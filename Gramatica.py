@@ -201,8 +201,7 @@ def p_instrucciones_instruccion(t) :
 
 
 def p_instruccion(t) :
-    '''INSTRUCCION     : DQL_COMANDOS
-                       | DDL_COMANDS'''
+    '''INSTRUCCION     : DQL_COMANDOS'''
     t[0] = t[1]
 
 
