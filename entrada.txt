@@ -38,4 +38,10 @@ from tabla1 as A;
 -- Probando Group By
 
 
+CREATE TABLE my_first_table (
+    nombre INTEGER NOT NULL,
+    nombre2  BIGINT NULL,
+    nombre3 CHAR (55) DEFAULT "dd",
+    nombre4 INTEGER
+);
 

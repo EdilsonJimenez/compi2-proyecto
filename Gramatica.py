@@ -20,7 +20,30 @@ reservadas = {
     'update': 'UPDATE',
     'set': 'SET',
     'delete': 'DELETE',
-    'values': 'VALUES'
+    'values': 'VALUES',    
+    'type': 'TYPE',
+    'database': 'DATABASE',
+    'create': 'CREATE',
+    'table': 'TABLE',
+    'smallint': 'SMALLINT',
+    'integer': 'INTEGER',
+    'bigint': 'BIGINT',
+    'decimal': 'DECIMAL',
+    'real': 'REAL',
+    'money': 'MONEY',
+    'double': 'DOUBLE',
+    'precision':'PRECISION',
+    'character': 'CHARACTER',
+    'varying': 'VARYING',
+    'varchar': 'VARCHAR',
+    'character': 'CHARACTER',
+    'char': 'CHAR',
+    'text': 'TEXT',
+    'boolean': 'BOOLEAN',
+    'not': 'NOT',
+    'null': 'NULL',
+    'constraint': 'CONSTRAINT',
+    'default': 'DEFAULT'
 
 }
 
@@ -570,6 +593,98 @@ def p_SimboloRela_Simbolos(t):
 
 
 
+
+
+
+
+
+
+#MI GRANATICA CESAR SAZO------------------------
+# CREATE TABLE
+
+
+def p_instruccion_dml_comandos_CREATE_TABLE(t) :
+    'DQL_COMANDOS       : CREATE TABLE NOMBRES_TABLAS PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_CUERPO(t) :
+    'CUERPO_CREATE_TABLE       : LISTA_DE_COLUMNAS'
+    t[1].append(t[1])
+    t[0] = t[1]
+
+
+#LISTA DE COLUMNAS------------------------------------
+def p_CREATE_TABLE_LISTA_CAMPOS(t):
+    'LISTA_DE_COLUMNAS       : LISTA_DE_COLUMNAS LISTA2'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_CREATE_TABLE_LISTA2_CAMPOS(t):
+    'LISTA_DE_COLUMNAS    : LISTA2'
+    t[0] = [t[1]]
+
+
+
+def p_Create_TABLE_CAMPOS(t):
+    'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) 
+
+
+def p_Create_TABLE_CAMPOS2(t):
+    'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_Create_TABLE_TIPO_CAMPO(t):
+    '''TIPO_CAMPO   : SMALLINT
+                    | INTEGER
+                    | BIGINT
+                    | DECIMAL
+                    | REAL
+                    | MONEY
+                    | DOUBLE PRECISION 
+                    | CHARACTER VARYING PARIZQ ENTERO PARDER
+                    | VARCHAR PARIZQ ENTERO PARDER
+                    | CHARACTER PARIZQ ENTERO PARDER
+                    | CHAR PARIZQ ENTERO PARDER
+                    | TEXT
+                    | BOOLEAN'''
+    t[0] = str(t[1])
+
+def p_CREATE_TABLE_LISTA3_CAMPOS(t):
+    'VALIDACIONES_CREATE_TABLE    : LISTA3'
+    t[0] = [t[1]]
+
+
+def p_Create_TABLE_CAMPOS3(t):
+    'LISTA3          :  VALIDACION_CAMPO_CREATE '
+    t[0] = str(t[1]) 
+
+def p_Create_TABLE_CAMPOS4(t):
+    'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
+    t[0] = str(t[1]) 
+
+
+def p_Create_TABLE_TIPO_CAMPO2(t):
+    '''VALIDACION_CAMPO_CREATE  : NOT NULL  
+                                | DEFAULT CADENASIMPLE
+                                | DEFAULT CADENADOBLE
+                                | DEFAULT DECIMAL
+                                | DEFAULT ENTERO '''
+    t[0] = str(t[1])
+
+def p_Create_TABLE_TIPO_CAMPO3(t):
+    'VALIDACION_CAMPO_CREATE_VACIO  :  '
+
+
+def p_Create_TABLE_TIPO_CAMPO4(t):
+    '''VALIDACION_CAMPO_CREATE  : NULL  '''
+    t[0] = str(t[1])
+
+
+
+#-----------------------------------------------------------------------------------------------------------------
 
 
 

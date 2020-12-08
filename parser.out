@@ -4,13 +4,14 @@ Unused terminals:
 
     COMENTARIOMULTI
     COMENTARIONORMAL
+    CONSTRAINT
+    DATABASE
     DELETE
     FECHA
     INSERT
     INTO
-    PARDER
-    PARIZQ
     SET
+    TYPE
     UPDATE
     VALUES
 
@@ -76,44 +77,94 @@ Rule 56    OPERADOR -> MAYOR
 Rule 57    OPERADOR -> MENOR
 Rule 58    OPERADOR -> MENORIGUAL
 Rule 59    OPERADOR -> MAYORIGUAL
+Rule 60    DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA
+Rule 61    CUERPO_CREATE_TABLE -> LISTA_DE_COLUMNAS
+Rule 62    LISTA_DE_COLUMNAS -> LISTA_DE_COLUMNAS LISTA2
+Rule 63    LISTA_DE_COLUMNAS -> LISTA2
+Rule 64    LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA
+Rule 65    LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE
+Rule 66    TIPO_CAMPO -> SMALLINT
+Rule 67    TIPO_CAMPO -> INTEGER
+Rule 68    TIPO_CAMPO -> BIGINT
+Rule 69    TIPO_CAMPO -> DECIMAL
+Rule 70    TIPO_CAMPO -> REAL
+Rule 71    TIPO_CAMPO -> MONEY
+Rule 72    TIPO_CAMPO -> DOUBLE PRECISION
+Rule 73    TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER
+Rule 74    TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER
+Rule 75    TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER
+Rule 76    TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER
+Rule 77    TIPO_CAMPO -> TEXT
+Rule 78    TIPO_CAMPO -> BOOLEAN
+Rule 79    VALIDACIONES_CREATE_TABLE -> LISTA3
+Rule 80    LISTA3 -> VALIDACION_CAMPO_CREATE
+Rule 81    LISTA3 -> VALIDACION_CAMPO_CREATE_VACIO
+Rule 82    VALIDACION_CAMPO_CREATE -> NOT NULL
+Rule 83    VALIDACION_CAMPO_CREATE -> DEFAULT CADENASIMPLE
+Rule 84    VALIDACION_CAMPO_CREATE -> DEFAULT CADENADOBLE
+Rule 85    VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL
+Rule 86    VALIDACION_CAMPO_CREATE -> DEFAULT ENTERO
+Rule 87    VALIDACION_CAMPO_CREATE_VACIO -> <empty>
+Rule 88    VALIDACION_CAMPO_CREATE -> NULL
 
 Terminals, with rules where they appear
 
 AND                  : 46
 AS                   : 20 27 43
 ASTERISCO            : 16
-CADENADOBLE          : 53
-CADENASIMPLE         : 52
-COMA                 : 19 26
+BIGINT               : 68
+BOOLEAN              : 78
+CADENADOBLE          : 53 84
+CADENASIMPLE         : 52 83
+CHAR                 : 76
+CHARACTER            : 73 75
+COMA                 : 19 26 64
 COMENTARIOMULTI      : 
 COMENTARIONORMAL     : 
-DECIMAL              : 51
+CONSTRAINT           : 
+CREATE               : 60
+DATABASE             : 
+DECIMAL              : 51 69 85
+DEFAULT              : 83 84 85 86
 DELETE               : 
 DIFERENTE            : 55
 DISTINCT             : 21
-ENTERO               : 50
+DOUBLE               : 72
+ENTERO               : 50 73 74 75 76 86
 FECHA                : 
 FROM                 : 5 6 7 8
 ID                   : 15 17 18 42 43 43 48 49
 IGUAL                : 54
 INNER                : 39
 INSERT               : 
+INTEGER              : 67
 INTO                 : 
 JOIN                 : 39 40
 MAYOR                : 56
 MAYORIGUAL           : 59
 MENOR                : 57
 MENORIGUAL           : 58
+MONEY                : 71
+NOT                  : 82
+NULL                 : 82 88
 ON                   : 39 40
 OR                   : 47
-PARDER               : 
-PARIZQ               : 
+PARDER               : 60 73 74 75 76
+PARIZQ               : 60 73 74 75 76
+PRECISION            : 72
 PUNTO                : 11 12 44
-PUNTOCOMA            : 5 6 7 8
+PUNTOCOMA            : 5 6 7 8 60
+REAL                 : 70
 SELECT               : 5 6 7 8
 SET                  : 
+SMALLINT             : 66
+TABLE                : 60
+TEXT                 : 77
+TYPE                 : 
 UPDATE               : 
 VALUES               : 
+VARCHAR              : 74
+VARYING              : 73
 WHERE                : 28 41
 error                : 
 
@@ -126,6 +177,7 @@ CONDICION            : 30 31
 CONDICIONES          : 28 30 35 39 40 41
 CONDICION_REL        : 32 32 33 33 34
 CUERPO               : 5 7
+CUERPO_CREATE_TABLE  : 60
 DISTINCTNT           : 7 8
 DQL_COMANDOS         : 4
 EXPRESIONNE          : 36 36
@@ -135,10 +187,13 @@ INNERS               : 29 37
 INSTRUCCION          : 2 3
 INSTRUCCIONES        : 1 2
 LISTA                : 9 10 19
+LISTA2               : 62 63
+LISTA3               : 79
 LISTA_CAMPOS         : 5 6 7 8 9
-NOMBRES_TABLAS       : 5 6 7 8 22
+LISTA_DE_COLUMNAS    : 61 62
+NOMBRES_TABLAS       : 5 6 7 8 22 60
 NOMBRE_C             : 44
-NOMBRE_T             : 11 12 24 25
+NOMBRE_T             : 11 12 24 25 64 65
 OPERADOR             : 36
 OTRO_LOGICO          : 32
 S                    : 11 13
@@ -146,6 +201,10 @@ S1                   : 25
 SIMBOLO_LOGICO       : 32 33 35
 TABLA                : 22 23 26
 TABLA_REF            : 39 40
+TIPO_CAMPO           : 64 65
+VALIDACIONES_CREATE_TABLE : 64 65
+VALIDACION_CAMPO_CREATE : 80
+VALIDACION_CAMPO_CREATE_VACIO : 81
 
 Parsing method: LALR
 
@@ -160,8 +219,10 @@ state 0
     (6) DQL_COMANDOS -> . SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
     (7) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
     (8) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+    (60) DQL_COMANDOS -> . CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA
 
     SELECT          shift and go to state 5
+    CREATE          shift and go to state 6
 
     INICIO                         shift and go to state 1
     INSTRUCCIONES                  shift and go to state 2
@@ -183,11 +244,13 @@ state 2
     (6) DQL_COMANDOS -> . SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
     (7) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
     (8) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+    (60) DQL_COMANDOS -> . CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA
 
     $end            reduce using rule 1 (INICIO -> INSTRUCCIONES .)
     SELECT          shift and go to state 5
+    CREATE          shift and go to state 6
 
-    INSTRUCCION                    shift and go to state 6
+    INSTRUCCION                    shift and go to state 7
     DQL_COMANDOS                   shift and go to state 4
 
 state 3
@@ -195,6 +258,7 @@ state 3
     (3) INSTRUCCIONES -> INSTRUCCION .
 
     SELECT          reduce using rule 3 (INSTRUCCIONES -> INSTRUCCION .)
+    CREATE          reduce using rule 3 (INSTRUCCIONES -> INSTRUCCION .)
     $end            reduce using rule 3 (INSTRUCCIONES -> INSTRUCCION .)
 
 
@@ -203,6 +267,7 @@ state 4
     (4) INSTRUCCION -> DQL_COMANDOS .
 
     SELECT          reduce using rule 4 (INSTRUCCION -> DQL_COMANDOS .)
+    CREATE          reduce using rule 4 (INSTRUCCION -> DQL_COMANDOS .)
     $end            reduce using rule 4 (INSTRUCCION -> DQL_COMANDOS .)
 
 
@@ -223,25 +288,33 @@ state 5
     (15) CAMPOS -> . ID
     (16) CAMPOS -> . ASTERISCO
 
-    DISTINCT        shift and go to state 10
-    ID              shift and go to state 13
-    ASTERISCO       shift and go to state 14
+    DISTINCT        shift and go to state 11
+    ID              shift and go to state 14
+    ASTERISCO       shift and go to state 15
 
-    LISTA_CAMPOS                   shift and go to state 7
-    DISTINCTNT                     shift and go to state 8
-    LISTA                          shift and go to state 9
-    NOMBRE_T                       shift and go to state 11
-    CAMPOS                         shift and go to state 12
+    LISTA_CAMPOS                   shift and go to state 8
+    DISTINCTNT                     shift and go to state 9
+    LISTA                          shift and go to state 10
+    NOMBRE_T                       shift and go to state 12
+    CAMPOS                         shift and go to state 13
 
 state 6
+
+    (60) DQL_COMANDOS -> CREATE . TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA
+
+    TABLE           shift and go to state 16
+
+
+state 7
 
     (2) INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION .
 
     SELECT          reduce using rule 2 (INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION .)
+    CREATE          reduce using rule 2 (INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION .)
     $end            reduce using rule 2 (INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION .)
 
 
-state 7
+state 8
 
     (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS . FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
     (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS . FROM NOMBRES_TABLAS PUNTOCOMA
@@ -254,15 +327,15 @@ state 7
     (15) CAMPOS -> . ID
     (16) CAMPOS -> . ASTERISCO
 
-    FROM            shift and go to state 15
-    ID              shift and go to state 13
-    ASTERISCO       shift and go to state 14
+    FROM            shift and go to state 17
+    ID              shift and go to state 14
+    ASTERISCO       shift and go to state 15
 
-    LISTA                          shift and go to state 16
-    NOMBRE_T                       shift and go to state 11
-    CAMPOS                         shift and go to state 12
+    LISTA                          shift and go to state 18
+    NOMBRE_T                       shift and go to state 12
+    CAMPOS                         shift and go to state 13
 
-state 8
+state 9
 
     (7) DQL_COMANDOS -> SELECT DISTINCTNT . LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
     (8) DQL_COMANDOS -> SELECT DISTINCTNT . LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
@@ -276,15 +349,15 @@ state 8
     (15) CAMPOS -> . ID
     (16) CAMPOS -> . ASTERISCO
 
-    ID              shift and go to state 13
-    ASTERISCO       shift and go to state 14
+    ID              shift and go to state 14
+    ASTERISCO       shift and go to state 15
 
-    LISTA_CAMPOS                   shift and go to state 17
-    LISTA                          shift and go to state 9
-    NOMBRE_T                       shift and go to state 11
-    CAMPOS                         shift and go to state 12
+    LISTA_CAMPOS                   shift and go to state 19
+    LISTA                          shift and go to state 10
+    NOMBRE_T                       shift and go to state 12
+    CAMPOS                         shift and go to state 13
 
-state 9
+state 10
 
     (10) LISTA_CAMPOS -> LISTA .
 
@@ -293,7 +366,7 @@ state 9
     ASTERISCO       reduce using rule 10 (LISTA_CAMPOS -> LISTA .)
 
 
-state 10
+state 11
 
     (21) DISTINCTNT -> DISTINCT .
 
@@ -301,15 +374,15 @@ state 10
     ASTERISCO       reduce using rule 21 (DISTINCTNT -> DISTINCT .)
 
 
-state 11
+state 12
 
     (11) LISTA -> NOMBRE_T . PUNTO CAMPOS S
     (12) LISTA -> NOMBRE_T . PUNTO CAMPOS
 
-    PUNTO           shift and go to state 18
+    PUNTO           shift and go to state 20
 
 
-state 12
+state 13
 
     (13) LISTA -> CAMPOS . S
     (14) LISTA -> CAMPOS .
@@ -319,12 +392,12 @@ state 12
     FROM            reduce using rule 14 (LISTA -> CAMPOS .)
     ID              reduce using rule 14 (LISTA -> CAMPOS .)
     ASTERISCO       reduce using rule 14 (LISTA -> CAMPOS .)
-    COMA            shift and go to state 20
-    AS              shift and go to state 21
+    COMA            shift and go to state 22
+    AS              shift and go to state 23
 
-    S                              shift and go to state 19
+    S                              shift and go to state 21
 
-state 13
+state 14
 
     (17) NOMBRE_T -> ID .
     (15) CAMPOS -> ID .
@@ -337,7 +410,7 @@ state 13
     ASTERISCO       reduce using rule 15 (CAMPOS -> ID .)
 
 
-state 14
+state 15
 
     (16) CAMPOS -> ASTERISCO .
 
@@ -348,7 +421,22 @@ state 14
     ASTERISCO       reduce using rule 16 (CAMPOS -> ASTERISCO .)
 
 
-state 15
+state 16
+
+    (60) DQL_COMANDOS -> CREATE TABLE . NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA
+    (22) NOMBRES_TABLAS -> . NOMBRES_TABLAS TABLA
+    (23) NOMBRES_TABLAS -> . TABLA
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (17) NOMBRE_T -> . ID
+
+    ID              shift and go to state 27
+
+    NOMBRES_TABLAS                 shift and go to state 24
+    TABLA                          shift and go to state 25
+    NOMBRE_T                       shift and go to state 26
+
+state 17
 
     (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM . NOMBRES_TABLAS CUERPO PUNTOCOMA
     (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM . NOMBRES_TABLAS PUNTOCOMA
@@ -358,13 +446,13 @@ state 15
     (25) TABLA -> . NOMBRE_T S1
     (17) NOMBRE_T -> . ID
 
-    ID              shift and go to state 25
+    ID              shift and go to state 27
 
-    NOMBRES_TABLAS                 shift and go to state 22
-    TABLA                          shift and go to state 23
-    NOMBRE_T                       shift and go to state 24
+    NOMBRES_TABLAS                 shift and go to state 28
+    TABLA                          shift and go to state 25
+    NOMBRE_T                       shift and go to state 26
 
-state 16
+state 18
 
     (9) LISTA_CAMPOS -> LISTA_CAMPOS LISTA .
 
@@ -373,7 +461,7 @@ state 16
     ASTERISCO       reduce using rule 9 (LISTA_CAMPOS -> LISTA_CAMPOS LISTA .)
 
 
-state 17
+state 19
 
     (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS . FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
     (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS . FROM NOMBRES_TABLAS PUNTOCOMA
@@ -386,27 +474,27 @@ state 17
     (15) CAMPOS -> . ID
     (16) CAMPOS -> . ASTERISCO
 
-    FROM            shift and go to state 26
-    ID              shift and go to state 13
-    ASTERISCO       shift and go to state 14
+    FROM            shift and go to state 29
+    ID              shift and go to state 14
+    ASTERISCO       shift and go to state 15
 
-    LISTA                          shift and go to state 16
-    NOMBRE_T                       shift and go to state 11
-    CAMPOS                         shift and go to state 12
+    LISTA                          shift and go to state 18
+    NOMBRE_T                       shift and go to state 12
+    CAMPOS                         shift and go to state 13
 
-state 18
+state 20
 
     (11) LISTA -> NOMBRE_T PUNTO . CAMPOS S
     (12) LISTA -> NOMBRE_T PUNTO . CAMPOS
     (15) CAMPOS -> . ID
     (16) CAMPOS -> . ASTERISCO
 
-    ID              shift and go to state 28
-    ASTERISCO       shift and go to state 14
+    ID              shift and go to state 31
+    ASTERISCO       shift and go to state 15
 
-    CAMPOS                         shift and go to state 27
+    CAMPOS                         shift and go to state 30
 
-state 19
+state 21
 
     (13) LISTA -> CAMPOS S .
 
@@ -415,7 +503,7 @@ state 19
     ASTERISCO       reduce using rule 13 (LISTA -> CAMPOS S .)
 
 
-state 20
+state 22
 
     (19) S -> COMA . LISTA
     (11) LISTA -> . NOMBRE_T PUNTO CAMPOS S
@@ -426,23 +514,93 @@ state 20
     (15) CAMPOS -> . ID
     (16) CAMPOS -> . ASTERISCO
 
-    ID              shift and go to state 13
-    ASTERISCO       shift and go to state 14
+    ID              shift and go to state 14
+    ASTERISCO       shift and go to state 15
 
-    LISTA                          shift and go to state 29
-    NOMBRE_T                       shift and go to state 11
-    CAMPOS                         shift and go to state 12
+    LISTA                          shift and go to state 32
+    NOMBRE_T                       shift and go to state 12
+    CAMPOS                         shift and go to state 13
 
-state 21
+state 23
 
     (20) S -> AS . ALIAS
     (18) ALIAS -> . ID
 
-    ID              shift and go to state 31
+    ID              shift and go to state 34
 
-    ALIAS                          shift and go to state 30
+    ALIAS                          shift and go to state 33
 
-state 22
+state 24
+
+    (60) DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS . PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA
+    (22) NOMBRES_TABLAS -> NOMBRES_TABLAS . TABLA
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (17) NOMBRE_T -> . ID
+
+    PARIZQ          shift and go to state 35
+    ID              shift and go to state 27
+
+    TABLA                          shift and go to state 36
+    NOMBRE_T                       shift and go to state 26
+
+state 25
+
+    (23) NOMBRES_TABLAS -> TABLA .
+
+    PARIZQ          reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    ID              reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    PUNTOCOMA       reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    WHERE           reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    INNER           reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    JOIN            reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+
+
+state 26
+
+    (24) TABLA -> NOMBRE_T .
+    (25) TABLA -> NOMBRE_T . S1
+    (26) S1 -> . COMA TABLA
+    (27) S1 -> . AS ALIAS
+
+    PARIZQ          reduce using rule 24 (TABLA -> NOMBRE_T .)
+    ID              reduce using rule 24 (TABLA -> NOMBRE_T .)
+    PUNTOCOMA       reduce using rule 24 (TABLA -> NOMBRE_T .)
+    WHERE           reduce using rule 24 (TABLA -> NOMBRE_T .)
+    INNER           reduce using rule 24 (TABLA -> NOMBRE_T .)
+    JOIN            reduce using rule 24 (TABLA -> NOMBRE_T .)
+    COMA            shift and go to state 38
+    AS              shift and go to state 39
+
+    S1                             shift and go to state 37
+
+state 27
+
+    (17) NOMBRE_T -> ID .
+
+    COMA            reduce using rule 17 (NOMBRE_T -> ID .)
+    AS              reduce using rule 17 (NOMBRE_T -> ID .)
+    PARIZQ          reduce using rule 17 (NOMBRE_T -> ID .)
+    ID              reduce using rule 17 (NOMBRE_T -> ID .)
+    PUNTOCOMA       reduce using rule 17 (NOMBRE_T -> ID .)
+    WHERE           reduce using rule 17 (NOMBRE_T -> ID .)
+    INNER           reduce using rule 17 (NOMBRE_T -> ID .)
+    JOIN            reduce using rule 17 (NOMBRE_T -> ID .)
+    SMALLINT        reduce using rule 17 (NOMBRE_T -> ID .)
+    INTEGER         reduce using rule 17 (NOMBRE_T -> ID .)
+    BIGINT          reduce using rule 17 (NOMBRE_T -> ID .)
+    DECIMAL         reduce using rule 17 (NOMBRE_T -> ID .)
+    REAL            reduce using rule 17 (NOMBRE_T -> ID .)
+    MONEY           reduce using rule 17 (NOMBRE_T -> ID .)
+    DOUBLE          reduce using rule 17 (NOMBRE_T -> ID .)
+    CHARACTER       reduce using rule 17 (NOMBRE_T -> ID .)
+    VARCHAR         reduce using rule 17 (NOMBRE_T -> ID .)
+    CHAR            reduce using rule 17 (NOMBRE_T -> ID .)
+    TEXT            reduce using rule 17 (NOMBRE_T -> ID .)
+    BOOLEAN         reduce using rule 17 (NOMBRE_T -> ID .)
+
+
+state 28
 
     (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS . CUERPO PUNTOCOMA
     (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS . PUNTOCOMA
@@ -458,60 +616,19 @@ state 22
     (40) INNERR -> . JOIN TABLA_REF ON CONDICIONES
     (41) INNERR -> . WHERE CONDICIONES
 
-    PUNTOCOMA       shift and go to state 33
-    WHERE           shift and go to state 35
-    ID              shift and go to state 25
-    INNER           shift and go to state 38
-    JOIN            shift and go to state 39
+    PUNTOCOMA       shift and go to state 41
+    WHERE           shift and go to state 42
+    ID              shift and go to state 27
+    INNER           shift and go to state 45
+    JOIN            shift and go to state 46
 
-    CUERPO                         shift and go to state 32
-    TABLA                          shift and go to state 34
-    INNERS                         shift and go to state 36
-    NOMBRE_T                       shift and go to state 24
-    INNERR                         shift and go to state 37
+    CUERPO                         shift and go to state 40
+    TABLA                          shift and go to state 36
+    INNERS                         shift and go to state 43
+    NOMBRE_T                       shift and go to state 26
+    INNERR                         shift and go to state 44
 
-state 23
-
-    (23) NOMBRES_TABLAS -> TABLA .
-
-    PUNTOCOMA       reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
-    WHERE           reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
-    ID              reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
-    INNER           reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
-    JOIN            reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
-
-
-state 24
-
-    (24) TABLA -> NOMBRE_T .
-    (25) TABLA -> NOMBRE_T . S1
-    (26) S1 -> . COMA TABLA
-    (27) S1 -> . AS ALIAS
-
-    PUNTOCOMA       reduce using rule 24 (TABLA -> NOMBRE_T .)
-    WHERE           reduce using rule 24 (TABLA -> NOMBRE_T .)
-    ID              reduce using rule 24 (TABLA -> NOMBRE_T .)
-    INNER           reduce using rule 24 (TABLA -> NOMBRE_T .)
-    JOIN            reduce using rule 24 (TABLA -> NOMBRE_T .)
-    COMA            shift and go to state 41
-    AS              shift and go to state 42
-
-    S1                             shift and go to state 40
-
-state 25
-
-    (17) NOMBRE_T -> ID .
-
-    COMA            reduce using rule 17 (NOMBRE_T -> ID .)
-    AS              reduce using rule 17 (NOMBRE_T -> ID .)
-    PUNTOCOMA       reduce using rule 17 (NOMBRE_T -> ID .)
-    WHERE           reduce using rule 17 (NOMBRE_T -> ID .)
-    ID              reduce using rule 17 (NOMBRE_T -> ID .)
-    INNER           reduce using rule 17 (NOMBRE_T -> ID .)
-    JOIN            reduce using rule 17 (NOMBRE_T -> ID .)
-
-
-state 26
+state 29
 
     (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM . NOMBRES_TABLAS CUERPO PUNTOCOMA
     (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM . NOMBRES_TABLAS PUNTOCOMA
@@ -521,13 +638,13 @@ state 26
     (25) TABLA -> . NOMBRE_T S1
     (17) NOMBRE_T -> . ID
 
-    ID              shift and go to state 25
+    ID              shift and go to state 27
 
-    NOMBRES_TABLAS                 shift and go to state 43
-    TABLA                          shift and go to state 23
-    NOMBRE_T                       shift and go to state 24
+    NOMBRES_TABLAS                 shift and go to state 47
+    TABLA                          shift and go to state 25
+    NOMBRE_T                       shift and go to state 26
 
-state 27
+state 30
 
     (11) LISTA -> NOMBRE_T PUNTO CAMPOS . S
     (12) LISTA -> NOMBRE_T PUNTO CAMPOS .
@@ -537,12 +654,12 @@ state 27
     FROM            reduce using rule 12 (LISTA -> NOMBRE_T PUNTO CAMPOS .)
     ID              reduce using rule 12 (LISTA -> NOMBRE_T PUNTO CAMPOS .)
     ASTERISCO       reduce using rule 12 (LISTA -> NOMBRE_T PUNTO CAMPOS .)
-    COMA            shift and go to state 20
-    AS              shift and go to state 21
+    COMA            shift and go to state 22
+    AS              shift and go to state 23
 
-    S                              shift and go to state 44
+    S                              shift and go to state 48
 
-state 28
+state 31
 
     (15) CAMPOS -> ID .
 
@@ -553,7 +670,7 @@ state 28
     ASTERISCO       reduce using rule 15 (CAMPOS -> ID .)
 
 
-state 29
+state 32
 
     (19) S -> COMA LISTA .
 
@@ -562,7 +679,7 @@ state 29
     ASTERISCO       reduce using rule 19 (S -> COMA LISTA .)
 
 
-state 30
+state 33
 
     (20) S -> AS ALIAS .
 
@@ -571,46 +688,99 @@ state 30
     ASTERISCO       reduce using rule 20 (S -> AS ALIAS .)
 
 
-state 31
+state 34
 
     (18) ALIAS -> ID .
 
     FROM            reduce using rule 18 (ALIAS -> ID .)
     ID              reduce using rule 18 (ALIAS -> ID .)
     ASTERISCO       reduce using rule 18 (ALIAS -> ID .)
+    PARIZQ          reduce using rule 18 (ALIAS -> ID .)
     PUNTOCOMA       reduce using rule 18 (ALIAS -> ID .)
     WHERE           reduce using rule 18 (ALIAS -> ID .)
     INNER           reduce using rule 18 (ALIAS -> ID .)
     JOIN            reduce using rule 18 (ALIAS -> ID .)
 
 
-state 32
+state 35
 
-    (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO . PUNTOCOMA
+    (60) DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ . CUERPO_CREATE_TABLE PARDER PUNTOCOMA
+    (61) CUERPO_CREATE_TABLE -> . LISTA_DE_COLUMNAS
+    (62) LISTA_DE_COLUMNAS -> . LISTA_DE_COLUMNAS LISTA2
+    (63) LISTA_DE_COLUMNAS -> . LISTA2
+    (64) LISTA2 -> . NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA
+    (65) LISTA2 -> . NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE
+    (17) NOMBRE_T -> . ID
 
-    PUNTOCOMA       shift and go to state 45
+    ID              shift and go to state 27
 
+    CUERPO_CREATE_TABLE            shift and go to state 49
+    LISTA_DE_COLUMNAS              shift and go to state 50
+    LISTA2                         shift and go to state 51
+    NOMBRE_T                       shift and go to state 52
 
-state 33
-
-    (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .
-
-    SELECT          reduce using rule 6 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
-    $end            reduce using rule 6 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
-
-
-state 34
+state 36
 
     (22) NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .
 
+    PARIZQ          reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
+    ID              reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
     PUNTOCOMA       reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
     WHERE           reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
-    ID              reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
     INNER           reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
     JOIN            reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
 
 
-state 35
+state 37
+
+    (25) TABLA -> NOMBRE_T S1 .
+
+    PARIZQ          reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    ID              reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    PUNTOCOMA       reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    WHERE           reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    INNER           reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    JOIN            reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+
+
+state 38
+
+    (26) S1 -> COMA . TABLA
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (17) NOMBRE_T -> . ID
+
+    ID              shift and go to state 27
+
+    TABLA                          shift and go to state 53
+    NOMBRE_T                       shift and go to state 26
+
+state 39
+
+    (27) S1 -> AS . ALIAS
+    (18) ALIAS -> . ID
+
+    ID              shift and go to state 34
+
+    ALIAS                          shift and go to state 54
+
+state 40
+
+    (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 55
+
+
+state 41
+
+    (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .
+
+    SELECT          reduce using rule 6 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+    CREATE          reduce using rule 6 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+    $end            reduce using rule 6 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+
+
+state 42
 
     (28) CUERPO -> WHERE . CONDICIONES
     (41) INNERR -> WHERE . CONDICIONES
@@ -629,20 +799,20 @@ state 35
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICIONES                    shift and go to state 46
-    CONDICION                      shift and go to state 47
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICIONES                    shift and go to state 56
+    CONDICION                      shift and go to state 57
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 36
+state 43
 
     (29) CUERPO -> INNERS .
     (37) INNERS -> INNERS . INNERR
@@ -651,13 +821,13 @@ state 36
     (41) INNERR -> . WHERE CONDICIONES
 
     PUNTOCOMA       reduce using rule 29 (CUERPO -> INNERS .)
-    INNER           shift and go to state 38
-    JOIN            shift and go to state 39
-    WHERE           shift and go to state 58
+    INNER           shift and go to state 45
+    JOIN            shift and go to state 46
+    WHERE           shift and go to state 68
 
-    INNERR                         shift and go to state 57
+    INNERR                         shift and go to state 67
 
-state 37
+state 44
 
     (38) INNERS -> INNERR .
 
@@ -667,56 +837,24 @@ state 37
     PUNTOCOMA       reduce using rule 38 (INNERS -> INNERR .)
 
 
-state 38
+state 45
 
     (39) INNERR -> INNER . JOIN TABLA_REF ON CONDICIONES
 
-    JOIN            shift and go to state 59
+    JOIN            shift and go to state 69
 
 
-state 39
+state 46
 
     (40) INNERR -> JOIN . TABLA_REF ON CONDICIONES
     (42) TABLA_REF -> . ID
     (43) TABLA_REF -> . ID AS ID
 
-    ID              shift and go to state 61
+    ID              shift and go to state 71
 
-    TABLA_REF                      shift and go to state 60
+    TABLA_REF                      shift and go to state 70
 
-state 40
-
-    (25) TABLA -> NOMBRE_T S1 .
-
-    PUNTOCOMA       reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
-    WHERE           reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
-    ID              reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
-    INNER           reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
-    JOIN            reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
-
-
-state 41
-
-    (26) S1 -> COMA . TABLA
-    (24) TABLA -> . NOMBRE_T
-    (25) TABLA -> . NOMBRE_T S1
-    (17) NOMBRE_T -> . ID
-
-    ID              shift and go to state 25
-
-    TABLA                          shift and go to state 62
-    NOMBRE_T                       shift and go to state 24
-
-state 42
-
-    (27) S1 -> AS . ALIAS
-    (18) ALIAS -> . ID
-
-    ID              shift and go to state 31
-
-    ALIAS                          shift and go to state 63
-
-state 43
+state 47
 
     (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS . CUERPO PUNTOCOMA
     (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS . PUNTOCOMA
@@ -732,19 +870,19 @@ state 43
     (40) INNERR -> . JOIN TABLA_REF ON CONDICIONES
     (41) INNERR -> . WHERE CONDICIONES
 
-    PUNTOCOMA       shift and go to state 65
-    WHERE           shift and go to state 35
-    ID              shift and go to state 25
-    INNER           shift and go to state 38
-    JOIN            shift and go to state 39
+    PUNTOCOMA       shift and go to state 73
+    WHERE           shift and go to state 42
+    ID              shift and go to state 27
+    INNER           shift and go to state 45
+    JOIN            shift and go to state 46
 
-    CUERPO                         shift and go to state 64
-    TABLA                          shift and go to state 34
-    INNERS                         shift and go to state 36
-    NOMBRE_T                       shift and go to state 24
-    INNERR                         shift and go to state 37
+    CUERPO                         shift and go to state 72
+    TABLA                          shift and go to state 36
+    INNERS                         shift and go to state 43
+    NOMBRE_T                       shift and go to state 26
+    INNERR                         shift and go to state 44
 
-state 44
+state 48
 
     (11) LISTA -> NOMBRE_T PUNTO CAMPOS S .
 
@@ -753,15 +891,102 @@ state 44
     ASTERISCO       reduce using rule 11 (LISTA -> NOMBRE_T PUNTO CAMPOS S .)
 
 
-state 45
+state 49
+
+    (60) DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE . PARDER PUNTOCOMA
+
+    PARDER          shift and go to state 74
+
+
+state 50
+
+    (61) CUERPO_CREATE_TABLE -> LISTA_DE_COLUMNAS .
+    (62) LISTA_DE_COLUMNAS -> LISTA_DE_COLUMNAS . LISTA2
+    (64) LISTA2 -> . NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA
+    (65) LISTA2 -> . NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE
+    (17) NOMBRE_T -> . ID
+
+    PARDER          reduce using rule 61 (CUERPO_CREATE_TABLE -> LISTA_DE_COLUMNAS .)
+    ID              shift and go to state 27
+
+    LISTA2                         shift and go to state 75
+    NOMBRE_T                       shift and go to state 52
+
+state 51
+
+    (63) LISTA_DE_COLUMNAS -> LISTA2 .
+
+    ID              reduce using rule 63 (LISTA_DE_COLUMNAS -> LISTA2 .)
+    PARDER          reduce using rule 63 (LISTA_DE_COLUMNAS -> LISTA2 .)
+
+
+state 52
+
+    (64) LISTA2 -> NOMBRE_T . TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA
+    (65) LISTA2 -> NOMBRE_T . TIPO_CAMPO VALIDACIONES_CREATE_TABLE
+    (66) TIPO_CAMPO -> . SMALLINT
+    (67) TIPO_CAMPO -> . INTEGER
+    (68) TIPO_CAMPO -> . BIGINT
+    (69) TIPO_CAMPO -> . DECIMAL
+    (70) TIPO_CAMPO -> . REAL
+    (71) TIPO_CAMPO -> . MONEY
+    (72) TIPO_CAMPO -> . DOUBLE PRECISION
+    (73) TIPO_CAMPO -> . CHARACTER VARYING PARIZQ ENTERO PARDER
+    (74) TIPO_CAMPO -> . VARCHAR PARIZQ ENTERO PARDER
+    (75) TIPO_CAMPO -> . CHARACTER PARIZQ ENTERO PARDER
+    (76) TIPO_CAMPO -> . CHAR PARIZQ ENTERO PARDER
+    (77) TIPO_CAMPO -> . TEXT
+    (78) TIPO_CAMPO -> . BOOLEAN
+
+    SMALLINT        shift and go to state 77
+    INTEGER         shift and go to state 78
+    BIGINT          shift and go to state 79
+    DECIMAL         shift and go to state 80
+    REAL            shift and go to state 81
+    MONEY           shift and go to state 82
+    DOUBLE          shift and go to state 83
+    CHARACTER       shift and go to state 84
+    VARCHAR         shift and go to state 85
+    CHAR            shift and go to state 86
+    TEXT            shift and go to state 87
+    BOOLEAN         shift and go to state 88
+
+    TIPO_CAMPO                     shift and go to state 76
+
+state 53
+
+    (26) S1 -> COMA TABLA .
+
+    PARIZQ          reduce using rule 26 (S1 -> COMA TABLA .)
+    ID              reduce using rule 26 (S1 -> COMA TABLA .)
+    PUNTOCOMA       reduce using rule 26 (S1 -> COMA TABLA .)
+    WHERE           reduce using rule 26 (S1 -> COMA TABLA .)
+    INNER           reduce using rule 26 (S1 -> COMA TABLA .)
+    JOIN            reduce using rule 26 (S1 -> COMA TABLA .)
+
+
+state 54
+
+    (27) S1 -> AS ALIAS .
+
+    PARIZQ          reduce using rule 27 (S1 -> AS ALIAS .)
+    ID              reduce using rule 27 (S1 -> AS ALIAS .)
+    PUNTOCOMA       reduce using rule 27 (S1 -> AS ALIAS .)
+    WHERE           reduce using rule 27 (S1 -> AS ALIAS .)
+    INNER           reduce using rule 27 (S1 -> AS ALIAS .)
+    JOIN            reduce using rule 27 (S1 -> AS ALIAS .)
+
+
+state 55
 
     (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .
 
     SELECT          reduce using rule 5 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
+    CREATE          reduce using rule 5 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
     $end            reduce using rule 5 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
 
 
-state 46
+state 56
 
     (28) CUERPO -> WHERE CONDICIONES .
     (41) INNERR -> WHERE CONDICIONES .
@@ -784,21 +1009,21 @@ state 46
     INNER           reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
     JOIN            reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
     WHERE           reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
   ! PUNTOCOMA       [ reduce using rule 41 (INNERR -> WHERE CONDICIONES .) ]
 
-    CONDICION                      shift and go to state 66
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICION                      shift and go to state 89
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 47
+state 57
 
     (31) CONDICIONES -> CONDICION .
 
@@ -813,7 +1038,7 @@ state 47
     WHERE           reduce using rule 31 (CONDICIONES -> CONDICION .)
 
 
-state 48
+state 58
 
     (32) CONDICION -> CONDICION_REL . SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
     (33) CONDICION -> CONDICION_REL . SIMBOLO_LOGICO CONDICION_REL
@@ -830,12 +1055,12 @@ state 48
     INNER           reduce using rule 34 (CONDICION -> CONDICION_REL .)
     JOIN            reduce using rule 34 (CONDICION -> CONDICION_REL .)
     WHERE           reduce using rule 34 (CONDICION -> CONDICION_REL .)
-    AND             shift and go to state 68
-    OR              shift and go to state 69
+    AND             shift and go to state 91
+    OR              shift and go to state 92
 
-    SIMBOLO_LOGICO                 shift and go to state 67
+    SIMBOLO_LOGICO                 shift and go to state 90
 
-state 49
+state 59
 
     (36) CONDICION_REL -> EXPRESIONNE . OPERADOR EXPRESIONNE
     (54) OPERADOR -> . IGUAL
@@ -845,23 +1070,23 @@ state 49
     (58) OPERADOR -> . MENORIGUAL
     (59) OPERADOR -> . MAYORIGUAL
 
-    IGUAL           shift and go to state 71
-    DIFERENTE       shift and go to state 72
-    MAYOR           shift and go to state 73
-    MENOR           shift and go to state 74
-    MENORIGUAL      shift and go to state 75
-    MAYORIGUAL      shift and go to state 76
+    IGUAL           shift and go to state 94
+    DIFERENTE       shift and go to state 95
+    MAYOR           shift and go to state 96
+    MENOR           shift and go to state 97
+    MENORIGUAL      shift and go to state 98
+    MAYORIGUAL      shift and go to state 99
 
-    OPERADOR                       shift and go to state 70
+    OPERADOR                       shift and go to state 93
 
-state 50
+state 60
 
     (44) EXPRESIONNE -> NOMBRE_C . PUNTO CAMPOSC
 
-    PUNTO           shift and go to state 77
+    PUNTO           shift and go to state 100
 
 
-state 51
+state 61
 
     (45) EXPRESIONNE -> CAMPOSC .
 
@@ -884,7 +1109,7 @@ state 51
     WHERE           reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
 
 
-state 52
+state 62
 
     (48) NOMBRE_C -> ID .
     (49) CAMPOSC -> ID .
@@ -909,7 +1134,7 @@ state 52
     WHERE           reduce using rule 49 (CAMPOSC -> ID .)
 
 
-state 53
+state 63
 
     (50) CAMPOSC -> ENTERO .
 
@@ -932,7 +1157,7 @@ state 53
     WHERE           reduce using rule 50 (CAMPOSC -> ENTERO .)
 
 
-state 54
+state 64
 
     (51) CAMPOSC -> DECIMAL .
 
@@ -955,7 +1180,7 @@ state 54
     WHERE           reduce using rule 51 (CAMPOSC -> DECIMAL .)
 
 
-state 55
+state 65
 
     (52) CAMPOSC -> CADENASIMPLE .
 
@@ -978,7 +1203,7 @@ state 55
     WHERE           reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
 
 
-state 56
+state 66
 
     (53) CAMPOSC -> CADENADOBLE .
 
@@ -1001,7 +1226,7 @@ state 56
     WHERE           reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
 
 
-state 57
+state 67
 
     (37) INNERS -> INNERS INNERR .
 
@@ -1011,7 +1236,7 @@ state 57
     PUNTOCOMA       reduce using rule 37 (INNERS -> INNERS INNERR .)
 
 
-state 58
+state 68
 
     (41) INNERR -> WHERE . CONDICIONES
     (30) CONDICIONES -> . CONDICIONES CONDICION
@@ -1029,83 +1254,230 @@ state 58
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICIONES                    shift and go to state 78
-    CONDICION                      shift and go to state 47
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICIONES                    shift and go to state 101
+    CONDICION                      shift and go to state 57
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 59
+state 69
 
     (39) INNERR -> INNER JOIN . TABLA_REF ON CONDICIONES
     (42) TABLA_REF -> . ID
     (43) TABLA_REF -> . ID AS ID
 
-    ID              shift and go to state 61
+    ID              shift and go to state 71
 
-    TABLA_REF                      shift and go to state 79
+    TABLA_REF                      shift and go to state 102
 
-state 60
+state 70
 
     (40) INNERR -> JOIN TABLA_REF . ON CONDICIONES
 
-    ON              shift and go to state 80
+    ON              shift and go to state 103
 
 
-state 61
+state 71
 
     (42) TABLA_REF -> ID .
     (43) TABLA_REF -> ID . AS ID
 
     ON              reduce using rule 42 (TABLA_REF -> ID .)
-    AS              shift and go to state 81
+    AS              shift and go to state 104
 
 
-state 62
-
-    (26) S1 -> COMA TABLA .
-
-    PUNTOCOMA       reduce using rule 26 (S1 -> COMA TABLA .)
-    WHERE           reduce using rule 26 (S1 -> COMA TABLA .)
-    ID              reduce using rule 26 (S1 -> COMA TABLA .)
-    INNER           reduce using rule 26 (S1 -> COMA TABLA .)
-    JOIN            reduce using rule 26 (S1 -> COMA TABLA .)
-
-
-state 63
-
-    (27) S1 -> AS ALIAS .
-
-    PUNTOCOMA       reduce using rule 27 (S1 -> AS ALIAS .)
-    WHERE           reduce using rule 27 (S1 -> AS ALIAS .)
-    ID              reduce using rule 27 (S1 -> AS ALIAS .)
-    INNER           reduce using rule 27 (S1 -> AS ALIAS .)
-    JOIN            reduce using rule 27 (S1 -> AS ALIAS .)
-
-
-state 64
+state 72
 
     (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 82
+    PUNTOCOMA       shift and go to state 105
 
 
-state 65
+state 73
 
     (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .
 
     SELECT          reduce using rule 8 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+    CREATE          reduce using rule 8 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
     $end            reduce using rule 8 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
 
 
-state 66
+state 74
+
+    (60) DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 106
+
+
+state 75
+
+    (62) LISTA_DE_COLUMNAS -> LISTA_DE_COLUMNAS LISTA2 .
+
+    ID              reduce using rule 62 (LISTA_DE_COLUMNAS -> LISTA_DE_COLUMNAS LISTA2 .)
+    PARDER          reduce using rule 62 (LISTA_DE_COLUMNAS -> LISTA_DE_COLUMNAS LISTA2 .)
+
+
+state 76
+
+    (64) LISTA2 -> NOMBRE_T TIPO_CAMPO . VALIDACIONES_CREATE_TABLE COMA
+    (65) LISTA2 -> NOMBRE_T TIPO_CAMPO . VALIDACIONES_CREATE_TABLE
+    (79) VALIDACIONES_CREATE_TABLE -> . LISTA3
+    (80) LISTA3 -> . VALIDACION_CAMPO_CREATE
+    (81) LISTA3 -> . VALIDACION_CAMPO_CREATE_VACIO
+    (82) VALIDACION_CAMPO_CREATE -> . NOT NULL
+    (83) VALIDACION_CAMPO_CREATE -> . DEFAULT CADENASIMPLE
+    (84) VALIDACION_CAMPO_CREATE -> . DEFAULT CADENADOBLE
+    (85) VALIDACION_CAMPO_CREATE -> . DEFAULT DECIMAL
+    (86) VALIDACION_CAMPO_CREATE -> . DEFAULT ENTERO
+    (88) VALIDACION_CAMPO_CREATE -> . NULL
+    (87) VALIDACION_CAMPO_CREATE_VACIO -> .
+
+    NOT             shift and go to state 111
+    DEFAULT         shift and go to state 113
+    NULL            shift and go to state 112
+    COMA            reduce using rule 87 (VALIDACION_CAMPO_CREATE_VACIO -> .)
+    ID              reduce using rule 87 (VALIDACION_CAMPO_CREATE_VACIO -> .)
+    PARDER          reduce using rule 87 (VALIDACION_CAMPO_CREATE_VACIO -> .)
+
+    VALIDACIONES_CREATE_TABLE      shift and go to state 107
+    LISTA3                         shift and go to state 108
+    VALIDACION_CAMPO_CREATE        shift and go to state 109
+    VALIDACION_CAMPO_CREATE_VACIO  shift and go to state 110
+
+state 77
+
+    (66) TIPO_CAMPO -> SMALLINT .
+
+    NOT             reduce using rule 66 (TIPO_CAMPO -> SMALLINT .)
+    DEFAULT         reduce using rule 66 (TIPO_CAMPO -> SMALLINT .)
+    NULL            reduce using rule 66 (TIPO_CAMPO -> SMALLINT .)
+    COMA            reduce using rule 66 (TIPO_CAMPO -> SMALLINT .)
+    ID              reduce using rule 66 (TIPO_CAMPO -> SMALLINT .)
+    PARDER          reduce using rule 66 (TIPO_CAMPO -> SMALLINT .)
+
+
+state 78
+
+    (67) TIPO_CAMPO -> INTEGER .
+
+    NOT             reduce using rule 67 (TIPO_CAMPO -> INTEGER .)
+    DEFAULT         reduce using rule 67 (TIPO_CAMPO -> INTEGER .)
+    NULL            reduce using rule 67 (TIPO_CAMPO -> INTEGER .)
+    COMA            reduce using rule 67 (TIPO_CAMPO -> INTEGER .)
+    ID              reduce using rule 67 (TIPO_CAMPO -> INTEGER .)
+    PARDER          reduce using rule 67 (TIPO_CAMPO -> INTEGER .)
+
+
+state 79
+
+    (68) TIPO_CAMPO -> BIGINT .
+
+    NOT             reduce using rule 68 (TIPO_CAMPO -> BIGINT .)
+    DEFAULT         reduce using rule 68 (TIPO_CAMPO -> BIGINT .)
+    NULL            reduce using rule 68 (TIPO_CAMPO -> BIGINT .)
+    COMA            reduce using rule 68 (TIPO_CAMPO -> BIGINT .)
+    ID              reduce using rule 68 (TIPO_CAMPO -> BIGINT .)
+    PARDER          reduce using rule 68 (TIPO_CAMPO -> BIGINT .)
+
+
+state 80
+
+    (69) TIPO_CAMPO -> DECIMAL .
+
+    NOT             reduce using rule 69 (TIPO_CAMPO -> DECIMAL .)
+    DEFAULT         reduce using rule 69 (TIPO_CAMPO -> DECIMAL .)
+    NULL            reduce using rule 69 (TIPO_CAMPO -> DECIMAL .)
+    COMA            reduce using rule 69 (TIPO_CAMPO -> DECIMAL .)
+    ID              reduce using rule 69 (TIPO_CAMPO -> DECIMAL .)
+    PARDER          reduce using rule 69 (TIPO_CAMPO -> DECIMAL .)
+
+
+state 81
+
+    (70) TIPO_CAMPO -> REAL .
+
+    NOT             reduce using rule 70 (TIPO_CAMPO -> REAL .)
+    DEFAULT         reduce using rule 70 (TIPO_CAMPO -> REAL .)
+    NULL            reduce using rule 70 (TIPO_CAMPO -> REAL .)
+    COMA            reduce using rule 70 (TIPO_CAMPO -> REAL .)
+    ID              reduce using rule 70 (TIPO_CAMPO -> REAL .)
+    PARDER          reduce using rule 70 (TIPO_CAMPO -> REAL .)
+
+
+state 82
+
+    (71) TIPO_CAMPO -> MONEY .
+
+    NOT             reduce using rule 71 (TIPO_CAMPO -> MONEY .)
+    DEFAULT         reduce using rule 71 (TIPO_CAMPO -> MONEY .)
+    NULL            reduce using rule 71 (TIPO_CAMPO -> MONEY .)
+    COMA            reduce using rule 71 (TIPO_CAMPO -> MONEY .)
+    ID              reduce using rule 71 (TIPO_CAMPO -> MONEY .)
+    PARDER          reduce using rule 71 (TIPO_CAMPO -> MONEY .)
+
+
+state 83
+
+    (72) TIPO_CAMPO -> DOUBLE . PRECISION
+
+    PRECISION       shift and go to state 114
+
+
+state 84
+
+    (73) TIPO_CAMPO -> CHARACTER . VARYING PARIZQ ENTERO PARDER
+    (75) TIPO_CAMPO -> CHARACTER . PARIZQ ENTERO PARDER
+
+    VARYING         shift and go to state 115
+    PARIZQ          shift and go to state 116
+
+
+state 85
+
+    (74) TIPO_CAMPO -> VARCHAR . PARIZQ ENTERO PARDER
+
+    PARIZQ          shift and go to state 117
+
+
+state 86
+
+    (76) TIPO_CAMPO -> CHAR . PARIZQ ENTERO PARDER
+
+    PARIZQ          shift and go to state 118
+
+
+state 87
+
+    (77) TIPO_CAMPO -> TEXT .
+
+    NOT             reduce using rule 77 (TIPO_CAMPO -> TEXT .)
+    DEFAULT         reduce using rule 77 (TIPO_CAMPO -> TEXT .)
+    NULL            reduce using rule 77 (TIPO_CAMPO -> TEXT .)
+    COMA            reduce using rule 77 (TIPO_CAMPO -> TEXT .)
+    ID              reduce using rule 77 (TIPO_CAMPO -> TEXT .)
+    PARDER          reduce using rule 77 (TIPO_CAMPO -> TEXT .)
+
+
+state 88
+
+    (78) TIPO_CAMPO -> BOOLEAN .
+
+    NOT             reduce using rule 78 (TIPO_CAMPO -> BOOLEAN .)
+    DEFAULT         reduce using rule 78 (TIPO_CAMPO -> BOOLEAN .)
+    NULL            reduce using rule 78 (TIPO_CAMPO -> BOOLEAN .)
+    COMA            reduce using rule 78 (TIPO_CAMPO -> BOOLEAN .)
+    ID              reduce using rule 78 (TIPO_CAMPO -> BOOLEAN .)
+    PARDER          reduce using rule 78 (TIPO_CAMPO -> BOOLEAN .)
+
+
+state 89
 
     (30) CONDICIONES -> CONDICIONES CONDICION .
 
@@ -1120,7 +1492,7 @@ state 66
     WHERE           reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
 
 
-state 67
+state 90
 
     (32) CONDICION -> CONDICION_REL SIMBOLO_LOGICO . CONDICION_REL OTRO_LOGICO
     (33) CONDICION -> CONDICION_REL SIMBOLO_LOGICO . CONDICION_REL
@@ -1134,18 +1506,18 @@ state 67
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICION_REL                  shift and go to state 83
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICION_REL                  shift and go to state 119
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 68
+state 91
 
     (46) SIMBOLO_LOGICO -> AND .
 
@@ -1156,7 +1528,7 @@ state 68
     CADENADOBLE     reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
 
 
-state 69
+state 92
 
     (47) SIMBOLO_LOGICO -> OR .
 
@@ -1167,7 +1539,7 @@ state 69
     CADENADOBLE     reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
 
 
-state 70
+state 93
 
     (36) CONDICION_REL -> EXPRESIONNE OPERADOR . EXPRESIONNE
     (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
@@ -1179,17 +1551,17 @@ state 70
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    EXPRESIONNE                    shift and go to state 84
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    EXPRESIONNE                    shift and go to state 120
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 71
+state 94
 
     (54) OPERADOR -> IGUAL .
 
@@ -1200,7 +1572,7 @@ state 71
     CADENADOBLE     reduce using rule 54 (OPERADOR -> IGUAL .)
 
 
-state 72
+state 95
 
     (55) OPERADOR -> DIFERENTE .
 
@@ -1211,7 +1583,7 @@ state 72
     CADENADOBLE     reduce using rule 55 (OPERADOR -> DIFERENTE .)
 
 
-state 73
+state 96
 
     (56) OPERADOR -> MAYOR .
 
@@ -1222,7 +1594,7 @@ state 73
     CADENADOBLE     reduce using rule 56 (OPERADOR -> MAYOR .)
 
 
-state 74
+state 97
 
     (57) OPERADOR -> MENOR .
 
@@ -1233,7 +1605,7 @@ state 74
     CADENADOBLE     reduce using rule 57 (OPERADOR -> MENOR .)
 
 
-state 75
+state 98
 
     (58) OPERADOR -> MENORIGUAL .
 
@@ -1244,7 +1616,7 @@ state 75
     CADENADOBLE     reduce using rule 58 (OPERADOR -> MENORIGUAL .)
 
 
-state 76
+state 99
 
     (59) OPERADOR -> MAYORIGUAL .
 
@@ -1255,7 +1627,7 @@ state 76
     CADENADOBLE     reduce using rule 59 (OPERADOR -> MAYORIGUAL .)
 
 
-state 77
+state 100
 
     (44) EXPRESIONNE -> NOMBRE_C PUNTO . CAMPOSC
     (49) CAMPOSC -> . ID
@@ -1264,15 +1636,15 @@ state 77
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 86
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 122
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CAMPOSC                        shift and go to state 85
+    CAMPOSC                        shift and go to state 121
 
-state 78
+state 101
 
     (41) INNERR -> WHERE CONDICIONES .
     (30) CONDICIONES -> CONDICIONES . CONDICION
@@ -1293,26 +1665,26 @@ state 78
     JOIN            reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
     WHERE           reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
     PUNTOCOMA       reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICION                      shift and go to state 66
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICION                      shift and go to state 89
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 79
+state 102
 
     (39) INNERR -> INNER JOIN TABLA_REF . ON CONDICIONES
 
-    ON              shift and go to state 87
+    ON              shift and go to state 123
 
 
-state 80
+state 103
 
     (40) INNERR -> JOIN TABLA_REF ON . CONDICIONES
     (30) CONDICIONES -> . CONDICIONES CONDICION
@@ -1330,35 +1702,151 @@ state 80
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICIONES                    shift and go to state 88
-    CONDICION                      shift and go to state 47
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICIONES                    shift and go to state 124
+    CONDICION                      shift and go to state 57
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 81
+state 104
 
     (43) TABLA_REF -> ID AS . ID
 
-    ID              shift and go to state 89
+    ID              shift and go to state 125
 
 
-state 82
+state 105
 
     (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .
 
     SELECT          reduce using rule 7 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
+    CREATE          reduce using rule 7 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
     $end            reduce using rule 7 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
 
 
-state 83
+state 106
+
+    (60) DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA .
+
+    SELECT          reduce using rule 60 (DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA .)
+    CREATE          reduce using rule 60 (DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA .)
+    $end            reduce using rule 60 (DQL_COMANDOS -> CREATE TABLE NOMBRES_TABLAS PARIZQ CUERPO_CREATE_TABLE PARDER PUNTOCOMA .)
+
+
+state 107
+
+    (64) LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE . COMA
+    (65) LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE .
+
+    COMA            shift and go to state 126
+    ID              reduce using rule 65 (LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE .)
+    PARDER          reduce using rule 65 (LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE .)
+
+
+state 108
+
+    (79) VALIDACIONES_CREATE_TABLE -> LISTA3 .
+
+    COMA            reduce using rule 79 (VALIDACIONES_CREATE_TABLE -> LISTA3 .)
+    ID              reduce using rule 79 (VALIDACIONES_CREATE_TABLE -> LISTA3 .)
+    PARDER          reduce using rule 79 (VALIDACIONES_CREATE_TABLE -> LISTA3 .)
+
+
+state 109
+
+    (80) LISTA3 -> VALIDACION_CAMPO_CREATE .
+
+    COMA            reduce using rule 80 (LISTA3 -> VALIDACION_CAMPO_CREATE .)
+    ID              reduce using rule 80 (LISTA3 -> VALIDACION_CAMPO_CREATE .)
+    PARDER          reduce using rule 80 (LISTA3 -> VALIDACION_CAMPO_CREATE .)
+
+
+state 110
+
+    (81) LISTA3 -> VALIDACION_CAMPO_CREATE_VACIO .
+
+    COMA            reduce using rule 81 (LISTA3 -> VALIDACION_CAMPO_CREATE_VACIO .)
+    ID              reduce using rule 81 (LISTA3 -> VALIDACION_CAMPO_CREATE_VACIO .)
+    PARDER          reduce using rule 81 (LISTA3 -> VALIDACION_CAMPO_CREATE_VACIO .)
+
+
+state 111
+
+    (82) VALIDACION_CAMPO_CREATE -> NOT . NULL
+
+    NULL            shift and go to state 127
+
+
+state 112
+
+    (88) VALIDACION_CAMPO_CREATE -> NULL .
+
+    COMA            reduce using rule 88 (VALIDACION_CAMPO_CREATE -> NULL .)
+    ID              reduce using rule 88 (VALIDACION_CAMPO_CREATE -> NULL .)
+    PARDER          reduce using rule 88 (VALIDACION_CAMPO_CREATE -> NULL .)
+
+
+state 113
+
+    (83) VALIDACION_CAMPO_CREATE -> DEFAULT . CADENASIMPLE
+    (84) VALIDACION_CAMPO_CREATE -> DEFAULT . CADENADOBLE
+    (85) VALIDACION_CAMPO_CREATE -> DEFAULT . DECIMAL
+    (86) VALIDACION_CAMPO_CREATE -> DEFAULT . ENTERO
+
+    CADENASIMPLE    shift and go to state 128
+    CADENADOBLE     shift and go to state 129
+    DECIMAL         shift and go to state 130
+    ENTERO          shift and go to state 131
+
+
+state 114
+
+    (72) TIPO_CAMPO -> DOUBLE PRECISION .
+
+    NOT             reduce using rule 72 (TIPO_CAMPO -> DOUBLE PRECISION .)
+    DEFAULT         reduce using rule 72 (TIPO_CAMPO -> DOUBLE PRECISION .)
+    NULL            reduce using rule 72 (TIPO_CAMPO -> DOUBLE PRECISION .)
+    COMA            reduce using rule 72 (TIPO_CAMPO -> DOUBLE PRECISION .)
+    ID              reduce using rule 72 (TIPO_CAMPO -> DOUBLE PRECISION .)
+    PARDER          reduce using rule 72 (TIPO_CAMPO -> DOUBLE PRECISION .)
+
+
+state 115
+
+    (73) TIPO_CAMPO -> CHARACTER VARYING . PARIZQ ENTERO PARDER
+
+    PARIZQ          shift and go to state 132
+
+
+state 116
+
+    (75) TIPO_CAMPO -> CHARACTER PARIZQ . ENTERO PARDER
+
+    ENTERO          shift and go to state 133
+
+
+state 117
+
+    (74) TIPO_CAMPO -> VARCHAR PARIZQ . ENTERO PARDER
+
+    ENTERO          shift and go to state 134
+
+
+state 118
+
+    (76) TIPO_CAMPO -> CHAR PARIZQ . ENTERO PARDER
+
+    ENTERO          shift and go to state 135
+
+
+state 119
 
     (32) CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL . OTRO_LOGICO
     (33) CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .
@@ -1375,13 +1863,13 @@ state 83
     INNER           reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
     JOIN            reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
     WHERE           reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
-    AND             shift and go to state 68
-    OR              shift and go to state 69
+    AND             shift and go to state 91
+    OR              shift and go to state 92
 
-    SIMBOLO_LOGICO                 shift and go to state 90
-    OTRO_LOGICO                    shift and go to state 91
+    SIMBOLO_LOGICO                 shift and go to state 136
+    OTRO_LOGICO                    shift and go to state 137
 
-state 84
+state 120
 
     (36) CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .
 
@@ -1398,7 +1886,7 @@ state 84
     WHERE           reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
 
 
-state 85
+state 121
 
     (44) EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .
 
@@ -1421,7 +1909,7 @@ state 85
     WHERE           reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
 
 
-state 86
+state 122
 
     (49) CAMPOSC -> ID .
 
@@ -1444,7 +1932,7 @@ state 86
     WHERE           reduce using rule 49 (CAMPOSC -> ID .)
 
 
-state 87
+state 123
 
     (39) INNERR -> INNER JOIN TABLA_REF ON . CONDICIONES
     (30) CONDICIONES -> . CONDICIONES CONDICION
@@ -1462,20 +1950,20 @@ state 87
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICIONES                    shift and go to state 92
-    CONDICION                      shift and go to state 47
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICIONES                    shift and go to state 138
+    CONDICION                      shift and go to state 57
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 88
+state 124
 
     (40) INNERR -> JOIN TABLA_REF ON CONDICIONES .
     (30) CONDICIONES -> CONDICIONES . CONDICION
@@ -1496,26 +1984,107 @@ state 88
     JOIN            reduce using rule 40 (INNERR -> JOIN TABLA_REF ON CONDICIONES .)
     WHERE           reduce using rule 40 (INNERR -> JOIN TABLA_REF ON CONDICIONES .)
     PUNTOCOMA       reduce using rule 40 (INNERR -> JOIN TABLA_REF ON CONDICIONES .)
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICION                      shift and go to state 66
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICION                      shift and go to state 89
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 89
+state 125
 
     (43) TABLA_REF -> ID AS ID .
 
     ON              reduce using rule 43 (TABLA_REF -> ID AS ID .)
 
 
-state 90
+state 126
+
+    (64) LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA .
+
+    ID              reduce using rule 64 (LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA .)
+    PARDER          reduce using rule 64 (LISTA2 -> NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA .)
+
+
+state 127
+
+    (82) VALIDACION_CAMPO_CREATE -> NOT NULL .
+
+    COMA            reduce using rule 82 (VALIDACION_CAMPO_CREATE -> NOT NULL .)
+    ID              reduce using rule 82 (VALIDACION_CAMPO_CREATE -> NOT NULL .)
+    PARDER          reduce using rule 82 (VALIDACION_CAMPO_CREATE -> NOT NULL .)
+
+
+state 128
+
+    (83) VALIDACION_CAMPO_CREATE -> DEFAULT CADENASIMPLE .
+
+    COMA            reduce using rule 83 (VALIDACION_CAMPO_CREATE -> DEFAULT CADENASIMPLE .)
+    ID              reduce using rule 83 (VALIDACION_CAMPO_CREATE -> DEFAULT CADENASIMPLE .)
+    PARDER          reduce using rule 83 (VALIDACION_CAMPO_CREATE -> DEFAULT CADENASIMPLE .)
+
+
+state 129
+
+    (84) VALIDACION_CAMPO_CREATE -> DEFAULT CADENADOBLE .
+
+    COMA            reduce using rule 84 (VALIDACION_CAMPO_CREATE -> DEFAULT CADENADOBLE .)
+    ID              reduce using rule 84 (VALIDACION_CAMPO_CREATE -> DEFAULT CADENADOBLE .)
+    PARDER          reduce using rule 84 (VALIDACION_CAMPO_CREATE -> DEFAULT CADENADOBLE .)
+
+
+state 130
+
+    (85) VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .
+
+    COMA            reduce using rule 85 (VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .)
+    ID              reduce using rule 85 (VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .)
+    PARDER          reduce using rule 85 (VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .)
+
+
+state 131
+
+    (86) VALIDACION_CAMPO_CREATE -> DEFAULT ENTERO .
+
+    COMA            reduce using rule 86 (VALIDACION_CAMPO_CREATE -> DEFAULT ENTERO .)
+    ID              reduce using rule 86 (VALIDACION_CAMPO_CREATE -> DEFAULT ENTERO .)
+    PARDER          reduce using rule 86 (VALIDACION_CAMPO_CREATE -> DEFAULT ENTERO .)
+
+
+state 132
+
+    (73) TIPO_CAMPO -> CHARACTER VARYING PARIZQ . ENTERO PARDER
+
+    ENTERO          shift and go to state 139
+
+
+state 133
+
+    (75) TIPO_CAMPO -> CHARACTER PARIZQ ENTERO . PARDER
+
+    PARDER          shift and go to state 140
+
+
+state 134
+
+    (74) TIPO_CAMPO -> VARCHAR PARIZQ ENTERO . PARDER
+
+    PARDER          shift and go to state 141
+
+
+state 135
+
+    (76) TIPO_CAMPO -> CHAR PARIZQ ENTERO . PARDER
+
+    PARDER          shift and go to state 142
+
+
+state 136
 
     (35) OTRO_LOGICO -> SIMBOLO_LOGICO . CONDICIONES
     (30) CONDICIONES -> . CONDICIONES CONDICION
@@ -1533,20 +2102,20 @@ state 90
     (52) CAMPOSC -> . CADENASIMPLE
     (53) CAMPOSC -> . CADENADOBLE
 
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICIONES                    shift and go to state 93
-    CONDICION                      shift and go to state 47
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICIONES                    shift and go to state 143
+    CONDICION                      shift and go to state 57
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 91
+state 137
 
     (32) CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .
 
@@ -1561,7 +2130,7 @@ state 91
     WHERE           reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
 
 
-state 92
+state 138
 
     (39) INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .
     (30) CONDICIONES -> CONDICIONES . CONDICION
@@ -1582,19 +2151,62 @@ state 92
     JOIN            reduce using rule 39 (INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .)
     WHERE           reduce using rule 39 (INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .)
     PUNTOCOMA       reduce using rule 39 (INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .)
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
-    CONDICION                      shift and go to state 66
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICION                      shift and go to state 89
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
 
-state 93
+state 139
+
+    (73) TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO . PARDER
+
+    PARDER          shift and go to state 144
+
+
+state 140
+
+    (75) TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .
+
+    NOT             reduce using rule 75 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
+    DEFAULT         reduce using rule 75 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
+    NULL            reduce using rule 75 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
+    COMA            reduce using rule 75 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
+    ID              reduce using rule 75 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
+    PARDER          reduce using rule 75 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
+
+
+state 141
+
+    (74) TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .
+
+    NOT             reduce using rule 74 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
+    DEFAULT         reduce using rule 74 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
+    NULL            reduce using rule 74 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
+    COMA            reduce using rule 74 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
+    ID              reduce using rule 74 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
+    PARDER          reduce using rule 74 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
+
+
+state 142
+
+    (76) TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .
+
+    NOT             reduce using rule 76 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
+    DEFAULT         reduce using rule 76 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
+    NULL            reduce using rule 76 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
+    COMA            reduce using rule 76 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
+    ID              reduce using rule 76 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
+    PARDER          reduce using rule 76 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
+
+
+state 143
 
     (35) OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .
     (30) CONDICIONES -> CONDICIONES . CONDICION
@@ -1620,11 +2232,11 @@ state 93
     INNER           reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
     JOIN            reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
     WHERE           reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
-    ID              shift and go to state 52
-    ENTERO          shift and go to state 53
-    DECIMAL         shift and go to state 54
-    CADENASIMPLE    shift and go to state 55
-    CADENADOBLE     shift and go to state 56
+    ID              shift and go to state 62
+    ENTERO          shift and go to state 63
+    DECIMAL         shift and go to state 64
+    CADENASIMPLE    shift and go to state 65
+    CADENADOBLE     shift and go to state 66
 
   ! ID              [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
   ! ENTERO          [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
@@ -1632,18 +2244,30 @@ state 93
   ! CADENASIMPLE    [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
   ! CADENADOBLE     [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
 
-    CONDICION                      shift and go to state 66
-    CONDICION_REL                  shift and go to state 48
-    EXPRESIONNE                    shift and go to state 49
-    NOMBRE_C                       shift and go to state 50
-    CAMPOSC                        shift and go to state 51
+    CONDICION                      shift and go to state 89
+    CONDICION_REL                  shift and go to state 58
+    EXPRESIONNE                    shift and go to state 59
+    NOMBRE_C                       shift and go to state 60
+    CAMPOSC                        shift and go to state 61
+
+state 144
+
+    (73) TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .
+
+    NOT             reduce using rule 73 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
+    DEFAULT         reduce using rule 73 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
+    NULL            reduce using rule 73 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
+    COMA            reduce using rule 73 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
+    ID              reduce using rule 73 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
+    PARDER          reduce using rule 73 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
+
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for ID in state 93 resolved as shift
-WARNING: shift/reduce conflict for ENTERO in state 93 resolved as shift
-WARNING: shift/reduce conflict for DECIMAL in state 93 resolved as shift
-WARNING: shift/reduce conflict for CADENASIMPLE in state 93 resolved as shift
-WARNING: shift/reduce conflict for CADENADOBLE in state 93 resolved as shift
-WARNING: reduce/reduce conflict in state 46 resolved using rule (CUERPO -> WHERE CONDICIONES)
-WARNING: rejected rule (INNERR -> WHERE CONDICIONES) in state 46
+WARNING: shift/reduce conflict for ID in state 143 resolved as shift
+WARNING: shift/reduce conflict for ENTERO in state 143 resolved as shift
+WARNING: shift/reduce conflict for DECIMAL in state 143 resolved as shift
+WARNING: shift/reduce conflict for CADENASIMPLE in state 143 resolved as shift
+WARNING: shift/reduce conflict for CADENADOBLE in state 143 resolved as shift
+WARNING: reduce/reduce conflict in state 56 resolved using rule (CUERPO -> WHERE CONDICIONES)
+WARNING: rejected rule (INNERR -> WHERE CONDICIONES) in state 56
