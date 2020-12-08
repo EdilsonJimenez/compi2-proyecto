@@ -37,6 +37,18 @@ from tabla1 as A;
 
 -- Probando Group By
 
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla ;
+
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ;
+
+
 
 CREATE TABLE my_first_table (
     nombre INTEGER NOT NULL,

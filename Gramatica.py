@@ -12,6 +12,21 @@ reservadas = {
     'as': 'AS',
     'inner': 'INNER',
     'join': 'JOIN',
+    # PALABRAS RESERVADAS DQL
+    'using': 'USING',
+    'left': 'LEFT',
+    'right': 'RIGHT',
+    'full': 'FULL',
+    'outer': 'OUTER',
+    'group': 'GROUP',
+    'by': 'BY',
+    'asc': 'ASC',
+    'desc': 'DESC',
+    'nulls': 'NULLS',
+    'first': 'FIRST',
+    'last': 'LAST',
+    'having': 'HAVING',
+
     'on': 'ON',
     'and': 'AND',
     'or': 'OR',
@@ -45,6 +60,9 @@ reservadas = {
     'constraint': 'CONSTRAINT',
     'default': 'DEFAULT',
 
+
+
+
     # palabras reservadas DDL dabatabases
     'replace': 'REPLACE',
     'if': 'IF',
@@ -72,6 +90,7 @@ tokens = [
 
              # SIMBOLOS UTILIZADOS EN EL LENGUAJE
              'DIFERENTE',
+             'NEGACION',
              'IGUAL',
              'MAYOR',
              'MENOR',
@@ -102,6 +121,7 @@ tokens = [
 
 # TOKENS DE LOS SIMBOLOS UTILIZADOS EN EL LENGUAJE
 t_DIFERENTE = r'!='
+t_NEGACION  = r'\!'
 t_IGUAL     = r'='
 t_MAYOR     = r'>'
 t_MENOR = r'<'
@@ -281,6 +301,8 @@ def p_instruccion_dql_comandosS2(t) :
 
 
 #------------------------------------------------------------------------------------------------------------------
+
+#Lista de Campos
 def p_ListaCampos_ListaCampos(t):
     'LISTA_CAMPOS       : LISTA_CAMPOS LISTA'
 
@@ -375,7 +397,12 @@ def p_S_AsAlias(t):
     t[0] = str(t[1]) + str(t[2])
    # print('\n' + str(t[1]) + str(t[2]) + '\n')
 
+
+
 #------------------------------------------------------------------------------------------------------------------
+
+#Distinct
+
 
 def p_Disctint_Rw(t):
     'DISTINCTNT          : DISTINCT'
@@ -386,10 +413,7 @@ def p_Disctint_Rw(t):
 
 #------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
+#Nombres Tablas
 
 def p_NombresTablas_NombresTablas(t):
     'NOMBRES_TABLAS       : NOMBRES_TABLAS TABLA'
@@ -420,6 +444,8 @@ def p_Tabla_NombreTS(t):
 
 
 
+
+
 def p_Ss_ComaLista(t):
     'S1          : COMA TABLA'
 
@@ -433,9 +459,13 @@ def p_Ss_AsAlias(t):
     'S1          : AS ALIAS'
 
     t[0] = str(t[1]) + str(t[2])
-
     #print('\n' + str(t[1]) + str(t[2]) + '\n')
 
+
+
+
+#------------------------------------------------------------------------------------------------------------------
+#Cuerpo
 
 
 
@@ -447,15 +477,55 @@ def p_Cuerpo_Where(t):
     #print('\n' + str(t[1]) + str(t[2]) + '\n')
 
 
-def p_Cuerpo_Inners(t):
-    'CUERPO   : INNERS'
+
+def p_Cuerpo_Mores(t):
+    'CUERPO   : MORES'
 
     t[0] = str(t[1])
-   # print('\n' + str(t[1]) + '\n')
+
+
+
+def p_MORES_ListaCampos(t):
+    'MORES       : MORES MOREE'
+
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+
+def p_MORES_Lista(t):
+    'MORES    : MOREE'
+    t[0] = [t[1]]
+
+
+
+
+
+
+
+
+
+
+def p_Mores_Inners(t):
+    'MOREE   : INNERS'
+
+    t[0] = str(t[1])
+
+
+
+def p_Mores_Groups(t):
+    'MOREE   : GROUPS'
+
+    t[0] = str(t[1])
+
+
+
+
 
 
 #-----------------------------------------------------------------------------------------------------------------
 
+#Condiciones
 
 
 def p_Condiciones_Lista(t):
@@ -491,11 +561,6 @@ def p_Condicion_CondiRel(t):
     t[0] = str(t[1])
 
 
-def p_OtroLogico_SimboloLogic(t):
-
-    'OTRO_LOGICO : SIMBOLO_LOGICO CONDICIONES'
-
-    t[0] = str(t[1]) + str(t[2])
 
 
 def p_CondicionRel_Expresionn(t):
@@ -504,56 +569,29 @@ def p_CondicionRel_Expresionn(t):
 
 
 
-#-----------------------------------------------------------------------------------------------------------------
 
-def p_Inners_Lista(t):
-    'INNERS : INNERS INNERR'
-
-    t[1].append(t[2])
-    t[0] = t[1]
+def p_CondicionRel_Negacion(t):
+    'CONDICION_REL : SIMBOLO_NEG  EXPRESIONNE'
+    t[0] = str(t[1]) + str(t[2])
 
 
-
-def p_Inners_Inner(t):
-    'INNERS : INNERR'
-
-    t[0] = [t[1]]
+def p_CondicionRel_Expre(t):
+    'CONDICION_REL : EXPRESIONNE'
+    t[0] = str(t[1])
 
 
 
-def p_Inner_InnerJoin(t):
-    'INNERR : INNER JOIN TABLA_REF ON CONDICIONES'
-
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
-
-
-
-def p_Inner_Join(t):
-    'INNERR :  JOIN TABLA_REF ON CONDICIONES'
-
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-
-def p_Inner_Where(t):
-    'INNERR   : WHERE CONDICIONES'
+def p_OtroLogico_SimboloLogic(t):
+    'OTRO_LOGICO : SIMBOLO_LOGICO CONDICIONES'
 
     t[0] = str(t[1]) + str(t[2])
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
 
 
-def p_TablaRef_Id(t):
-    'TABLA_REF : ID'
-
-    t[0] = t[1]
-
-def p_TablaRef_IdAS(t):
-    'TABLA_REF : ID AS ID'
-
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 #------------------------------------------------------------------------------------------------------------------
+#Expresiones
+
 
 def p_Expresion_Nombre(t):
     'EXPRESIONNE : NOMBRE_C PUNTO CAMPOSC'
@@ -566,11 +604,26 @@ def p_Expresion_CampoC(t):
     t[0] = str(t[1])
 
 
+
 def p_SimboloLogico_Logicos(t):
     ''' SIMBOLO_LOGICO : AND
                       | OR '''
 
     t[0] = str(t[1])
+
+
+
+
+
+
+def p_SimboloNegacion_sim(t):
+    'SIMBOLO_NEG  :  NEGACION'
+
+    t[0] = str(t[1])
+
+
+
+
 
 
 def p_NombreC_id(t):
@@ -587,8 +640,8 @@ def p_CamposC_id(t):
                     | DECIMAL
                     | CADENASIMPLE
                     | CADENADOBLE '''
-
     t[0] = str(t[1])
+
 
 
 def p_SimboloRela_Simbolos(t):
@@ -602,7 +655,282 @@ def p_SimboloRela_Simbolos(t):
     t[0] = str(t[1])
 
 
+
+
 #-----------------------------------------------------------------------------------------------------------------
+#inners
+
+def p_Inners_Lista(t):
+    'INNERS : INNERS INNERR'
+
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+
+def p_Inners_Inner(t):
+    'INNERS : INNERR'
+
+    t[0] = [t[1]]
+
+
+
+
+
+def p_Inner_InnerJoin(t):
+    'INNERR : TIPOS_INNER JOIN TABLA_REF ON CONDICIONES'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+
+
+
+def p_Inner_Join(t):
+    'INNERR :  JOIN TABLA_REF ON CONDICIONES'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+
+
+
+def p_Inner_InnerJoinUsing(t):
+    'INNERR : TIPOS_INNER JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+
+
+
+def p_Inner_JoinUsing(t):
+    'INNERR :  JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER '
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+
+
+def p_Inner_Where(t):
+    'INNERR   : WHERE CONDICIONES'
+
+    t[0] = str(t[1]) + str(t[2])
+    #print('\n' + str(t[1]) + str(t[2]) + '\n')
+
+
+def p_SubColumn_join(t):
+    'SUB_COLUMN  :  JOIN EXPRESIONNE'
+
+    t[0] = str(t[1]) + str(t[2])
+
+
+
+
+def p_SubColumn_Expresione(t):
+    'SUB_COLUMN  :  EXPRESIONNE'
+
+    t[0] = str(t[1])
+
+
+
+def p_TiposInner_InnerOuter(t):
+    ''' TIPOS_INNER :  INNER OUTER'''
+    t[0] = str(t[1]) + str(t[2])
+
+def p_TiposInner_Inner(t):
+    ''' TIPOS_INNER :  INNER'''
+    t[0] = str(t[1])
+
+
+def p_TiposInner_LefOuter(t):
+    ''' TIPOS_INNER :  LEFT OUTER'''
+    t[0] = str(t[1]) + str(t[2])
+
+def p_TiposInner_Left(t):
+    ''' TIPOS_INNER :  LEFT'''
+    t[0] = str(t[1])
+
+
+def p_TiposInner_RightOuter(t):
+    ''' TIPOS_INNER :  RIGHT OUTER'''
+    t[0] = str(t[1]) + str(t[2])
+
+def p_TiposInner_Right(t):
+    ''' TIPOS_INNER :  RIGHT'''
+    t[0] = str(t[1])
+
+
+def p_TiposInner_FullOuter(t):
+    ''' TIPOS_INNER :  FULL OUTER'''
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_TiposInner_Full(t):
+    ''' TIPOS_INNER :  FULL'''
+    t[0] = str(t[1])
+
+
+
+
+
+
+def p_TablaRef_Id(t):
+    'TABLA_REF : ID'
+
+    t[0] = t[1]
+
+def p_TablaRef_IdAS(t):
+    'TABLA_REF : ID AS ID'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#Groups
+
+
+def p_Groups_ListaG(t):
+    'GROUPS : GROUPS GROUPP'
+
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+
+def p_Groups_ListaG(t):
+    'GROUPS    : GROUPP'
+
+    t[0] = [t[1]]
+
+
+
+def p_Group_GroupBy(t):
+    'GROUPP    : GROUP BY EXPRE_LIST MORE_ORDER'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+def p_Group_GroupBySin(t):
+    'GROUPP    : GROUP BY EXPRE_LIST'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+
+
+def p_ExpreList_Lista(t):
+    'EXPRE_LIST : EXPRE_LIST  EXPRES'
+
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_ExpreList_Expresion(t):
+    'EXPRE_LIST    : EXPRES'
+
+    t[0] = [t[1]]
+
+
+
+def p_Expre_Campo1(t):
+    'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_Expre_Campo2(t):
+    'EXPRES    :  NOMBRE_T PUNTO CAMPOS '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+def p_Expre_Campo3(t):
+    'EXPRES    :  CAMPOS S2 '
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_Expre_Campo4(t):
+    'EXPRES    :  CAMPOS '
+    t[0] = str(t[1])
+
+
+
+def p_Expre_Campo5(t):
+    'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2 STATE '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+
+
+
+
+def p_Expre_Campo6(t):
+    'EXPRES    :  NOMBRE_T PUNTO CAMPOS STATE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+def p_Expre_Campo7(t):
+    'EXPRES    :  CAMPOS S2 STATE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+def p_Expre_Campo8(t):
+    'EXPRES    :  CAMPOS STATE '
+    t[0] = str(t[1]) + str(t[2])
+
+
+
+def p_S2(t):
+    'S2 : COMA EXPRES'
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_S2(t):
+    'S2 : AS ALIAS'
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_MoreOrder_Having(t):
+    'MORE_ORDER  :  HAVING CONDICIONES'
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_State_orden1(t):
+    'STATE : ASC'
+    t[0] = str(t[1])
+
+
+def p_State_orden2(t):
+    'STATE : ASC NULLS FIRST'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_State_orden3(t):
+    'STATE : ASC NULLS LAST'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+def p_State_orden4(t):
+    'STATE : DESC '
+    t[0] = str(t[1])
+
+
+
+def p_State_orden5(t):
+    'STATE : DESC NULLS FIRST'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+def p_State_orden6(t):
+    'STATE : DESC NULLS LAST'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
