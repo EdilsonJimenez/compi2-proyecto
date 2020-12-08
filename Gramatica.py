@@ -20,7 +20,7 @@ reservadas = {
     'update': 'UPDATE',
     'set': 'SET',
     'delete': 'DELETE',
-    'values': 'VALUES',    
+    'values': 'VALUES',
     'type': 'TYPE',
     'database': 'DATABASE',
     'create': 'CREATE',
@@ -32,7 +32,7 @@ reservadas = {
     'real': 'REAL',
     'money': 'MONEY',
     'double': 'DOUBLE',
-    'precision':'PRECISION',
+    'precision': 'PRECISION',
     'character': 'CHARACTER',
     'varying': 'VARYING',
     'varchar': 'VARCHAR',
@@ -43,8 +43,23 @@ reservadas = {
     'not': 'NOT',
     'null': 'NULL',
     'constraint': 'CONSTRAINT',
-    'default': 'DEFAULT'
+    'default': 'DEFAULT',
 
+    # palabras reservadas DDL dabatabases
+    'replace': 'REPLACE',
+    'if': 'IF',
+    'exists': 'EXISTS',
+    'owner': 'OWNER',
+    'mode': 'MODE',
+    'show': 'SHOW',
+    'databases': 'DATABASES',
+    'like': 'LIKE',
+    'alter': 'ALTER',
+    'rename': 'RENAME',
+    'to': 'TO',
+    'current_user': 'CURRENT_USER',
+    'session_user': 'SESSION_USER',
+    'drop': 'DROP'
 }
 
 
@@ -224,7 +239,8 @@ def p_instrucciones_instruccion(t) :
 
 
 def p_instruccion(t) :
-    '''INSTRUCCION     : DQL_COMANDOS'''
+    '''INSTRUCCION  : DQL_COMANDOS
+                    | DDL_COMANDOS'''
     t[0] = t[1]
 
 
@@ -629,7 +645,7 @@ def p_CREATE_TABLE_LISTA2_CAMPOS(t):
 
 def p_Create_TABLE_CAMPOS(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Create_TABLE_CAMPOS2(t):
@@ -643,7 +659,7 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | DECIMAL
                     | REAL
                     | MONEY
-                    | DOUBLE PRECISION 
+                    | DOUBLE PRECISION
                     | CHARACTER VARYING PARIZQ ENTERO PARDER
                     | VARCHAR PARIZQ ENTERO PARDER
                     | CHARACTER PARIZQ ENTERO PARDER
@@ -659,15 +675,15 @@ def p_CREATE_TABLE_LISTA3_CAMPOS(t):
 
 def p_Create_TABLE_CAMPOS3(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE '
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 def p_Create_TABLE_CAMPOS4(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
-    '''VALIDACION_CAMPO_CREATE  : NOT NULL  
+    '''VALIDACION_CAMPO_CREATE  : NOT NULL
                                 | DEFAULT CADENASIMPLE
                                 | DEFAULT CADENADOBLE
                                 | DEFAULT DECIMAL
@@ -683,24 +699,96 @@ def p_Create_TABLE_TIPO_CAMPO4(t):
     t[0] = str(t[1])
 
 
+#DDL
+#-----------------------------------------------------------------------------------------------------------------
+def p_comando_ddl(t):
+    '''DDL_COMANDOS : CREATE_DATABASE
+                    | SHOW_DATABASES
+                    | ALTER_DATABASE
+                    | DROP_DATABASE'''
+
+    t[0] = str(t[1])
+    print('\n' + str(t[0]) + '\n')
+def p_create_database(t):
+    'CREATE_DATABASE : CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+
+def p_replace_op(t):
+    'REPLACE_OP : OR REPLACE'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_replace_op_e(t):
+    'REPLACE_OP : '
+    t[0] = ''
+
+def p_if_not_exists(t):
+    'IF_NOT_EXISTIS : IF NOT EXISTS'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_if_not_exists_e(t):
+    'IF_NOT_EXISTIS : '
+    t[0] = ''
+
+def p_owner_database(t):
+    'OWNER_DATABASE : OWNER IGUAL ID'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_owner_database_e(t):
+    'OWNER_DATABASE : '
+    t[0] = ''
+
+def p_mode_database(t):
+    'MODE_DATABASE : MODE IGUAL ENTERO'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_mode_database_e(t):
+    'MODE_DATABASE : '
+    t[0] = ''
+
+def p_show_databases(t):
+    'SHOW_DATABASES : SHOW DATABASES SHOW_DATABASES_LIKE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_show_databases_like(t):
+    'SHOW_DATABASES_LIKE : LIKE CADENADOBLE'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_show_databases_like_e(t):
+    'SHOW_DATABASES_LIKE : '
+    t[0] = ''
+
+def p_alter_database(t):
+    'ALTER_DATABASE : ALTER DATABASE ID ALTER_DATABASE_OP'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+def p_alter_database_op(t):
+    '''ALTER_DATABASE_OP : RENAME TO ID
+                        |  OWNER TO ALTER_TABLE_OP_OW'''
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_alter_database_op_ow(t):
+    '''ALTER_TABLE_OP_OW : ID
+                        |  CURRENT_USER
+                        |  SESSION_USER'''
+    t[0] = str(t[1])
+
+def p_alter_database_op_e(t):
+    'ALTER_DATABASE_OP : '
+    t[0] = ''
+
+def p_drop_database(t):
+    'DROP_DATABASE : DROP DATABASE IF_EXISTS_DATABASE ID'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+def p_if_exists_database(t):
+    'IF_EXISTS_DATABASE : IF EXISTS'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_if_exists_database_e(t):
+    'IF_EXISTS_DATABASE : '
+    t[0] = ''
 
 #-----------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-#-----------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 
 
