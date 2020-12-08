@@ -1,0 +1,1649 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    COMENTARIOMULTI
+    COMENTARIONORMAL
+    DELETE
+    FECHA
+    INSERT
+    INTO
+    PARDER
+    PARIZQ
+    SET
+    UPDATE
+    VALUES
+
+Grammar
+
+Rule 0     S' -> INICIO
+Rule 1     INICIO -> INSTRUCCIONES
+Rule 2     INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION
+Rule 3     INSTRUCCIONES -> INSTRUCCION
+Rule 4     INSTRUCCION -> DQL_COMANDOS
+Rule 5     DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+Rule 6     DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+Rule 7     DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+Rule 8     DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+Rule 9     LISTA_CAMPOS -> LISTA_CAMPOS LISTA
+Rule 10    LISTA_CAMPOS -> LISTA
+Rule 11    LISTA -> NOMBRE_T PUNTO CAMPOS S
+Rule 12    LISTA -> NOMBRE_T PUNTO CAMPOS
+Rule 13    LISTA -> CAMPOS S
+Rule 14    LISTA -> CAMPOS
+Rule 15    CAMPOS -> ID
+Rule 16    CAMPOS -> ASTERISCO
+Rule 17    NOMBRE_T -> ID
+Rule 18    ALIAS -> ID
+Rule 19    S -> COMA LISTA
+Rule 20    S -> AS ALIAS
+Rule 21    DISTINCTNT -> DISTINCT
+Rule 22    NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA
+Rule 23    NOMBRES_TABLAS -> TABLA
+Rule 24    TABLA -> NOMBRE_T
+Rule 25    TABLA -> NOMBRE_T S1
+Rule 26    S1 -> COMA TABLA
+Rule 27    S1 -> AS ALIAS
+Rule 28    CUERPO -> WHERE CONDICIONES
+Rule 29    CUERPO -> INNERS
+Rule 30    CONDICIONES -> CONDICIONES CONDICION
+Rule 31    CONDICIONES -> CONDICION
+Rule 32    CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+Rule 33    CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+Rule 34    CONDICION -> CONDICION_REL
+Rule 35    OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES
+Rule 36    CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE
+Rule 37    INNERS -> INNERS INNERR
+Rule 38    INNERS -> INNERR
+Rule 39    INNERR -> INNER JOIN TABLA_REF ON CONDICIONES
+Rule 40    INNERR -> JOIN TABLA_REF ON CONDICIONES
+Rule 41    INNERR -> WHERE CONDICIONES
+Rule 42    TABLA_REF -> ID
+Rule 43    TABLA_REF -> ID AS ID
+Rule 44    EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC
+Rule 45    EXPRESIONNE -> CAMPOSC
+Rule 46    SIMBOLO_LOGICO -> AND
+Rule 47    SIMBOLO_LOGICO -> OR
+Rule 48    NOMBRE_C -> ID
+Rule 49    CAMPOSC -> ID
+Rule 50    CAMPOSC -> ENTERO
+Rule 51    CAMPOSC -> DECIMAL
+Rule 52    CAMPOSC -> CADENASIMPLE
+Rule 53    CAMPOSC -> CADENADOBLE
+Rule 54    OPERADOR -> IGUAL
+Rule 55    OPERADOR -> DIFERENTE
+Rule 56    OPERADOR -> MAYOR
+Rule 57    OPERADOR -> MENOR
+Rule 58    OPERADOR -> MENORIGUAL
+Rule 59    OPERADOR -> MAYORIGUAL
+
+Terminals, with rules where they appear
+
+AND                  : 46
+AS                   : 20 27 43
+ASTERISCO            : 16
+CADENADOBLE          : 53
+CADENASIMPLE         : 52
+COMA                 : 19 26
+COMENTARIOMULTI      : 
+COMENTARIONORMAL     : 
+DECIMAL              : 51
+DELETE               : 
+DIFERENTE            : 55
+DISTINCT             : 21
+ENTERO               : 50
+FECHA                : 
+FROM                 : 5 6 7 8
+ID                   : 15 17 18 42 43 43 48 49
+IGUAL                : 54
+INNER                : 39
+INSERT               : 
+INTO                 : 
+JOIN                 : 39 40
+MAYOR                : 56
+MAYORIGUAL           : 59
+MENOR                : 57
+MENORIGUAL           : 58
+ON                   : 39 40
+OR                   : 47
+PARDER               : 
+PARIZQ               : 
+PUNTO                : 11 12 44
+PUNTOCOMA            : 5 6 7 8
+SELECT               : 5 6 7 8
+SET                  : 
+UPDATE               : 
+VALUES               : 
+WHERE                : 28 41
+error                : 
+
+Nonterminals, with rules where they appear
+
+ALIAS                : 20 27
+CAMPOS               : 11 12 13 14
+CAMPOSC              : 44 45
+CONDICION            : 30 31
+CONDICIONES          : 28 30 35 39 40 41
+CONDICION_REL        : 32 32 33 33 34
+CUERPO               : 5 7
+DISTINCTNT           : 7 8
+DQL_COMANDOS         : 4
+EXPRESIONNE          : 36 36
+INICIO               : 0
+INNERR               : 37 38
+INNERS               : 29 37
+INSTRUCCION          : 2 3
+INSTRUCCIONES        : 1 2
+LISTA                : 9 10 19
+LISTA_CAMPOS         : 5 6 7 8 9
+NOMBRES_TABLAS       : 5 6 7 8 22
+NOMBRE_C             : 44
+NOMBRE_T             : 11 12 24 25
+OPERADOR             : 36
+OTRO_LOGICO          : 32
+S                    : 11 13
+S1                   : 25
+SIMBOLO_LOGICO       : 32 33 35
+TABLA                : 22 23 26
+TABLA_REF            : 39 40
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . INICIO
+    (1) INICIO -> . INSTRUCCIONES
+    (2) INSTRUCCIONES -> . INSTRUCCIONES INSTRUCCION
+    (3) INSTRUCCIONES -> . INSTRUCCION
+    (4) INSTRUCCION -> . DQL_COMANDOS
+    (5) DQL_COMANDOS -> . SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (6) DQL_COMANDOS -> . SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+    (7) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (8) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+
+    SELECT          shift and go to state 5
+
+    INICIO                         shift and go to state 1
+    INSTRUCCIONES                  shift and go to state 2
+    INSTRUCCION                    shift and go to state 3
+    DQL_COMANDOS                   shift and go to state 4
+
+state 1
+
+    (0) S' -> INICIO .
+
+
+
+state 2
+
+    (1) INICIO -> INSTRUCCIONES .
+    (2) INSTRUCCIONES -> INSTRUCCIONES . INSTRUCCION
+    (4) INSTRUCCION -> . DQL_COMANDOS
+    (5) DQL_COMANDOS -> . SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (6) DQL_COMANDOS -> . SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+    (7) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (8) DQL_COMANDOS -> . SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+
+    $end            reduce using rule 1 (INICIO -> INSTRUCCIONES .)
+    SELECT          shift and go to state 5
+
+    INSTRUCCION                    shift and go to state 6
+    DQL_COMANDOS                   shift and go to state 4
+
+state 3
+
+    (3) INSTRUCCIONES -> INSTRUCCION .
+
+    SELECT          reduce using rule 3 (INSTRUCCIONES -> INSTRUCCION .)
+    $end            reduce using rule 3 (INSTRUCCIONES -> INSTRUCCION .)
+
+
+state 4
+
+    (4) INSTRUCCION -> DQL_COMANDOS .
+
+    SELECT          reduce using rule 4 (INSTRUCCION -> DQL_COMANDOS .)
+    $end            reduce using rule 4 (INSTRUCCION -> DQL_COMANDOS .)
+
+
+state 5
+
+    (5) DQL_COMANDOS -> SELECT . LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (6) DQL_COMANDOS -> SELECT . LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+    (7) DQL_COMANDOS -> SELECT . DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (8) DQL_COMANDOS -> SELECT . DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+    (9) LISTA_CAMPOS -> . LISTA_CAMPOS LISTA
+    (10) LISTA_CAMPOS -> . LISTA
+    (21) DISTINCTNT -> . DISTINCT
+    (11) LISTA -> . NOMBRE_T PUNTO CAMPOS S
+    (12) LISTA -> . NOMBRE_T PUNTO CAMPOS
+    (13) LISTA -> . CAMPOS S
+    (14) LISTA -> . CAMPOS
+    (17) NOMBRE_T -> . ID
+    (15) CAMPOS -> . ID
+    (16) CAMPOS -> . ASTERISCO
+
+    DISTINCT        shift and go to state 10
+    ID              shift and go to state 13
+    ASTERISCO       shift and go to state 14
+
+    LISTA_CAMPOS                   shift and go to state 7
+    DISTINCTNT                     shift and go to state 8
+    LISTA                          shift and go to state 9
+    NOMBRE_T                       shift and go to state 11
+    CAMPOS                         shift and go to state 12
+
+state 6
+
+    (2) INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION .
+
+    SELECT          reduce using rule 2 (INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION .)
+    $end            reduce using rule 2 (INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION .)
+
+
+state 7
+
+    (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS . FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS . FROM NOMBRES_TABLAS PUNTOCOMA
+    (9) LISTA_CAMPOS -> LISTA_CAMPOS . LISTA
+    (11) LISTA -> . NOMBRE_T PUNTO CAMPOS S
+    (12) LISTA -> . NOMBRE_T PUNTO CAMPOS
+    (13) LISTA -> . CAMPOS S
+    (14) LISTA -> . CAMPOS
+    (17) NOMBRE_T -> . ID
+    (15) CAMPOS -> . ID
+    (16) CAMPOS -> . ASTERISCO
+
+    FROM            shift and go to state 15
+    ID              shift and go to state 13
+    ASTERISCO       shift and go to state 14
+
+    LISTA                          shift and go to state 16
+    NOMBRE_T                       shift and go to state 11
+    CAMPOS                         shift and go to state 12
+
+state 8
+
+    (7) DQL_COMANDOS -> SELECT DISTINCTNT . LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (8) DQL_COMANDOS -> SELECT DISTINCTNT . LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA
+    (9) LISTA_CAMPOS -> . LISTA_CAMPOS LISTA
+    (10) LISTA_CAMPOS -> . LISTA
+    (11) LISTA -> . NOMBRE_T PUNTO CAMPOS S
+    (12) LISTA -> . NOMBRE_T PUNTO CAMPOS
+    (13) LISTA -> . CAMPOS S
+    (14) LISTA -> . CAMPOS
+    (17) NOMBRE_T -> . ID
+    (15) CAMPOS -> . ID
+    (16) CAMPOS -> . ASTERISCO
+
+    ID              shift and go to state 13
+    ASTERISCO       shift and go to state 14
+
+    LISTA_CAMPOS                   shift and go to state 17
+    LISTA                          shift and go to state 9
+    NOMBRE_T                       shift and go to state 11
+    CAMPOS                         shift and go to state 12
+
+state 9
+
+    (10) LISTA_CAMPOS -> LISTA .
+
+    FROM            reduce using rule 10 (LISTA_CAMPOS -> LISTA .)
+    ID              reduce using rule 10 (LISTA_CAMPOS -> LISTA .)
+    ASTERISCO       reduce using rule 10 (LISTA_CAMPOS -> LISTA .)
+
+
+state 10
+
+    (21) DISTINCTNT -> DISTINCT .
+
+    ID              reduce using rule 21 (DISTINCTNT -> DISTINCT .)
+    ASTERISCO       reduce using rule 21 (DISTINCTNT -> DISTINCT .)
+
+
+state 11
+
+    (11) LISTA -> NOMBRE_T . PUNTO CAMPOS S
+    (12) LISTA -> NOMBRE_T . PUNTO CAMPOS
+
+    PUNTO           shift and go to state 18
+
+
+state 12
+
+    (13) LISTA -> CAMPOS . S
+    (14) LISTA -> CAMPOS .
+    (19) S -> . COMA LISTA
+    (20) S -> . AS ALIAS
+
+    FROM            reduce using rule 14 (LISTA -> CAMPOS .)
+    ID              reduce using rule 14 (LISTA -> CAMPOS .)
+    ASTERISCO       reduce using rule 14 (LISTA -> CAMPOS .)
+    COMA            shift and go to state 20
+    AS              shift and go to state 21
+
+    S                              shift and go to state 19
+
+state 13
+
+    (17) NOMBRE_T -> ID .
+    (15) CAMPOS -> ID .
+
+    PUNTO           reduce using rule 17 (NOMBRE_T -> ID .)
+    COMA            reduce using rule 15 (CAMPOS -> ID .)
+    AS              reduce using rule 15 (CAMPOS -> ID .)
+    FROM            reduce using rule 15 (CAMPOS -> ID .)
+    ID              reduce using rule 15 (CAMPOS -> ID .)
+    ASTERISCO       reduce using rule 15 (CAMPOS -> ID .)
+
+
+state 14
+
+    (16) CAMPOS -> ASTERISCO .
+
+    COMA            reduce using rule 16 (CAMPOS -> ASTERISCO .)
+    AS              reduce using rule 16 (CAMPOS -> ASTERISCO .)
+    FROM            reduce using rule 16 (CAMPOS -> ASTERISCO .)
+    ID              reduce using rule 16 (CAMPOS -> ASTERISCO .)
+    ASTERISCO       reduce using rule 16 (CAMPOS -> ASTERISCO .)
+
+
+state 15
+
+    (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM . NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM . NOMBRES_TABLAS PUNTOCOMA
+    (22) NOMBRES_TABLAS -> . NOMBRES_TABLAS TABLA
+    (23) NOMBRES_TABLAS -> . TABLA
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (17) NOMBRE_T -> . ID
+
+    ID              shift and go to state 25
+
+    NOMBRES_TABLAS                 shift and go to state 22
+    TABLA                          shift and go to state 23
+    NOMBRE_T                       shift and go to state 24
+
+state 16
+
+    (9) LISTA_CAMPOS -> LISTA_CAMPOS LISTA .
+
+    FROM            reduce using rule 9 (LISTA_CAMPOS -> LISTA_CAMPOS LISTA .)
+    ID              reduce using rule 9 (LISTA_CAMPOS -> LISTA_CAMPOS LISTA .)
+    ASTERISCO       reduce using rule 9 (LISTA_CAMPOS -> LISTA_CAMPOS LISTA .)
+
+
+state 17
+
+    (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS . FROM NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS . FROM NOMBRES_TABLAS PUNTOCOMA
+    (9) LISTA_CAMPOS -> LISTA_CAMPOS . LISTA
+    (11) LISTA -> . NOMBRE_T PUNTO CAMPOS S
+    (12) LISTA -> . NOMBRE_T PUNTO CAMPOS
+    (13) LISTA -> . CAMPOS S
+    (14) LISTA -> . CAMPOS
+    (17) NOMBRE_T -> . ID
+    (15) CAMPOS -> . ID
+    (16) CAMPOS -> . ASTERISCO
+
+    FROM            shift and go to state 26
+    ID              shift and go to state 13
+    ASTERISCO       shift and go to state 14
+
+    LISTA                          shift and go to state 16
+    NOMBRE_T                       shift and go to state 11
+    CAMPOS                         shift and go to state 12
+
+state 18
+
+    (11) LISTA -> NOMBRE_T PUNTO . CAMPOS S
+    (12) LISTA -> NOMBRE_T PUNTO . CAMPOS
+    (15) CAMPOS -> . ID
+    (16) CAMPOS -> . ASTERISCO
+
+    ID              shift and go to state 28
+    ASTERISCO       shift and go to state 14
+
+    CAMPOS                         shift and go to state 27
+
+state 19
+
+    (13) LISTA -> CAMPOS S .
+
+    FROM            reduce using rule 13 (LISTA -> CAMPOS S .)
+    ID              reduce using rule 13 (LISTA -> CAMPOS S .)
+    ASTERISCO       reduce using rule 13 (LISTA -> CAMPOS S .)
+
+
+state 20
+
+    (19) S -> COMA . LISTA
+    (11) LISTA -> . NOMBRE_T PUNTO CAMPOS S
+    (12) LISTA -> . NOMBRE_T PUNTO CAMPOS
+    (13) LISTA -> . CAMPOS S
+    (14) LISTA -> . CAMPOS
+    (17) NOMBRE_T -> . ID
+    (15) CAMPOS -> . ID
+    (16) CAMPOS -> . ASTERISCO
+
+    ID              shift and go to state 13
+    ASTERISCO       shift and go to state 14
+
+    LISTA                          shift and go to state 29
+    NOMBRE_T                       shift and go to state 11
+    CAMPOS                         shift and go to state 12
+
+state 21
+
+    (20) S -> AS . ALIAS
+    (18) ALIAS -> . ID
+
+    ID              shift and go to state 31
+
+    ALIAS                          shift and go to state 30
+
+state 22
+
+    (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS . CUERPO PUNTOCOMA
+    (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS . PUNTOCOMA
+    (22) NOMBRES_TABLAS -> NOMBRES_TABLAS . TABLA
+    (28) CUERPO -> . WHERE CONDICIONES
+    (29) CUERPO -> . INNERS
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (37) INNERS -> . INNERS INNERR
+    (38) INNERS -> . INNERR
+    (17) NOMBRE_T -> . ID
+    (39) INNERR -> . INNER JOIN TABLA_REF ON CONDICIONES
+    (40) INNERR -> . JOIN TABLA_REF ON CONDICIONES
+    (41) INNERR -> . WHERE CONDICIONES
+
+    PUNTOCOMA       shift and go to state 33
+    WHERE           shift and go to state 35
+    ID              shift and go to state 25
+    INNER           shift and go to state 38
+    JOIN            shift and go to state 39
+
+    CUERPO                         shift and go to state 32
+    TABLA                          shift and go to state 34
+    INNERS                         shift and go to state 36
+    NOMBRE_T                       shift and go to state 24
+    INNERR                         shift and go to state 37
+
+state 23
+
+    (23) NOMBRES_TABLAS -> TABLA .
+
+    PUNTOCOMA       reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    WHERE           reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    ID              reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    INNER           reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+    JOIN            reduce using rule 23 (NOMBRES_TABLAS -> TABLA .)
+
+
+state 24
+
+    (24) TABLA -> NOMBRE_T .
+    (25) TABLA -> NOMBRE_T . S1
+    (26) S1 -> . COMA TABLA
+    (27) S1 -> . AS ALIAS
+
+    PUNTOCOMA       reduce using rule 24 (TABLA -> NOMBRE_T .)
+    WHERE           reduce using rule 24 (TABLA -> NOMBRE_T .)
+    ID              reduce using rule 24 (TABLA -> NOMBRE_T .)
+    INNER           reduce using rule 24 (TABLA -> NOMBRE_T .)
+    JOIN            reduce using rule 24 (TABLA -> NOMBRE_T .)
+    COMA            shift and go to state 41
+    AS              shift and go to state 42
+
+    S1                             shift and go to state 40
+
+state 25
+
+    (17) NOMBRE_T -> ID .
+
+    COMA            reduce using rule 17 (NOMBRE_T -> ID .)
+    AS              reduce using rule 17 (NOMBRE_T -> ID .)
+    PUNTOCOMA       reduce using rule 17 (NOMBRE_T -> ID .)
+    WHERE           reduce using rule 17 (NOMBRE_T -> ID .)
+    ID              reduce using rule 17 (NOMBRE_T -> ID .)
+    INNER           reduce using rule 17 (NOMBRE_T -> ID .)
+    JOIN            reduce using rule 17 (NOMBRE_T -> ID .)
+
+
+state 26
+
+    (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM . NOMBRES_TABLAS CUERPO PUNTOCOMA
+    (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM . NOMBRES_TABLAS PUNTOCOMA
+    (22) NOMBRES_TABLAS -> . NOMBRES_TABLAS TABLA
+    (23) NOMBRES_TABLAS -> . TABLA
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (17) NOMBRE_T -> . ID
+
+    ID              shift and go to state 25
+
+    NOMBRES_TABLAS                 shift and go to state 43
+    TABLA                          shift and go to state 23
+    NOMBRE_T                       shift and go to state 24
+
+state 27
+
+    (11) LISTA -> NOMBRE_T PUNTO CAMPOS . S
+    (12) LISTA -> NOMBRE_T PUNTO CAMPOS .
+    (19) S -> . COMA LISTA
+    (20) S -> . AS ALIAS
+
+    FROM            reduce using rule 12 (LISTA -> NOMBRE_T PUNTO CAMPOS .)
+    ID              reduce using rule 12 (LISTA -> NOMBRE_T PUNTO CAMPOS .)
+    ASTERISCO       reduce using rule 12 (LISTA -> NOMBRE_T PUNTO CAMPOS .)
+    COMA            shift and go to state 20
+    AS              shift and go to state 21
+
+    S                              shift and go to state 44
+
+state 28
+
+    (15) CAMPOS -> ID .
+
+    COMA            reduce using rule 15 (CAMPOS -> ID .)
+    AS              reduce using rule 15 (CAMPOS -> ID .)
+    FROM            reduce using rule 15 (CAMPOS -> ID .)
+    ID              reduce using rule 15 (CAMPOS -> ID .)
+    ASTERISCO       reduce using rule 15 (CAMPOS -> ID .)
+
+
+state 29
+
+    (19) S -> COMA LISTA .
+
+    FROM            reduce using rule 19 (S -> COMA LISTA .)
+    ID              reduce using rule 19 (S -> COMA LISTA .)
+    ASTERISCO       reduce using rule 19 (S -> COMA LISTA .)
+
+
+state 30
+
+    (20) S -> AS ALIAS .
+
+    FROM            reduce using rule 20 (S -> AS ALIAS .)
+    ID              reduce using rule 20 (S -> AS ALIAS .)
+    ASTERISCO       reduce using rule 20 (S -> AS ALIAS .)
+
+
+state 31
+
+    (18) ALIAS -> ID .
+
+    FROM            reduce using rule 18 (ALIAS -> ID .)
+    ID              reduce using rule 18 (ALIAS -> ID .)
+    ASTERISCO       reduce using rule 18 (ALIAS -> ID .)
+    PUNTOCOMA       reduce using rule 18 (ALIAS -> ID .)
+    WHERE           reduce using rule 18 (ALIAS -> ID .)
+    INNER           reduce using rule 18 (ALIAS -> ID .)
+    JOIN            reduce using rule 18 (ALIAS -> ID .)
+
+
+state 32
+
+    (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 45
+
+
+state 33
+
+    (6) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .
+
+    SELECT          reduce using rule 6 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+    $end            reduce using rule 6 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+
+
+state 34
+
+    (22) NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .
+
+    PUNTOCOMA       reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
+    WHERE           reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
+    ID              reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
+    INNER           reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
+    JOIN            reduce using rule 22 (NOMBRES_TABLAS -> NOMBRES_TABLAS TABLA .)
+
+
+state 35
+
+    (28) CUERPO -> WHERE . CONDICIONES
+    (41) INNERR -> WHERE . CONDICIONES
+    (30) CONDICIONES -> . CONDICIONES CONDICION
+    (31) CONDICIONES -> . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICIONES                    shift and go to state 46
+    CONDICION                      shift and go to state 47
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 36
+
+    (29) CUERPO -> INNERS .
+    (37) INNERS -> INNERS . INNERR
+    (39) INNERR -> . INNER JOIN TABLA_REF ON CONDICIONES
+    (40) INNERR -> . JOIN TABLA_REF ON CONDICIONES
+    (41) INNERR -> . WHERE CONDICIONES
+
+    PUNTOCOMA       reduce using rule 29 (CUERPO -> INNERS .)
+    INNER           shift and go to state 38
+    JOIN            shift and go to state 39
+    WHERE           shift and go to state 58
+
+    INNERR                         shift and go to state 57
+
+state 37
+
+    (38) INNERS -> INNERR .
+
+    INNER           reduce using rule 38 (INNERS -> INNERR .)
+    JOIN            reduce using rule 38 (INNERS -> INNERR .)
+    WHERE           reduce using rule 38 (INNERS -> INNERR .)
+    PUNTOCOMA       reduce using rule 38 (INNERS -> INNERR .)
+
+
+state 38
+
+    (39) INNERR -> INNER . JOIN TABLA_REF ON CONDICIONES
+
+    JOIN            shift and go to state 59
+
+
+state 39
+
+    (40) INNERR -> JOIN . TABLA_REF ON CONDICIONES
+    (42) TABLA_REF -> . ID
+    (43) TABLA_REF -> . ID AS ID
+
+    ID              shift and go to state 61
+
+    TABLA_REF                      shift and go to state 60
+
+state 40
+
+    (25) TABLA -> NOMBRE_T S1 .
+
+    PUNTOCOMA       reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    WHERE           reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    ID              reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    INNER           reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+    JOIN            reduce using rule 25 (TABLA -> NOMBRE_T S1 .)
+
+
+state 41
+
+    (26) S1 -> COMA . TABLA
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (17) NOMBRE_T -> . ID
+
+    ID              shift and go to state 25
+
+    TABLA                          shift and go to state 62
+    NOMBRE_T                       shift and go to state 24
+
+state 42
+
+    (27) S1 -> AS . ALIAS
+    (18) ALIAS -> . ID
+
+    ID              shift and go to state 31
+
+    ALIAS                          shift and go to state 63
+
+state 43
+
+    (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS . CUERPO PUNTOCOMA
+    (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS . PUNTOCOMA
+    (22) NOMBRES_TABLAS -> NOMBRES_TABLAS . TABLA
+    (28) CUERPO -> . WHERE CONDICIONES
+    (29) CUERPO -> . INNERS
+    (24) TABLA -> . NOMBRE_T
+    (25) TABLA -> . NOMBRE_T S1
+    (37) INNERS -> . INNERS INNERR
+    (38) INNERS -> . INNERR
+    (17) NOMBRE_T -> . ID
+    (39) INNERR -> . INNER JOIN TABLA_REF ON CONDICIONES
+    (40) INNERR -> . JOIN TABLA_REF ON CONDICIONES
+    (41) INNERR -> . WHERE CONDICIONES
+
+    PUNTOCOMA       shift and go to state 65
+    WHERE           shift and go to state 35
+    ID              shift and go to state 25
+    INNER           shift and go to state 38
+    JOIN            shift and go to state 39
+
+    CUERPO                         shift and go to state 64
+    TABLA                          shift and go to state 34
+    INNERS                         shift and go to state 36
+    NOMBRE_T                       shift and go to state 24
+    INNERR                         shift and go to state 37
+
+state 44
+
+    (11) LISTA -> NOMBRE_T PUNTO CAMPOS S .
+
+    FROM            reduce using rule 11 (LISTA -> NOMBRE_T PUNTO CAMPOS S .)
+    ID              reduce using rule 11 (LISTA -> NOMBRE_T PUNTO CAMPOS S .)
+    ASTERISCO       reduce using rule 11 (LISTA -> NOMBRE_T PUNTO CAMPOS S .)
+
+
+state 45
+
+    (5) DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .
+
+    SELECT          reduce using rule 5 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
+    $end            reduce using rule 5 (DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
+
+
+state 46
+
+    (28) CUERPO -> WHERE CONDICIONES .
+    (41) INNERR -> WHERE CONDICIONES .
+    (30) CONDICIONES -> CONDICIONES . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+  ! reduce/reduce conflict for PUNTOCOMA resolved using rule 28 (CUERPO -> WHERE CONDICIONES .)
+    PUNTOCOMA       reduce using rule 28 (CUERPO -> WHERE CONDICIONES .)
+    INNER           reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
+    JOIN            reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
+    WHERE           reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+  ! PUNTOCOMA       [ reduce using rule 41 (INNERR -> WHERE CONDICIONES .) ]
+
+    CONDICION                      shift and go to state 66
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 47
+
+    (31) CONDICIONES -> CONDICION .
+
+    ID              reduce using rule 31 (CONDICIONES -> CONDICION .)
+    ENTERO          reduce using rule 31 (CONDICIONES -> CONDICION .)
+    DECIMAL         reduce using rule 31 (CONDICIONES -> CONDICION .)
+    CADENASIMPLE    reduce using rule 31 (CONDICIONES -> CONDICION .)
+    CADENADOBLE     reduce using rule 31 (CONDICIONES -> CONDICION .)
+    PUNTOCOMA       reduce using rule 31 (CONDICIONES -> CONDICION .)
+    INNER           reduce using rule 31 (CONDICIONES -> CONDICION .)
+    JOIN            reduce using rule 31 (CONDICIONES -> CONDICION .)
+    WHERE           reduce using rule 31 (CONDICIONES -> CONDICION .)
+
+
+state 48
+
+    (32) CONDICION -> CONDICION_REL . SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> CONDICION_REL . SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> CONDICION_REL .
+    (46) SIMBOLO_LOGICO -> . AND
+    (47) SIMBOLO_LOGICO -> . OR
+
+    ID              reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    ENTERO          reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    DECIMAL         reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    CADENASIMPLE    reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    CADENADOBLE     reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    PUNTOCOMA       reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    INNER           reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    JOIN            reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    WHERE           reduce using rule 34 (CONDICION -> CONDICION_REL .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+
+    SIMBOLO_LOGICO                 shift and go to state 67
+
+state 49
+
+    (36) CONDICION_REL -> EXPRESIONNE . OPERADOR EXPRESIONNE
+    (54) OPERADOR -> . IGUAL
+    (55) OPERADOR -> . DIFERENTE
+    (56) OPERADOR -> . MAYOR
+    (57) OPERADOR -> . MENOR
+    (58) OPERADOR -> . MENORIGUAL
+    (59) OPERADOR -> . MAYORIGUAL
+
+    IGUAL           shift and go to state 71
+    DIFERENTE       shift and go to state 72
+    MAYOR           shift and go to state 73
+    MENOR           shift and go to state 74
+    MENORIGUAL      shift and go to state 75
+    MAYORIGUAL      shift and go to state 76
+
+    OPERADOR                       shift and go to state 70
+
+state 50
+
+    (44) EXPRESIONNE -> NOMBRE_C . PUNTO CAMPOSC
+
+    PUNTO           shift and go to state 77
+
+
+state 51
+
+    (45) EXPRESIONNE -> CAMPOSC .
+
+    IGUAL           reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    DIFERENTE       reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    MAYOR           reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    MENOR           reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    MENORIGUAL      reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    MAYORIGUAL      reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    AND             reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    OR              reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    ID              reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    ENTERO          reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    DECIMAL         reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    CADENASIMPLE    reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    CADENADOBLE     reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    PUNTOCOMA       reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    INNER           reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    JOIN            reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    WHERE           reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+
+
+state 52
+
+    (48) NOMBRE_C -> ID .
+    (49) CAMPOSC -> ID .
+
+    PUNTO           reduce using rule 48 (NOMBRE_C -> ID .)
+    IGUAL           reduce using rule 49 (CAMPOSC -> ID .)
+    DIFERENTE       reduce using rule 49 (CAMPOSC -> ID .)
+    MAYOR           reduce using rule 49 (CAMPOSC -> ID .)
+    MENOR           reduce using rule 49 (CAMPOSC -> ID .)
+    MENORIGUAL      reduce using rule 49 (CAMPOSC -> ID .)
+    MAYORIGUAL      reduce using rule 49 (CAMPOSC -> ID .)
+    AND             reduce using rule 49 (CAMPOSC -> ID .)
+    OR              reduce using rule 49 (CAMPOSC -> ID .)
+    ID              reduce using rule 49 (CAMPOSC -> ID .)
+    ENTERO          reduce using rule 49 (CAMPOSC -> ID .)
+    DECIMAL         reduce using rule 49 (CAMPOSC -> ID .)
+    CADENASIMPLE    reduce using rule 49 (CAMPOSC -> ID .)
+    CADENADOBLE     reduce using rule 49 (CAMPOSC -> ID .)
+    PUNTOCOMA       reduce using rule 49 (CAMPOSC -> ID .)
+    INNER           reduce using rule 49 (CAMPOSC -> ID .)
+    JOIN            reduce using rule 49 (CAMPOSC -> ID .)
+    WHERE           reduce using rule 49 (CAMPOSC -> ID .)
+
+
+state 53
+
+    (50) CAMPOSC -> ENTERO .
+
+    IGUAL           reduce using rule 50 (CAMPOSC -> ENTERO .)
+    DIFERENTE       reduce using rule 50 (CAMPOSC -> ENTERO .)
+    MAYOR           reduce using rule 50 (CAMPOSC -> ENTERO .)
+    MENOR           reduce using rule 50 (CAMPOSC -> ENTERO .)
+    MENORIGUAL      reduce using rule 50 (CAMPOSC -> ENTERO .)
+    MAYORIGUAL      reduce using rule 50 (CAMPOSC -> ENTERO .)
+    AND             reduce using rule 50 (CAMPOSC -> ENTERO .)
+    OR              reduce using rule 50 (CAMPOSC -> ENTERO .)
+    ID              reduce using rule 50 (CAMPOSC -> ENTERO .)
+    ENTERO          reduce using rule 50 (CAMPOSC -> ENTERO .)
+    DECIMAL         reduce using rule 50 (CAMPOSC -> ENTERO .)
+    CADENASIMPLE    reduce using rule 50 (CAMPOSC -> ENTERO .)
+    CADENADOBLE     reduce using rule 50 (CAMPOSC -> ENTERO .)
+    PUNTOCOMA       reduce using rule 50 (CAMPOSC -> ENTERO .)
+    INNER           reduce using rule 50 (CAMPOSC -> ENTERO .)
+    JOIN            reduce using rule 50 (CAMPOSC -> ENTERO .)
+    WHERE           reduce using rule 50 (CAMPOSC -> ENTERO .)
+
+
+state 54
+
+    (51) CAMPOSC -> DECIMAL .
+
+    IGUAL           reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    DIFERENTE       reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    MAYOR           reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    MENOR           reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    MENORIGUAL      reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    MAYORIGUAL      reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    AND             reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    OR              reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    ID              reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    ENTERO          reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    DECIMAL         reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    CADENASIMPLE    reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    CADENADOBLE     reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    PUNTOCOMA       reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    INNER           reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    JOIN            reduce using rule 51 (CAMPOSC -> DECIMAL .)
+    WHERE           reduce using rule 51 (CAMPOSC -> DECIMAL .)
+
+
+state 55
+
+    (52) CAMPOSC -> CADENASIMPLE .
+
+    IGUAL           reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    DIFERENTE       reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    MAYOR           reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    MENOR           reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    MENORIGUAL      reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    MAYORIGUAL      reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    AND             reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    OR              reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    ID              reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    ENTERO          reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    DECIMAL         reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    CADENASIMPLE    reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    CADENADOBLE     reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    PUNTOCOMA       reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    INNER           reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    JOIN            reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+    WHERE           reduce using rule 52 (CAMPOSC -> CADENASIMPLE .)
+
+
+state 56
+
+    (53) CAMPOSC -> CADENADOBLE .
+
+    IGUAL           reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    DIFERENTE       reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    MAYOR           reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    MENOR           reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    MENORIGUAL      reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    MAYORIGUAL      reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    AND             reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    OR              reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    ID              reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    ENTERO          reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    DECIMAL         reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    CADENASIMPLE    reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    CADENADOBLE     reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    PUNTOCOMA       reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    INNER           reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    JOIN            reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+    WHERE           reduce using rule 53 (CAMPOSC -> CADENADOBLE .)
+
+
+state 57
+
+    (37) INNERS -> INNERS INNERR .
+
+    INNER           reduce using rule 37 (INNERS -> INNERS INNERR .)
+    JOIN            reduce using rule 37 (INNERS -> INNERS INNERR .)
+    WHERE           reduce using rule 37 (INNERS -> INNERS INNERR .)
+    PUNTOCOMA       reduce using rule 37 (INNERS -> INNERS INNERR .)
+
+
+state 58
+
+    (41) INNERR -> WHERE . CONDICIONES
+    (30) CONDICIONES -> . CONDICIONES CONDICION
+    (31) CONDICIONES -> . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICIONES                    shift and go to state 78
+    CONDICION                      shift and go to state 47
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 59
+
+    (39) INNERR -> INNER JOIN . TABLA_REF ON CONDICIONES
+    (42) TABLA_REF -> . ID
+    (43) TABLA_REF -> . ID AS ID
+
+    ID              shift and go to state 61
+
+    TABLA_REF                      shift and go to state 79
+
+state 60
+
+    (40) INNERR -> JOIN TABLA_REF . ON CONDICIONES
+
+    ON              shift and go to state 80
+
+
+state 61
+
+    (42) TABLA_REF -> ID .
+    (43) TABLA_REF -> ID . AS ID
+
+    ON              reduce using rule 42 (TABLA_REF -> ID .)
+    AS              shift and go to state 81
+
+
+state 62
+
+    (26) S1 -> COMA TABLA .
+
+    PUNTOCOMA       reduce using rule 26 (S1 -> COMA TABLA .)
+    WHERE           reduce using rule 26 (S1 -> COMA TABLA .)
+    ID              reduce using rule 26 (S1 -> COMA TABLA .)
+    INNER           reduce using rule 26 (S1 -> COMA TABLA .)
+    JOIN            reduce using rule 26 (S1 -> COMA TABLA .)
+
+
+state 63
+
+    (27) S1 -> AS ALIAS .
+
+    PUNTOCOMA       reduce using rule 27 (S1 -> AS ALIAS .)
+    WHERE           reduce using rule 27 (S1 -> AS ALIAS .)
+    ID              reduce using rule 27 (S1 -> AS ALIAS .)
+    INNER           reduce using rule 27 (S1 -> AS ALIAS .)
+    JOIN            reduce using rule 27 (S1 -> AS ALIAS .)
+
+
+state 64
+
+    (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO . PUNTOCOMA
+
+    PUNTOCOMA       shift and go to state 82
+
+
+state 65
+
+    (8) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .
+
+    SELECT          reduce using rule 8 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+    $end            reduce using rule 8 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS PUNTOCOMA .)
+
+
+state 66
+
+    (30) CONDICIONES -> CONDICIONES CONDICION .
+
+    ID              reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    ENTERO          reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    DECIMAL         reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    CADENASIMPLE    reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    CADENADOBLE     reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    PUNTOCOMA       reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    INNER           reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    JOIN            reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+    WHERE           reduce using rule 30 (CONDICIONES -> CONDICIONES CONDICION .)
+
+
+state 67
+
+    (32) CONDICION -> CONDICION_REL SIMBOLO_LOGICO . CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> CONDICION_REL SIMBOLO_LOGICO . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICION_REL                  shift and go to state 83
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 68
+
+    (46) SIMBOLO_LOGICO -> AND .
+
+    ID              reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
+    ENTERO          reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
+    DECIMAL         reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
+    CADENASIMPLE    reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
+    CADENADOBLE     reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
+
+
+state 69
+
+    (47) SIMBOLO_LOGICO -> OR .
+
+    ID              reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
+    ENTERO          reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
+    DECIMAL         reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
+    CADENASIMPLE    reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
+    CADENADOBLE     reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
+
+
+state 70
+
+    (36) CONDICION_REL -> EXPRESIONNE OPERADOR . EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    EXPRESIONNE                    shift and go to state 84
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 71
+
+    (54) OPERADOR -> IGUAL .
+
+    ID              reduce using rule 54 (OPERADOR -> IGUAL .)
+    ENTERO          reduce using rule 54 (OPERADOR -> IGUAL .)
+    DECIMAL         reduce using rule 54 (OPERADOR -> IGUAL .)
+    CADENASIMPLE    reduce using rule 54 (OPERADOR -> IGUAL .)
+    CADENADOBLE     reduce using rule 54 (OPERADOR -> IGUAL .)
+
+
+state 72
+
+    (55) OPERADOR -> DIFERENTE .
+
+    ID              reduce using rule 55 (OPERADOR -> DIFERENTE .)
+    ENTERO          reduce using rule 55 (OPERADOR -> DIFERENTE .)
+    DECIMAL         reduce using rule 55 (OPERADOR -> DIFERENTE .)
+    CADENASIMPLE    reduce using rule 55 (OPERADOR -> DIFERENTE .)
+    CADENADOBLE     reduce using rule 55 (OPERADOR -> DIFERENTE .)
+
+
+state 73
+
+    (56) OPERADOR -> MAYOR .
+
+    ID              reduce using rule 56 (OPERADOR -> MAYOR .)
+    ENTERO          reduce using rule 56 (OPERADOR -> MAYOR .)
+    DECIMAL         reduce using rule 56 (OPERADOR -> MAYOR .)
+    CADENASIMPLE    reduce using rule 56 (OPERADOR -> MAYOR .)
+    CADENADOBLE     reduce using rule 56 (OPERADOR -> MAYOR .)
+
+
+state 74
+
+    (57) OPERADOR -> MENOR .
+
+    ID              reduce using rule 57 (OPERADOR -> MENOR .)
+    ENTERO          reduce using rule 57 (OPERADOR -> MENOR .)
+    DECIMAL         reduce using rule 57 (OPERADOR -> MENOR .)
+    CADENASIMPLE    reduce using rule 57 (OPERADOR -> MENOR .)
+    CADENADOBLE     reduce using rule 57 (OPERADOR -> MENOR .)
+
+
+state 75
+
+    (58) OPERADOR -> MENORIGUAL .
+
+    ID              reduce using rule 58 (OPERADOR -> MENORIGUAL .)
+    ENTERO          reduce using rule 58 (OPERADOR -> MENORIGUAL .)
+    DECIMAL         reduce using rule 58 (OPERADOR -> MENORIGUAL .)
+    CADENASIMPLE    reduce using rule 58 (OPERADOR -> MENORIGUAL .)
+    CADENADOBLE     reduce using rule 58 (OPERADOR -> MENORIGUAL .)
+
+
+state 76
+
+    (59) OPERADOR -> MAYORIGUAL .
+
+    ID              reduce using rule 59 (OPERADOR -> MAYORIGUAL .)
+    ENTERO          reduce using rule 59 (OPERADOR -> MAYORIGUAL .)
+    DECIMAL         reduce using rule 59 (OPERADOR -> MAYORIGUAL .)
+    CADENASIMPLE    reduce using rule 59 (OPERADOR -> MAYORIGUAL .)
+    CADENADOBLE     reduce using rule 59 (OPERADOR -> MAYORIGUAL .)
+
+
+state 77
+
+    (44) EXPRESIONNE -> NOMBRE_C PUNTO . CAMPOSC
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 86
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CAMPOSC                        shift and go to state 85
+
+state 78
+
+    (41) INNERR -> WHERE CONDICIONES .
+    (30) CONDICIONES -> CONDICIONES . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    INNER           reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
+    JOIN            reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
+    WHERE           reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
+    PUNTOCOMA       reduce using rule 41 (INNERR -> WHERE CONDICIONES .)
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICION                      shift and go to state 66
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 79
+
+    (39) INNERR -> INNER JOIN TABLA_REF . ON CONDICIONES
+
+    ON              shift and go to state 87
+
+
+state 80
+
+    (40) INNERR -> JOIN TABLA_REF ON . CONDICIONES
+    (30) CONDICIONES -> . CONDICIONES CONDICION
+    (31) CONDICIONES -> . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICIONES                    shift and go to state 88
+    CONDICION                      shift and go to state 47
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 81
+
+    (43) TABLA_REF -> ID AS . ID
+
+    ID              shift and go to state 89
+
+
+state 82
+
+    (7) DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .
+
+    SELECT          reduce using rule 7 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
+    $end            reduce using rule 7 (DQL_COMANDOS -> SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA .)
+
+
+state 83
+
+    (32) CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL . OTRO_LOGICO
+    (33) CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .
+    (35) OTRO_LOGICO -> . SIMBOLO_LOGICO CONDICIONES
+    (46) SIMBOLO_LOGICO -> . AND
+    (47) SIMBOLO_LOGICO -> . OR
+
+    ID              reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    ENTERO          reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    DECIMAL         reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    CADENASIMPLE    reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    CADENADOBLE     reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    PUNTOCOMA       reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    INNER           reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    JOIN            reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    WHERE           reduce using rule 33 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+
+    SIMBOLO_LOGICO                 shift and go to state 90
+    OTRO_LOGICO                    shift and go to state 91
+
+state 84
+
+    (36) CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .
+
+    AND             reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    OR              reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    ID              reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    ENTERO          reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    DECIMAL         reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    CADENASIMPLE    reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    CADENADOBLE     reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    PUNTOCOMA       reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    INNER           reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    JOIN            reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    WHERE           reduce using rule 36 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+
+
+state 85
+
+    (44) EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .
+
+    IGUAL           reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    DIFERENTE       reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    MAYOR           reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    MENOR           reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    MENORIGUAL      reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    MAYORIGUAL      reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    AND             reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    OR              reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    ID              reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    ENTERO          reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    DECIMAL         reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    CADENASIMPLE    reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    CADENADOBLE     reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    PUNTOCOMA       reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    INNER           reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    JOIN            reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    WHERE           reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+
+
+state 86
+
+    (49) CAMPOSC -> ID .
+
+    IGUAL           reduce using rule 49 (CAMPOSC -> ID .)
+    DIFERENTE       reduce using rule 49 (CAMPOSC -> ID .)
+    MAYOR           reduce using rule 49 (CAMPOSC -> ID .)
+    MENOR           reduce using rule 49 (CAMPOSC -> ID .)
+    MENORIGUAL      reduce using rule 49 (CAMPOSC -> ID .)
+    MAYORIGUAL      reduce using rule 49 (CAMPOSC -> ID .)
+    AND             reduce using rule 49 (CAMPOSC -> ID .)
+    OR              reduce using rule 49 (CAMPOSC -> ID .)
+    ID              reduce using rule 49 (CAMPOSC -> ID .)
+    ENTERO          reduce using rule 49 (CAMPOSC -> ID .)
+    DECIMAL         reduce using rule 49 (CAMPOSC -> ID .)
+    CADENASIMPLE    reduce using rule 49 (CAMPOSC -> ID .)
+    CADENADOBLE     reduce using rule 49 (CAMPOSC -> ID .)
+    PUNTOCOMA       reduce using rule 49 (CAMPOSC -> ID .)
+    INNER           reduce using rule 49 (CAMPOSC -> ID .)
+    JOIN            reduce using rule 49 (CAMPOSC -> ID .)
+    WHERE           reduce using rule 49 (CAMPOSC -> ID .)
+
+
+state 87
+
+    (39) INNERR -> INNER JOIN TABLA_REF ON . CONDICIONES
+    (30) CONDICIONES -> . CONDICIONES CONDICION
+    (31) CONDICIONES -> . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICIONES                    shift and go to state 92
+    CONDICION                      shift and go to state 47
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 88
+
+    (40) INNERR -> JOIN TABLA_REF ON CONDICIONES .
+    (30) CONDICIONES -> CONDICIONES . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    INNER           reduce using rule 40 (INNERR -> JOIN TABLA_REF ON CONDICIONES .)
+    JOIN            reduce using rule 40 (INNERR -> JOIN TABLA_REF ON CONDICIONES .)
+    WHERE           reduce using rule 40 (INNERR -> JOIN TABLA_REF ON CONDICIONES .)
+    PUNTOCOMA       reduce using rule 40 (INNERR -> JOIN TABLA_REF ON CONDICIONES .)
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICION                      shift and go to state 66
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 89
+
+    (43) TABLA_REF -> ID AS ID .
+
+    ON              reduce using rule 43 (TABLA_REF -> ID AS ID .)
+
+
+state 90
+
+    (35) OTRO_LOGICO -> SIMBOLO_LOGICO . CONDICIONES
+    (30) CONDICIONES -> . CONDICIONES CONDICION
+    (31) CONDICIONES -> . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICIONES                    shift and go to state 93
+    CONDICION                      shift and go to state 47
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 91
+
+    (32) CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .
+
+    ID              reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    ENTERO          reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    DECIMAL         reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    CADENASIMPLE    reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    CADENADOBLE     reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    PUNTOCOMA       reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    INNER           reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    JOIN            reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    WHERE           reduce using rule 32 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+
+
+state 92
+
+    (39) INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .
+    (30) CONDICIONES -> CONDICIONES . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+    INNER           reduce using rule 39 (INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .)
+    JOIN            reduce using rule 39 (INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .)
+    WHERE           reduce using rule 39 (INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .)
+    PUNTOCOMA       reduce using rule 39 (INNERR -> INNER JOIN TABLA_REF ON CONDICIONES .)
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+    CONDICION                      shift and go to state 66
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+
+state 93
+
+    (35) OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .
+    (30) CONDICIONES -> CONDICIONES . CONDICION
+    (32) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO
+    (33) CONDICION -> . CONDICION_REL SIMBOLO_LOGICO CONDICION_REL
+    (34) CONDICION -> . CONDICION_REL
+    (36) CONDICION_REL -> . EXPRESIONNE OPERADOR EXPRESIONNE
+    (44) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
+    (45) EXPRESIONNE -> . CAMPOSC
+    (48) NOMBRE_C -> . ID
+    (49) CAMPOSC -> . ID
+    (50) CAMPOSC -> . ENTERO
+    (51) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . CADENASIMPLE
+    (53) CAMPOSC -> . CADENADOBLE
+
+  ! shift/reduce conflict for ID resolved as shift
+  ! shift/reduce conflict for ENTERO resolved as shift
+  ! shift/reduce conflict for DECIMAL resolved as shift
+  ! shift/reduce conflict for CADENASIMPLE resolved as shift
+  ! shift/reduce conflict for CADENADOBLE resolved as shift
+    PUNTOCOMA       reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
+    INNER           reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
+    JOIN            reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
+    WHERE           reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
+    ID              shift and go to state 52
+    ENTERO          shift and go to state 53
+    DECIMAL         shift and go to state 54
+    CADENASIMPLE    shift and go to state 55
+    CADENADOBLE     shift and go to state 56
+
+  ! ID              [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
+  ! ENTERO          [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
+  ! DECIMAL         [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
+  ! CADENASIMPLE    [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
+  ! CADENADOBLE     [ reduce using rule 35 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
+
+    CONDICION                      shift and go to state 66
+    CONDICION_REL                  shift and go to state 48
+    EXPRESIONNE                    shift and go to state 49
+    NOMBRE_C                       shift and go to state 50
+    CAMPOSC                        shift and go to state 51
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ID in state 93 resolved as shift
+WARNING: shift/reduce conflict for ENTERO in state 93 resolved as shift
+WARNING: shift/reduce conflict for DECIMAL in state 93 resolved as shift
+WARNING: shift/reduce conflict for CADENASIMPLE in state 93 resolved as shift
+WARNING: shift/reduce conflict for CADENADOBLE in state 93 resolved as shift
+WARNING: reduce/reduce conflict in state 46 resolved using rule (CUERPO -> WHERE CONDICIONES)
+WARNING: rejected rule (INNERR -> WHERE CONDICIONES) in state 46

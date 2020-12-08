@@ -1,0 +1,41 @@
+
+Select *
+from tabla
+where c=c;
+
+Select *
+from tabla1,tabla2
+where a=b;
+
+
+
+Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B  on A.campo1 = B.campo1 and A.campo2 = B.campo2;
+
+
+
+Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
+where a.tabla = 'jasssas';
+
+
+-- Disctint aÑADIDO
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
+where a.tabla = 'jasssas';
+
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A;
+
+
+
+
+-- Probando Group By
+
+
+
