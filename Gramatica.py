@@ -1059,10 +1059,10 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | REAL
                     | MONEY
                     | DOUBLE PRECISION 
-                    | CHARACTER VARYING PARIZQ ENTERO PARDER
-                    | VARCHAR PARIZQ ENTERO PARDER
-                    | CHARACTER PARIZQ ENTERO PARDER
-                    | CHAR PARIZQ ENTERO PARDER
+                    | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
+                    | VARCHAR PARIZQ EXPNUMERICA PARDER
+                    | CHARACTER PARIZQ EXPNUMERICA PARDER
+                    | CHAR PARIZQ EXPNUMERICA PARDER
                     | TEXT
                     | BOOLEAN'''
     t[0] = str(t[1])
@@ -1168,11 +1168,11 @@ def p_instruccion_dml_comandos_INSERT_VALOR(t) :
     t[0] = str(t[1]) + str(t[2])
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t) :
-    'VALOR       : ID'
+    'VALOR       : EXPRESION_GLOBAL'
     t[0] = str(t[1]) 
 
 def p_instruccion_dml_comandos_INSERT_D(t) :
-    'D       : COMA ID'
+    'D       : COMA EXPRESION_GLOBAL'
     t[0] = str(t[1]) + str(t[2])
 
 #-----------------------------------------------------------------------------------------------------------------
@@ -1198,19 +1198,19 @@ def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t) :
 
 #-------------------------------------------------------
 def p_instruccion_dml_comandos_UPDATE_CAMPO(t) :
-    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE'
+    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO2(t) :
-    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE C'
+    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL C'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])  
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO3(t) :
-    'CAMPO       :  ID IGUAL EXPRESIONNE'
+    'CAMPO       :  ID IGUAL EXPRESION_GLOBAL'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO4(t) :
-    'CAMPO       :  ID IGUAL EXPRESIONNE C'
+    'CAMPO       :  ID IGUAL EXPRESION_GLOBAL C'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
 
 def p_instruccion_dml_comandos_UPDATE_C(t) :
@@ -1280,7 +1280,11 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
 
 
 
+def p_expresion_global(t):
+    '''EXPRESION_GLOBAL : EXPNUMERICA   '''
 
+    t[0] = str(t[1])
+    print('\n' + str(t[0]) + '\n')
 
 
 #DDL

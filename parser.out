@@ -138,10 +138,10 @@ Rule 125   TIPO_CAMPO -> DECIMAL
 Rule 126   TIPO_CAMPO -> REAL
 Rule 127   TIPO_CAMPO -> MONEY
 Rule 128   TIPO_CAMPO -> DOUBLE PRECISION
-Rule 129   TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER
-Rule 130   TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER
-Rule 131   TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER
-Rule 132   TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER
+Rule 129   TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
+Rule 130   TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER
+Rule 131   TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER
+Rule 132   TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER
 Rule 133   TIPO_CAMPO -> TEXT
 Rule 134   TIPO_CAMPO -> BOOLEAN
 Rule 135   VALIDACIONES_CREATE_TABLE -> LISTA3
@@ -260,7 +260,7 @@ DISTINCT             : 23
 DIVISION             : 210
 DOUBLE               : 128
 DROP                 : 173 175 177 204
-ENTERO               : 52 129 130 131 132 144 192 214
+ENTERO               : 52 144 192 214
 EXISTS               : 188 205
 FECHA                : 
 FIRST                : 99 102
@@ -355,7 +355,7 @@ DISTINCTNT           : 9 10
 DML_COMANDOS         : 6
 DQL_COMANDOS         : 4
 DROP_DATABASE        : 184
-EXPNUMERICA          : 207 207 208 208 209 209 210 210 211 211 212
+EXPNUMERICA          : 129 130 131 132 207 207 208 208 209 209 210 210 211 211 212
 EXPRES               : 85 86 95
 EXPRESIONNE          : 41 41 42 43 69 70 166 167 168 169
 EXPRE_LIST           : 83 84 85
@@ -2306,10 +2306,10 @@ state 120
     (126) TIPO_CAMPO -> . REAL
     (127) TIPO_CAMPO -> . MONEY
     (128) TIPO_CAMPO -> . DOUBLE PRECISION
-    (129) TIPO_CAMPO -> . CHARACTER VARYING PARIZQ ENTERO PARDER
-    (130) TIPO_CAMPO -> . VARCHAR PARIZQ ENTERO PARDER
-    (131) TIPO_CAMPO -> . CHARACTER PARIZQ ENTERO PARDER
-    (132) TIPO_CAMPO -> . CHAR PARIZQ ENTERO PARDER
+    (129) TIPO_CAMPO -> . CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
+    (130) TIPO_CAMPO -> . VARCHAR PARIZQ EXPNUMERICA PARDER
+    (131) TIPO_CAMPO -> . CHARACTER PARIZQ EXPNUMERICA PARDER
+    (132) TIPO_CAMPO -> . CHAR PARIZQ EXPNUMERICA PARDER
     (133) TIPO_CAMPO -> . TEXT
     (134) TIPO_CAMPO -> . BOOLEAN
 
@@ -3389,8 +3389,8 @@ state 185
 
 state 186
 
-    (129) TIPO_CAMPO -> CHARACTER . VARYING PARIZQ ENTERO PARDER
-    (131) TIPO_CAMPO -> CHARACTER . PARIZQ ENTERO PARDER
+    (129) TIPO_CAMPO -> CHARACTER . VARYING PARIZQ EXPNUMERICA PARDER
+    (131) TIPO_CAMPO -> CHARACTER . PARIZQ EXPNUMERICA PARDER
 
     VARYING         shift and go to state 258
     PARIZQ          shift and go to state 259
@@ -3398,14 +3398,14 @@ state 186
 
 state 187
 
-    (130) TIPO_CAMPO -> VARCHAR . PARIZQ ENTERO PARDER
+    (130) TIPO_CAMPO -> VARCHAR . PARIZQ EXPNUMERICA PARDER
 
     PARIZQ          shift and go to state 260
 
 
 state 188
 
-    (132) TIPO_CAMPO -> CHAR . PARIZQ ENTERO PARDER
+    (132) TIPO_CAMPO -> CHAR . PARIZQ EXPNUMERICA PARDER
 
     PARIZQ          shift and go to state 261
 
@@ -3883,10 +3883,10 @@ state 224
     (126) TIPO_CAMPO -> . REAL
     (127) TIPO_CAMPO -> . MONEY
     (128) TIPO_CAMPO -> . DOUBLE PRECISION
-    (129) TIPO_CAMPO -> . CHARACTER VARYING PARIZQ ENTERO PARDER
-    (130) TIPO_CAMPO -> . VARCHAR PARIZQ ENTERO PARDER
-    (131) TIPO_CAMPO -> . CHARACTER PARIZQ ENTERO PARDER
-    (132) TIPO_CAMPO -> . CHAR PARIZQ ENTERO PARDER
+    (129) TIPO_CAMPO -> . CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
+    (130) TIPO_CAMPO -> . VARCHAR PARIZQ EXPNUMERICA PARDER
+    (131) TIPO_CAMPO -> . CHARACTER PARIZQ EXPNUMERICA PARDER
+    (132) TIPO_CAMPO -> . CHAR PARIZQ EXPNUMERICA PARDER
     (133) TIPO_CAMPO -> . TEXT
     (134) TIPO_CAMPO -> . BOOLEAN
 
@@ -4432,31 +4432,70 @@ state 257
 
 state 258
 
-    (129) TIPO_CAMPO -> CHARACTER VARYING . PARIZQ ENTERO PARDER
+    (129) TIPO_CAMPO -> CHARACTER VARYING . PARIZQ EXPNUMERICA PARDER
 
     PARIZQ          shift and go to state 316
 
 
 state 259
 
-    (131) TIPO_CAMPO -> CHARACTER PARIZQ . ENTERO PARDER
+    (131) TIPO_CAMPO -> CHARACTER PARIZQ . EXPNUMERICA PARDER
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
 
-    ENTERO          shift and go to state 317
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
 
+    EXPNUMERICA                    shift and go to state 318
 
 state 260
 
-    (130) TIPO_CAMPO -> VARCHAR PARIZQ . ENTERO PARDER
+    (130) TIPO_CAMPO -> VARCHAR PARIZQ . EXPNUMERICA PARDER
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
 
-    ENTERO          shift and go to state 318
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
 
+    EXPNUMERICA                    shift and go to state 322
 
 state 261
 
-    (132) TIPO_CAMPO -> CHAR PARIZQ . ENTERO PARDER
+    (132) TIPO_CAMPO -> CHAR PARIZQ . EXPNUMERICA PARDER
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
 
-    ENTERO          shift and go to state 319
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
 
+    EXPNUMERICA                    shift and go to state 323
 
 state 262
 
@@ -4474,7 +4513,7 @@ state 263
 
     (112) LISTA2 -> CONSTRAINT ID CHECK . PARIZQ CONDICIONES PARDER
 
-    PARIZQ          shift and go to state 320
+    PARIZQ          shift and go to state 324
 
 
 state 264
@@ -4484,10 +4523,10 @@ state 264
     (120) LISTA_ID_ -> . ID COMA
     (121) LISTA_ID_ -> . ID
 
-    PARIZQ          shift and go to state 321
+    PARIZQ          shift and go to state 325
     ID              shift and go to state 266
 
-    LISTA_ID_                      shift and go to state 322
+    LISTA_ID_                      shift and go to state 326
 
 state 265
 
@@ -4503,7 +4542,7 @@ state 266
     (120) LISTA_ID_ -> ID . COMA
     (121) LISTA_ID_ -> ID .
 
-    COMA            shift and go to state 323
+    COMA            shift and go to state 327
     PARIZQ          reduce using rule 121 (LISTA_ID_ -> ID .)
     ID              reduce using rule 121 (LISTA_ID_ -> ID .)
     PARDER          reduce using rule 121 (LISTA_ID_ -> ID .)
@@ -4520,7 +4559,7 @@ state 267
 
     ID              shift and go to state 266
 
-    LISTA_DE_IDS                   shift and go to state 324
+    LISTA_DE_IDS                   shift and go to state 328
     LISTA_ID_                      shift and go to state 265
 
 state 268
@@ -4534,7 +4573,7 @@ state 268
 
     ID              shift and go to state 266
 
-    LISTA_DE_IDS                   shift and go to state 325
+    LISTA_DE_IDS                   shift and go to state 329
     LISTA_ID_                      shift and go to state 265
 
 state 269
@@ -4556,14 +4595,14 @@ state 270
 
     (192) MODE_DATABASE -> MODE . IGUAL ENTERO
 
-    IGUAL           shift and go to state 326
+    IGUAL           shift and go to state 330
 
 
 state 271
 
     (190) OWNER_DATABASE -> OWNER IGUAL . ID
 
-    ID              shift and go to state 327
+    ID              shift and go to state 331
 
 
 state 272
@@ -4593,7 +4632,7 @@ state 275
 
     (151) DATOS -> PARIZQ COLUMNAS PARDER VALUES . PARIZQ VALORES PARDER
 
-    PARIZQ          shift and go to state 328
+    PARIZQ          shift and go to state 332
 
 
 state 276
@@ -4623,7 +4662,7 @@ state 277
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    EXPRESIONNE                    shift and go to state 329
+    EXPRESIONNE                    shift and go to state 333
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
@@ -4666,7 +4705,7 @@ state 280
 
     ID              shift and go to state 83
 
-    CAMPO                          shift and go to state 330
+    CAMPO                          shift and go to state 334
     NOMBRES_TABLAS                 shift and go to state 80
     TABLA                          shift and go to state 33
     NOMBRE_T                       shift and go to state 34
@@ -4697,8 +4736,8 @@ state 281
     AND             shift and go to state 212
     OR              shift and go to state 213
 
-    SIMBOLO_LOGICO                 shift and go to state 331
-    OTRO_LOGICO                    shift and go to state 332
+    SIMBOLO_LOGICO                 shift and go to state 335
+    OTRO_LOGICO                    shift and go to state 336
 
 state 282
 
@@ -4757,28 +4796,28 @@ state 284
 
     (178) DML_COMANDOS -> ALTER TABLE ID ALTER COLUMN ID SET . NOT NULL PUNTOCOMA
 
-    NOT             shift and go to state 333
+    NOT             shift and go to state 337
 
 
 state 285
 
     (174) DML_COMANDOS -> ALTER TABLE ID ADD COLUMN ID TIPO_CAMPO . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 334
+    PUNTOCOMA       shift and go to state 338
 
 
 state 286
 
     (179) DML_COMANDOS -> ALTER TABLE ID ADD FOREIGN KEY PARIZQ . ID PARDER REFERENCES ID PUNTOCOMA
 
-    ID              shift and go to state 335
+    ID              shift and go to state 339
 
 
 state 287
 
     (180) DML_COMANDOS -> ALTER TABLE ID ADD CONSTRAINT ID UNIQUE . PARIZQ ID PARDER PUNTOCOMA
 
-    PARIZQ          shift and go to state 336
+    PARIZQ          shift and go to state 340
 
 
 state 288
@@ -4815,7 +4854,7 @@ state 290
 
     (176) DML_COMANDOS -> ALTER TABLE ID RENAME COLUMN ID TO . ID PUNTOCOMA
 
-    ID              shift and go to state 337
+    ID              shift and go to state 341
 
 
 state 291
@@ -4846,7 +4885,7 @@ state 291
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    CONDICIONES                    shift and go to state 338
+    CONDICIONES                    shift and go to state 342
     CONDICION                      shift and go to state 139
     CONDICION_REL                  shift and go to state 140
     EXPRESIONNE                    shift and go to state 141
@@ -4858,7 +4897,7 @@ state 292
 
     (66) INNERR -> TIPOS_INNER JOIN TABLA_REF USING . PARIZQ SUB_COLUMN PARDER
 
-    PARIZQ          shift and go to state 339
+    PARIZQ          shift and go to state 343
 
 
 state 293
@@ -4917,15 +4956,15 @@ state 294
     (54) CAMPOSC -> . CADENASIMPLE
     (55) CAMPOSC -> . CADENADOBLE
 
-    JOIN            shift and go to state 340
+    JOIN            shift and go to state 344
     ID              shift and go to state 146
     ENTERO          shift and go to state 147
     FLOTANTE        shift and go to state 148
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    SUB_COLUMN                     shift and go to state 341
-    EXPRESIONNE                    shift and go to state 342
+    SUB_COLUMN                     shift and go to state 345
+    EXPRESIONNE                    shift and go to state 346
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
@@ -4996,7 +5035,7 @@ state 298
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    CONDICIONES                    shift and go to state 343
+    CONDICIONES                    shift and go to state 347
     CONDICION                      shift and go to state 139
     CONDICION_REL                  shift and go to state 140
     EXPRESIONNE                    shift and go to state 141
@@ -5016,7 +5055,7 @@ state 299
     ID              shift and go to state 69
     ASTERISCO       shift and go to state 27
 
-    CAMPOS                         shift and go to state 344
+    CAMPOS                         shift and go to state 348
 
 state 300
 
@@ -5048,7 +5087,7 @@ state 300
   ! ASC             [ reduce using rule 89 (EXPRES -> CAMPOS S2 .) ]
   ! DESC            [ reduce using rule 89 (EXPRES -> CAMPOS S2 .) ]
 
-    STATE                          shift and go to state 345
+    STATE                          shift and go to state 349
 
 state 301
 
@@ -5087,7 +5126,7 @@ state 302
     ID              shift and go to state 26
     ASTERISCO       shift and go to state 27
 
-    EXPRES                         shift and go to state 346
+    EXPRES                         shift and go to state 350
     NOMBRE_T                       shift and go to state 243
     CAMPOS                         shift and go to state 244
 
@@ -5098,7 +5137,7 @@ state 303
 
     ID              shift and go to state 72
 
-    ALIAS                          shift and go to state 347
+    ALIAS                          shift and go to state 351
 
 state 304
 
@@ -5119,7 +5158,7 @@ state 304
     PUNTOCOMA       reduce using rule 98 (STATE -> ASC .)
     ASC             reduce using rule 98 (STATE -> ASC .)
     DESC            reduce using rule 98 (STATE -> ASC .)
-    NULLS           shift and go to state 348
+    NULLS           shift and go to state 352
 
 
 state 305
@@ -5141,14 +5180,14 @@ state 305
     PUNTOCOMA       reduce using rule 101 (STATE -> DESC .)
     ASC             reduce using rule 101 (STATE -> DESC .)
     DESC            reduce using rule 101 (STATE -> DESC .)
-    NULLS           shift and go to state 349
+    NULLS           shift and go to state 353
 
 
 state 306
 
     (105) DML_COMANDOS -> CREATE TABLE ID PARIZQ CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ . ID PARIZQ PUNTOCOMA
 
-    ID              shift and go to state 350
+    ID              shift and go to state 354
 
 
 state 307
@@ -5280,39 +5319,138 @@ state 315
     (147) VALIDACION_CAMPO_CREATE -> CONSTRAINT ID . UNIQUE
     (148) VALIDACION_CAMPO_CREATE -> CONSTRAINT ID . CHECK PARIZQ CONDICIONES PARDER
 
-    UNIQUE          shift and go to state 351
-    CHECK           shift and go to state 352
+    UNIQUE          shift and go to state 355
+    CHECK           shift and go to state 356
 
 
 state 316
 
-    (129) TIPO_CAMPO -> CHARACTER VARYING PARIZQ . ENTERO PARDER
+    (129) TIPO_CAMPO -> CHARACTER VARYING PARIZQ . EXPNUMERICA PARDER
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
 
-    ENTERO          shift and go to state 353
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
 
+    EXPNUMERICA                    shift and go to state 357
 
 state 317
 
-    (131) TIPO_CAMPO -> CHARACTER PARIZQ ENTERO . PARDER
+    (212) EXPNUMERICA -> PARIZQ . EXPNUMERICA PARDER
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
 
-    PARDER          shift and go to state 354
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
 
+    EXPNUMERICA                    shift and go to state 358
 
 state 318
 
-    (130) TIPO_CAMPO -> VARCHAR PARIZQ ENTERO . PARDER
+    (131) TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA . PARDER
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
 
-    PARDER          shift and go to state 355
+    PARDER          shift and go to state 359
+    MAS             shift and go to state 360
+    MENOS           shift and go to state 361
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+    PORCENTAJE      shift and go to state 364
 
 
 state 319
 
-    (132) TIPO_CAMPO -> CHAR PARIZQ ENTERO . PARDER
+    (213) EXPNUMERICA -> ID .
 
-    PARDER          shift and go to state 356
+    PARDER          reduce using rule 213 (EXPNUMERICA -> ID .)
+    MAS             reduce using rule 213 (EXPNUMERICA -> ID .)
+    MENOS           reduce using rule 213 (EXPNUMERICA -> ID .)
+    ASTERISCO       reduce using rule 213 (EXPNUMERICA -> ID .)
+    DIVISION        reduce using rule 213 (EXPNUMERICA -> ID .)
+    PORCENTAJE      reduce using rule 213 (EXPNUMERICA -> ID .)
 
 
 state 320
+
+    (214) EXPNUMERICA -> ENTERO .
+
+    PARDER          reduce using rule 214 (EXPNUMERICA -> ENTERO .)
+    MAS             reduce using rule 214 (EXPNUMERICA -> ENTERO .)
+    MENOS           reduce using rule 214 (EXPNUMERICA -> ENTERO .)
+    ASTERISCO       reduce using rule 214 (EXPNUMERICA -> ENTERO .)
+    DIVISION        reduce using rule 214 (EXPNUMERICA -> ENTERO .)
+    PORCENTAJE      reduce using rule 214 (EXPNUMERICA -> ENTERO .)
+
+
+state 321
+
+    (215) EXPNUMERICA -> FLOTANTE .
+
+    PARDER          reduce using rule 215 (EXPNUMERICA -> FLOTANTE .)
+    MAS             reduce using rule 215 (EXPNUMERICA -> FLOTANTE .)
+    MENOS           reduce using rule 215 (EXPNUMERICA -> FLOTANTE .)
+    ASTERISCO       reduce using rule 215 (EXPNUMERICA -> FLOTANTE .)
+    DIVISION        reduce using rule 215 (EXPNUMERICA -> FLOTANTE .)
+    PORCENTAJE      reduce using rule 215 (EXPNUMERICA -> FLOTANTE .)
+
+
+state 322
+
+    (130) TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA . PARDER
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          shift and go to state 365
+    MAS             shift and go to state 360
+    MENOS           shift and go to state 361
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+    PORCENTAJE      shift and go to state 364
+
+
+state 323
+
+    (132) TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA . PARDER
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          shift and go to state 366
+    MAS             shift and go to state 360
+    MENOS           shift and go to state 361
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+    PORCENTAJE      shift and go to state 364
+
+
+state 324
 
     (112) LISTA2 -> CONSTRAINT ID CHECK PARIZQ . CONDICIONES PARDER
     (36) CONDICIONES -> . CONDICIONES CONDICION
@@ -5340,7 +5478,7 @@ state 320
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    CONDICIONES                    shift and go to state 357
+    CONDICIONES                    shift and go to state 367
     CONDICION                      shift and go to state 139
     CONDICION_REL                  shift and go to state 140
     EXPRESIONNE                    shift and go to state 141
@@ -5348,7 +5486,7 @@ state 320
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 321
+state 325
 
     (113) LISTA2 -> UNIQUE PARDER LISTA_DE_IDS PARIZQ .
 
@@ -5360,7 +5498,7 @@ state 321
     PARDER          reduce using rule 113 (LISTA2 -> UNIQUE PARDER LISTA_DE_IDS PARIZQ .)
 
 
-state 322
+state 326
 
     (118) LISTA_DE_IDS -> LISTA_DE_IDS LISTA_ID_ .
 
@@ -5369,7 +5507,7 @@ state 322
     PARDER          reduce using rule 118 (LISTA_DE_IDS -> LISTA_DE_IDS LISTA_ID_ .)
 
 
-state 323
+state 327
 
     (120) LISTA_ID_ -> ID COMA .
 
@@ -5378,7 +5516,7 @@ state 323
     PARDER          reduce using rule 120 (LISTA_ID_ -> ID COMA .)
 
 
-state 324
+state 328
 
     (114) LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS . PARDER COMA
     (116) LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS . PARDER
@@ -5386,12 +5524,12 @@ state 324
     (120) LISTA_ID_ -> . ID COMA
     (121) LISTA_ID_ -> . ID
 
-    PARDER          shift and go to state 358
+    PARDER          shift and go to state 368
     ID              shift and go to state 266
 
-    LISTA_ID_                      shift and go to state 322
+    LISTA_ID_                      shift and go to state 326
 
-state 325
+state 329
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS . PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER COMA
     (117) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS . PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER
@@ -5399,19 +5537,19 @@ state 325
     (120) LISTA_ID_ -> . ID COMA
     (121) LISTA_ID_ -> . ID
 
-    PARDER          shift and go to state 359
+    PARDER          shift and go to state 369
     ID              shift and go to state 266
 
-    LISTA_ID_                      shift and go to state 322
+    LISTA_ID_                      shift and go to state 326
 
-state 326
+state 330
 
     (192) MODE_DATABASE -> MODE IGUAL . ENTERO
 
-    ENTERO          shift and go to state 360
+    ENTERO          shift and go to state 370
 
 
-state 327
+state 331
 
     (190) OWNER_DATABASE -> OWNER IGUAL ID .
 
@@ -5427,7 +5565,7 @@ state 327
     $end            reduce using rule 190 (OWNER_DATABASE -> OWNER IGUAL ID .)
 
 
-state 328
+state 332
 
     (151) DATOS -> PARIZQ COLUMNAS PARDER VALUES PARIZQ . VALORES PARDER
     (157) VALORES -> . VALORES VALOR
@@ -5437,10 +5575,10 @@ state 328
 
     ID              shift and go to state 201
 
-    VALORES                        shift and go to state 361
+    VALORES                        shift and go to state 371
     VALOR                          shift and go to state 200
 
-state 329
+state 333
 
     (166) CAMPO -> NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE .
     (167) CAMPO -> NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE . C
@@ -5451,9 +5589,9 @@ state 329
     ID              reduce using rule 166 (CAMPO -> NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE .)
     COMA            shift and go to state 280
 
-    C                              shift and go to state 362
+    C                              shift and go to state 372
 
-state 330
+state 334
 
     (170) C -> COMA CAMPO .
 
@@ -5462,7 +5600,7 @@ state 330
     ID              reduce using rule 170 (C -> COMA CAMPO .)
 
 
-state 331
+state 335
 
     (44) OTRO_LOGICO -> SIMBOLO_LOGICO . CONDICIONES
     (36) CONDICIONES -> . CONDICIONES CONDICION
@@ -5490,7 +5628,7 @@ state 331
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    CONDICIONES                    shift and go to state 363
+    CONDICIONES                    shift and go to state 373
     CONDICION                      shift and go to state 139
     CONDICION_REL                  shift and go to state 140
     EXPRESIONNE                    shift and go to state 141
@@ -5498,7 +5636,7 @@ state 331
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 332
+state 336
 
     (38) CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .
 
@@ -5519,14 +5657,14 @@ state 332
     PARDER          reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
 
 
-state 333
+state 337
 
     (178) DML_COMANDOS -> ALTER TABLE ID ALTER COLUMN ID SET NOT . NULL PUNTOCOMA
 
-    NULL            shift and go to state 364
+    NULL            shift and go to state 374
 
 
-state 334
+state 338
 
     (174) DML_COMANDOS -> ALTER TABLE ID ADD COLUMN ID TIPO_CAMPO PUNTOCOMA .
 
@@ -5541,28 +5679,28 @@ state 334
     $end            reduce using rule 174 (DML_COMANDOS -> ALTER TABLE ID ADD COLUMN ID TIPO_CAMPO PUNTOCOMA .)
 
 
-state 335
+state 339
 
     (179) DML_COMANDOS -> ALTER TABLE ID ADD FOREIGN KEY PARIZQ ID . PARDER REFERENCES ID PUNTOCOMA
 
-    PARDER          shift and go to state 365
+    PARDER          shift and go to state 375
 
 
-state 336
+state 340
 
     (180) DML_COMANDOS -> ALTER TABLE ID ADD CONSTRAINT ID UNIQUE PARIZQ . ID PARDER PUNTOCOMA
 
-    ID              shift and go to state 366
+    ID              shift and go to state 376
 
 
-state 337
+state 341
 
     (176) DML_COMANDOS -> ALTER TABLE ID RENAME COLUMN ID TO ID . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 367
+    PUNTOCOMA       shift and go to state 377
 
 
-state 338
+state 342
 
     (64) INNERR -> TIPOS_INNER JOIN TABLA_REF ON CONDICIONES .
     (36) CONDICIONES -> CONDICIONES . CONDICION
@@ -5604,7 +5742,7 @@ state 338
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 339
+state 343
 
     (66) INNERR -> TIPOS_INNER JOIN TABLA_REF USING PARIZQ . SUB_COLUMN PARDER
     (69) SUB_COLUMN -> . JOIN EXPRESIONNE
@@ -5618,19 +5756,19 @@ state 339
     (54) CAMPOSC -> . CADENASIMPLE
     (55) CAMPOSC -> . CADENADOBLE
 
-    JOIN            shift and go to state 340
+    JOIN            shift and go to state 344
     ID              shift and go to state 146
     ENTERO          shift and go to state 147
     FLOTANTE        shift and go to state 148
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    SUB_COLUMN                     shift and go to state 368
-    EXPRESIONNE                    shift and go to state 342
+    SUB_COLUMN                     shift and go to state 378
+    EXPRESIONNE                    shift and go to state 346
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 340
+state 344
 
     (69) SUB_COLUMN -> JOIN . EXPRESIONNE
     (45) EXPRESIONNE -> . NOMBRE_C PUNTO CAMPOSC
@@ -5648,25 +5786,25 @@ state 340
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    EXPRESIONNE                    shift and go to state 369
+    EXPRESIONNE                    shift and go to state 379
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 341
+state 345
 
     (67) INNERR -> JOIN TABLA_REF USING PARIZQ SUB_COLUMN . PARDER
 
-    PARDER          shift and go to state 370
+    PARDER          shift and go to state 380
 
 
-state 342
+state 346
 
     (70) SUB_COLUMN -> EXPRESIONNE .
 
     PARDER          reduce using rule 70 (SUB_COLUMN -> EXPRESIONNE .)
 
 
-state 343
+state 347
 
     (97) MORE_ORDER -> HAVING CONDICIONES .
     (36) CONDICIONES -> CONDICIONES . CONDICION
@@ -5708,7 +5846,7 @@ state 343
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 344
+state 348
 
     (87) EXPRES -> NOMBRE_T PUNTO CAMPOS . S2
     (88) EXPRES -> NOMBRE_T PUNTO CAMPOS .
@@ -5744,10 +5882,10 @@ state 344
   ! ASC             [ reduce using rule 88 (EXPRES -> NOMBRE_T PUNTO CAMPOS .) ]
   ! DESC            [ reduce using rule 88 (EXPRES -> NOMBRE_T PUNTO CAMPOS .) ]
 
-    S2                             shift and go to state 371
-    STATE                          shift and go to state 372
+    S2                             shift and go to state 381
+    STATE                          shift and go to state 382
 
-state 345
+state 349
 
     (93) EXPRES -> CAMPOS S2 STATE .
 
@@ -5766,7 +5904,7 @@ state 345
     DESC            reduce using rule 93 (EXPRES -> CAMPOS S2 STATE .)
 
 
-state 346
+state 350
 
     (95) S2 -> COMA EXPRES .
 
@@ -5785,7 +5923,7 @@ state 346
     PUNTOCOMA       reduce using rule 95 (S2 -> COMA EXPRES .)
 
 
-state 347
+state 351
 
     (96) S2 -> AS ALIAS .
 
@@ -5804,32 +5942,32 @@ state 347
     PUNTOCOMA       reduce using rule 96 (S2 -> AS ALIAS .)
 
 
-state 348
+state 352
 
     (99) STATE -> ASC NULLS . FIRST
     (100) STATE -> ASC NULLS . LAST
 
-    FIRST           shift and go to state 373
-    LAST            shift and go to state 374
+    FIRST           shift and go to state 383
+    LAST            shift and go to state 384
 
 
-state 349
+state 353
 
     (102) STATE -> DESC NULLS . FIRST
     (103) STATE -> DESC NULLS . LAST
 
-    FIRST           shift and go to state 375
-    LAST            shift and go to state 376
+    FIRST           shift and go to state 385
+    LAST            shift and go to state 386
 
 
-state 350
+state 354
 
     (105) DML_COMANDOS -> CREATE TABLE ID PARIZQ CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID . PARIZQ PUNTOCOMA
 
-    PARIZQ          shift and go to state 377
+    PARIZQ          shift and go to state 387
 
 
-state 351
+state 355
 
     (147) VALIDACION_CAMPO_CREATE -> CONSTRAINT ID UNIQUE .
 
@@ -5845,72 +5983,199 @@ state 351
     PARDER          reduce using rule 147 (VALIDACION_CAMPO_CREATE -> CONSTRAINT ID UNIQUE .)
 
 
-state 352
+state 356
 
     (148) VALIDACION_CAMPO_CREATE -> CONSTRAINT ID CHECK . PARIZQ CONDICIONES PARDER
 
-    PARIZQ          shift and go to state 378
-
-
-state 353
-
-    (129) TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO . PARDER
-
-    PARDER          shift and go to state 379
-
-
-state 354
-
-    (131) TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .
-
-    NOT             reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    PRIMARY         reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    DEFAULT         reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    NULL            reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    CONSTRAINT      reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    COMA            reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    UNIQUE          reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    FOREIGN         reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    ID              reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    PARDER          reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-    PUNTOCOMA       reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ ENTERO PARDER .)
-
-
-state 355
-
-    (130) TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .
-
-    NOT             reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    PRIMARY         reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    DEFAULT         reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    NULL            reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    CONSTRAINT      reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    COMA            reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    UNIQUE          reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    FOREIGN         reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    ID              reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    PARDER          reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-    PUNTOCOMA       reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ ENTERO PARDER .)
-
-
-state 356
-
-    (132) TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .
-
-    NOT             reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    PRIMARY         reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    DEFAULT         reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    NULL            reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    CONSTRAINT      reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    COMA            reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    UNIQUE          reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    FOREIGN         reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    ID              reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    PARDER          reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
-    PUNTOCOMA       reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ ENTERO PARDER .)
+    PARIZQ          shift and go to state 388
 
 
 state 357
+
+    (129) TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA . PARDER
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          shift and go to state 389
+    MAS             shift and go to state 360
+    MENOS           shift and go to state 361
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+    PORCENTAJE      shift and go to state 364
+
+
+state 358
+
+    (212) EXPNUMERICA -> PARIZQ EXPNUMERICA . PARDER
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          shift and go to state 390
+    MAS             shift and go to state 360
+    MENOS           shift and go to state 361
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+    PORCENTAJE      shift and go to state 364
+
+
+state 359
+
+    (131) TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .
+
+    NOT             reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    PRIMARY         reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    DEFAULT         reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    NULL            reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    CONSTRAINT      reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    COMA            reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    UNIQUE          reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    FOREIGN         reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    ID              reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    PARDER          reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+    PUNTOCOMA       reduce using rule 131 (TIPO_CAMPO -> CHARACTER PARIZQ EXPNUMERICA PARDER .)
+
+
+state 360
+
+    (207) EXPNUMERICA -> EXPNUMERICA MAS . EXPNUMERICA
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
+
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
+
+    EXPNUMERICA                    shift and go to state 391
+
+state 361
+
+    (208) EXPNUMERICA -> EXPNUMERICA MENOS . EXPNUMERICA
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
+
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
+
+    EXPNUMERICA                    shift and go to state 392
+
+state 362
+
+    (209) EXPNUMERICA -> EXPNUMERICA ASTERISCO . EXPNUMERICA
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
+
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
+
+    EXPNUMERICA                    shift and go to state 393
+
+state 363
+
+    (210) EXPNUMERICA -> EXPNUMERICA DIVISION . EXPNUMERICA
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
+
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
+
+    EXPNUMERICA                    shift and go to state 394
+
+state 364
+
+    (211) EXPNUMERICA -> EXPNUMERICA PORCENTAJE . EXPNUMERICA
+    (207) EXPNUMERICA -> . EXPNUMERICA MAS EXPNUMERICA
+    (208) EXPNUMERICA -> . EXPNUMERICA MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> . EXPNUMERICA ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> . EXPNUMERICA DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> . EXPNUMERICA PORCENTAJE EXPNUMERICA
+    (212) EXPNUMERICA -> . PARIZQ EXPNUMERICA PARDER
+    (213) EXPNUMERICA -> . ID
+    (214) EXPNUMERICA -> . ENTERO
+    (215) EXPNUMERICA -> . FLOTANTE
+
+    PARIZQ          shift and go to state 317
+    ID              shift and go to state 319
+    ENTERO          shift and go to state 320
+    FLOTANTE        shift and go to state 321
+
+    EXPNUMERICA                    shift and go to state 395
+
+state 365
+
+    (130) TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .
+
+    NOT             reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    PRIMARY         reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    DEFAULT         reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    NULL            reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    CONSTRAINT      reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    COMA            reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    UNIQUE          reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    FOREIGN         reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    ID              reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    PARDER          reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+    PUNTOCOMA       reduce using rule 130 (TIPO_CAMPO -> VARCHAR PARIZQ EXPNUMERICA PARDER .)
+
+
+state 366
+
+    (132) TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .
+
+    NOT             reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    PRIMARY         reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    DEFAULT         reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    NULL            reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    CONSTRAINT      reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    COMA            reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    UNIQUE          reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    FOREIGN         reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    ID              reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    PARDER          reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+    PUNTOCOMA       reduce using rule 132 (TIPO_CAMPO -> CHAR PARIZQ EXPNUMERICA PARDER .)
+
+
+state 367
 
     (112) LISTA2 -> CONSTRAINT ID CHECK PARIZQ CONDICIONES . PARDER
     (36) CONDICIONES -> CONDICIONES . CONDICION
@@ -5930,7 +6195,7 @@ state 357
     (54) CAMPOSC -> . CADENASIMPLE
     (55) CAMPOSC -> . CADENADOBLE
 
-    PARDER          shift and go to state 380
+    PARDER          shift and go to state 396
     NEGACION        shift and go to state 145
     ID              shift and go to state 146
     ENTERO          shift and go to state 147
@@ -5945,12 +6210,12 @@ state 357
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 358
+state 368
 
     (114) LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER . COMA
     (116) LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER .
 
-    COMA            shift and go to state 381
+    COMA            shift and go to state 397
     CONSTRAINT      reduce using rule 116 (LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER .)
     UNIQUE          reduce using rule 116 (LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER .)
     PRIMARY         reduce using rule 116 (LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER .)
@@ -5959,15 +6224,15 @@ state 358
     PARDER          reduce using rule 116 (LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER .)
 
 
-state 359
+state 369
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER . REFERENCES ID PARIZQ LISTA_DE_IDS PARDER COMA
     (117) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER . REFERENCES ID PARIZQ LISTA_DE_IDS PARDER
 
-    REFERENCES      shift and go to state 382
+    REFERENCES      shift and go to state 398
 
 
-state 360
+state 370
 
     (192) MODE_DATABASE -> MODE IGUAL ENTERO .
 
@@ -5982,19 +6247,19 @@ state 360
     $end            reduce using rule 192 (MODE_DATABASE -> MODE IGUAL ENTERO .)
 
 
-state 361
+state 371
 
     (151) DATOS -> PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES . PARDER
     (157) VALORES -> VALORES . VALOR
     (159) VALOR -> . ID D
     (160) VALOR -> . ID
 
-    PARDER          shift and go to state 383
+    PARDER          shift and go to state 399
     ID              shift and go to state 201
 
     VALOR                          shift and go to state 273
 
-state 362
+state 372
 
     (167) CAMPO -> NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE C .
 
@@ -6003,7 +6268,7 @@ state 362
     ID              reduce using rule 167 (CAMPO -> NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE C .)
 
 
-state 363
+state 373
 
     (44) OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .
     (36) CONDICIONES -> CONDICIONES . CONDICION
@@ -6059,28 +6324,28 @@ state 363
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 364
+state 374
 
     (178) DML_COMANDOS -> ALTER TABLE ID ALTER COLUMN ID SET NOT NULL . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 384
+    PUNTOCOMA       shift and go to state 400
 
 
-state 365
+state 375
 
     (179) DML_COMANDOS -> ALTER TABLE ID ADD FOREIGN KEY PARIZQ ID PARDER . REFERENCES ID PUNTOCOMA
 
-    REFERENCES      shift and go to state 385
+    REFERENCES      shift and go to state 401
 
 
-state 366
+state 376
 
     (180) DML_COMANDOS -> ALTER TABLE ID ADD CONSTRAINT ID UNIQUE PARIZQ ID . PARDER PUNTOCOMA
 
-    PARDER          shift and go to state 386
+    PARDER          shift and go to state 402
 
 
-state 367
+state 377
 
     (176) DML_COMANDOS -> ALTER TABLE ID RENAME COLUMN ID TO ID PUNTOCOMA .
 
@@ -6095,21 +6360,21 @@ state 367
     $end            reduce using rule 176 (DML_COMANDOS -> ALTER TABLE ID RENAME COLUMN ID TO ID PUNTOCOMA .)
 
 
-state 368
+state 378
 
     (66) INNERR -> TIPOS_INNER JOIN TABLA_REF USING PARIZQ SUB_COLUMN . PARDER
 
-    PARDER          shift and go to state 387
+    PARDER          shift and go to state 403
 
 
-state 369
+state 379
 
     (69) SUB_COLUMN -> JOIN EXPRESIONNE .
 
     PARDER          reduce using rule 69 (SUB_COLUMN -> JOIN EXPRESIONNE .)
 
 
-state 370
+state 380
 
     (67) INNERR -> JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER .
 
@@ -6123,7 +6388,7 @@ state 370
     PUNTOCOMA       reduce using rule 67 (INNERR -> JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER .)
 
 
-state 371
+state 381
 
     (87) EXPRES -> NOMBRE_T PUNTO CAMPOS S2 .
     (91) EXPRES -> NOMBRE_T PUNTO CAMPOS S2 . STATE
@@ -6153,9 +6418,9 @@ state 371
   ! ASC             [ reduce using rule 87 (EXPRES -> NOMBRE_T PUNTO CAMPOS S2 .) ]
   ! DESC            [ reduce using rule 87 (EXPRES -> NOMBRE_T PUNTO CAMPOS S2 .) ]
 
-    STATE                          shift and go to state 388
+    STATE                          shift and go to state 404
 
-state 372
+state 382
 
     (92) EXPRES -> NOMBRE_T PUNTO CAMPOS STATE .
 
@@ -6174,7 +6439,7 @@ state 372
     DESC            reduce using rule 92 (EXPRES -> NOMBRE_T PUNTO CAMPOS STATE .)
 
 
-state 373
+state 383
 
     (99) STATE -> ASC NULLS FIRST .
 
@@ -6193,7 +6458,7 @@ state 373
     DESC            reduce using rule 99 (STATE -> ASC NULLS FIRST .)
 
 
-state 374
+state 384
 
     (100) STATE -> ASC NULLS LAST .
 
@@ -6212,7 +6477,7 @@ state 374
     DESC            reduce using rule 100 (STATE -> ASC NULLS LAST .)
 
 
-state 375
+state 385
 
     (102) STATE -> DESC NULLS FIRST .
 
@@ -6231,7 +6496,7 @@ state 375
     DESC            reduce using rule 102 (STATE -> DESC NULLS FIRST .)
 
 
-state 376
+state 386
 
     (103) STATE -> DESC NULLS LAST .
 
@@ -6250,14 +6515,14 @@ state 376
     DESC            reduce using rule 103 (STATE -> DESC NULLS LAST .)
 
 
-state 377
+state 387
 
     (105) DML_COMANDOS -> CREATE TABLE ID PARIZQ CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID PARIZQ . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 389
+    PUNTOCOMA       shift and go to state 405
 
 
-state 378
+state 388
 
     (148) VALIDACION_CAMPO_CREATE -> CONSTRAINT ID CHECK PARIZQ . CONDICIONES PARDER
     (36) CONDICIONES -> . CONDICIONES CONDICION
@@ -6285,7 +6550,7 @@ state 378
     CADENASIMPLE    shift and go to state 149
     CADENADOBLE     shift and go to state 150
 
-    CONDICIONES                    shift and go to state 390
+    CONDICIONES                    shift and go to state 406
     CONDICION                      shift and go to state 139
     CONDICION_REL                  shift and go to state 140
     EXPRESIONNE                    shift and go to state 141
@@ -6293,24 +6558,156 @@ state 378
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 379
+state 389
 
-    (129) TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .
+    (129) TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .
 
-    NOT             reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    PRIMARY         reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    DEFAULT         reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    NULL            reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    CONSTRAINT      reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    COMA            reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    UNIQUE          reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    FOREIGN         reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    ID              reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    PARDER          reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
-    PUNTOCOMA       reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ ENTERO PARDER .)
+    NOT             reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    PRIMARY         reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    DEFAULT         reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    NULL            reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    CONSTRAINT      reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    COMA            reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    UNIQUE          reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    FOREIGN         reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    ID              reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    PARDER          reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
+    PUNTOCOMA       reduce using rule 129 (TIPO_CAMPO -> CHARACTER VARYING PARIZQ EXPNUMERICA PARDER .)
 
 
-state 380
+state 390
+
+    (212) EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER .
+
+    PARDER          reduce using rule 212 (EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER .)
+    MAS             reduce using rule 212 (EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER .)
+    MENOS           reduce using rule 212 (EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER .)
+    ASTERISCO       reduce using rule 212 (EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER .)
+    DIVISION        reduce using rule 212 (EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER .)
+    PORCENTAJE      reduce using rule 212 (EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER .)
+
+
+state 391
+
+    (207) EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA .
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          reduce using rule 207 (EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA .)
+    MAS             reduce using rule 207 (EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA .)
+    MENOS           reduce using rule 207 (EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA .)
+    PORCENTAJE      reduce using rule 207 (EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA .)
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+
+  ! ASTERISCO       [ reduce using rule 207 (EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA .) ]
+  ! DIVISION        [ reduce using rule 207 (EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA .) ]
+  ! MAS             [ shift and go to state 360 ]
+  ! MENOS           [ shift and go to state 361 ]
+  ! PORCENTAJE      [ shift and go to state 364 ]
+
+
+state 392
+
+    (208) EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA .
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          reduce using rule 208 (EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA .)
+    MAS             reduce using rule 208 (EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA .)
+    MENOS           reduce using rule 208 (EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA .)
+    PORCENTAJE      reduce using rule 208 (EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA .)
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+
+  ! ASTERISCO       [ reduce using rule 208 (EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA .) ]
+  ! DIVISION        [ reduce using rule 208 (EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA .) ]
+  ! MAS             [ shift and go to state 360 ]
+  ! MENOS           [ shift and go to state 361 ]
+  ! PORCENTAJE      [ shift and go to state 364 ]
+
+
+state 393
+
+    (209) EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA .
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          reduce using rule 209 (EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA .)
+    MAS             reduce using rule 209 (EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA .)
+    MENOS           reduce using rule 209 (EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA .)
+    ASTERISCO       reduce using rule 209 (EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA .)
+    DIVISION        reduce using rule 209 (EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA .)
+    PORCENTAJE      reduce using rule 209 (EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA .)
+
+  ! MAS             [ shift and go to state 360 ]
+  ! MENOS           [ shift and go to state 361 ]
+  ! ASTERISCO       [ shift and go to state 362 ]
+  ! DIVISION        [ shift and go to state 363 ]
+  ! PORCENTAJE      [ shift and go to state 364 ]
+
+
+state 394
+
+    (210) EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA .
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+    PARDER          reduce using rule 210 (EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA .)
+    MAS             reduce using rule 210 (EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA .)
+    MENOS           reduce using rule 210 (EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA .)
+    ASTERISCO       reduce using rule 210 (EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA .)
+    DIVISION        reduce using rule 210 (EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA .)
+    PORCENTAJE      reduce using rule 210 (EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA .)
+
+  ! MAS             [ shift and go to state 360 ]
+  ! MENOS           [ shift and go to state 361 ]
+  ! ASTERISCO       [ shift and go to state 362 ]
+  ! DIVISION        [ shift and go to state 363 ]
+  ! PORCENTAJE      [ shift and go to state 364 ]
+
+
+state 395
+
+    (211) EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA .
+    (207) EXPNUMERICA -> EXPNUMERICA . MAS EXPNUMERICA
+    (208) EXPNUMERICA -> EXPNUMERICA . MENOS EXPNUMERICA
+    (209) EXPNUMERICA -> EXPNUMERICA . ASTERISCO EXPNUMERICA
+    (210) EXPNUMERICA -> EXPNUMERICA . DIVISION EXPNUMERICA
+    (211) EXPNUMERICA -> EXPNUMERICA . PORCENTAJE EXPNUMERICA
+
+  ! shift/reduce conflict for MAS resolved as shift
+  ! shift/reduce conflict for MENOS resolved as shift
+  ! shift/reduce conflict for ASTERISCO resolved as shift
+  ! shift/reduce conflict for DIVISION resolved as shift
+  ! shift/reduce conflict for PORCENTAJE resolved as shift
+    PARDER          reduce using rule 211 (EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA .)
+    MAS             shift and go to state 360
+    MENOS           shift and go to state 361
+    ASTERISCO       shift and go to state 362
+    DIVISION        shift and go to state 363
+    PORCENTAJE      shift and go to state 364
+
+  ! MAS             [ reduce using rule 211 (EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA .) ]
+  ! MENOS           [ reduce using rule 211 (EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA .) ]
+  ! ASTERISCO       [ reduce using rule 211 (EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA .) ]
+  ! DIVISION        [ reduce using rule 211 (EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA .) ]
+  ! PORCENTAJE      [ reduce using rule 211 (EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA .) ]
+
+
+state 396
 
     (112) LISTA2 -> CONSTRAINT ID CHECK PARIZQ CONDICIONES PARDER .
 
@@ -6322,7 +6719,7 @@ state 380
     PARDER          reduce using rule 112 (LISTA2 -> CONSTRAINT ID CHECK PARIZQ CONDICIONES PARDER .)
 
 
-state 381
+state 397
 
     (114) LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER COMA .
 
@@ -6334,22 +6731,22 @@ state 381
     PARDER          reduce using rule 114 (LISTA2 -> PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER COMA .)
 
 
-state 382
+state 398
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES . ID PARIZQ LISTA_DE_IDS PARDER COMA
     (117) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES . ID PARIZQ LISTA_DE_IDS PARDER
 
-    ID              shift and go to state 391
+    ID              shift and go to state 407
 
 
-state 383
+state 399
 
     (151) DATOS -> PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES PARDER .
 
     PUNTOCOMA       reduce using rule 151 (DATOS -> PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES PARDER .)
 
 
-state 384
+state 400
 
     (178) DML_COMANDOS -> ALTER TABLE ID ALTER COLUMN ID SET NOT NULL PUNTOCOMA .
 
@@ -6364,21 +6761,21 @@ state 384
     $end            reduce using rule 178 (DML_COMANDOS -> ALTER TABLE ID ALTER COLUMN ID SET NOT NULL PUNTOCOMA .)
 
 
-state 385
+state 401
 
     (179) DML_COMANDOS -> ALTER TABLE ID ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES . ID PUNTOCOMA
 
-    ID              shift and go to state 392
+    ID              shift and go to state 408
 
 
-state 386
+state 402
 
     (180) DML_COMANDOS -> ALTER TABLE ID ADD CONSTRAINT ID UNIQUE PARIZQ ID PARDER . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 393
+    PUNTOCOMA       shift and go to state 409
 
 
-state 387
+state 403
 
     (66) INNERR -> TIPOS_INNER JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER .
 
@@ -6392,7 +6789,7 @@ state 387
     PUNTOCOMA       reduce using rule 66 (INNERR -> TIPOS_INNER JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER .)
 
 
-state 388
+state 404
 
     (91) EXPRES -> NOMBRE_T PUNTO CAMPOS S2 STATE .
 
@@ -6411,7 +6808,7 @@ state 388
     DESC            reduce using rule 91 (EXPRES -> NOMBRE_T PUNTO CAMPOS S2 STATE .)
 
 
-state 389
+state 405
 
     (105) DML_COMANDOS -> CREATE TABLE ID PARIZQ CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID PARIZQ PUNTOCOMA .
 
@@ -6426,7 +6823,7 @@ state 389
     $end            reduce using rule 105 (DML_COMANDOS -> CREATE TABLE ID PARIZQ CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID PARIZQ PUNTOCOMA .)
 
 
-state 390
+state 406
 
     (148) VALIDACION_CAMPO_CREATE -> CONSTRAINT ID CHECK PARIZQ CONDICIONES . PARDER
     (36) CONDICIONES -> CONDICIONES . CONDICION
@@ -6446,7 +6843,7 @@ state 390
     (54) CAMPOSC -> . CADENASIMPLE
     (55) CAMPOSC -> . CADENADOBLE
 
-    PARDER          shift and go to state 394
+    PARDER          shift and go to state 410
     NEGACION        shift and go to state 145
     ID              shift and go to state 146
     ENTERO          shift and go to state 147
@@ -6461,22 +6858,22 @@ state 390
     NOMBRE_C                       shift and go to state 143
     CAMPOSC                        shift and go to state 144
 
-state 391
+state 407
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID . PARIZQ LISTA_DE_IDS PARDER COMA
     (117) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID . PARIZQ LISTA_DE_IDS PARDER
 
-    PARIZQ          shift and go to state 395
+    PARIZQ          shift and go to state 411
 
 
-state 392
+state 408
 
     (179) DML_COMANDOS -> ALTER TABLE ID ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID . PUNTOCOMA
 
-    PUNTOCOMA       shift and go to state 396
+    PUNTOCOMA       shift and go to state 412
 
 
-state 393
+state 409
 
     (180) DML_COMANDOS -> ALTER TABLE ID ADD CONSTRAINT ID UNIQUE PARIZQ ID PARDER PUNTOCOMA .
 
@@ -6491,7 +6888,7 @@ state 393
     $end            reduce using rule 180 (DML_COMANDOS -> ALTER TABLE ID ADD CONSTRAINT ID UNIQUE PARIZQ ID PARDER PUNTOCOMA .)
 
 
-state 394
+state 410
 
     (148) VALIDACION_CAMPO_CREATE -> CONSTRAINT ID CHECK PARIZQ CONDICIONES PARDER .
 
@@ -6507,7 +6904,7 @@ state 394
     PARDER          reduce using rule 148 (VALIDACION_CAMPO_CREATE -> CONSTRAINT ID CHECK PARIZQ CONDICIONES PARDER .)
 
 
-state 395
+state 411
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ . LISTA_DE_IDS PARDER COMA
     (117) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ . LISTA_DE_IDS PARDER
@@ -6518,10 +6915,10 @@ state 395
 
     ID              shift and go to state 266
 
-    LISTA_DE_IDS                   shift and go to state 397
+    LISTA_DE_IDS                   shift and go to state 413
     LISTA_ID_                      shift and go to state 265
 
-state 396
+state 412
 
     (179) DML_COMANDOS -> ALTER TABLE ID ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID PUNTOCOMA .
 
@@ -6536,7 +6933,7 @@ state 396
     $end            reduce using rule 179 (DML_COMANDOS -> ALTER TABLE ID ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID PUNTOCOMA .)
 
 
-state 397
+state 413
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS . PARDER COMA
     (117) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS . PARDER
@@ -6544,17 +6941,17 @@ state 397
     (120) LISTA_ID_ -> . ID COMA
     (121) LISTA_ID_ -> . ID
 
-    PARDER          shift and go to state 398
+    PARDER          shift and go to state 414
     ID              shift and go to state 266
 
-    LISTA_ID_                      shift and go to state 322
+    LISTA_ID_                      shift and go to state 326
 
-state 398
+state 414
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER . COMA
     (117) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER .
 
-    COMA            shift and go to state 399
+    COMA            shift and go to state 415
     CONSTRAINT      reduce using rule 117 (LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER .)
     UNIQUE          reduce using rule 117 (LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER .)
     PRIMARY         reduce using rule 117 (LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER .)
@@ -6563,7 +6960,7 @@ state 398
     PARDER          reduce using rule 117 (LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER .)
 
 
-state 399
+state 415
 
     (115) LISTA2 -> FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER COMA .
 
@@ -6595,15 +6992,20 @@ WARNING: shift/reduce conflict for PRIMARY in state 249 resolved as shift
 WARNING: shift/reduce conflict for CONSTRAINT in state 249 resolved as shift
 WARNING: shift/reduce conflict for ASC in state 300 resolved as shift
 WARNING: shift/reduce conflict for DESC in state 300 resolved as shift
-WARNING: shift/reduce conflict for ASC in state 344 resolved as shift
-WARNING: shift/reduce conflict for DESC in state 344 resolved as shift
-WARNING: shift/reduce conflict for NEGACION in state 363 resolved as shift
-WARNING: shift/reduce conflict for ID in state 363 resolved as shift
-WARNING: shift/reduce conflict for ENTERO in state 363 resolved as shift
-WARNING: shift/reduce conflict for FLOTANTE in state 363 resolved as shift
-WARNING: shift/reduce conflict for CADENASIMPLE in state 363 resolved as shift
-WARNING: shift/reduce conflict for CADENADOBLE in state 363 resolved as shift
-WARNING: shift/reduce conflict for ASC in state 371 resolved as shift
-WARNING: shift/reduce conflict for DESC in state 371 resolved as shift
+WARNING: shift/reduce conflict for ASC in state 348 resolved as shift
+WARNING: shift/reduce conflict for DESC in state 348 resolved as shift
+WARNING: shift/reduce conflict for NEGACION in state 373 resolved as shift
+WARNING: shift/reduce conflict for ID in state 373 resolved as shift
+WARNING: shift/reduce conflict for ENTERO in state 373 resolved as shift
+WARNING: shift/reduce conflict for FLOTANTE in state 373 resolved as shift
+WARNING: shift/reduce conflict for CADENASIMPLE in state 373 resolved as shift
+WARNING: shift/reduce conflict for CADENADOBLE in state 373 resolved as shift
+WARNING: shift/reduce conflict for ASC in state 381 resolved as shift
+WARNING: shift/reduce conflict for DESC in state 381 resolved as shift
+WARNING: shift/reduce conflict for MAS in state 395 resolved as shift
+WARNING: shift/reduce conflict for MENOS in state 395 resolved as shift
+WARNING: shift/reduce conflict for ASTERISCO in state 395 resolved as shift
+WARNING: shift/reduce conflict for DIVISION in state 395 resolved as shift
+WARNING: shift/reduce conflict for PORCENTAJE in state 395 resolved as shift
 WARNING: reduce/reduce conflict in state 161 resolved using rule (CUERPO -> WHERE CONDICIONES)
 WARNING: rejected rule (INNERR -> WHERE CONDICIONES) in state 161
