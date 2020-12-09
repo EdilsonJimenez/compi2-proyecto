@@ -59,6 +59,19 @@ reservadas = {
     'null': 'NULL',
     'constraint': 'CONSTRAINT',
     'default': 'DEFAULT',
+    'primary': 'PRIMARY',
+    'key': 'KEY',
+    'unique': 'UNIQUE',
+    'check': 'CHECK',
+    'foreign': 'FOREIGN',
+    'references': 'REFERENCES',
+    'iniherits': 'INHERITS',
+    'alter': 'ALTER',
+    'rename': 'RENAME',
+    'column': 'COLUMN',
+    'to': 'TO',
+    'drop': 'DROP',
+    'add': 'ADD',
 
 
 
@@ -953,20 +966,19 @@ def p_State_orden6(t):
 
 
 
-
-
-
-
-
-
-
 #MI GRANATICA CESAR SAZO------------------------
-# CREATE TABLE
+# CREATE TABLE--------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 
 
 def p_instruccion_dml_comandos_CREATE_TABLE(t) :
-    'DQL_COMANDOS       : CREATE TABLE NOMBRES_TABLAS PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    'DML_COMANDOS       : CREATE TABLE NOMBRES_TABLAS PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_CREATE_TABLE2(t) :
+    'DML_COMANDOS       : CREATE TABLE NOMBRES_TABLAS PARIZQ  CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID PARIZQ PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dml_comandos_CUERPO(t) :
@@ -975,14 +987,14 @@ def p_instruccion_dml_comandos_CUERPO(t) :
     t[0] = t[1]
 
 
-#LISTA DE COLUMNAS------------------------------------
+#LISTA DE LAS FILAS COMPLETAS---------------------------------------------------------------------------------
 def p_CREATE_TABLE_LISTA_CAMPOS(t):
     'LISTA_DE_COLUMNAS       : LISTA_DE_COLUMNAS LISTA2'
     t[1].append(t[2])
     t[0] = t[1]
 
 
-def p_CREATE_TABLE_LISTA2_CAMPOS(t):
+def p_CREATE_TABLE_LISTA_CAMPOS2(t):
     'LISTA_DE_COLUMNAS    : LISTA2'
     t[0] = [t[1]]
 
@@ -990,13 +1002,62 @@ def p_CREATE_TABLE_LISTA2_CAMPOS(t):
 
 def p_Create_TABLE_CAMPOS(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) 
 
 
 def p_Create_TABLE_CAMPOS2(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE'
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
+def p_Create_TABLE_CAMPOS3(t):
+    'LISTA2  : CONSTRAINT ID  UNIQUE '
+    t[0] = str(t[1])  + str(t[2])  + str(t[3])  
+
+def p_Create_TABLE_CAMPOS4(t):
+    'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) 
+
+def p_Create_TABLE_CAMPOS4_(t):
+    'LISTA2  : UNIQUE PARDER LISTA_DE_IDS PARIZQ'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) 
+
+#PENDIENTE LISTADO DE ID'S
+def p_Create_TABLE_CAMPOS5(t):
+    'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER COMA'
+    t[0] =str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])  
+
+def p_Create_TABLE_CAMPOS6(t):
+    'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER COMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) + str(t[11]) 
+
+def p_Create_TABLE_CAMPOS7(t):
+    'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) 
+
+def p_Create_TABLE_CAMPOS8(t):
+    'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) 
+
+
+#LISTADO DE IDS--------------------------------------------------------
+def p_CREATE_TABLE_LISTA_IDS(t):
+    'LISTA_DE_IDS      : LISTA_DE_IDS LISTA_ID_'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_CREATE_TABLE_LISTA_IDS2(t):
+    'LISTA_DE_IDS    : LISTA_ID_'
+    t[0] = [t[1]]
+
+def p_CREATE_TABLE_LISTA_IDS3(t):
+    'LISTA_ID_  :  ID COMA'
+    t[0] = str(t[1]) +  str(t[2])
+
+def p_CREATE_TABLE_LISTA_IDS4(t):
+    'LISTA_ID_  :  ID'
+    t[0] = str(t[1]) 
+
+#TIPO DE LAS VARIABLES DE CADA CAMPO DECLARADAS--------------------------------------------------------------
 def p_Create_TABLE_TIPO_CAMPO(t):
     '''TIPO_CAMPO   : SMALLINT
                     | INTEGER
@@ -1004,7 +1065,7 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | DECIMAL
                     | REAL
                     | MONEY
-                    | DOUBLE PRECISION
+                    | DOUBLE PRECISION 
                     | CHARACTER VARYING PARIZQ ENTERO PARDER
                     | VARCHAR PARIZQ ENTERO PARDER
                     | CHARACTER PARIZQ ENTERO PARDER
@@ -1013,27 +1074,34 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | BOOLEAN'''
     t[0] = str(t[1])
 
+
+#LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES--------------------------------------------------------------
 def p_CREATE_TABLE_LISTA3_CAMPOS(t):
     'VALIDACIONES_CREATE_TABLE    : LISTA3'
     t[0] = [t[1]]
 
 
-def p_Create_TABLE_CAMPOS3(t):
+def p_Create_TABLE_CAMPOS_3(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE '
-    t[0] = str(t[1])
+    t[0] = str(t[1]) 
 
-def p_Create_TABLE_CAMPOS4(t):
+def p_Create_TABLE_CAMPOS_4(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
-    t[0] = str(t[1])
+    t[0] = str(t[1]) 
+
+def p_Create_TABLE_CAMPOS_5(t):
+    'LISTA3          : LISTA3  VALIDACION_CAMPO_CREATE '
+    t[0] = str(t[1]) 
 
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
-    '''VALIDACION_CAMPO_CREATE  : NOT NULL
+    '''VALIDACION_CAMPO_CREATE  : NOT NULL                    
+                                | PRIMARY KEY   
                                 | DEFAULT CADENASIMPLE
                                 | DEFAULT CADENADOBLE
-                                | DEFAULT FLOTANTE
+                                | DEFAULT DECIMAL
                                 | DEFAULT ENTERO '''
-    t[0] = str(t[1])
+    t[0] = str(t[1]) + str(t[2])
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
     'VALIDACION_CAMPO_CREATE_VACIO  :  '
@@ -1042,6 +1110,182 @@ def p_Create_TABLE_TIPO_CAMPO3(t):
 def p_Create_TABLE_TIPO_CAMPO4(t):
     '''VALIDACION_CAMPO_CREATE  : NULL  '''
     t[0] = str(t[1])
+
+#CONDICIONES CON EL CONSTRAIN------------------------------------------------------------------------------------------------------------
+def p_Create_TABLE_TIPO_CAMPO5(t):
+    'VALIDACION_CAMPO_CREATE  : CONSTRAINT ID  UNIQUE'
+    t[0] = str(t[1])+str(t[2])+str(t[3])
+
+def p_Create_TABLE_TIPO_CAMPO6(t):
+    'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
+    t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#INSERT
+def p_instruccion_dml_comandos_INSERT(t) :
+    'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DATOS PUNTOCOMA '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_INSERT2(t) :
+    'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DEFAULT VALUES PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_INSERT_DATOS(t) :
+    'DATOS       : PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES PARDER'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+ str(t[5]) + str(t[6])+ str(t[7])
+
+def p_instruccion_dml_comandos_INSERT_DATOS2(t) :
+    'DATOS       : VALUES PARIZQ VALORES PARDER'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_instruccion_dml_comandos_INSERT_COLUMNAS(t) :
+    'COLUMNAS       : COLUMNAS COLUMNA'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_instruccion_dml_comandos_INSERT_COLUMNAS2(t) :
+    'COLUMNAS       : COLUMNA'
+    t[0] = [t[1]]
+
+def p_instruccion_dml_comandos_INSERT_COLUMNA(t) :
+    'COLUMNA       : ID D'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_instruccion_dml_comandos_INSERT_COLUMNA2(t) :
+    'COLUMNA       : ID'
+    t[0] = str(t[1]) 
+
+
+def p_instruccion_dml_comandos_INSERT_VALORES(t) :
+    'VALORES       : VALORES VALOR'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_instruccion_dml_comandos_INSERT_VALORES2(t) :
+    'VALORES       :  VALOR'
+    t[0] = [t[1]]
+
+def p_instruccion_dml_comandos_INSERT_VALOR(t) :
+    'VALOR       : ID D'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_instruccion_dml_comandos_INSERT_VALOR2(t) :
+    'VALOR       : ID'
+    t[0] = str(t[1]) 
+
+def p_instruccion_dml_comandos_INSERT_D(t) :
+    'D       : COMA ID'
+    t[0] = str(t[1]) + str(t[2])
+
+#-----------------------------------------------------------------------------------------------------------------
+#UPDATE
+def p_instruccion_dml_comandos_UPDATE(t) :
+    'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n') 
+
+def p_instruccion_dml_comandos_UPDATE2(t) :
+    'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_UPDATE_CAMPOS(t) :
+    'CAMPOSN       : CAMPOSN CAMPO'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t) :
+    'CAMPOSN       :  CAMPO'
+    t[0] = [t[1]]
+
+#-------------------------------------------------------
+def p_instruccion_dml_comandos_UPDATE_CAMPO(t) :
+    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) 
+
+def p_instruccion_dml_comandos_UPDATE_CAMPO2(t) :
+    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESIONNE C'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])  
+
+def p_instruccion_dml_comandos_UPDATE_CAMPO3(t) :
+    'CAMPO       :  ID IGUAL EXPRESIONNE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
+
+def p_instruccion_dml_comandos_UPDATE_CAMPO4(t) :
+    'CAMPO       :  ID IGUAL EXPRESIONNE C'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
+
+def p_instruccion_dml_comandos_UPDATE_C(t) :
+    'C       :  COMA CAMPO'
+    t[0] = str(t[1]) + str(t[2])
+
+#-----------------------------------------------------------------------------------------------------------------
+#DELETE
+def p_instruccion_dml_comandos_DELETE(t) :
+    'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS WHERE CONDICIONES PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_DELETE2(t) :
+    'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    print('\n' + str(t[0]) + '\n')
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#DROP TABLES
+def p_instruccion_dml_comandos_DROP_TABLE(t) :
+    'DML_COMANDOS       : DROP TABLE ID PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) 
+    print('\n' + str(t[0]) + '\n')
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#ALTER TABLES
+def p_instruccion_dml_comandos_ALTER_TABLE(t) :
+    'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN ID TIPO_CAMPO PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) 
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE2(t) :
+    'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN CAMPOSC PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE3(t) :
+    'DML_COMANDOS       : ALTER TABLE ID  RENAME COLUMN ID TO ID PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])+ str(t[8]) + str(t[9])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE4(t) :
+    'DML_COMANDOS       : ALTER TABLE ID  DROP CONSTRAINT ID  PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE5(t) :
+    'DML_COMANDOS       : ALTER TABLE ID  ALTER COLUMN ID SET NOT NULL  PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) 
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE6(t) :
+    'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])  
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
+    'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) 
+    print('\n' + str(t[0]) + '\n')
+
+#--------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------
+
+
 
 
 #DDL
