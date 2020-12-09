@@ -1,7 +1,11 @@
 
-Select *
-from tabla
-where c=c;
+SELECT EXTRACT ( YEAR FROM TIMESTAMP '2018-20-23' );
+SELECT EXTRACT ( MINUTE FROM TIMESTAMP '2018-20-23' );
+SELECT EXTRACT ( SECOND FROM TIMESTAMP '2018-20-23' );
+
+SELECT date_part('minutes', INTERVAL '4 hours 3 minutes');
+SELECT date_part('seconds', INTERVAL '4 hours 3 minutes 15 seconds');
+SELECT date_part('hour', INTERVAL '4 hours 3 minutes');
 
 Select *
 from tabla1,tabla2
@@ -128,7 +132,7 @@ where o>2
 group by tabla.col1 ;
 
 
---pROBANDO las subconsultas 
+--pROBANDO las subconsultas
 
 Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
 from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5

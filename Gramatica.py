@@ -86,7 +86,27 @@ reservadas = {
     'drop': 'DROP',
     'add': 'ADD',
 
-    'in': 'IN',
+    # Date/Time Types
+    'timestamp': 'TIMESTAMP',
+    'date': 'DATE',
+    'time': 'TIME',
+    'interval': 'INTERVAL',
+    'date_part': 'DATE_PART',
+
+    # Date/Time aditional options
+    'year': 'YEAR',
+    'month': 'MONTH',
+    'day': 'DAY',
+    'hour': 'HOUR',
+    'minute': 'MINUTE',
+    'second': 'SECOND',
+    'extract': 'EXTRACT',
+    'now': 'NOW',
+    'current_date': 'CURRENT_DATE',
+    'current_time': 'CURRENT_TIME',
+    'in':'IN',
+
+
     'case': 'CASE',
     'when': 'WHEN',
     'then': 'THEN',
@@ -94,9 +114,6 @@ reservadas = {
     'least': 'LEAST',
     'else':'ELSE',
     'end':'END',
-
-
-
 
 
     # palabras reservadas DDL dabatabases
@@ -113,14 +130,7 @@ reservadas = {
 
 }
 
-
-
-
-
-
-
 tokens = [
-
              # SIMBOLOS UTILIZADOS EN EL LENGUAJE
              'DIFERENTE',
              'NEGACION',
@@ -154,8 +164,6 @@ tokens = [
              'COMENTARIONORMAL'
 
          ] + list(reservadas.values())
-
-
 
 # TOKENS DE LOS SIMBOLOS UTILIZADOS EN EL LENGUAJE
 t_DIFERENTE = r'!='
@@ -240,10 +248,6 @@ def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
 
-
-
-
-
 # CARACTERES IGNORADOS DEL LENGUAJE
 
 t_ignore = "\t"
@@ -266,8 +270,6 @@ def t_error(t):
 import ply.lex as lex
 
 lexer = lex.lex()
-
-
 
 # ASOCIACION DE OPERADORES CON PRESEDENCIA
 
@@ -415,7 +417,6 @@ def p_Ss_AsAliasMo(t):
     'S          : AS ALIAS COMA LISTA'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
 
 
 
@@ -1145,7 +1146,7 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | DECIMAL
                     | REAL
                     | MONEY
-                    | DOUBLE PRECISION 
+                    | DOUBLE PRECISION
                     | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
                     | VARCHAR PARIZQ EXPNUMERICA PARDER
                     | CHARACTER PARIZQ EXPNUMERICA PARDER
@@ -1256,7 +1257,7 @@ def p_instruccion_dml_comandos_INSERT_VALOR(t) :
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t) :
     'VALOR       : EXPRESION_GLOBAL'
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 def p_instruccion_dml_comandos_INSERT_D(t) :
     'D       : COMA EXPRESION_GLOBAL'
@@ -1286,19 +1287,19 @@ def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t) :
 #-------------------------------------------------------
 def p_instruccion_dml_comandos_UPDATE_CAMPO(t) :
     'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO2(t) :
     'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL C'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])  
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO3(t) :
     'CAMPO       :  ID IGUAL EXPRESION_GLOBAL'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO4(t) :
     'CAMPO       :  ID IGUAL EXPRESION_GLOBAL C'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 def p_instruccion_dml_comandos_UPDATE_C(t) :
     'C       :  COMA CAMPO'
@@ -1467,9 +1468,30 @@ def p_if_exists_database_e(t):
     'IF_EXISTS_DATABASE : '
     t[0] = ''
 
-#Expresiones numericas
+
 #-----------------------------------------------------------------------------------------------------------------
 
+
+# SELECT DATE/TIME
+def p_instruccion_tiempo(t) :
+    'DQL_COMANDOS       : SELECT EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
+
+    print('\n * ' + str(t[0]) + ' * \n')
+
+def p_Tipo_Tiempo(t):
+    '''TIPO_TIEMPO      : YEAR
+                        | HOUR
+                        | MINUTE
+                        | SECOND '''
+
+    t[0] = str(t[1])
+
+def p_instruccion_tiempo2(t) :
+    'DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
+
+    print('\n ** ' + str(t[0]) + ' ** \n')
 def p_expnumerica(t):
     '''EXPNUMERICA : EXPNUMERICA MAS EXPNUMERICA
                    | EXPNUMERICA MENOS EXPNUMERICA
@@ -1480,6 +1502,7 @@ def p_expnumerica(t):
     print('\n'+t[0]+'\n')
 
 #-----------------------------------------------------------------------------------------------------------------
+#Expresiones numericas
 
 def p_expnumerica_agrupacion(t):
     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
