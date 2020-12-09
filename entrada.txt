@@ -261,3 +261,21 @@ CREATE TABLE my_first_table (
     PRIMARY KEY (nombre,nombre2),
     FOREIGN KEY (nombre) REFERENCES tableee (Nombre)
 );
+
+
+
+
+
+-- Probando cases dentro de select 
+
+Select case when a=2 then a.colm end
+from tabla1 as A
+where o>2;
+
+Select case when a=2 then a.colm WHEN a=b columna end
+from tabla1 as A
+where o>2;
+
+Select case when a=2 then a.colm WHEN a=b columna.g else colu.mjj end
+from tabla1 as A
+where o>2;
