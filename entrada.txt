@@ -140,7 +140,7 @@ group by tabla.col1 ;) as cosa
 where o>2
 group by tabla.col1
 
-union all 
+union all
 
 Select distinct B.campo1,A.campo2,A.campo3,B.campo4,B.campo5
 from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
@@ -151,7 +151,7 @@ from tabla1 as A
 where o>2
 group by tabla.col1 ;) as cosa
 where o>2
-group by tabla.col1 
+group by tabla.col1
 
 intersect
 
@@ -164,7 +164,7 @@ from tabla1 as A
 where o>2
 group by tabla.col1 ;) as cosa
 where o>2
-group by tabla.col1 
+group by tabla.col1
 ;
 
 
@@ -228,6 +228,36 @@ DROP DATABASE prueba
 
 DROP DATABASE IF EXISTS prueba
 
-*/
 
 
+Select *
+from tabla
+where c=c;
+
+Select *
+from tabla1,tabla2
+where a=b;
+
+
+
+Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B  on A.campo1 = B.campo1 and A.campo2 = B.campo2;
+
+
+
+Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
+where a.tabla = 'jasssas';
+
+
+CREATE TABLE my_first_table (
+    nombre INTEGER NOT NULL PRIMARY KEY,
+    nombre2  BIGINT NULL,
+    nombre3 CHAR (55) DEFAULT "dd",
+    nombre4 INTEGER CONSTRAINT defdd CHECK (nombreColumna1>=0) ,
+    nombre5 INTEGER,
+    PRIMARY KEY (nombre,nombre2),
+    FOREIGN KEY (nombre) REFERENCES tableee (Nombre)
+);
