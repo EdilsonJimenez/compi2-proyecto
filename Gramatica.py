@@ -103,11 +103,16 @@ tokens = [
              'PUNTO',
              'PUNTOCOMA',
              'ASTERISCO',
+             'DIVISION',
+             'PORCENTAJE',
+             'MAS',
+             'MENOS',
 
+             
              # ESTOS SON LAS EXPRESIONES REGULARES
              'ID',
              'ENTERO',
-             'DECIMAL',
+             'FLOTANTE',
              'CADENASIMPLE',
              'CADENADOBLE',
              'FECHA',
@@ -134,6 +139,11 @@ t_COMA = r','
 t_PUNTO = r'\.'
 t_PUNTOCOMA = r';'
 t_ASTERISCO = r'\*'
+t_DIVISION = r'/'
+t_PORCENTAJE = r'%'
+t_MAS = r'\+'
+t_MENOS = r'-'
+
 
 
 
@@ -160,7 +170,7 @@ def t_ENTERO(t):
 
 
 
-def t_DECIMAL(t):
+def t_FLOTANTE(t):
     r'\d+\.\d+'
     try:
         t.value = float(t.value)
@@ -231,7 +241,13 @@ lexer = lex.lex()
 #precedence = ( ) #NO HAY POR EL MOMENTO PERO SE VERA INVOLUCRADO LOS SIMBOLOS LOGICOS
 
 
-
+precedence = (
+    ('left', 'OR'),
+    ('left', 'AND'),
+    ('right', 'NOT'),
+    ('left', 'MAS', 'MENOS'),
+    ('left', 'ASTERISCO', 'DIVISION'),
+    )
 
 # Definición de la gramática
 
@@ -260,7 +276,8 @@ def p_instrucciones_instruccion(t) :
 
 def p_instruccion(t) :
     '''INSTRUCCION  : DQL_COMANDOS
-                    | DDL_COMANDOS'''
+                    | DDL_COMANDOS
+                    '''
     t[0] = t[1]
 
 
@@ -637,7 +654,7 @@ def p_NombreC_id(t):
 def p_CamposC_id(t):
     '''CAMPOSC     :  ID
                     | ENTERO
-                    | DECIMAL
+                    | FLOTANTE
                     | CADENASIMPLE
                     | CADENADOBLE '''
     t[0] = str(t[1])
@@ -1014,7 +1031,7 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
     '''VALIDACION_CAMPO_CREATE  : NOT NULL
                                 | DEFAULT CADENASIMPLE
                                 | DEFAULT CADENADOBLE
-                                | DEFAULT DECIMAL
+                                | DEFAULT FLOTANTE
                                 | DEFAULT ENTERO '''
     t[0] = str(t[1])
 
@@ -1116,12 +1133,30 @@ def p_if_exists_database_e(t):
     'IF_EXISTS_DATABASE : '
     t[0] = ''
 
+#Expresiones numericas
 #-----------------------------------------------------------------------------------------------------------------
 
+def p_expnumerica(t):
+    '''EXPNUMERICA : EXPNUMERICA MAS EXPNUMERICA
+                   | EXPNUMERICA MENOS EXPNUMERICA
+                   | EXPNUMERICA ASTERISCO EXPNUMERICA
+                   | EXPNUMERICA DIVISION EXPNUMERICA
+                   | EXPNUMERICA PORCENTAJE EXPNUMERICA'''
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    print('\n'+t[0]+'\n')
 
+#-----------------------------------------------------------------------------------------------------------------
 
+def p_expnumerica_agrupacion(t):
+    '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
+def p_expnumerica_valor(t):
+    '''EXPNUMERICA : ID
+                   | ENTERO
+                   | FLOTANTE'''
 
+    t[0] = str(t[1])
 
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)

@@ -68,7 +68,7 @@ Rule 48    SIMBOLO_NEG -> NEGACION
 Rule 49    NOMBRE_C -> ID
 Rule 50    CAMPOSC -> ID
 Rule 51    CAMPOSC -> ENTERO
-Rule 52    CAMPOSC -> DECIMAL
+Rule 52    CAMPOSC -> FLOTANTE
 Rule 53    CAMPOSC -> CADENASIMPLE
 Rule 54    CAMPOSC -> CADENADOBLE
 Rule 55    OPERADOR -> IGUAL
@@ -142,7 +142,7 @@ Rule 122   LISTA3 -> VALIDACION_CAMPO_CREATE_VACIO
 Rule 123   VALIDACION_CAMPO_CREATE -> NOT NULL
 Rule 124   VALIDACION_CAMPO_CREATE -> DEFAULT CADENASIMPLE
 Rule 125   VALIDACION_CAMPO_CREATE -> DEFAULT CADENADOBLE
-Rule 126   VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL
+Rule 126   VALIDACION_CAMPO_CREATE -> DEFAULT FLOTANTE
 Rule 127   VALIDACION_CAMPO_CREATE -> DEFAULT ENTERO
 Rule 128   VALIDACION_CAMPO_CREATE_VACIO -> <empty>
 Rule 129   VALIDACION_CAMPO_CREATE -> NULL
@@ -172,6 +172,15 @@ Rule 152   ALTER_DATABASE_OP -> <empty>
 Rule 153   DROP_DATABASE -> DROP DATABASE IF_EXISTS_DATABASE ID
 Rule 154   IF_EXISTS_DATABASE -> IF EXISTS
 Rule 155   IF_EXISTS_DATABASE -> <empty>
+Rule 156   EXPNUMERICA -> EXPNUMERICA MAS EXPNUMERICA
+Rule 157   EXPNUMERICA -> EXPNUMERICA MENOS EXPNUMERICA
+Rule 158   EXPNUMERICA -> EXPNUMERICA ASTERISCO EXPNUMERICA
+Rule 159   EXPNUMERICA -> EXPNUMERICA DIVISION EXPNUMERICA
+Rule 160   EXPNUMERICA -> EXPNUMERICA PORCENTAJE EXPNUMERICA
+Rule 161   EXPNUMERICA -> PARIZQ EXPNUMERICA PARDER
+Rule 162   EXPNUMERICA -> ID
+Rule 163   EXPNUMERICA -> ENTERO
+Rule 164   EXPNUMERICA -> FLOTANTE
 
 Terminals, with rules where they appear
 
@@ -179,7 +188,7 @@ ALTER                : 146
 AND                  : 46
 AS                   : 21 28 79 93
 ASC                  : 95 96 97
-ASTERISCO            : 17
+ASTERISCO            : 17 158
 BIGINT               : 109
 BOOLEAN              : 119
 BY                   : 81 82
@@ -195,23 +204,25 @@ CREATE               : 101 134
 CURRENT_USER         : 150
 DATABASE             : 134 146 153
 DATABASES            : 143
-DECIMAL              : 52 110 126
+DECIMAL              : 110
 DEFAULT              : 124 125 126 127
 DELETE               : 
 DESC                 : 98 99 100
 DIFERENTE            : 56
 DISTINCT             : 22
+DIVISION             : 159
 DOUBLE               : 113
 DROP                 : 153
-ENTERO               : 51 114 115 116 117 127 141
+ENTERO               : 51 114 115 116 117 127 141 163
 EXISTS               : 137 154
 FECHA                : 
 FIRST                : 96 99
+FLOTANTE             : 52 126 164
 FROM                 : 6 7 8 9
 FULL                 : 76 77
 GROUP                : 81 82
 HAVING               : 94
-ID                   : 16 18 19 49 50 78 79 79 134 139 146 147 149 153
+ID                   : 16 18 19 49 50 78 79 79 134 139 146 147 149 153 162
 IF                   : 137 154
 IGUAL                : 55 139 141
 INNER                : 70 71
@@ -222,10 +233,12 @@ JOIN                 : 63 64 65 66 68
 LAST                 : 97 100
 LEFT                 : 72 73
 LIKE                 : 144
+MAS                  : 156
 MAYOR                : 57
 MAYORIGUAL           : 60
 MENOR                : 58
 MENORIGUAL           : 59
+MENOS                : 157
 MODE                 : 141
 MONEY                : 112
 NEGACION             : 48
@@ -236,8 +249,9 @@ ON                   : 63 64
 OR                   : 47 135
 OUTER                : 70 72 74 76
 OWNER                : 139 148
-PARDER               : 65 66 101 114 115 116 117
-PARIZQ               : 65 66 101 114 115 116 117
+PARDER               : 65 66 101 114 115 116 117 161
+PARIZQ               : 65 66 101 114 115 116 117 161
+PORCENTAJE           : 160
 PRECISION            : 113
 PUNTO                : 12 13 44 85 86 89 90
 PUNTOCOMA            : 6 7 8 9 101
@@ -280,6 +294,7 @@ DDL_COMANDOS         : 5
 DISTINCTNT           : 8 9
 DQL_COMANDOS         : 4
 DROP_DATABASE        : 133
+EXPNUMERICA          : 156 156 157 157 158 158 159 159 160 160 161
 EXPRES               : 83 84
 EXPRESIONNE          : 40 40 41 42 68 69
 EXPRE_LIST           : 81 82 83
@@ -1324,14 +1339,14 @@ state 70
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -1776,7 +1791,7 @@ state 97
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
@@ -1792,7 +1807,7 @@ state 97
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -1812,7 +1827,7 @@ state 98
     NEGACION        reduce using rule 36 (CONDICIONES -> CONDICION .)
     ID              reduce using rule 36 (CONDICIONES -> CONDICION .)
     ENTERO          reduce using rule 36 (CONDICIONES -> CONDICION .)
-    DECIMAL         reduce using rule 36 (CONDICIONES -> CONDICION .)
+    FLOTANTE        reduce using rule 36 (CONDICIONES -> CONDICION .)
     CADENASIMPLE    reduce using rule 36 (CONDICIONES -> CONDICION .)
     CADENADOBLE     reduce using rule 36 (CONDICIONES -> CONDICION .)
     PUNTOCOMA       reduce using rule 36 (CONDICIONES -> CONDICION .)
@@ -1836,7 +1851,7 @@ state 99
     NEGACION        reduce using rule 39 (CONDICION -> CONDICION_REL .)
     ID              reduce using rule 39 (CONDICION -> CONDICION_REL .)
     ENTERO          reduce using rule 39 (CONDICION -> CONDICION_REL .)
-    DECIMAL         reduce using rule 39 (CONDICION -> CONDICION_REL .)
+    FLOTANTE        reduce using rule 39 (CONDICION -> CONDICION_REL .)
     CADENASIMPLE    reduce using rule 39 (CONDICION -> CONDICION_REL .)
     CADENADOBLE     reduce using rule 39 (CONDICION -> CONDICION_REL .)
     PUNTOCOMA       reduce using rule 39 (CONDICION -> CONDICION_REL .)
@@ -1868,7 +1883,7 @@ state 100
     NEGACION        reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
     ID              reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
     ENTERO          reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
-    DECIMAL         reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
+    FLOTANTE        reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
     CADENASIMPLE    reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
     CADENADOBLE     reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
     PUNTOCOMA       reduce using rule 42 (CONDICION_REL -> EXPRESIONNE .)
@@ -1896,13 +1911,13 @@ state 101
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -1932,7 +1947,7 @@ state 103
     NEGACION        reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
     ID              reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
     ENTERO          reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
-    DECIMAL         reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
+    FLOTANTE        reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
     CADENASIMPLE    reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
     CADENADOBLE     reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
     PUNTOCOMA       reduce using rule 45 (EXPRESIONNE -> CAMPOSC .)
@@ -1952,7 +1967,7 @@ state 104
 
     ID              reduce using rule 48 (SIMBOLO_NEG -> NEGACION .)
     ENTERO          reduce using rule 48 (SIMBOLO_NEG -> NEGACION .)
-    DECIMAL         reduce using rule 48 (SIMBOLO_NEG -> NEGACION .)
+    FLOTANTE        reduce using rule 48 (SIMBOLO_NEG -> NEGACION .)
     CADENASIMPLE    reduce using rule 48 (SIMBOLO_NEG -> NEGACION .)
     CADENADOBLE     reduce using rule 48 (SIMBOLO_NEG -> NEGACION .)
 
@@ -1974,7 +1989,7 @@ state 105
     NEGACION        reduce using rule 50 (CAMPOSC -> ID .)
     ID              reduce using rule 50 (CAMPOSC -> ID .)
     ENTERO          reduce using rule 50 (CAMPOSC -> ID .)
-    DECIMAL         reduce using rule 50 (CAMPOSC -> ID .)
+    FLOTANTE        reduce using rule 50 (CAMPOSC -> ID .)
     CADENASIMPLE    reduce using rule 50 (CAMPOSC -> ID .)
     CADENADOBLE     reduce using rule 50 (CAMPOSC -> ID .)
     PUNTOCOMA       reduce using rule 50 (CAMPOSC -> ID .)
@@ -2003,7 +2018,7 @@ state 106
     NEGACION        reduce using rule 51 (CAMPOSC -> ENTERO .)
     ID              reduce using rule 51 (CAMPOSC -> ENTERO .)
     ENTERO          reduce using rule 51 (CAMPOSC -> ENTERO .)
-    DECIMAL         reduce using rule 51 (CAMPOSC -> ENTERO .)
+    FLOTANTE        reduce using rule 51 (CAMPOSC -> ENTERO .)
     CADENASIMPLE    reduce using rule 51 (CAMPOSC -> ENTERO .)
     CADENADOBLE     reduce using rule 51 (CAMPOSC -> ENTERO .)
     PUNTOCOMA       reduce using rule 51 (CAMPOSC -> ENTERO .)
@@ -2019,31 +2034,31 @@ state 106
 
 state 107
 
-    (52) CAMPOSC -> DECIMAL .
+    (52) CAMPOSC -> FLOTANTE .
 
-    IGUAL           reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    DIFERENTE       reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    MAYOR           reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    MENOR           reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    MENORIGUAL      reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    MAYORIGUAL      reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    AND             reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    OR              reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    NEGACION        reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    ID              reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    ENTERO          reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    DECIMAL         reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    CADENASIMPLE    reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    CADENADOBLE     reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    PUNTOCOMA       reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    JOIN            reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    WHERE           reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    INNER           reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    LEFT            reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    RIGHT           reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    FULL            reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    GROUP           reduce using rule 52 (CAMPOSC -> DECIMAL .)
-    PARDER          reduce using rule 52 (CAMPOSC -> DECIMAL .)
+    IGUAL           reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    DIFERENTE       reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    MAYOR           reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    MENOR           reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    MENORIGUAL      reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    MAYORIGUAL      reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    AND             reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    OR              reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    NEGACION        reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    ID              reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    ENTERO          reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    FLOTANTE        reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    CADENASIMPLE    reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    CADENADOBLE     reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    PUNTOCOMA       reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    JOIN            reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    WHERE           reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    INNER           reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    LEFT            reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    RIGHT           reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    FULL            reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    GROUP           reduce using rule 52 (CAMPOSC -> FLOTANTE .)
+    PARDER          reduce using rule 52 (CAMPOSC -> FLOTANTE .)
 
 
 state 108
@@ -2061,7 +2076,7 @@ state 108
     NEGACION        reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
     ID              reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
     ENTERO          reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
-    DECIMAL         reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
+    FLOTANTE        reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
     CADENASIMPLE    reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
     CADENADOBLE     reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
     PUNTOCOMA       reduce using rule 53 (CAMPOSC -> CADENASIMPLE .)
@@ -2090,7 +2105,7 @@ state 109
     NEGACION        reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
     ID              reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
     ENTERO          reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
-    DECIMAL         reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
+    FLOTANTE        reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
     CADENASIMPLE    reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
     CADENADOBLE     reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
     PUNTOCOMA       reduce using rule 54 (CAMPOSC -> CADENADOBLE .)
@@ -2135,14 +2150,14 @@ state 111
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -2296,7 +2311,7 @@ state 125
     (123) VALIDACION_CAMPO_CREATE -> . NOT NULL
     (124) VALIDACION_CAMPO_CREATE -> . DEFAULT CADENASIMPLE
     (125) VALIDACION_CAMPO_CREATE -> . DEFAULT CADENADOBLE
-    (126) VALIDACION_CAMPO_CREATE -> . DEFAULT DECIMAL
+    (126) VALIDACION_CAMPO_CREATE -> . DEFAULT FLOTANTE
     (127) VALIDACION_CAMPO_CREATE -> . DEFAULT ENTERO
     (129) VALIDACION_CAMPO_CREATE -> . NULL
     (128) VALIDACION_CAMPO_CREATE_VACIO -> .
@@ -2536,7 +2551,7 @@ state 146
     NEGACION        reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
     ID              reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
     ENTERO          reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
-    DECIMAL         reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
+    FLOTANTE        reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
     CADENASIMPLE    reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
     CADENADOBLE     reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
     PUNTOCOMA       reduce using rule 35 (CONDICIONES -> CONDICIONES CONDICION .)
@@ -2562,14 +2577,14 @@ state 147
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -2586,7 +2601,7 @@ state 148
     NEGACION        reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
     ID              reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
     ENTERO          reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
-    DECIMAL         reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
+    FLOTANTE        reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
     CADENASIMPLE    reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
     CADENADOBLE     reduce using rule 46 (SIMBOLO_LOGICO -> AND .)
 
@@ -2598,7 +2613,7 @@ state 149
     NEGACION        reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
     ID              reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
     ENTERO          reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
-    DECIMAL         reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
+    FLOTANTE        reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
     CADENASIMPLE    reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
     CADENADOBLE     reduce using rule 47 (SIMBOLO_LOGICO -> OR .)
 
@@ -2611,13 +2626,13 @@ state 150
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -2631,7 +2646,7 @@ state 151
 
     ID              reduce using rule 55 (OPERADOR -> IGUAL .)
     ENTERO          reduce using rule 55 (OPERADOR -> IGUAL .)
-    DECIMAL         reduce using rule 55 (OPERADOR -> IGUAL .)
+    FLOTANTE        reduce using rule 55 (OPERADOR -> IGUAL .)
     CADENASIMPLE    reduce using rule 55 (OPERADOR -> IGUAL .)
     CADENADOBLE     reduce using rule 55 (OPERADOR -> IGUAL .)
 
@@ -2642,7 +2657,7 @@ state 152
 
     ID              reduce using rule 56 (OPERADOR -> DIFERENTE .)
     ENTERO          reduce using rule 56 (OPERADOR -> DIFERENTE .)
-    DECIMAL         reduce using rule 56 (OPERADOR -> DIFERENTE .)
+    FLOTANTE        reduce using rule 56 (OPERADOR -> DIFERENTE .)
     CADENASIMPLE    reduce using rule 56 (OPERADOR -> DIFERENTE .)
     CADENADOBLE     reduce using rule 56 (OPERADOR -> DIFERENTE .)
 
@@ -2653,7 +2668,7 @@ state 153
 
     ID              reduce using rule 57 (OPERADOR -> MAYOR .)
     ENTERO          reduce using rule 57 (OPERADOR -> MAYOR .)
-    DECIMAL         reduce using rule 57 (OPERADOR -> MAYOR .)
+    FLOTANTE        reduce using rule 57 (OPERADOR -> MAYOR .)
     CADENASIMPLE    reduce using rule 57 (OPERADOR -> MAYOR .)
     CADENADOBLE     reduce using rule 57 (OPERADOR -> MAYOR .)
 
@@ -2664,7 +2679,7 @@ state 154
 
     ID              reduce using rule 58 (OPERADOR -> MENOR .)
     ENTERO          reduce using rule 58 (OPERADOR -> MENOR .)
-    DECIMAL         reduce using rule 58 (OPERADOR -> MENOR .)
+    FLOTANTE        reduce using rule 58 (OPERADOR -> MENOR .)
     CADENASIMPLE    reduce using rule 58 (OPERADOR -> MENOR .)
     CADENADOBLE     reduce using rule 58 (OPERADOR -> MENOR .)
 
@@ -2675,7 +2690,7 @@ state 155
 
     ID              reduce using rule 59 (OPERADOR -> MENORIGUAL .)
     ENTERO          reduce using rule 59 (OPERADOR -> MENORIGUAL .)
-    DECIMAL         reduce using rule 59 (OPERADOR -> MENORIGUAL .)
+    FLOTANTE        reduce using rule 59 (OPERADOR -> MENORIGUAL .)
     CADENASIMPLE    reduce using rule 59 (OPERADOR -> MENORIGUAL .)
     CADENADOBLE     reduce using rule 59 (OPERADOR -> MENORIGUAL .)
 
@@ -2686,7 +2701,7 @@ state 156
 
     ID              reduce using rule 60 (OPERADOR -> MAYORIGUAL .)
     ENTERO          reduce using rule 60 (OPERADOR -> MAYORIGUAL .)
-    DECIMAL         reduce using rule 60 (OPERADOR -> MAYORIGUAL .)
+    FLOTANTE        reduce using rule 60 (OPERADOR -> MAYORIGUAL .)
     CADENASIMPLE    reduce using rule 60 (OPERADOR -> MAYORIGUAL .)
     CADENADOBLE     reduce using rule 60 (OPERADOR -> MAYORIGUAL .)
 
@@ -2700,7 +2715,7 @@ state 157
     NEGACION        reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
     ID              reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
     ENTERO          reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
-    DECIMAL         reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
+    FLOTANTE        reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
     CADENASIMPLE    reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
     CADENADOBLE     reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
     PUNTOCOMA       reduce using rule 41 (CONDICION_REL -> SIMBOLO_NEG EXPRESIONNE .)
@@ -2718,13 +2733,13 @@ state 158
     (44) EXPRESIONNE -> NOMBRE_C PUNTO . CAMPOSC
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     ID              shift and go to state 188
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -2746,7 +2761,7 @@ state 159
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
@@ -2761,7 +2776,7 @@ state 159
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -2798,14 +2813,14 @@ state 161
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3006,12 +3021,12 @@ state 176
 
     (124) VALIDACION_CAMPO_CREATE -> DEFAULT . CADENASIMPLE
     (125) VALIDACION_CAMPO_CREATE -> DEFAULT . CADENADOBLE
-    (126) VALIDACION_CAMPO_CREATE -> DEFAULT . DECIMAL
+    (126) VALIDACION_CAMPO_CREATE -> DEFAULT . FLOTANTE
     (127) VALIDACION_CAMPO_CREATE -> DEFAULT . ENTERO
 
     CADENASIMPLE    shift and go to state 205
     CADENADOBLE     shift and go to state 206
-    DECIMAL         shift and go to state 207
+    FLOTANTE        shift and go to state 207
     ENTERO          shift and go to state 208
 
 
@@ -3092,7 +3107,7 @@ state 185
     NEGACION        reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
     ID              reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
     ENTERO          reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
-    DECIMAL         reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
+    FLOTANTE        reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
     CADENASIMPLE    reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
     CADENADOBLE     reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
     PUNTOCOMA       reduce using rule 38 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL .)
@@ -3118,7 +3133,7 @@ state 186
     NEGACION        reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
     ID              reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
     ENTERO          reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
-    DECIMAL         reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
+    FLOTANTE        reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
     CADENASIMPLE    reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
     CADENADOBLE     reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
     PUNTOCOMA       reduce using rule 40 (CONDICION_REL -> EXPRESIONNE OPERADOR EXPRESIONNE .)
@@ -3146,7 +3161,7 @@ state 187
     NEGACION        reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
     ID              reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
     ENTERO          reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
-    DECIMAL         reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
+    FLOTANTE        reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
     CADENASIMPLE    reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
     CADENADOBLE     reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
     PUNTOCOMA       reduce using rule 44 (EXPRESIONNE -> NOMBRE_C PUNTO CAMPOSC .)
@@ -3175,7 +3190,7 @@ state 188
     NEGACION        reduce using rule 50 (CAMPOSC -> ID .)
     ID              reduce using rule 50 (CAMPOSC -> ID .)
     ENTERO          reduce using rule 50 (CAMPOSC -> ID .)
-    DECIMAL         reduce using rule 50 (CAMPOSC -> ID .)
+    FLOTANTE        reduce using rule 50 (CAMPOSC -> ID .)
     CADENASIMPLE    reduce using rule 50 (CAMPOSC -> ID .)
     CADENADOBLE     reduce using rule 50 (CAMPOSC -> ID .)
     PUNTOCOMA       reduce using rule 50 (CAMPOSC -> ID .)
@@ -3206,14 +3221,14 @@ state 189
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3248,7 +3263,7 @@ state 191
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
@@ -3263,7 +3278,7 @@ state 191
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3284,14 +3299,14 @@ state 192
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     JOIN            shift and go to state 219
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3356,14 +3371,14 @@ state 196
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3519,11 +3534,11 @@ state 206
 
 state 207
 
-    (126) VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .
+    (126) VALIDACION_CAMPO_CREATE -> DEFAULT FLOTANTE .
 
-    COMA            reduce using rule 126 (VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .)
-    ID              reduce using rule 126 (VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .)
-    PARDER          reduce using rule 126 (VALIDACION_CAMPO_CREATE -> DEFAULT DECIMAL .)
+    COMA            reduce using rule 126 (VALIDACION_CAMPO_CREATE -> DEFAULT FLOTANTE .)
+    ID              reduce using rule 126 (VALIDACION_CAMPO_CREATE -> DEFAULT FLOTANTE .)
+    PARDER          reduce using rule 126 (VALIDACION_CAMPO_CREATE -> DEFAULT FLOTANTE .)
 
 
 state 208
@@ -3600,14 +3615,14 @@ state 215
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3626,7 +3641,7 @@ state 216
     NEGACION        reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
     ID              reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
     ENTERO          reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
-    DECIMAL         reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
+    FLOTANTE        reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
     CADENASIMPLE    reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
     CADENADOBLE     reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
     PUNTOCOMA       reduce using rule 37 (CONDICION -> CONDICION_REL SIMBOLO_LOGICO CONDICION_REL OTRO_LOGICO .)
@@ -3655,7 +3670,7 @@ state 217
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
@@ -3670,7 +3685,7 @@ state 217
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3691,14 +3706,14 @@ state 218
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     JOIN            shift and go to state 219
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3715,13 +3730,13 @@ state 219
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3759,7 +3774,7 @@ state 222
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
@@ -3774,7 +3789,7 @@ state 222
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
@@ -3942,14 +3957,14 @@ state 233
     (49) NOMBRE_C -> . ID
     (50) CAMPOSC -> . ID
     (51) CAMPOSC -> . ENTERO
-    (52) CAMPOSC -> . DECIMAL
+    (52) CAMPOSC -> . FLOTANTE
     (53) CAMPOSC -> . CADENASIMPLE
     (54) CAMPOSC -> . CADENADOBLE
 
   ! shift/reduce conflict for NEGACION resolved as shift
   ! shift/reduce conflict for ID resolved as shift
   ! shift/reduce conflict for ENTERO resolved as shift
-  ! shift/reduce conflict for DECIMAL resolved as shift
+  ! shift/reduce conflict for FLOTANTE resolved as shift
   ! shift/reduce conflict for CADENASIMPLE resolved as shift
   ! shift/reduce conflict for CADENADOBLE resolved as shift
     PUNTOCOMA       reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .)
@@ -3963,14 +3978,14 @@ state 233
     NEGACION        shift and go to state 104
     ID              shift and go to state 105
     ENTERO          shift and go to state 106
-    DECIMAL         shift and go to state 107
+    FLOTANTE        shift and go to state 107
     CADENASIMPLE    shift and go to state 108
     CADENADOBLE     shift and go to state 109
 
   ! NEGACION        [ reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
   ! ID              [ reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
   ! ENTERO          [ reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
-  ! DECIMAL         [ reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
+  ! FLOTANTE        [ reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
   ! CADENASIMPLE    [ reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
   ! CADENADOBLE     [ reduce using rule 43 (OTRO_LOGICO -> SIMBOLO_LOGICO CONDICIONES .) ]
 
@@ -4175,7 +4190,7 @@ WARNING: shift/reduce conflict for FULL in state 73 resolved as shift
 WARNING: shift/reduce conflict for NEGACION in state 233 resolved as shift
 WARNING: shift/reduce conflict for ID in state 233 resolved as shift
 WARNING: shift/reduce conflict for ENTERO in state 233 resolved as shift
-WARNING: shift/reduce conflict for DECIMAL in state 233 resolved as shift
+WARNING: shift/reduce conflict for FLOTANTE in state 233 resolved as shift
 WARNING: shift/reduce conflict for CADENASIMPLE in state 233 resolved as shift
 WARNING: shift/reduce conflict for CADENADOBLE in state 233 resolved as shift
 WARNING: reduce/reduce conflict in state 97 resolved using rule (CUERPO -> WHERE CONDICIONES)
