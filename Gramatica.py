@@ -11,6 +11,7 @@ reservadas = {
     'where': 'WHERE',
     'as': 'AS',
     'inner': 'INNER',
+
     'join': 'JOIN',
     # PALABRAS RESERVADAS DQL
     'using': 'USING',
@@ -26,6 +27,18 @@ reservadas = {
     'first': 'FIRST',
     'last': 'LAST',
     'having': 'HAVING',
+    'limit': 'LIMIT',
+    'offset': 'OFFSET',
+
+    'any': 'ANY',
+    'all': 'ALL',
+    'some': 'SOME',
+    'union': 'UNION',
+    'intersect': 'INTERSECT',
+    'except': 'EXCEPT',
+
+
+
 
     'on': 'ON',
     'and': 'AND',
@@ -36,6 +49,7 @@ reservadas = {
     'set': 'SET',
     'delete': 'DELETE',
     'values': 'VALUES',
+
     'type': 'TYPE',
     'database': 'DATABASE',
     'create': 'CREATE',
@@ -51,7 +65,6 @@ reservadas = {
     'character': 'CHARACTER',
     'varying': 'VARYING',
     'varchar': 'VARCHAR',
-    'character': 'CHARACTER',
     'char': 'CHAR',
     'text': 'TEXT',
     'boolean': 'BOOLEAN',
@@ -73,7 +86,7 @@ reservadas = {
     'drop': 'DROP',
     'add': 'ADD',
 
-
+    'in':'IN',
 
 
     # palabras reservadas DDL dabatabases
@@ -121,7 +134,7 @@ tokens = [
              'MAS',
              'MENOS',
 
-             
+
              # ESTOS SON LAS EXPRESIONES REGULARES
              'ID',
              'ENTERO',
@@ -270,8 +283,6 @@ def p_init(t) :
     t[0] = t[1]
 
 
-
-
 def p_instrucciones_lista(t) :
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
     t[1].append(t[2])
@@ -284,9 +295,6 @@ def p_instrucciones_instruccion(t) :
     t[0] = [t[1]]
 
 
-
-
-
 def p_instruccion(t) :
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
@@ -295,38 +303,32 @@ def p_instruccion(t) :
     t[0] = t[1]
 
 
-
-
-
-
 #===================  DEFINICIONES DE LOS TIPOS DE SELECT
 
 def p_instruccion_dql_comandos(t) :
-    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA'
+    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
     print('\n' + str(t[0]) + '\n')
 
-
-
 def p_instruccion_dql_comandosS(t) :
-    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  PUNTOCOMA'
+    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
     print('\n' + str(t[0]) + '\n')
 
-
 def p_instruccion_dql_comandosS1(t) :
-    'DQL_COMANDOS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO PUNTOCOMA'
+    'DQL_COMANDOS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
 
     print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dql_comandosS2(t) :
-    'DQL_COMANDOS       : SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS  PUNTOCOMA'
+    'DQL_COMANDOS       : SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
     print('\n' + str(t[0]) + '\n')
+
 
 
 
@@ -340,93 +342,67 @@ def p_ListaCampos_ListaCampos(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-
 def p_ListaCampos_Lista(t):
     'LISTA_CAMPOS    : LISTA'
     t[0] = [t[1]]
-
-
 
 def p_Lista_NombreS(t):
     'LISTA          : NOMBRE_T PUNTO CAMPOS S'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
-    #print('\n' + str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + '\n')
-
-
 def p_Lista_Nombre(t):
     'LISTA          : NOMBRE_T PUNTO CAMPOS'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
-   # print('\n' + str(t[1]) + str(t[2]) + str(t[3]) + '\n')
-
-
 def p_Lista_CampoS(t):
     'LISTA          : CAMPOS S'
 
     t[0] = str(t[1]) + str(t[2])
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
-
-
-
 
 def p_Lista_Campo(t):
     'LISTA          : CAMPOS'
 
     t[0] = str(t[1])
-    #print('\n' + str(t[1]) + '\n')
-
-
 
 def p_Campos_id(t):
     'CAMPOS          : ID'
 
     t[0] = str(t[1])
-    #print('\n' + str(t[1]) + '\n')
-
-
 
 def p_Campos_Asterisco(t):
     'CAMPOS          : ASTERISCO'
 
     t[0] = str(t[1])
-    #print('\n' + str(t[1]) + '\n')
-
-
 
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
 
     t[0] = str(t[1])
-    #print('\n' + str(t[1]) + '\n')
-
-
 
 def p_Alias_id(t):
     'ALIAS          : ID'
 
     t[0] = str(t[1])
-    #print('\n' + str(t[1]) + '\n')
-
-
-
 
 def p_S_ComaLista(t):
     'S          : COMA LISTA'
 
     t[0] = str(t[1]) + str(t[2])
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
-
-
-
 
 def p_S_AsAlias(t):
     'S          : AS ALIAS'
 
     t[0] = str(t[1]) + str(t[2])
-   # print('\n' + str(t[1]) + str(t[2]) + '\n')
+
+
+def p_Ss_AsAliasMo(t):
+    'S          : AS ALIAS COMA LISTA'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
 
 
 
@@ -434,13 +410,9 @@ def p_S_AsAlias(t):
 
 #Distinct
 
-
 def p_Disctint_Rw(t):
     'DISTINCTNT          : DISTINCT'
     t[0] = str(t[1])
-
-
-
 
 #------------------------------------------------------------------------------------------------------------------
 
@@ -457,21 +429,20 @@ def p_NombresTablas_Tabla(t):
 
     t[0] = [t[1]]
 
-
 def p_Tabla_NombreT(t):
     'TABLA   : NOMBRE_T'
 
     t[0] = str(t[1])
-   # print('\n' + str(t[1]) + '\n')
-
-
 
 def p_Tabla_NombreTS(t):
     'TABLA   : NOMBRE_T S1'
 
     t[0] = str(t[1]) + str(t[2])
 
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
+def p_Tabla_SubQuerys(t):
+    'TABLA   : SUBQUERYS'
+    t[0] = str(t[1])
+
 
 
 
@@ -482,15 +453,16 @@ def p_Ss_ComaLista(t):
 
     t[0] = str(t[1]) + str(t[2])
 
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
-
-
 
 def p_Ss_AsAlias(t):
     'S1          : AS ALIAS'
 
     t[0] = str(t[1]) + str(t[2])
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
+
+def p_Ss_AsAliasComa(t):
+    'S1          : AS ALIAS COMA TABLA'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 
@@ -498,15 +470,10 @@ def p_Ss_AsAlias(t):
 #------------------------------------------------------------------------------------------------------------------
 #Cuerpo
 
-
-
-
 def p_Cuerpo_Where(t):
     'CUERPO   : WHERE CONDICIONES'
 
     t[0] = str(t[1]) + str(t[2])
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
-
 
 
 def p_Cuerpo_Mores(t):
@@ -514,35 +481,20 @@ def p_Cuerpo_Mores(t):
 
     t[0] = str(t[1])
 
-
-
 def p_MORES_ListaCampos(t):
     'MORES       : MORES MOREE'
 
     t[1].append(t[2])
     t[0] = t[1]
 
-
-
 def p_MORES_Lista(t):
     'MORES    : MOREE'
     t[0] = [t[1]]
-
-
-
-
-
-
-
-
-
 
 def p_Mores_Inners(t):
     'MOREE   : INNERS'
 
     t[0] = str(t[1])
-
-
 
 def p_Mores_Groups(t):
     'MOREE   : GROUPS'
@@ -550,14 +502,15 @@ def p_Mores_Groups(t):
     t[0] = str(t[1])
 
 
+def p_Mores_Limits(t):
+    'MOREE   : LIMITS'
 
-
+    t[0] = str(t[1])
 
 
 #-----------------------------------------------------------------------------------------------------------------
 
 #Condiciones
-
 
 def p_Condiciones_Lista(t):
     'CONDICIONES : CONDICIONES CONDICION'
@@ -565,60 +518,41 @@ def p_Condiciones_Lista(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-
-
 def p_Condiciones_Condicion(t):
     'CONDICIONES : CONDICION'
 
     t[0] = [t[1]]
 
-
-
-
 def p_Condicion_CondicionRel(t):
    'CONDICION : CONDICION_REL SIMBOLO_LOGICO  CONDICION_REL  OTRO_LOGICO'
    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
 
 def p_Condicion_CondicionRel_Sin(t):
     'CONDICION : CONDICION_REL SIMBOLO_LOGICO CONDICION_REL'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
-
 def p_Condicion_CondiRel(t):
     'CONDICION : CONDICION_REL'
 
     t[0] = str(t[1])
 
-
-
-
 def p_CondicionRel_Expresionn(t):
     'CONDICION_REL : EXPRESIONNE OPERADOR EXPRESIONNE'
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-
 
 def p_CondicionRel_Negacion(t):
     'CONDICION_REL : SIMBOLO_NEG  EXPRESIONNE'
     t[0] = str(t[1]) + str(t[2])
 
-
 def p_CondicionRel_Expre(t):
     'CONDICION_REL : EXPRESIONNE'
     t[0] = str(t[1])
-
-
 
 def p_OtroLogico_SimboloLogic(t):
     'OTRO_LOGICO : SIMBOLO_LOGICO CONDICIONES'
 
     t[0] = str(t[1]) + str(t[2])
-
-
-
 
 #------------------------------------------------------------------------------------------------------------------
 #Expresiones
@@ -634,36 +568,21 @@ def p_Expresion_CampoC(t):
 
     t[0] = str(t[1])
 
-
-
 def p_SimboloLogico_Logicos(t):
     ''' SIMBOLO_LOGICO : AND
                       | OR '''
 
     t[0] = str(t[1])
 
-
-
-
-
-
 def p_SimboloNegacion_sim(t):
-    'SIMBOLO_NEG  :  NEGACION'
+    'SIMBOLO_NEG  :  NOT'
 
     t[0] = str(t[1])
-
-
-
-
-
 
 def p_NombreC_id(t):
     'NOMBRE_C : ID'
 
     t[0] = str(t[1])
-
-
-
 
 def p_CamposC_id(t):
     '''CAMPOSC     :  ID
@@ -672,8 +591,6 @@ def p_CamposC_id(t):
                     | CADENASIMPLE
                     | CADENADOBLE '''
     t[0] = str(t[1])
-
-
 
 def p_SimboloRela_Simbolos(t):
     '''OPERADOR     : IGUAL
@@ -686,8 +603,6 @@ def p_SimboloRela_Simbolos(t):
     t[0] = str(t[1])
 
 
-
-
 #-----------------------------------------------------------------------------------------------------------------
 #inners
 
@@ -697,68 +612,45 @@ def p_Inners_Lista(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-
-
 def p_Inners_Inner(t):
     'INNERS : INNERR'
 
     t[0] = [t[1]]
-
-
-
-
 
 def p_Inner_InnerJoin(t):
     'INNERR : TIPOS_INNER JOIN TABLA_REF ON CONDICIONES'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
-
-
 def p_Inner_Join(t):
     'INNERR :  JOIN TABLA_REF ON CONDICIONES'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-
-
-
 
 def p_Inner_InnerJoinUsing(t):
     'INNERR : TIPOS_INNER JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
 
-
-
 def p_Inner_JoinUsing(t):
     'INNERR :  JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER '
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
-
 def p_Inner_Where(t):
     'INNERR   : WHERE CONDICIONES'
 
     t[0] = str(t[1]) + str(t[2])
-    #print('\n' + str(t[1]) + str(t[2]) + '\n')
-
 
 def p_SubColumn_join(t):
     'SUB_COLUMN  :  JOIN EXPRESIONNE'
 
     t[0] = str(t[1]) + str(t[2])
 
-
-
-
 def p_SubColumn_Expresione(t):
     'SUB_COLUMN  :  EXPRESIONNE'
 
     t[0] = str(t[1])
-
-
 
 def p_TiposInner_InnerOuter(t):
     ''' TIPOS_INNER :  INNER OUTER'''
@@ -768,7 +660,6 @@ def p_TiposInner_Inner(t):
     ''' TIPOS_INNER :  INNER'''
     t[0] = str(t[1])
 
-
 def p_TiposInner_LefOuter(t):
     ''' TIPOS_INNER :  LEFT OUTER'''
     t[0] = str(t[1]) + str(t[2])
@@ -776,7 +667,6 @@ def p_TiposInner_LefOuter(t):
 def p_TiposInner_Left(t):
     ''' TIPOS_INNER :  LEFT'''
     t[0] = str(t[1])
-
 
 def p_TiposInner_RightOuter(t):
     ''' TIPOS_INNER :  RIGHT OUTER'''
@@ -786,20 +676,13 @@ def p_TiposInner_Right(t):
     ''' TIPOS_INNER :  RIGHT'''
     t[0] = str(t[1])
 
-
 def p_TiposInner_FullOuter(t):
     ''' TIPOS_INNER :  FULL OUTER'''
     t[0] = str(t[1]) + str(t[2])
 
-
 def p_TiposInner_Full(t):
     ''' TIPOS_INNER :  FULL'''
     t[0] = str(t[1])
-
-
-
-
-
 
 def p_TablaRef_Id(t):
     'TABLA_REF : ID'
@@ -812,10 +695,8 @@ def p_TablaRef_IdAS(t):
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
-
 #-----------------------------------------------------------------------------------------------------------------
 #Groups
-
 
 def p_Groups_ListaG(t):
     'GROUPS : GROUPS GROUPP'
@@ -830,22 +711,15 @@ def p_Groups_ListaG2(t):
 
     t[0] = [t[1]]
 
-
-
 def p_Group_GroupBy(t):
     'GROUPP    : GROUP BY EXPRE_LIST MORE_ORDER'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
-
-
 def p_Group_GroupBySin(t):
     'GROUPP    : GROUP BY EXPRE_LIST'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-
 
 def p_ExpreList_Lista(t):
     'EXPRE_LIST : EXPRE_LIST  EXPRES'
@@ -858,54 +732,39 @@ def p_ExpreList_Expresion(t):
 
     t[0] = [t[1]]
 
-
-
 def p_Expre_Campo1(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
 
 def p_Expre_Campo2(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS '
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
-
 def p_Expre_Campo3(t):
     'EXPRES    :  CAMPOS S2 '
     t[0] = str(t[1]) + str(t[2])
-
 
 def p_Expre_Campo4(t):
     'EXPRES    :  CAMPOS '
     t[0] = str(t[1])
 
-
-
 def p_Expre_Campo5(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2 STATE '
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
-
-
-
 
 def p_Expre_Campo6(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS STATE'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
-
-
 def p_Expre_Campo7(t):
     'EXPRES    :  CAMPOS S2 STATE'
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
 
 def p_Expre_Campo8(t):
     'EXPRES    :  CAMPOS STATE '
     t[0] = str(t[1]) + str(t[2])
 
-
-
-def p_S2(t):
+def p_S2_Coma(t):
     'S2 : COMA EXPRES'
     t[0] = str(t[1]) + str(t[2])
 
@@ -915,15 +774,20 @@ def p_S2_2(t):
     t[0] = str(t[1]) + str(t[2])
 
 
+def p_Ss_AsAliasComa(t):
+    'S2 :  AS ALIAS COMA EXPRES'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
 def p_MoreOrder_Having(t):
     'MORE_ORDER  :  HAVING CONDICIONES'
     t[0] = str(t[1]) + str(t[2])
 
-
 def p_State_orden1(t):
     'STATE : ASC'
     t[0] = str(t[1])
-
 
 def p_State_orden2(t):
     'STATE : ASC NULLS FIRST'
@@ -933,27 +797,186 @@ def p_State_orden3(t):
     'STATE : ASC NULLS LAST'
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
-
 def p_State_orden4(t):
     'STATE : DESC '
     t[0] = str(t[1])
-
-
 
 def p_State_orden5(t):
     'STATE : DESC NULLS FIRST'
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
-
 def p_State_orden6(t):
     'STATE : DESC NULLS LAST'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+#-----------------------------------------------------------------------------------------------------------------
+#Limits
+
+def p_Limits_ListaLimits(t):
+    'LIMITS  :  LIMITS LIMITT'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_Limits_Limit(t):
+    'LIMITS  :  LIMITT'
+    t[0] = [t[1]]
+
+
+
+
+
+def p_Limit_Reservada(t):
+    'LIMITT  :  LIMIT EXPRE_NUM'
+
+    t[0] = str(t[1]) + str(t[2])
+
+
+
+def p_Limit_Offset(t):
+    'LIMITT  : OFFSET EXPRE_NUM '
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_Expresion_Atributos(t):
+    '''EXPRE_NUM : ENTERO
+                 | ALL '''
+    t[0] = str(t[1])
+
+
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#SUBCONSULTAS
+
+def p_SubQuerys_Lista(t):
+    'SUBQUERYS :  SUBQUERYS QUERY'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_SubQuerys_Query(t):
+    'SUBQUERYS :  QUERY'
+    t[0] = str(t[1])
+
+def p_Query_Ate(t):
+    'QUERY : ATE_QUE  PARIZQ QUE PARDER'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_Query_AteAs(t):
+    'QUERY : ATE_QUE PARIZQ QUE  PARDER AS_NO'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+
+
+def p_Query_Query(t):
+    'QUERY :   PARIZQ QUE PARDER'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+def p_Query_QueryAs(t):
+    'QUERY :  PARIZQ QUE PARDER AS_NO'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+
+def p_AsNo_Coma(t):
+    'AS_NO : COMA QUERY'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_AsNo_As(t):
+    'AS_NO : AS NO_N'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_AsNo_AsComa(t):
+    'AS_NO : AS NO_N COMA QUERY'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+def p_NoN_Id(t):
+    'NO_N  :  ID'
+    t[0] = str(t[1])
+
+
+
+def p_AteQue_Exist(t):
+    'ATE_QUE  :  EXISTS'
+    t[0] = str(t[1])
+
+def p_AteQue_Expre(t):
+    'ATE_QUE  :  EXPRESIONNE OPCIONALESS'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_AteQue_ExpreOps(t):
+    'ATE_QUE  :  EXPRESIONNE OPERADOR OPCIONALESS2'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_AteQue_ID(t):
+    'ATE_QUE  :  ID'
+    t[0] = str(t[1])
+
+def p_Opcionales_In(t):
+    'OPCIONALESS : IN'
+    t[0] = str(t[1])
+
+def p_Opcionales_NotIn(t):
+    'OPCIONALESS : NOT IN'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_Opcionales2_Any(t):
+    'OPCIONALESS2 : ANY'
+    t[0] = str(t[1])
+
+def p_Opcionales2_All(t):
+    'OPCIONALESS2 : ALL'
+    t[0] = str(t[1])
+
+def p_Opcionales2_Some(t):
+    'OPCIONALESS2 : SOME'
+    t[0] = str(t[1])
+
+def p_Que_InstruccionQuery(t):
+    'QUE : DQL_COMANDOS'
+    t[0] = str(t[1])
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#COMBINACION DE  CONSULTAS
+
+def p_Unions_Lista(t):
+    'UNIONS  : UNIONS UNIONN'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_Unions_Comando(t):
+    'UNIONS  : UNIONN'
+    t[0] = [t[1]]
+
+
+
+
+
+def p_Unions_DQLComandos(t):
+    'UNIONN  :    COMPORTAMIENTO  ALL DQL_COMANDOS '
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 
+def p_Unions_DQLComandos2(t):
+    'UNIONN  :    COMPORTAMIENTO  DQL_COMANDOS '
+    t[0] = str(t[1]) + str(t[2])
+
+def p_Unions_DQLComandos3(t):
+    'UNIONN  :    PUNTOCOMA '
+    t[0] = str(t[1])
 
 
 
+def p_Comportamiento_Comandos(t):
+    '''COMPORTAMIENTO : UNION
+                      | INTERSECT
+                      | EXCEPT'''
+    t[0] = str(t[1])
 
 
 
@@ -995,7 +1018,7 @@ def p_CREATE_TABLE_LISTA_CAMPOS2(t):
 
 def p_Create_TABLE_CAMPOS(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Create_TABLE_CAMPOS2(t):
@@ -1004,32 +1027,32 @@ def p_Create_TABLE_CAMPOS2(t):
 
 def p_Create_TABLE_CAMPOS3(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE '
-    t[0] = str(t[1])  + str(t[2])  + str(t[3])  
+    t[0] = str(t[1])  + str(t[2])  + str(t[3])
 
 def p_Create_TABLE_CAMPOS4(t):
     'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
 
 def p_Create_TABLE_CAMPOS4_(t):
     'LISTA2  : UNIQUE PARDER LISTA_DE_IDS PARIZQ'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4])
 
 #PENDIENTE LISTADO DE ID'S
 def p_Create_TABLE_CAMPOS5(t):
     'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER COMA'
-    t[0] =str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])  
+    t[0] =str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
 
 def p_Create_TABLE_CAMPOS6(t):
     'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) + str(t[11]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) + str(t[11])
 
 def p_Create_TABLE_CAMPOS7(t):
     'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5])
 
 def p_Create_TABLE_CAMPOS8(t):
     'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10])
 
 
 #LISTADO DE IDS--------------------------------------------------------
@@ -1048,7 +1071,7 @@ def p_CREATE_TABLE_LISTA_IDS3(t):
 
 def p_CREATE_TABLE_LISTA_IDS4(t):
     'LISTA_ID_  :  ID'
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 #TIPO DE LAS VARIABLES DE CADA CAMPO DECLARADAS--------------------------------------------------------------
 def p_Create_TABLE_TIPO_CAMPO(t):
@@ -1076,20 +1099,20 @@ def p_CREATE_TABLE_LISTA3_CAMPOS(t):
 
 def p_Create_TABLE_CAMPOS_3(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE '
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 def p_Create_TABLE_CAMPOS_4(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 def p_Create_TABLE_CAMPOS_5(t):
     'LISTA3          : LISTA3  VALIDACION_CAMPO_CREATE '
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
-    '''VALIDACION_CAMPO_CREATE  : NOT NULL                    
-                                | PRIMARY KEY   
+    '''VALIDACION_CAMPO_CREATE  : NOT NULL
+                                | PRIMARY KEY
                                 | DEFAULT CADENASIMPLE
                                 | DEFAULT CADENADOBLE
                                 | DEFAULT DECIMAL
@@ -1150,7 +1173,7 @@ def p_instruccion_dml_comandos_INSERT_COLUMNA(t) :
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA2(t) :
     'COLUMNA       : ID'
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES(t) :
@@ -1180,7 +1203,7 @@ def p_instruccion_dml_comandos_INSERT_D(t) :
 def p_instruccion_dml_comandos_UPDATE(t) :
     'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    print('\n' + str(t[0]) + '\n') 
+    print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dml_comandos_UPDATE2(t) :
     'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN PUNTOCOMA'
@@ -1234,7 +1257,7 @@ def p_instruccion_dml_comandos_DELETE2(t) :
 #DROP TABLES
 def p_instruccion_dml_comandos_DROP_TABLE(t) :
     'DML_COMANDOS       : DROP TABLE ID PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
 
 
@@ -1242,7 +1265,7 @@ def p_instruccion_dml_comandos_DROP_TABLE(t) :
 #ALTER TABLES
 def p_instruccion_dml_comandos_ALTER_TABLE(t) :
     'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN ID TIPO_CAMPO PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
     print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dml_comandos_ALTER_TABLE2(t) :
@@ -1262,17 +1285,17 @@ def p_instruccion_dml_comandos_ALTER_TABLE4(t) :
 
 def p_instruccion_dml_comandos_ALTER_TABLE5(t) :
     'DML_COMANDOS       : ALTER TABLE ID  ALTER COLUMN ID SET NOT NULL  PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10])
     print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dml_comandos_ALTER_TABLE6(t) :
     'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])  
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
     print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
 
 #--------------------------------------------------------------------------------------------------------
@@ -1285,6 +1308,10 @@ def p_expresion_global(t):
 
     t[0] = str(t[1])
     print('\n' + str(t[0]) + '\n')
+
+
+
+
 
 
 #DDL

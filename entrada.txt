@@ -1,3 +1,38 @@
+/*
+Select *
+from tabla
+where c=c;
+
+Select *
+from tabla1,tabla2
+where a=b;
+
+
+
+Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B  on A.campo1 = B.campo1 and A.campo2 = B.campo2;
+
+
+
+Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
+where a.tabla = 'jasssas';
+
+
+-- Disctint aÑADIDO
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
+where a.tabla = 'jasssas';
+
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A;
+
+*/
 
 Select *
 from tabla
@@ -35,6 +70,49 @@ from tabla1 as A;
 
 
 
+-- Probando DIFERENTES TIPOS DE INNER JOIN CON CONDICIONES NEGADAS Y LOGICAS CON BOOLEANAS
+
+
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+full  join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
+where a.tabla = 'jasssas';
+
+
+
+
+
+-- Probando GROUP BY
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla ;
+
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1,tabla2.col3 asc;
+
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2 and b>c or not b
+group by tabla.col1,tabla2.col3 asc Having a=b;
+
+
+
+-- Probando Having and limit
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1,tabla2.col3 as coco, tabla as je  asc Having a=b
+Limit 2;
+
+
+
+
 -- Probando Group By
 
 Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
@@ -49,6 +127,61 @@ where o>2
 group by tabla.col1 ;
 
 
+--pROBANDO las subconsultas 
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ;) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ;) as cosa
+where o>2
+group by tabla.col1
+
+union all
+
+Select distinct B.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ;) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ;) as cosa
+where o>2
+group by tabla.col1
+
+intersect
+
+Select distinct C.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ;) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ;) as cosa
+where o>2
+group by tabla.col1
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 CREATE TABLE my_first_table (
     nombre INTEGER NOT NULL,
@@ -128,6 +261,3 @@ CREATE TABLE my_first_table (
     PRIMARY KEY (nombre,nombre2),
     FOREIGN KEY (nombre) REFERENCES tableee (Nombre)
 );
-
-
-
