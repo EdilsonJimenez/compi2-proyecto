@@ -235,7 +235,7 @@ def t_newline(t):
 
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+   # print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 
@@ -290,6 +290,7 @@ def p_instrucciones_instruccion(t) :
 def p_instruccion(t) :
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
+                    | DML_COMANDOS
                     '''
     t[0] = t[1]
 
@@ -824,7 +825,7 @@ def p_Groups_ListaG(t):
 
 
 
-def p_Groups_ListaG(t):
+def p_Groups_ListaG2(t):
     'GROUPS    : GROUPP'
 
     t[0] = [t[1]]
@@ -909,7 +910,7 @@ def p_S2(t):
     t[0] = str(t[1]) + str(t[2])
 
 
-def p_S2(t):
+def p_S2_2(t):
     'S2 : AS ALIAS'
     t[0] = str(t[1]) + str(t[2])
 
@@ -958,26 +959,18 @@ def p_State_orden6(t):
 
 
 
-
-
-
-
-
-
-
-
 #MI GRANATICA CESAR SAZO------------------------
 # CREATE TABLE--------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------
 
 
 def p_instruccion_dml_comandos_CREATE_TABLE(t) :
-    'DML_COMANDOS       : CREATE TABLE NOMBRES_TABLAS PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
+    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dml_comandos_CREATE_TABLE2(t) :
-    'DML_COMANDOS       : CREATE TABLE NOMBRES_TABLAS PARIZQ  CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID PARIZQ PUNTOCOMA'
+    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID PARIZQ PUNTOCOMA'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
@@ -1284,6 +1277,8 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
 
 #--------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------
+
+
 
 
 
