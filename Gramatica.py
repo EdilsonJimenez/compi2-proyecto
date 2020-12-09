@@ -98,12 +98,9 @@ reservadas = {
     'show': 'SHOW',
     'databases': 'DATABASES',
     'like': 'LIKE',
-    'alter': 'ALTER',
-    'rename': 'RENAME',
-    'to': 'TO',
     'current_user': 'CURRENT_USER',
-    'session_user': 'SESSION_USER',
-    'drop': 'DROP'
+    'session_user': 'SESSION_USER'
+
 }
 
 

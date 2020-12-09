@@ -1,4 +1,4 @@
-/*
+
 Select *
 from tabla
 where c=c;
@@ -32,7 +32,8 @@ where a.tabla = 'jasssas';
 Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
 from tabla1 as A;
 
-*/
+
+
 
 Select *
 from tabla
@@ -181,7 +182,6 @@ group by tabla.col1
 
 
 
-/*
 
 CREATE TABLE my_first_table (
     nombre INTEGER NOT NULL,
