@@ -129,7 +129,9 @@ reservadas = {
     'databases': 'DATABASES',
     'like': 'LIKE',
     'current_user': 'CURRENT_USER',
-    'session_user': 'SESSION_USER'
+    'session_user': 'SESSION_USER',
+
+    'substring': 'SUBSTRING'
 
 }
 
@@ -154,6 +156,14 @@ tokens = [
              'MAS',
              'MENOS',
 
+            #Operadores de cadenas de bits
+             'DOBLEPLECA',
+             'AMPERSAND',
+             'PLECA',
+             'NUMERAL',
+             'VIRGULILLA',
+             'LEFTSHIFT',
+             'RIGHTSHIFT',
 
              # ESTOS SON LAS EXPRESIONES REGULARES
              'ID',
@@ -162,6 +172,7 @@ tokens = [
              'CADENASIMPLE',
              'CADENADOBLE',
              'FECHA',
+             'CADENABINARIA',
 
              'COMENTARIOMULTI',
              'COMENTARIONORMAL'
@@ -187,11 +198,37 @@ t_DIVISION = r'/'
 t_PORCENTAJE = r'%'
 t_MAS = r'\+'
 t_MENOS = r'-'
+t_DOBLEPLECA = r'\|\|'
+t_AMPERSAND = r'&'
+t_PLECA = r'\|'
+t_NUMERAL = r'\#'
+t_VIRGULILLA = r'~'
+t_LEFTSHIFT = r'<<'
+t_RIGHTSHIFT = r'>>'
+
+
+#Importacion de Objetos Del Analisis
+
+from ObjetoLexico import *
+from ObjetoSintactico import *
+from ObjetoSemantico import *
+
+#importamos el Generador  AST
+
+from src import Generador as g
+
+
+
 
 
 
 
 # EXPRESIONES REGULARES DEL LENGUAJE
+def t_CADENABINARIA(t):
+    r'B\'(1|0)+\''
+    t.value = t.value[2:-1]
+    return t
+
 
 
 def t_ID(t):
@@ -215,7 +252,7 @@ def t_ENTERO(t):
 
 
 def t_FLOTANTE(t):
-    r'\d+\.\d+'
+    r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'
     try:
         t.value = float(t.value)
     except ValueError:
@@ -251,6 +288,7 @@ def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
 
+
 # CARACTERES IGNORADOS DEL LENGUAJE
 
 t_ignore = "\t"
@@ -274,6 +312,75 @@ import ply.lex as lex
 
 lexer = lex.lex()
 
+
+
+
+#========================================  DEFINICION DE ESTRUCURAS PARA EL MANEJO DE REPORTES
+
+
+
+
+
+
+
+#Listas que se Utilizaran para Manejo de Errores
+
+sintacticErroList = []
+sintacticErroList[:] = []
+
+LexicalErrosList = []
+LexicalErrosList[:] =[]
+
+
+#Listas que se utilizaran para el Manejo del Arbol
+
+primeravez = 0
+
+treeList = [] #list for save nodes
+
+contador = 0
+contadorSente = 1
+
+conNode = 1
+
+senteList  = [] #para guardar las sentencias y despues apuntarlas
+senteList_ = []
+
+corcheList = []
+
+
+bandera = 0
+
+corcheListaux = []
+
+csList = []
+sentenciaHija = 0
+bandera = 0
+res = []
+fgraph = ''
+
+
+
+#Listas que se Utilizaran para el manejo de la Gramatica Generada
+
+grammarList = []
+grammarList[:] = []
+
+
+#variables a utilizar
+aux = []
+input_ = ''
+
+
+
+
+
+
+
+
+
+
+
 # ASOCIACION DE OPERADORES CON PRESEDENCIA
 
 #precedence = ( ) #NO HAY POR EL MOMENTO PERO SE VERA INVOLUCRADO LOS SIMBOLOS LOGICOS
@@ -283,16 +390,52 @@ precedence = (
     ('left', 'OR'),
     ('left', 'AND'),
     ('right', 'NOT'),
+    ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
+    ('right', 'VIRGULILLA'),
     ('left', 'MAS', 'MENOS'),
-    ('left', 'ASTERISCO', 'DIVISION'),
+    ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
     )
 
 # Definición de la gramática
 
 def p_init(t) :
-    'INICIO          : INSTRUCCIONES'
-
+    'INICIO     : INSTRUCCIONES'
     t[0] = t[1]
+
+    # region graph del ast
+    global fgraph, senteList, contador, conNode
+
+
+
+    fgraph.write("n00"+str(conNode+1)+" [label=\"INICIO\"] ;\n")
+
+
+    for i in senteList:
+        fgraph.write("n00" + str(conNode+1) + " -- " + "n00" + str(i) + ";\n")
+
+    senteList[:] = []
+    contador += 1
+    fgraph.write("n00" + str(conNode + 2) + " [label=\"INSTRUCCIONES\"] ;\n")
+    fgraph.write("n00" + str(conNode + 2) + " -- " + "n00" + str(conNode + 1) + ";\n")
+    conNode += 3
+
+    # endregion
+    fgraph.flush()
+    fgraph.close()
+
+
+    #manejo de las listas gramaticales
+    global grammarList
+    grammarList.append(g.nodeGramatical('INICIO  -> INSTRUCCIONES', f'INICIO.val = INSTRUCCIONES.val'))
+    grammarList.reverse()
+
+    #for i in grammarList:
+    #    print(f'production: {i.production}, rules: {i.rules}')
+
+
+
+
+
 
 
 def p_instrucciones_lista(t) :
@@ -310,8 +453,7 @@ def p_instrucciones_instruccion(t) :
 def p_instruccion(t) :
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
-                    | DML_COMANDOS
-                    '''
+                    | DML_COMANDOS'''
     t[0] = t[1]
 
 
@@ -348,40 +490,54 @@ def p_instruccion_dql_comandosS2(t) :
 #------------------------------------------------------------------------------------------------------------------
 
 #Lista de Campos
-def p_ListaCampos_ListaCampos(t):
-    'LISTA_CAMPOS       : LISTA_CAMPOS LISTA'
+def p_ListaCampos_ListaCamposs(t):
+    'LISTA_CAMPOS       : LISTA_CAMPOS LISTAA'
 
     t[1].append(t[2])
     t[0] = t[1]
 
 def p_ListaCampos_Lista(t):
-    'LISTA_CAMPOS    : LISTA'
+    'LISTA_CAMPOS    : LISTAA'
     t[0] = [t[1]]
 
 def p_Lista_NombreS(t):
-    'LISTA          : NOMBRE_T PUNTO CAMPOS S'
+    'LISTAA          : NOMBRE_T PUNTO CAMPOS S'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 def p_Lista_Nombre(t):
-    'LISTA          : NOMBRE_T PUNTO CAMPOS'
+    'LISTAA          : NOMBRE_T PUNTO CAMPOS'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 def p_Lista_CampoS(t):
-    'LISTA          : CAMPOS S'
+    'LISTAA          : CAMPOS S'
 
     t[0] = str(t[1]) + str(t[2])
 
+
+
 def p_Lista_Campo(t):
-    'LISTA          : CAMPOS'
+    'LISTAA          : CAMPOS'
 
     t[0] = str(t[1])
 
 
 def p_Lista_ExprecionesCase(t):
-    'LISTA          : EXPRESIONES_C'
+    'LISTAA          :  EXPRESIONES_C'
+
     t[0] = str(t[1])
+
+
+def p_Lista_SubsQuery(t):
+    'LISTAA    :   SUBQUERYS'
+
+    t[0] = str(t[1])
+
+
+
+
+
 
 
 
@@ -406,7 +562,7 @@ def p_Alias_id(t):
     t[0] = str(t[1])
 
 def p_S_ComaLista(t):
-    'S          : COMA LISTA'
+    'S          : COMA LISTAA'
 
     t[0] = str(t[1]) + str(t[2])
 
@@ -416,10 +572,24 @@ def p_S_AsAlias(t):
     t[0] = str(t[1]) + str(t[2])
 
 
-def p_Ss_AsAliasMo(t):
-    'S          : AS ALIAS COMA LISTA'
+def p_Ss_AsAliasMos(t):
+    'S          : AS ALIAS COMA LISTAA'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_Ss_AliasMos(t):
+    'S          :  ALIAS COMA LISTAA'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+def p_S_Aliass(t):
+    'S          :  ALIAS'
+
+    t[0] = str(t[1])
+
+
 
 
 
@@ -483,6 +653,16 @@ def p_Ss_AsAliasComa(t):
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
+def p_Ss_AliasCo(t):
+    'S1          :  ALIAS COMA TABLA'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+def p_S_AliasSolo(t):
+    'S1          :  ALIAS'
+
+    t[0] = str(t[1])
 
 
 #------------------------------------------------------------------------------------------------------------------
@@ -555,6 +735,10 @@ def p_Condicion_CondiRel(t):
 
     t[0] = str(t[1])
 
+
+
+
+
 def p_CondicionRel_Expresionn(t):
     'CONDICION_REL : EXPRESIONNE OPERADOR EXPRESIONNE'
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
@@ -572,6 +756,8 @@ def p_OtroLogico_SimboloLogic(t):
 
     t[0] = str(t[1]) + str(t[2])
 
+
+
 #------------------------------------------------------------------------------------------------------------------
 #Expresiones
 
@@ -585,6 +771,20 @@ def p_Expresion_CampoC(t):
     'EXPRESIONNE : CAMPOSC'
 
     t[0] = str(t[1])
+
+
+def p_Expresion_SubQuery(t):
+    'EXPRESIONNE : SUBQUERYS'
+
+    t[0] = str(t[1])
+
+
+
+
+
+
+
+
 
 def p_SimboloLogico_Logicos(t):
     ''' SIMBOLO_LOGICO : AND
@@ -712,6 +912,11 @@ def p_TablaRef_IdAS(t):
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
+def p_TablaRef_IdSinAs(t):
+    'TABLA_REF : ID  ID'
+
+    t[0] = str(t[1]) + str(t[2])
+
 
 #-----------------------------------------------------------------------------------------------------------------
 #Groups
@@ -796,6 +1001,21 @@ def p_Ss_AsAliasComa(t):
     'S2 :  AS ALIAS COMA EXPRES'
 
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_S2_3(t):
+    'S2 :  ALIAS'
+    t[0] = str(t[1])
+
+
+def p_Ss_AsAlias3(t):
+    'S2 :   ALIAS COMA EXPRES'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+
+
 
 
 
@@ -909,6 +1129,16 @@ def p_AsNo_AsComa(t):
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
+def p_AsNo_SinAs(t):
+    'AS_NO :  NO_N'
+    t[0] = str(t[1])
+
+def p_AsNo_SinAsComa(t):
+    'AS_NO :  NO_N COMA QUERY'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+
+
 
 def p_NoN_Id(t):
     'NO_N  :  ID'
@@ -953,8 +1183,40 @@ def p_Opcionales2_Some(t):
     t[0] = str(t[1])
 
 def p_Que_InstruccionQuery(t):
-    'QUE : DQL_COMANDOS'
+    'QUE : QUE_SUBS'
     t[0] = str(t[1])
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#SUBCONSULTAS Llamadas sin Punto Coma
+
+def p_SubConsultas_comandos(t) :
+    'QUE_SUBS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+
+
+
+def p_SubConsultas_comandosS(t) :
+    'QUE_SUBS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+def p_SubConsultas_comandosS1(t) :
+    'QUE_SUBS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+
+
+
+def p_SubConsultas_comandosS2(t) :
+    'QUE_SUBS       : SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS  '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+
+
+
+
+
+
 
 
 #-----------------------------------------------------------------------------------------------------------------
@@ -991,21 +1253,11 @@ def p_Comportamiento_Comandos(t):
 #-----------------------------------------------------------------------------------------------------------------
 #CASES, GREATEST, LEAST
 
-    #def p_ExpresionesCode_ExpresionesC(t):
-    #'EXPRESIONES_CODE  :  EXPRESIONES_CODE EXPRESIONES_C'
-   # t[1].append(t[2])
-   # t[0] = t[1]
-
-
-#def p_ExpresionesCode_Expresion(t):
-  #  'EXPRESIONES_CODE  :  EXPRESIONES_C'
-  #  t[0] = [t[1]]
-
 
 def p_ExpresionesC_Case(t):
-    'EXPRESIONES_C  :  CASE WHEN CONDICIONES THEN EXPRESIONNE CUERPOO'
+    'EXPRESIONES_C  :  CASE WHEN_LIST  CUERPOO'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 
@@ -1020,9 +1272,13 @@ def p_ExpresionesC_Least(t):
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
+
+
 def p_Cuerpos_When(t):
     'CUERPOO  :  WHEN CONDICIONES EXPRESIONNE END'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
 
 
 def p_Cuerpo_WhenElse(t):
@@ -1030,13 +1286,39 @@ def p_Cuerpo_WhenElse(t):
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
+
 def p_Cuerpo_End(t):
     'CUERPOO  :  END'
     t[0] = str(t[1])
 
 
+def p_Cuerpo_EndID(t):
+    'CUERPOO  :  END ID'
+    t[0] = str(t[1]) + str(t[2])
 
 
+def p_whenList_Lista(t):
+    'WHEN_LIST  :  WHEN_LIST WHEN_UNI'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_whenList_Uni(t):
+    'WHEN_LIST  :  WHEN_UNI'
+    t[0] = str(t[1])
+
+
+def p_WhenUni_Then(t):
+    'WHEN_UNI  :   WHEN CONDICIONES THEN EXPRESIONNE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_WhenUni_ExpreThen(t):
+    'WHEN_UNI  :   WHEN CONDICIONES EXPRESIONNE THEN EXPRESIONNE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+
+
+def p_WhenUni_ExpreElseThen(t):
+    'WHEN_UNI  :   WHEN CONDICIONES EXPRESIONNE ELSE EXPRESIONNE THEN EXPRESIONNE'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
 
 
 
@@ -1208,7 +1490,7 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
                                 | DEFAULT CADENASIMPLE
                                 | DEFAULT CADENADOBLE
                                 | DEFAULT DECIMAL
-                                | DEFAULT ENTERO 
+                                | DEFAULT ENTERO
                                 | DEFAULT ID'''
     t[0] = str(t[1]) + str(t[2])
 
@@ -1391,16 +1673,29 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
 
+def p_instruccion_dml_comandos_ALTER_TABLE8(t) :
+    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE9(t) :
+    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+
 #--------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------
 
 
 
 def p_expresion_global(t):
-    '''EXPRESION_GLOBAL : EXPNUMERICA   '''
+    '''EXPRESION_GLOBAL : EXPBINARIO
+                        | EXPNUMERICA
+                        | EXPCADENA'''
 
     t[0] = str(t[1])
-    print('\n' + str(t[0]) + '\n')
+    print('\n' + str(t[1]) + '\n')
 
 
 
@@ -1586,8 +1881,37 @@ def p_expnumerica_agrupacion(t):
 def p_expnumerica_valor(t):
     '''EXPNUMERICA : ID
                    | ENTERO
-                   | FLOTANTE'''
+                   | FLOTANTE
+                   | DEFAULT'''
 
+    t[0] = str(t[1])
+
+def p_expresion_binario(t):
+    '''EXPBINARIO : EXPBINARIO DOBLEPLECA EXPBINARIO
+                |   EXPBINARIO AMPERSAND EXPBINARIO
+                |   EXPBINARIO PLECA EXPBINARIO
+                |   EXPBINARIO NUMERAL EXPBINARIO
+                |   EXPBINARIO LEFTSHIFT EXPNUMERICA
+                |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    print(t[0])
+
+def p_expresion_binario_n(t):
+    'EXPBINARIO : VIRGULILLA EXPBINARIO'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_expresion_binario_val(t):
+    'EXPBINARIO : CADENABINARIA'
+    t[0] = str(t[1])
+
+def p_expresoin_cadena(t):
+    'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+def p_expresion_cadena_val(t):
+    '''EXPCADENA : CADENASIMPLE
+                 | CADENADOBLE'''
     t[0] = str(t[1])
 
 def p_error(t):
@@ -1598,7 +1922,7 @@ import ply.yacc as yacc
 
 parser = yacc.yacc()
 
-f = open("./entrada.txt", "r")
+f = open("../src/entrada.txt", "r")
 input = f.read()
 print(input)
 
