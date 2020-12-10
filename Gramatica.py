@@ -215,7 +215,7 @@ from ObjetoSemantico import *
 
 #importamos el Generador  AST
 
-from src import Generador as g
+import Generador as g
 
 
 
@@ -310,7 +310,7 @@ def t_error(t):
 # Construyendo el analizador léxico
 import ply.lex as lex
 
-lexer = lex.lex()
+
 
 
 
@@ -402,6 +402,8 @@ def p_init(t) :
     'INICIO     : INSTRUCCIONES'
     t[0] = t[1]
 
+
+""" 
     # region graph del ast
     global fgraph, senteList, contador, conNode
 
@@ -433,7 +435,7 @@ def p_init(t) :
     #    print(f'production: {i.production}, rules: {i.rules}')
 
 
-
+ """
 
 
 
@@ -1920,10 +1922,30 @@ def p_error(t):
 
 import ply.yacc as yacc
 
+
+
+
+
+#parser = yacc.yacc()
+
+
+lexer = lex.lex()
 parser = yacc.yacc()
 
-f = open("../src/entrada.txt", "r")
-input = f.read()
-print(input)
 
-parser.parse(input)
+
+def parse():
+
+
+    f = open("./entrada.txt", "r")
+
+    input = f.read()
+    print(input)
+    return parser.parse(input)
+
+
+
+
+
+
+
