@@ -107,6 +107,15 @@ reservadas = {
     'in':'IN',
 
 
+    'case': 'CASE',
+    'when': 'WHEN',
+    'then': 'THEN',
+    'greatest': 'GREATEST',
+    'least': 'LEAST',
+    'else':'ELSE',
+    'end':'END',
+
+
     # palabras reservadas DDL dabatabases
     'replace': 'REPLACE',
     'if': 'IF',
@@ -387,6 +396,13 @@ def p_Lista_Campo(t):
     'LISTA          : CAMPOS'
 
     t[0] = str(t[1])
+
+
+def p_Lista_ExprecionesCase(t):
+    'LISTA          : EXPRESIONES_C'
+    t[0] = str(t[1])
+
+
 
 def p_Campos_id(t):
     'CAMPOS          : ID'
@@ -968,20 +984,13 @@ def p_Unions_Lista(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-
 def p_Unions_Comando(t):
     'UNIONS  : UNIONN'
     t[0] = [t[1]]
 
-
-
-
-
 def p_Unions_DQLComandos(t):
     'UNIONN  :    COMPORTAMIENTO  ALL DQL_COMANDOS '
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
 
 def p_Unions_DQLComandos2(t):
     'UNIONN  :    COMPORTAMIENTO  DQL_COMANDOS '
@@ -991,13 +1000,70 @@ def p_Unions_DQLComandos3(t):
     'UNIONN  :    PUNTOCOMA '
     t[0] = str(t[1])
 
-
-
 def p_Comportamiento_Comandos(t):
     '''COMPORTAMIENTO : UNION
                       | INTERSECT
                       | EXCEPT'''
     t[0] = str(t[1])
+
+
+#-----------------------------------------------------------------------------------------------------------------
+#CASES, GREATEST, LEAST
+
+    #def p_ExpresionesCode_ExpresionesC(t):
+    #'EXPRESIONES_CODE  :  EXPRESIONES_CODE EXPRESIONES_C'
+   # t[1].append(t[2])
+   # t[0] = t[1]
+
+
+#def p_ExpresionesCode_Expresion(t):
+  #  'EXPRESIONES_CODE  :  EXPRESIONES_C'
+  #  t[0] = [t[1]]
+
+
+def p_ExpresionesC_Case(t):
+    'EXPRESIONES_C  :  CASE WHEN CONDICIONES THEN EXPRESIONNE CUERPOO'
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+
+
+
+def p_ExpresionesC_Greatest(t):
+    'EXPRESIONES_C  :  GREATEST PARIZQ EXPRESIONNE PARDER '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+def p_ExpresionesC_Least(t):
+    'EXPRESIONES_C  :  LEAST PARIZQ EXPRESIONNE PARDER '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_Cuerpos_When(t):
+    'CUERPOO  :  WHEN CONDICIONES EXPRESIONNE END'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+def p_Cuerpo_WhenElse(t):
+    'CUERPOO  :  WHEN CONDICIONES  EXPRESIONNE ELSE EXPRESIONNE END'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+
+
+def p_Cuerpo_End(t):
+    'CUERPOO  :  END'
+    t[0] = str(t[1])
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1102,7 +1168,7 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | DECIMAL
                     | REAL
                     | MONEY
-                    | DOUBLE PRECISION 
+                    | DOUBLE PRECISION
                     | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
                     | VARCHAR PARIZQ EXPNUMERICA PARDER
                     | CHARACTER PARIZQ EXPNUMERICA PARDER
@@ -1213,7 +1279,7 @@ def p_instruccion_dml_comandos_INSERT_VALOR(t) :
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t) :
     'VALOR       : EXPRESION_GLOBAL'
-    t[0] = str(t[1]) 
+    t[0] = str(t[1])
 
 def p_instruccion_dml_comandos_INSERT_D(t) :
     'D       : COMA EXPRESION_GLOBAL'
@@ -1243,19 +1309,19 @@ def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t) :
 #-------------------------------------------------------
 def p_instruccion_dml_comandos_UPDATE_CAMPO(t) :
     'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO2(t) :
     'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL C'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])  
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO3(t) :
     'CAMPO       :  ID IGUAL EXPRESION_GLOBAL'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO4(t) :
     'CAMPO       :  ID IGUAL EXPRESION_GLOBAL C'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) 
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 def p_instruccion_dml_comandos_UPDATE_C(t) :
     'C       :  COMA CAMPO'
