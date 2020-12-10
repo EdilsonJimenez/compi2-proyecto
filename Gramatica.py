@@ -107,7 +107,8 @@ reservadas = {
     'current_date': 'CURRENT_DATE',
     'current_time': 'CURRENT_TIME',
     'in':'IN',
-
+    'mood': 'MOOD',
+    'enum': 'ENUM',
 
     'case': 'CASE',
     'when': 'WHEN',
@@ -1519,6 +1520,55 @@ def p_instruccion_tiempo2(t) :
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
 
     print('\n ** ' + str(t[0]) + ' ** \n')
+
+def p_instruccion_tiempo3(t):
+    'DQL_COMANDOS       : SELECT TIPO_CURRENT PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    print('\n ** ' + str(t[0]) + ' ** \n')
+
+def p_Tipo_Current(t):
+    '''TIPO_CURRENT     : CURRENT_DATE
+                        | CURRENT_TIME '''
+    t[0] = str(t[1])
+
+def p_instruccion_tiempo4(t):
+    'DQL_COMANDOS       : SELECT TIMESTAMP  CADENASIMPLE PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    print('\n ** ' + str(t[0]) + ' ** \n')
+
+def p_instruccion_tiempo5(t):
+    'DQL_COMANDOS       : SELECT NOW PARIZQ PARDER PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    print('\n ** ' + str(t[0]) + ' ** \n')
+
+def p_instrucion_ctypes(t):
+    'DQL_COMANDOS       : CREATE TYPE MOOD AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
+    print('\n *** ' + str(t[0]) + ' *** \n')
+
+def p_listas_cs(t):
+    'LISTAS_CS       : LISTA_CS'
+    t[0] = str(t[1])
+    print("Listas cs")
+
+def p_lista_cs2(t):
+    'LISTA_CS       : CADENASIMPLE'
+    t[0] = str(t[1])
+    print("cadenaSimple")
+
+def p_lista_cs(t):
+    'LISTA_CS       : CADENASIMPLE CS'
+    t[0] = str(t[1]) + str(t[2])
+    print("-Lista cs")
+
+def p_cs2(t):
+    'CS     : COMA LISTA_CS'
+    t[0] = str(t[1]) + str(t[2])
+    print("Coma Lista")
+
+#-----------------------------------------------------------------------------------------------------------------
+#Expresiones numericas
+
 def p_expnumerica(t):
     '''EXPNUMERICA : EXPNUMERICA MAS EXPNUMERICA
                    | EXPNUMERICA MENOS EXPNUMERICA
@@ -1528,8 +1578,6 @@ def p_expnumerica(t):
     t[0] = str(t[1]) + str(t[2]) + str(t[3])
     print('\n'+t[0]+'\n')
 
-#-----------------------------------------------------------------------------------------------------------------
-#Expresiones numericas
 
 def p_expnumerica_agrupacion(t):
     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
