@@ -187,6 +187,15 @@ t_PORCENTAJE = r'%'
 t_MAS = r'\+'
 t_MENOS = r'-'
 
+#Importacion de Objetos Del Analisis
+
+from ObjetoLexico import *
+from ObjetoSintactico import *
+from ObjetoSemantico import *
+
+#importamos el Generador  AST
+
+from src import Generador as g
 
 
 
@@ -195,6 +204,7 @@ t_MENOS = r'-'
 
 
 # EXPRESIONES REGULARES DEL LENGUAJE
+
 
 
 def t_ID(t):
@@ -282,15 +292,8 @@ lexer = lex.lex()
 
 #========================================  DEFINICION DE ESTRUCURAS PARA EL MANEJO DE REPORTES
 
-#Importacion de Objetos Del Analisis
 
-from src.ObjetoLexico import *
-from src.ObjetoSintactico import *
-from src.ObjetoSemantico import *
 
-#importamos el Generador  AST
-
-from src import Generador as g
 
 
 
@@ -324,7 +327,7 @@ corcheList = []
 bandera = 0
 
 corcheListaux = []
-corcheListaux = []
+
 csList = []
 sentenciaHija = 0
 bandera = 0
@@ -377,7 +380,7 @@ def p_init(t) :
 
 
 
-    fgraph.write("n00" + str(conNode+1) + " [label=\"INICIO\"] ;\n")
+    fgraph.write("n00"+str(conNode+1)+" [label=\"INICIO\"] ;\n")
 
 
     for i in senteList:
@@ -485,6 +488,8 @@ def p_Lista_CampoS(t):
     'LISTAA          : CAMPOS S'
 
     t[0] = str(t[1]) + str(t[2])
+
+
 
 def p_Lista_Campo(t):
     'LISTAA          : CAMPOS'
@@ -1802,7 +1807,7 @@ import ply.yacc as yacc
 
 parser = yacc.yacc()
 
-f = open("./entrada.txt", "r")
+f = open("../src/entrada.txt", "r")
 input = f.read()
 print(input)
 
