@@ -128,7 +128,9 @@ reservadas = {
     'databases': 'DATABASES',
     'like': 'LIKE',
     'current_user': 'CURRENT_USER',
-    'session_user': 'SESSION_USER'
+    'session_user': 'SESSION_USER',
+
+    'substring': 'SUBSTRING'
 
 }
 
@@ -153,6 +155,14 @@ tokens = [
              'MAS',
              'MENOS',
 
+            #Operadores de cadenas de bits
+             'DOBLEPLECA',
+             'AMPERSAND',
+             'PLECA',
+             'NUMERAL',
+             'VIRGULILLA',
+             'LEFTSHIFT',
+             'RIGHTSHIFT',
 
              # ESTOS SON LAS EXPRESIONES REGULARES
              'ID',
@@ -161,6 +171,7 @@ tokens = [
              'CADENASIMPLE',
              'CADENADOBLE',
              'FECHA',
+             'CADENABINARIA',
 
              'COMENTARIOMULTI',
              'COMENTARIONORMAL'
@@ -186,6 +197,14 @@ t_DIVISION = r'/'
 t_PORCENTAJE = r'%'
 t_MAS = r'\+'
 t_MENOS = r'-'
+t_DOBLEPLECA = r'\|\|'
+t_AMPERSAND = r'&'
+t_PLECA = r'\|'
+t_NUMERAL = r'\#'
+t_VIRGULILLA = r'~'
+t_LEFTSHIFT = r'<<'
+t_RIGHTSHIFT = r'>>'
+
 
 #Importacion de Objetos Del Analisis
 
@@ -204,6 +223,10 @@ from src import Generador as g
 
 
 # EXPRESIONES REGULARES DEL LENGUAJE
+def t_CADENABINARIA(t):
+    r'B\'(1|0)+\''
+    t.value = t.value[2:-1]
+    return t
 
 
 
@@ -228,7 +251,7 @@ def t_ENTERO(t):
 
 
 def t_FLOTANTE(t):
-    r'\d+\.\d+'
+    r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'
     try:
         t.value = float(t.value)
     except ValueError:
@@ -263,6 +286,7 @@ def t_COMENTARIONORMAL(t):
 def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
+
 
 # CARACTERES IGNORADOS DEL LENGUAJE
 
@@ -365,8 +389,10 @@ precedence = (
     ('left', 'OR'),
     ('left', 'AND'),
     ('right', 'NOT'),
+    ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
+    ('right', 'VIRGULILLA'),
     ('left', 'MAS', 'MENOS'),
-    ('left', 'ASTERISCO', 'DIVISION'),
+    ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
     )
 
 # Definición de la gramática
@@ -426,8 +452,7 @@ def p_instrucciones_instruccion(t) :
 def p_instruccion(t) :
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
-                    | DML_COMANDOS
-                    '''
+                    | DML_COMANDOS'''
     t[0] = t[1]
 
 
@@ -1464,7 +1489,7 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
                                 | DEFAULT CADENASIMPLE
                                 | DEFAULT CADENADOBLE
                                 | DEFAULT DECIMAL
-                                | DEFAULT ENTERO 
+                                | DEFAULT ENTERO
                                 | DEFAULT ID'''
     t[0] = str(t[1]) + str(t[2])
 
@@ -1647,16 +1672,29 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
 
+def p_instruccion_dml_comandos_ALTER_TABLE8(t) :
+    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE9(t) :
+    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+
 #--------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------
 
 
 
 def p_expresion_global(t):
-    '''EXPRESION_GLOBAL : EXPNUMERICA   '''
+    '''EXPRESION_GLOBAL : EXPBINARIO
+                        | EXPNUMERICA
+                        | EXPCADENA'''
 
     t[0] = str(t[1])
-    print('\n' + str(t[0]) + '\n')
+    print('\n' + str(t[1]) + '\n')
 
 
 
@@ -1795,8 +1833,37 @@ def p_expnumerica_agrupacion(t):
 def p_expnumerica_valor(t):
     '''EXPNUMERICA : ID
                    | ENTERO
-                   | FLOTANTE'''
+                   | FLOTANTE
+                   | DEFAULT'''
 
+    t[0] = str(t[1])
+
+def p_expresion_binario(t):
+    '''EXPBINARIO : EXPBINARIO DOBLEPLECA EXPBINARIO
+                |   EXPBINARIO AMPERSAND EXPBINARIO
+                |   EXPBINARIO PLECA EXPBINARIO
+                |   EXPBINARIO NUMERAL EXPBINARIO
+                |   EXPBINARIO LEFTSHIFT EXPNUMERICA
+                |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    print(t[0])
+
+def p_expresion_binario_n(t):
+    'EXPBINARIO : VIRGULILLA EXPBINARIO'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_expresion_binario_val(t):
+    'EXPBINARIO : CADENABINARIA'
+    t[0] = str(t[1])
+
+def p_expresoin_cadena(t):
+    'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+def p_expresion_cadena_val(t):
+    '''EXPCADENA : CADENASIMPLE
+                 | CADENADOBLE'''
     t[0] = str(t[1])
 
 def p_error(t):
