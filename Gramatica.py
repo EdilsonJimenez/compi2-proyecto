@@ -142,7 +142,15 @@ tokens = [
              'MAS',
              'MENOS',
 
-
+            #Operadores de cadenas de bits
+             'DOBLEPLECA',
+             'AMPERSAND',
+             'PLECA',
+             'NUMERAL',
+             'VIRGULILLA',
+             'LEFTSHIFT',
+             'RIGHTSHIFT',
+             
              # ESTOS SON LAS EXPRESIONES REGULARES
              'ID',
              'ENTERO',
@@ -150,6 +158,7 @@ tokens = [
              'CADENASIMPLE',
              'CADENADOBLE',
              'FECHA',
+             'CADENABINARIA',
 
              'COMENTARIOMULTI',
              'COMENTARIONORMAL'
@@ -175,6 +184,14 @@ t_DIVISION = r'/'
 t_PORCENTAJE = r'%'
 t_MAS = r'\+'
 t_MENOS = r'-'
+
+t_DOBLEPLECA = r'\|\|'
+t_AMPERSAND = r'&'
+t_PLECA = r'\|'
+t_NUMERAL = r'\#'
+t_VIRGULILLA = r'~'
+t_LEFTSHIFT = r'<<'
+t_RIGHTSHIFT = r'>>'
 
 
 
@@ -239,6 +256,10 @@ def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
 
+def t_CADENABINARIA(t):
+    r'B\'(1|0)+\''
+    t.value = t.value[2:-1]
+
 # CARACTERES IGNORADOS DEL LENGUAJE
 
 t_ignore = "\t"
@@ -271,8 +292,10 @@ precedence = (
     ('left', 'OR'),
     ('left', 'AND'),
     ('right', 'NOT'),
+    ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
+    ('right', 'VIRGULILLA'),
     ('left', 'MAS', 'MENOS'),
-    ('left', 'ASTERISCO', 'DIVISION'),
+    ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
     )
 
 # Definición de la gramática
@@ -298,8 +321,7 @@ def p_instrucciones_instruccion(t) :
 def p_instruccion(t) :
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
-                    | DML_COMANDOS
-                    '''
+                    | DML_COMANDOS'''
     t[0] = t[1]
 
 
@@ -1303,7 +1325,8 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
 
 
 def p_expresion_global(t):
-    '''EXPRESION_GLOBAL : EXPNUMERICA   '''
+    '''EXPRESION_GLOBAL : EXPNUMERICA
+                        | EXPBINARIO'''
 
     t[0] = str(t[1])
     print('\n' + str(t[0]) + '\n')
@@ -1445,9 +1468,31 @@ def p_expnumerica_agrupacion(t):
 def p_expnumerica_valor(t):
     '''EXPNUMERICA : ID
                    | ENTERO
-                   | FLOTANTE'''
+                   | FLOTANTE
+                   | DEFAULT'''
 
     t[0] = str(t[1])
+
+def p_expresion_binario(t):
+    '''EXPBINARIO : EXPBINARIO DOBLEPLECA EXPBINARIO
+                |   EXPBINARIO AMPERSAND EXPBINARIO
+                |   EXPBINARIO PLECA EXPBINARIO
+                |   EXPBINARIO NUMERAL EXPBINARIO
+                |   EXPBINARIO LEFTSHIFT EXPNUMERICA
+                |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
+
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+
+def p_expresion_binario_n(t):
+    'EXPBINARIO : VIRGULILLA EXPBINARIO'
+    t[0] = str(t[1]) + str(t[2])
+
+def p_expresion_binario_val(t):
+    'EXPBINARIO : CADENABINARIA'
+    t[0] = str(t[1])
+
+
+
 
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)
