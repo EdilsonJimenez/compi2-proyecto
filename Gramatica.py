@@ -1390,6 +1390,17 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t) :
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
 
+def p_instruccion_dml_comandos_ALTER_TABLE8(t) :
+    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+def p_instruccion_dml_comandos_ALTER_TABLE9(t) :
+    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  PUNTOCOMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
+    print('\n' + str(t[0]) + '\n')
+
+
 #--------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------
 
