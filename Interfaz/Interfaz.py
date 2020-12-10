@@ -56,10 +56,9 @@ class Aplicacion:
         contenido = self.entrada.get(1.0, "end-1c")
         self.consola.insert('insert', contenido)
 
-    def _init_(self):
+    def __init__(self):
         self.miVentana = Tk()
         self.miVentana.title("TytusDB G16")
-        self.miVentana.config(bg='#808000')
         self.miVentana.config(bd=3)
         self.miVentana.state('zoomed')
 
@@ -102,7 +101,6 @@ class Aplicacion:
 
         # Loop ventana
         self.miVentana.config(menu=self.barraMenu)
-        self.miVentana.iconbitmap('src/dba.ico')
         self.miVentana.mainloop()
 
 principal = Aplicacion()
