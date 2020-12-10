@@ -1,3 +1,4 @@
+INSERT INTO products VALUES (1, 2,2.2);
 UPDATE products SET price = 10 WHERE price = 5;
 UPDATE products SET price = 2 * 2;
 UPDATE mytable SET  a = 5, b = 3, c = 1 WHERE a > 0;
