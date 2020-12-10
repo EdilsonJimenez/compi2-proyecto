@@ -216,7 +216,8 @@ from ObjetoSemantico import *
 #importamos el Generador  AST
 
 import Generador as g
-
+import os
+import sys
 
 
 
@@ -403,11 +404,9 @@ def p_init(t) :
     t[0] = t[1]
 
 
-""" 
+
     # region graph del ast
     global fgraph, senteList, contador, conNode
-
-
 
     fgraph.write("n00"+str(conNode+1)+" [label=\"INICIO\"] ;\n")
 
@@ -417,13 +416,16 @@ def p_init(t) :
 
     senteList[:] = []
     contador += 1
+
+
     fgraph.write("n00" + str(conNode + 2) + " [label=\"INSTRUCCIONES\"] ;\n")
-    fgraph.write("n00" + str(conNode + 2) + " -- " + "n00" + str(conNode + 1) + ";\n")
-    conNode += 3
+    fgraph.write("n00" + str(conNode + 2) + " -- " + "n00" + str(conNode+1) + ";\n}")
+    conNode += 2
 
     # endregion
     fgraph.flush()
     fgraph.close()
+
 
 
     #manejo de las listas gramaticales
@@ -431,11 +433,10 @@ def p_init(t) :
     grammarList.append(g.nodeGramatical('INICIO  -> INSTRUCCIONES', f'INICIO.val = INSTRUCCIONES.val'))
     grammarList.reverse()
 
-    #for i in grammarList:
-    #    print(f'production: {i.production}, rules: {i.rules}')
+    for i in grammarList:
+        print(f'production: {i.production}, rules: {i.rules}')
 
 
- """
 
 
 
@@ -446,10 +447,56 @@ def p_instrucciones_lista(t) :
     t[0] = t[1]
 
 
+    #region graph
+    global contador, conNode, fgraph, sentenciaHija, senteList_,contadorSente
+
+    fgraph.write("n00"+str(conNode+1)+" [label=\"INSTRUCCIONES\"] ;\n")
+
+    for i in senteList_:
+        fgraph.write("n00"+str(conNode+1)+" -- "+"n00"+str(i)+";\n")
+
+    senteList_[:] = []
+    fgraph.write("n00"+str(conNode+2)+" [label=\"INSTRUCCION\"] ;\n")
+
+    fgraph.write("n00"+str(conNode+2)+" -- "+"n00"+str(conNode-1)+";\n")
+    senteList_.append(conNode +1)
+    senteList_.append(conNode +2)
+    conNode +=3
+    #endregion
+
+
+
+    # manejo de las listas gramaticales
+    global grammarList
+    grammarList.append(g.nodeGramatical('INSTRUCCIONES  -> INSTRUCCIONES INSTRUCCION', f'INSTRUCCIONES1.val.append(INSTRUCCION.val)\nINSTRUCCIONES.val = INSTRUCCION1.val'))
+
+
+
+
+
 def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
 
     t[0] = [t[1]]
+
+
+    # region draw graph
+    global contador, conNode, fgraph, sentenciaHija, primeravez, contadorSente
+    fgraph.write("n00" + str(conNode + 1) + " [label=\"INSTRUCCION\"] ;\n")
+    if primeravez == 0:
+        primeravez = 1
+        fgraph.write("n00" + str(conNode + 1) + " -- " + "n00" + str(conNode - 1) + ";\n")
+    else:
+        fgraph.write("n00" + str(conNode + 1) + " -- " + "n00" + str(conNode) + ";\n")
+    senteList_.append(conNode + 1)
+    conNode += 2
+    # endregion
+
+    # manejo de las listas gramaticales
+    global grammarList
+    grammarList.append(g.nodeGramatical('INSTRUCCIONES -> INSTRUCCION', f'INSTRUCCIONES.val = INSTRUCCION.val'))
+
+
 
 
 def p_instruccion(t) :
@@ -457,6 +504,24 @@ def p_instruccion(t) :
                     | DDL_COMANDOS
                     | DML_COMANDOS'''
     t[0] = t[1]
+
+
+    # region draw graph
+    global contador, conNode, senteList
+    fgraph.write("n00" + str(conNode + 1) + " [label=\"COMANDO\"] ;\n")
+
+
+    for i in senteList:
+        fgraph.write("n00" + str(conNode + 1) + " -- " + "n00" + str(i) + ";\n")
+    senteList[:] = []
+    # print(senteList)
+    conNode += 2
+    # endregion
+
+
+    # manejo de las listas gramaticales
+    global grammarList
+    grammarList.append(g.nodeGramatical('INSTRUCCION -> COMANDO', f'INSTRUCCION.val = COMANDO.val'))
 
 
 #===================  DEFINICIONES DE LOS TIPOS DE SELECT
@@ -471,7 +536,31 @@ def p_instruccion_dql_comandosS(t) :
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
-    print('\n' + str(t[0]) + '\n')
+
+    global contador, conNode, fgraph, senteList, input_, grammarList
+    # region graph
+    fgraph.write("n00" + str(conNode + 3) + " [label=\"SELECT\"] ;\n")
+    fgraph.write("n00" + str(conNode + 4) + " [label=\"LISTA_CAMPOS\"] ;\n")
+    fgraph.write("n00" + str(conNode + 5) + " [label=\"FROM\"] ;\n")
+    fgraph.write("n00" + str(conNode + 6) + " [label=\"NOMBRE_TABLAS\"] ;\n")
+    fgraph.write("n00" + str(conNode + 7) + " [label=\"UNIONS\"] ;\n")
+
+    fgraph.write("n00" + str(conNode + 4) + " -- " + "n00" + str(conNode) + ";\n")
+    fgraph.write("n00" + str(conNode + 6) + " -- " + "n00" + str(conNode+1) + ";\n")
+    fgraph.write("n00" + str(conNode + 7) + " -- " + "n00" + str(conNode+2) + ";\n")
+
+
+    senteList.append(conNode + 3)
+    senteList.append(conNode + 4)
+    senteList.append(conNode + 5)
+    senteList.append(conNode + 6)
+    senteList.append(conNode + 7)
+    conNode += 7
+
+    # endregion
+    grammarList.append(g.nodeGramatical('DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRE_TABLAS UNIONS', f'DQL_COMANDOS.val = Select Lista_Campos.val from NombreTablas.val unions.val'))
+
+
 
 def p_instruccion_dql_comandosS1(t) :
     'DQL_COMANDOS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
@@ -1934,14 +2023,75 @@ parser = yacc.yacc()
 
 
 
+#def parse():
+
+
+
+ #   print(input)
+ #  return parser.parse(input)
+
+
 def parse():
+
+    global input_, fgraph, primeravez, treeList, contador, contadorSente, conNode, senteList, senteList_, corcheList, bandera
+    global corcheListaux, csList, sentenciaHija, res, fgraph, sintacticErroList, LexicalErrosList
+
+
+    primeravez = 0
+    treeList = []  # list for save nodes
+    contador = 0
+    contadorSente = 1
+    conNode = 1
+    senteList = []  # para guardar las sentencias y despues apuntarlas
+    senteList_ = []
+    corcheList = []
+    bandera = 0
+    corcheListaux = []
+    corcheListaux = []
+    csList = []
+    sentenciaHija = 0
+    bandera = 0
+    res = []
+    fgraph = ''
+    sintacticErroList[:] = []
+    LexicalErrosList[:] = []
+
+
+    #input_ = input
+
+    fgraph = open('./Reportes/ast.dot', 'a')  # creamos el archivo
+    fgraph.write("\n")
+
+
+
+
+    lexer = lex.lex()
+    parser = yacc.yacc()
+
 
 
     f = open("./entrada.txt", "r")
-
     input = f.read()
-    print(input)
-    return parser.parse(input)
+
+    instructions = parser.parse(input)
+    lexer.lineno = 1
+    parser.restart()
+
+
+    os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
+    os.system('dot -Tpng ./Reportes/ast.dot -o ./Reportes/ast.png')
+
+
+
+    # if len(LexicalErrosList) > 0 or len(sintacticErroList) > 0:
+   #    if instructions == None:
+   #         instructions = []
+   #     else:
+   #        instructions[:] = []
+   #    return instructions
+
+
+    return instructions
 
 
 

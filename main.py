@@ -16,7 +16,14 @@ if __name__ == '__main__':
    #  input = f.read()
    #print(input)
    #parser.parse(input)
-
-    g.parse()
+   fgraph = open('./Reportes/ast.dot', 'w+')  # creamos el archivo
+   fgraph.write("graph \"\" {")
+   fgraph.write("\tnode [style=filled];");
+   fgraph.write("\tnode [shape = box];");
+   fgraph.write("\tnode [fillcolor=\"cyan4\"];");
+   fgraph.write("\tnode [color=\"#EE0000\"];");
+   fgraph.write("\tedge [color=\"#31CEF0\"];\n");
+   fgraph.close()
+   g.parse()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

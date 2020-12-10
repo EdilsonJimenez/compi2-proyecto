@@ -1,0 +1,22 @@
+graph "" {	node [style=filled];	node [shape = box];	node [fillcolor="cyan4"];	node [color="#EE0000"];	edge [color="#31CEF0"];
+
+n004 [label="SELECT"] ;
+n005 [label="LISTA_CAMPOS"] ;
+n006 [label="FROM"] ;
+n007 [label="NOMBRE_TABLAS"] ;
+n008 [label="UNIONS"] ;
+n005 -- n001;
+n007 -- n002;
+n008 -- n003;
+n009 [label="COMANDO"] ;
+n009 -- n004;
+n009 -- n005;
+n009 -- n006;
+n009 -- n007;
+n009 -- n008;
+n0011 [label="INSTRUCCION"] ;
+n0011 -- n009;
+n0013 [label="INICIO"] ;
+n0014 [label="INSTRUCCIONES"] ;
+n0014 -- n0013;
+}
