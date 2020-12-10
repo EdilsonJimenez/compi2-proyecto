@@ -56,6 +56,8 @@ reservadas = {
     'table': 'TABLE',
     'smallint': 'SMALLINT',
     'integer': 'INTEGER',
+    'int': 'INT',
+    'float' : 'FLOAT',
     'bigint': 'BIGINT',
     'decimal': 'DECIMAL',
     'real': 'REAL',
@@ -78,7 +80,7 @@ reservadas = {
     'check': 'CHECK',
     'foreign': 'FOREIGN',
     'references': 'REFERENCES',
-    'iniherits': 'INHERITS',
+    'inherits': 'INHERITS',
     'alter': 'ALTER',
     'rename': 'RENAME',
     'column': 'COLUMN',
@@ -1080,7 +1082,7 @@ def p_instruccion_dml_comandos_CREATE_TABLE(t) :
     print('\n' + str(t[0]) + '\n')
 
 def p_instruccion_dml_comandos_CREATE_TABLE2(t) :
-    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER INHERITS PARIZQ ID PARIZQ PUNTOCOMA'
+    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER  INHERITS PARIZQ ID PARDER PUNTOCOMA'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
@@ -1116,13 +1118,35 @@ def p_Create_TABLE_CAMPOS3(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE '
     t[0] = str(t[1])  + str(t[2])  + str(t[3])
 
+def p_Create_TABLE_CAMPOS3_2(t):
+    'LISTA2  : CONSTRAINT ID  UNIQUE COMA'
+    t[0] = str(t[1])  + str(t[2])  + str(t[3])
+
 def p_Create_TABLE_CAMPOS4(t):
     'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
 
+def p_Create_TABLE_CAMPOS42(t):
+    'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER COMA'
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
+
 def p_Create_TABLE_CAMPOS4_(t):
-    'LISTA2  : UNIQUE PARDER LISTA_DE_IDS PARIZQ'
+    'LISTA2  : UNIQUE PARIZQ LISTA_DE_IDS PARDER COMA'
     t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4])
+
+
+def p_Create_TABLE_CAMPOS4_2(t):
+    'LISTA2  : UNIQUE PARIZQ LISTA_DE_IDS PARDER '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4])
+
+
+def p_Create_TABLE_CAMPOS9(t):
+    'LISTA2  :  CONSTRAINT  ID PRIMARY KEY  PARIZQ LISTA_DE_IDS PARDER'
+    t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
+
+def p_Create_TABLE_CAMPOS9_2(t):
+    'LISTA2  :  CONSTRAINT  ID PRIMARY KEY  PARIZQ LISTA_DE_IDS PARDER COMA'
+    t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
 
 #PENDIENTE LISTADO DE ID'S
 def p_Create_TABLE_CAMPOS5(t):
@@ -1164,10 +1188,12 @@ def p_CREATE_TABLE_LISTA_IDS4(t):
 def p_Create_TABLE_TIPO_CAMPO(t):
     '''TIPO_CAMPO   : SMALLINT
                     | INTEGER
+                    | INT
                     | BIGINT
                     | DECIMAL
                     | REAL
                     | MONEY
+                    | FLOAT
                     | DOUBLE PRECISION
                     | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
                     | VARCHAR PARIZQ EXPNUMERICA PARDER
@@ -1203,7 +1229,8 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
                                 | DEFAULT CADENASIMPLE
                                 | DEFAULT CADENADOBLE
                                 | DEFAULT DECIMAL
-                                | DEFAULT ENTERO '''
+                                | DEFAULT ENTERO 
+                                | DEFAULT ID'''
     t[0] = str(t[1]) + str(t[2])
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
@@ -1222,6 +1249,8 @@ def p_Create_TABLE_TIPO_CAMPO5(t):
 def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
     t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
+
+
 
 
 #-----------------------------------------------------------------------------------------------------------------
@@ -1255,7 +1284,7 @@ def p_instruccion_dml_comandos_INSERT_COLUMNAS2(t) :
     t[0] = [t[1]]
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA(t) :
-    'COLUMNA       : ID D'
+    'COLUMNA       : ID COMA'
     t[0] = str(t[1]) + str(t[2])
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA2(t) :
@@ -1274,16 +1303,14 @@ def p_instruccion_dml_comandos_INSERT_VALORES2(t) :
     t[0] = [t[1]]
 
 def p_instruccion_dml_comandos_INSERT_VALOR(t) :
-    'VALOR       : ID D'
+    'VALOR       : EXPRESION_GLOBAL COMA'
     t[0] = str(t[1]) + str(t[2])
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t) :
     'VALOR       : EXPRESION_GLOBAL'
     t[0] = str(t[1])
 
-def p_instruccion_dml_comandos_INSERT_D(t) :
-    'D       : COMA EXPRESION_GLOBAL'
-    t[0] = str(t[1]) + str(t[2])
+
 
 #-----------------------------------------------------------------------------------------------------------------
 #UPDATE
