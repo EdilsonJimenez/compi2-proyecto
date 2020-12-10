@@ -1,15 +1,71 @@
 
-SELECT EXTRACT ( YEAR FROM TIMESTAMP '2018-20-23' );
-SELECT EXTRACT ( MINUTE FROM TIMESTAMP '2018-20-23' );
-SELECT EXTRACT ( SECOND FROM TIMESTAMP '2018-20-23' );
 
-SELECT date_part('minutes', INTERVAL '4 hours 3 minutes');
-SELECT date_part('seconds', INTERVAL '4 hours 3 minutes 15 seconds');
-SELECT date_part('hour', INTERVAL '4 hours 3 minutes');
+--pROBANDO las subconsultas
+Select distinct B.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ) as cosa
+where o>2
+group by tabla.col1
 
-Select *
-from tabla1,tabla2
-where a=b;
+intersect
+
+Select distinct C.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ) as cosa
+where o>2
+group by tabla.col1
+
+UNION
+
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A
+where o>2
+group by tabla.col1 ) as cosa
+where o>2
+group by tabla.col1
+;
+
+
+
+-- pruebas del aux 
+select CASE when nombre = 'sujeto3' then 'Juan Carlos'
+            when nombre = 'sujeto4' then 'Luis Espino'
+end Nombrecambiado
+from tbcolaborador A
+where substring = 'suje'
+and A.id not in (select idcolaborador from
+tbidentificacioncolaborador B ) ;
+
+
+
+-- Probando cases dentro de select 
+
+Select case when a=2 then a.colm end
+from tabla1 as A
+where o>2;
+
+Select case when a=2 then a.colm WHEN a=b columna end
+from tabla1 as A
+where o>2;
+
+Select case when a=2 then a.colm WHEN a=b columna.g else colu.mjj end
+from tabla1 as A
+where o>2;
+
 
 
 
@@ -25,21 +81,7 @@ inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
 where a.tabla = 'jasssas';
 
 
--- Disctint aÑADIDO
-
-Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A
-inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
-where a.tabla = 'jasssas';
-
-
-Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A;
-
-
-
-
-Select *
+SElect *
 from tabla
 where c=c;
 
@@ -132,115 +174,6 @@ where o>2
 group by tabla.col1 ;
 
 
---pROBANDO las subconsultas
-
-Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A
-where o>2
-group by tabla.col1 ;) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A
-where o>2
-group by tabla.col1 ;) as cosa
-where o>2
-group by tabla.col1
-
-union all
-
-Select distinct B.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A
-where o>2
-group by tabla.col1 ;) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A
-where o>2
-group by tabla.col1 ;) as cosa
-where o>2
-group by tabla.col1
-
-intersect
-
-Select distinct C.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A
-where o>2
-group by tabla.col1 ;) as cosa, (Select A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
-from tabla1 as A
-where o>2
-group by tabla.col1 ;) as cosa
-where o>2
-group by tabla.col1
-;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-CREATE TABLE my_first_table (
-    nombre INTEGER NOT NULL,
-    nombre2  BIGINT NULL,
-    nombre3 CHAR (55) DEFAULT "dd",
-    nombre4 INTEGER
-);
-
-
-
-CREATE DATABASE PRUEBA
-CREATE OR REPLACE DATABASE PRUEBA
-
-CREATE DATABASE IF NOT EXISTS PRUEBA
-CREATE OR REPLACE DATABASE IF NOT EXISTS PRUEBA
-
-CREATE DATABASE PRUEBA OWNER = usuario1
-CREATE OR REPLACE DATABASE PRUEBA OWNER = usuario1
-CREATE DATABASE IF NOT EXISTS PRUEBA OWNER = usuario1
-CREATE OR REPLACE DATABASE IF NOT EXISTS PRUEBA OWNER = usuario1
-
-CREATE DATABASE PRUEBA MODE = 2
-CREATE OR REPLACE DATABASE PRUEBA MODE = 2
-CREATE DATABASE IF NOT EXISTS PRUEBA MODE = 2
-CREATE OR REPLACE DATABASE IF NOT EXISTS PRUEBA MODE = 2
-CREATE DATABASE PRUEBA OWNER = usuario1 MODE = 2
-CREATE OR REPLACE DATABASE PRUEBA OWNER = usuario1 MODE = 2
-CREATE DATABASE IF NOT EXISTS PRUEBA OWNER = usuario1 MODE = 2
-CREATE OR REPLACE DATABASE IF NOT EXISTS PRUEBA OWNER = usuario1 MODE = 2
-
-SHOW DATABASES
-
-SHOW DATABASES LIKE "%hola%"
-
-ALTER DATABASE prueba RENAME TO prueba2
-
-ALTER DATABASE prueba owner to usuario2
-
-ALTER DATABASE prueba owner to CURRENT_USER
-
-ALTER DATABASE prueba owner to SESSION_USER
-
-DROP DATABASE prueba
-
-DROP DATABASE IF EXISTS prueba
-
-
-
-Select *
-from tabla
-where c=c;
-
-Select *
-from tabla1,tabla2
-where a=b;
 
 
 
@@ -256,30 +189,18 @@ inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
 where a.tabla = 'jasssas';
 
 
-CREATE TABLE my_first_table (
-    nombre INTEGER NOT NULL PRIMARY KEY,
-    nombre2  BIGINT NULL,
-    nombre3 CHAR (55) DEFAULT "dd",
-    nombre4 INTEGER CONSTRAINT defdd CHECK (nombreColumna1>=0) ,
-    nombre5 INTEGER,
-    PRIMARY KEY (nombre,nombre2),
-    FOREIGN KEY (nombre) REFERENCES tableee (Nombre)
-);
+-- Disctint aÑADIDO
 
-
-
-
-
--- Probando cases dentro de select 
-
-Select case when a=2 then a.colm end
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
 from tabla1 as A
-where o>2;
+inner join tabla2 as B on A.campo1 = B.campo1 and A.campo2 = B.campo2
+where a.tabla = 'jasssas';
 
-Select case when a=2 then a.colm WHEN a=b columna end
-from tabla1 as A
-where o>2;
 
-Select case when a=2 then a.colm WHEN a=b columna.g else colu.mjj end
-from tabla1 as A
-where o>2;
+Select distinct A.campo1,A.campo2,A.campo3,B.campo4,B.campo5
+from tabla1 as A;
+
+
+
+
+
