@@ -1,0 +1,50 @@
+digraph AST {
+	node [color=white fillcolor=white shape=record style=filled]
+	edge [arrowhead=none]
+	ordering=in rankdir=BT
+	N0 [label=DROP_TABLE]
+	N1 [label=DROP]
+	N2 [label=TABLE]
+	N3 [label=ID]
+	N4 [label=";"]
+	N5 [label=<<b>ID</b>.lexval = perro>]
+	N0 -> N1
+	N0 -> N2
+	N0 -> N3
+	N0 -> N4
+	N3 -> N5
+	N6 [label="INSTRUCCION.val = DROP_TABLE"]
+	N0 -> N6
+	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
+	N6 -> INICIO
+	N8 [label=DROP_TABLE]
+	N9 [label=DROP]
+	N10 [label=TABLE]
+	N11 [label=ID]
+	N12 [label=";"]
+	N13 [label=<<b>ID</b>.lexval = perro_salvaje>]
+	N8 -> N9
+	N8 -> N10
+	N8 -> N11
+	N8 -> N12
+	N11 -> N13
+	N14 [label="INSTRUCCION.val = DROP_TABLE"]
+	N8 -> N14
+	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
+	N14 -> INICIO
+	N16 [label=DROP_TABLE]
+	N17 [label=DROP]
+	N18 [label=TABLE]
+	N19 [label=ID]
+	N20 [label=";"]
+	N21 [label=<<b>ID</b>.lexval = perro_peludo>]
+	N16 -> N17
+	N16 -> N18
+	N16 -> N19
+	N16 -> N20
+	N19 -> N21
+	N22 [label="INSTRUCCION.val = DROP_TABLE"]
+	N16 -> N22
+	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
+	N22 -> INICIO
+}
