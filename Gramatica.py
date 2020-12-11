@@ -392,9 +392,6 @@ def p_instrucciones_instruccion(t):
 
     t[0] = [t[1]]
 
-    # region draw graph
-    global contador, ContadorNode, Grafica, SenteciaProducida, HayRecursion, ContadorSentencias
-    Grafica.write("n00" + str(ContadorNode + 1) + " [label=\"INSTRUCCION\"] ;\n")
 
 def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
