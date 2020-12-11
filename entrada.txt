@@ -1,1 +1,1 @@
-DROP TABLE tablaOtra;
+DROP TABLE tablaMaestro;
