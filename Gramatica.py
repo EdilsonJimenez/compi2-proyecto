@@ -205,8 +205,6 @@ t_RIGHTSHIFT = r'>>'
 # Importacion de Objetos Del Analisis
 
 
-
-import prueba as alias
 #importamos el Generador  AST
 
 import Generador as g
@@ -318,9 +316,6 @@ LErroresLexicos[:] = []  # LErroresLexicos
 
 
 
-
-
-
 # Listas que se Utilizaran para el manejo de la Gramatica Generada
 ListaProduccionesG = []  # ListaProduccionesG
 ListaProduccionesG[:] = []  # ListaProduccionesG
@@ -333,7 +328,7 @@ Input2 = ''  # Input2
 
 
 #llamado de instruccion
-from AST import *
+from Ast2 import *
 from Instruccion import *
 
 precedence = (
@@ -347,13 +342,7 @@ precedence = (
 )
 
 
-# Definición de la gramática
-from graphviz import Digraph
-ast = Digraph('AST', filename='c:/source/ast.gv', node_attr={'color': 'white', 'fillcolor': 'white','style': 'filled', 'shape': 'record'})
-ast.attr(rankdir='BT',ordering='in')
-ast.edge_attr.update(arrowhead='none')
-contador = 1
-tag = 'N'
+
 
 
 
@@ -364,28 +353,13 @@ def p_init(t) :
     'INICIO     : INSTRUCCIONES'
     t[0] = t[1]
 
-    arbolito = AST(t[0])
+    arbolito = Ast2(t[0])
     arbolito.crearReporte()
 
 def p_instrucciones_lista(t) :
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
     t[1].append(t[2])
     t[0] = t[1]
-
-    #REGION DE GRAFICA
-   #t[0] = [t[1]]
-    global contador
-
-    n1 = tag + str(contador)
-    contador = contador + 1
-
-    ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[2]['valor']) )
-    ast.edge(t[2]['nombre'],'INICIO')
-
-    ast.render('grafo', format='png', view=True)
-
-
-
     # endregion
 
 
@@ -394,10 +368,9 @@ def p_instrucciones_instruccion(t) :
     t[0] = [t[1]]
 
 
-    global contador
 
-    n1 = tag + str(contador)
-    contador = contador + 1
+
+
 
     #ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
     #ast.edge(t[1]['nombre'],'INICIO')
@@ -412,10 +385,7 @@ def p_instruccion(t):
                     | DML_COMANDOS'''
     t[0] = t[1]
 
-    global contador
 
-    n1 = tag + str(contador)
-    contador = contador + 1
 
     #ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
     #ast.edge(t[1]['nombre'],n1)
@@ -431,6 +401,7 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    t[0]= Select()
 
     # endregion
 
@@ -1643,38 +1614,9 @@ def p_instruccion_dml_comandos_DROP_TABLE(t):
 
 
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    global contador
 
-    n1 = tag + str(contador)
-    contador = contador + 1
 
-    n2 = tag + str(contador)
-    contador = contador + 1
 
-    n3 = tag + str(contador)
-    contador = contador + 1
-
-    n4 = tag + str(contador)
-    contador = contador + 1
-
-    n5 = tag + str(contador)
-    contador = contador + 1
-
-    n6 = tag + str(contador)
-    contador = contador + 1
-
-    ast.node(n1, 'DROP_TABLE' )
-    ast.node(n2, 'DROP' )
-    ast.node(n3, 'TABLE' )
-    ast.node(n4, 'ID' )
-    ast.node(n5, ';' )
-    ast.node(n6, '<<b>ID</b>.lexval = ' + str(t[3]) + '>' )
-
-    ast.edge(n1,n2)
-    ast.edge(n1,n3)
-    ast.edge(n1,n4)
-    ast.edge(n1,n5)
-    ast.edge(n4,n6)
 
     #t[0] = { 'valor' : 'DROP_TABLE', 'nombre' : n1, 'valor2': alias.metodo_prueba("sda") }
 
