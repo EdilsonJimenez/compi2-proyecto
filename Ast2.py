@@ -20,10 +20,12 @@ class Ast2:
         dot = Digraph('AST', format='png',filename='c:/source/ast.gv')
         dot.attr('node', shape='box',style='cyan4',color='#31CEF0')
 
+
         dot.node('Node'+ str(self.i), '[label="AST"]')
         dot.edge_attr.update(arrowhead='none')
         self.recorrerInstrucciones(self.sentencias, 'Node'+str(self.i))
         dot.render('AST', format='png', view=True)
+        print('Hecho')
 
 
     def recorrerInstrucciones(self, sente, padre):
