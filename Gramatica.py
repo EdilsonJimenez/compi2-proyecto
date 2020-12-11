@@ -332,6 +332,10 @@ Input2 = ''  # Input2
 # ASOCIACION DE OPERADORES CON PRESEDENCIA
 
 
+#llamado de instruccion
+from AST import *
+from Instruccion import *
+
 precedence = (
     ('left', 'OR'),
     ('left', 'AND'),
@@ -358,16 +362,16 @@ tag = 'N'
 
 def p_init(t) :
     'INICIO     : INSTRUCCIONES'
-    #t[0] = t[1]
+    t[0] = t[1]
 
-
-
-
-
-
+    arbolito = AST(t[0])
+    arbolito.crearReporte()
 
 def p_instrucciones_lista(t) :
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
+    t[1].append(t[2])
+    t[0] = t[1]
+
     #REGION DE GRAFICA
    #t[0] = [t[1]]
     global contador
@@ -385,26 +389,20 @@ def p_instrucciones_lista(t) :
     # endregion
 
 
-
-
-def p_instrucciones_instruccion(t):
+def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
-
     t[0] = [t[1]]
 
 
-def p_instrucciones_instruccion(t) :
-    'INSTRUCCIONES    : INSTRUCCION'
-    #t[0] = [t[1]]
     global contador
 
     n1 = tag + str(contador)
     contador = contador + 1
 
-    ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
-    ast.edge(t[1]['nombre'],'INICIO')
+    #ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
+    #ast.edge(t[1]['nombre'],'INICIO')
 
-    ast.render('grafo', format='png', view=True)
+    #ast.render('grafo', format='png', view=True)
 
 
 
@@ -412,15 +410,17 @@ def p_instruccion(t):
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
                     | DML_COMANDOS'''
+    t[0] = t[1]
+
     global contador
 
     n1 = tag + str(contador)
     contador = contador + 1
 
-    ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
-    ast.edge(t[1]['nombre'],n1)
+    #ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
+    #ast.edge(t[1]['nombre'],n1)
 
-    t[0] = { 'valor' : t[1]['valor'], 'nombre' : n1 }
+    #t[0] = { 'valor' : t[1]['valor'], 'nombre' : n1 }
     #t[0] = t[1]
 
 
@@ -1639,6 +1639,9 @@ def p_instruccion_dml_comandos_DELETE2(t):
 # DROP TABLES
 def p_instruccion_dml_comandos_DROP_TABLE(t):
     'DML_COMANDOS       : DROP TABLE ID PUNTOCOMA'
+    t[0] = DropTable(t[3])
+
+
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     global contador
 
@@ -1673,9 +1676,9 @@ def p_instruccion_dml_comandos_DROP_TABLE(t):
     ast.edge(n1,n5)
     ast.edge(n4,n6)
 
-    t[0] = { 'valor' : 'DROP_TABLE', 'nombre' : n1, 'valor2': alias.metodo_prueba("sda") }
+    #t[0] = { 'valor' : 'DROP_TABLE', 'nombre' : n1, 'valor2': alias.metodo_prueba("sda") }
 
-    print('\n' + str(t[0]) + '\n')
+    # print('\n' + str(t[0]) + '\n')
 
 
 # -----------------------------------------------------------------------------------------------------------------

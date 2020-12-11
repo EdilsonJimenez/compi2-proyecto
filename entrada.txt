@@ -1,3 +1,1 @@
-DROP TABLE perro;
-DROP TABLE perro_salvaje;
-DROP TABLE perro_peludo;
+DROP TABLE tablaOtra;

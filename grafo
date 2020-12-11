@@ -16,35 +16,5 @@ digraph AST {
 	N7 [label="INSTRUCCION.val = DROP_TABLE"]
 	N1 -> N7
 	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
-	N7 -> INICIO
-	N9 [label=DROP_TABLE]
-	N10 [label=DROP]
-	N11 [label=TABLE]
-	N12 [label=ID]
-	N13 [label=";"]
-	N14 [label=<<b>ID</b>.lexval = perro_salvaje>]
-	N9 -> N10
-	N9 -> N11
-	N9 -> N12
-	N9 -> N13
-	N12 -> N14
-	N15 [label="INSTRUCCION.val = DROP_TABLE"]
-	N9 -> N15
-	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
-	N15 -> INICIO
-	N17 [label=DROP_TABLE]
-	N18 [label=DROP]
-	N19 [label=TABLE]
-	N20 [label=ID]
-	N21 [label=";"]
-	N22 [label=<<b>ID</b>.lexval = perro_peludo>]
-	N17 -> N18
-	N17 -> N19
-	N17 -> N20
-	N17 -> N21
-	N20 -> N22
-	N23 [label="INSTRUCCION.val = DROP_TABLE"]
-	N17 -> N23
-	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
-	N23 -> INICIO
+	N1 -> INICIO
 }

@@ -1,0 +1,6 @@
+digraph G{
+rankdir = TB; 
+Node0[label="Tytus"]
+Node1[label="tablaOtra"]
+Node0->Node1;
+}
