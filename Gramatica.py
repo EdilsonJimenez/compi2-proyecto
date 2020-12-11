@@ -291,7 +291,7 @@ def t_FECHA(t):
 
 # CARACTERES IGNORADOS DEL LENGUAJE
 
-t_ignore = "\t"
+t_ignore = "\b|\f|\n|\r|\t"
 
 
 def t_newline(t):

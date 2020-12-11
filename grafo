@@ -2,49 +2,49 @@ digraph AST {
 	node [color=white fillcolor=white shape=record style=filled]
 	edge [arrowhead=none]
 	ordering=in rankdir=BT
-	N0 [label=DROP_TABLE]
-	N1 [label=DROP]
-	N2 [label=TABLE]
-	N3 [label=ID]
-	N4 [label=";"]
-	N5 [label=<<b>ID</b>.lexval = perro>]
-	N0 -> N1
-	N0 -> N2
-	N0 -> N3
-	N0 -> N4
-	N3 -> N5
-	N6 [label="INSTRUCCION.val = DROP_TABLE"]
-	N0 -> N6
+	N1 [label=DROP_TABLE]
+	N2 [label=DROP]
+	N3 [label=TABLE]
+	N4 [label=ID]
+	N5 [label=";"]
+	N6 [label=<<b>ID</b>.lexval = perro>]
+	N1 -> N2
+	N1 -> N3
+	N1 -> N4
+	N1 -> N5
+	N4 -> N6
+	N7 [label="INSTRUCCION.val = DROP_TABLE"]
+	N1 -> N7
 	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
-	N6 -> INICIO
-	N8 [label=DROP_TABLE]
-	N9 [label=DROP]
-	N10 [label=TABLE]
-	N11 [label=ID]
-	N12 [label=";"]
-	N13 [label=<<b>ID</b>.lexval = perro_salvaje>]
-	N8 -> N9
-	N8 -> N10
-	N8 -> N11
-	N8 -> N12
-	N11 -> N13
-	N14 [label="INSTRUCCION.val = DROP_TABLE"]
-	N8 -> N14
+	N7 -> INICIO
+	N9 [label=DROP_TABLE]
+	N10 [label=DROP]
+	N11 [label=TABLE]
+	N12 [label=ID]
+	N13 [label=";"]
+	N14 [label=<<b>ID</b>.lexval = perro_salvaje>]
+	N9 -> N10
+	N9 -> N11
+	N9 -> N12
+	N9 -> N13
+	N12 -> N14
+	N15 [label="INSTRUCCION.val = DROP_TABLE"]
+	N9 -> N15
 	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
-	N14 -> INICIO
-	N16 [label=DROP_TABLE]
-	N17 [label=DROP]
-	N18 [label=TABLE]
-	N19 [label=ID]
-	N20 [label=";"]
-	N21 [label=<<b>ID</b>.lexval = perro_peludo>]
-	N16 -> N17
-	N16 -> N18
-	N16 -> N19
-	N16 -> N20
-	N19 -> N21
-	N22 [label="INSTRUCCION.val = DROP_TABLE"]
-	N16 -> N22
+	N15 -> INICIO
+	N17 [label=DROP_TABLE]
+	N18 [label=DROP]
+	N19 [label=TABLE]
+	N20 [label=ID]
+	N21 [label=";"]
+	N22 [label=<<b>ID</b>.lexval = perro_peludo>]
+	N17 -> N18
+	N17 -> N19
+	N17 -> N20
+	N17 -> N21
+	N20 -> N22
+	N23 [label="INSTRUCCION.val = DROP_TABLE"]
+	N17 -> N23
 	INICIO [label="INSTRUCCIONES.val = DROP_TABLE"]
-	N22 -> INICIO
+	N23 -> INICIO
 }
