@@ -204,11 +204,10 @@ t_RIGHTSHIFT = r'>>'
 
 # Importacion de Objetos Del Analisis
 
-from ObjetoLexico import *
-from ObjetoSintactico import *
-from ObjetoSemantico import *
 
-# importamos el Generador  AST
+
+import prueba as alias
+#importamos el Generador  AST
 
 import Generador as g
 import os
@@ -280,7 +279,7 @@ def t_FECHA(t):
 
 # CARACTERES IGNORADOS DEL LENGUAJE
 
-t_ignore = "\t"
+t_ignore = "\b|\f|\n|\r|\t"
 
 
 def t_newline(t):
@@ -307,26 +306,20 @@ LErroresSintacticos[:] = []  # LErroresSintacticos
 LErroresLexicos = []  # LErroresLexicos
 LErroresLexicos[:] = []  # LErroresLexicos
 
-# Listas que se utilizaran para el Manejo del Arbol
+#========================================  DEFINICION DE ESTRUCURAS PARA EL MANEJO DE REPORTES
 
-HayRecursion = 0  # HayRecursion
 
-ListadoArbol = []  # list for save nodes     #ListadoArbol
 
-contador = 0  # Contador
-ContadorSentencias = 1  # ContadorSentenciasncias
 
-ContadorNode = 1  # ContadorNode
 
-ListaSentencias = []  # para guardar las sentencias y despues apuntarlas  #ListaSentencias
-ListaSentencias_ = []  # ListaSentencias2
 
-bandera = 0  # Bandera
 
-SenteciaProducida = 0  # SenteciaProducida
 
-res = []
-Grafica = ''  # Grafica
+
+
+
+
+
 
 # Listas que se Utilizaran para el manejo de la Gramatica Generada
 ListaProduccionesG = []  # ListaProduccionesG
@@ -351,68 +344,47 @@ precedence = (
 
 
 # Definición de la gramática
+from graphviz import Digraph
+ast = Digraph('AST', filename='c:/source/ast.gv', node_attr={'color': 'white', 'fillcolor': 'white','style': 'filled', 'shape': 'record'})
+ast.attr(rankdir='BT',ordering='in')
+ast.edge_attr.update(arrowhead='none')
+contador = 1
+tag = 'N'
 
-def p_init(t):
+
+
+
+# Definición de la gramática
+
+def p_init(t) :
     'INICIO     : INSTRUCCIONES'
-    t[0] = t[1]
-
-    # region graph del ast
-    global Grafica, ListaSentencias, contador, ContadorNode
-
-    Grafica.write("n00" + str(ContadorNode + 1) + " [label=\"INICIO\"] ;\n")
-
-    for i in ListaSentencias:
-        Grafica.write("n00" + str(ContadorNode + 1) + " -- " + "n00" + str(i) + ";\n")
-
-    ListaSentencias[:] = []
-    contador += 1
-
-    Grafica.write("n00" + str(ContadorNode + 2) + " [label=\"INSTRUCCIONES\"] ;\n")
-
-    Grafica.write("n00" + str(ContadorNode + 2) + " -- " + "n00" + str(ContadorNode + 1) + ";\n }")
-
-    ContadorNode += 2
-
-    # endregion
-    Grafica.flush()
-    Grafica.close()
-
-    # manejo de las listas gramaticales
-    global ListaProduccionesG
-    ListaProduccionesG.append(g.nodeGramatical('INICIO  -> INSTRUCCIONES', f'INICIO.val = INSTRUCCIONES.val'))
-    ListaProduccionesG.reverse()
-
-    for i in ListaProduccionesG:
-        print(f'production: {i.production}, rules: {i.rules}')
+    #t[0] = t[1]
 
 
-def p_instrucciones_lista(t):
+
+
+
+
+
+def p_instrucciones_lista(t) :
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
-    t[1].append(t[2])
-    t[0] = t[1]
+    #REGION DE GRAFICA
+   #t[0] = [t[1]]
+    global contador
 
-    # region graph
-    global contador, ContadorNode, Grafica, SenteciaProducida, ListaSentencias_, ContadorSentencias
+    n1 = tag + str(contador)
+    contador = contador + 1
 
-    Grafica.write("n00" + str(ContadorNode + 1) + " [label=\"INSTRUCCIONES\"] ;\n")
+    ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[2]['valor']) )
+    ast.edge(t[2]['nombre'],'INICIO')
 
-    for i in ListaSentencias_:
-        Grafica.write("n00" + str(ContadorNode + 1) + " -- " + "n00" + str(i) + ";\n")
+    ast.render('grafo', format='png', view=True)
 
-    ListaSentencias_[:] = []
 
-    Grafica.write("n00" + str(ContadorNode + 2) + " [label=\"INSTRUCCION\"] ;\n")
 
-    Grafica.write("n00" + str(ContadorNode + 2) + " -- " + "n00" + str(ContadorNode - 1) + ";\n")
-    ListaSentencias_.append(ContadorNode + 1)
-    ListaSentencias_.append(ContadorNode + 2)
-    ContadorNode += 3
     # endregion
 
-    # manejo de las listas gramaticales
-    global ListaProduccionesG
-    ListaProduccionesG.append(g.nodeGramatical('INSTRUCCIONES  -> INSTRUCCIONES INSTRUCCION',
-                                               f'INSTRUCCIONES1.val.append(INSTRUCCION.val)\nINSTRUCCIONES.val = INSTRUCCION1.val'))
+
 
 
 def p_instrucciones_instruccion(t):
@@ -424,96 +396,59 @@ def p_instrucciones_instruccion(t):
     global contador, ContadorNode, Grafica, SenteciaProducida, HayRecursion, ContadorSentencias
     Grafica.write("n00" + str(ContadorNode + 1) + " [label=\"INSTRUCCION\"] ;\n")
 
-    if HayRecursion == 0:
+def p_instrucciones_instruccion(t) :
+    'INSTRUCCIONES    : INSTRUCCION'
+    #t[0] = [t[1]]
+    global contador
 
-        HayRecursion = 1
+    n1 = tag + str(contador)
+    contador = contador + 1
 
-        Grafica.write("n00" + str(ContadorNode + 1) + " -- " + "n00" + str(ContadorNode - 1) + ";\n")
+    ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
+    ast.edge(t[1]['nombre'],'INICIO')
 
-    else:
-        Grafica.write("n00" + str(ContadorNode + 1) + " -- " + "n00" + str(ContadorNode) + ";\n")
+    ast.render('grafo', format='png', view=True)
 
-    ListaSentencias_.append(ContadorNode + 1)
-
-    ContadorNode += 2
-    # endregion
-
-    # manejo de las listas gramaticales
-    global ListaProduccionesG
-    ListaProduccionesG.append(g.nodeGramatical('INSTRUCCIONES -> INSTRUCCION', f'INSTRUCCIONES.val = INSTRUCCION.val'))
 
 
 def p_instruccion(t):
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
                     | DML_COMANDOS'''
-    t[0] = t[1]
+    global contador
 
-    # region draw graph
-    global contador, ContadorNode, ListaSentencias
-    Grafica.write("n00" + str(ContadorNode + 1) + " [label=\"COMANDO\"] ;\n")
+    n1 = tag + str(contador)
+    contador = contador + 1
 
-    for i in ListaSentencias:
-        Grafica.write("n00" + str(ContadorNode + 1) + " -- " + "n00" + str(i) + ";\n")
-    ListaSentencias[:] = []
-    # print(ListaSentencias)
-    ContadorNode += 2
-    # endregion
+    ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
+    ast.edge(t[1]['nombre'],n1)
 
-    # manejo de las listas gramaticales
-    global ListaProduccionesG
-    ListaProduccionesG.append(g.nodeGramatical('INSTRUCCION -> COMANDO', f'INSTRUCCION.val = COMANDO.val'))
+    t[0] = { 'valor' : t[1]['valor'], 'nombre' : n1 }
+    #t[0] = t[1]
+
+
 
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
 
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
-    print('\n' + str(t[0]) + '\n')
-
-
-def p_instruccion_dql_comandosS(t):
-    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
-
-    global contador, ContadorNode, Grafica, ListaSentencias, Input2, ListaProduccionesG
-    # region graph
-    Grafica.write("n00" + str(ContadorNode + 3) + " [label=\"SELECT\"] ;\n")
-    Grafica.write("n00" + str(ContadorNode + 4) + " [label=\"LISTA_CAMPOS\"] ;\n")
-    Grafica.write("n00" + str(ContadorNode + 5) + " [label=\"FROM\"] ;\n")
-    Grafica.write("n00" + str(ContadorNode + 6) + " [label=\"NOMBRE_TABLAS\"] ;\n")
-    Grafica.write("n00" + str(ContadorNode + 7) + " [label=\"UNIONS\"] ;\n")
-
-    Grafica.write("n00" + str(ContadorNode + 4) + " -- " + "n00" + str(ContadorNode) + ";\n")
-    Grafica.write("n00" + str(ContadorNode + 6) + " -- " + "n00" + str(ContadorNode + 1) + ";\n")
-    Grafica.write("n00" + str(ContadorNode + 7) + " -- " + "n00" + str(ContadorNode + 2) + ";\n")
-
-    ListaSentencias.append(ContadorNode + 3)
-    ListaSentencias.append(ContadorNode + 4)
-    ListaSentencias.append(ContadorNode + 5)
-    ListaSentencias.append(ContadorNode + 6)
-    ListaSentencias.append(ContadorNode + 7)
-    ContadorNode += 7
-
-
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
     # endregion
-    ListaProduccionesG.append(g.nodeGramatical('DQL_COMANDOS -> SELECT LISTA_CAMPOS FROM NOMBRE_TABLAS UNIONS',
-                                               f'DQL_COMANDOS.val = Select Lista_Campos.val from NombreTablas.val unions.val'))
+
 
 
 def p_instruccion_dql_comandosS1(t):
     'DQL_COMANDOS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
 
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dql_comandosS2(t):
     'DQL_COMANDOS       : SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
     print('\n' + str(t[0]) + '\n')
 
@@ -524,103 +459,103 @@ def p_instruccion_dql_comandosS2(t):
 def p_ListaCampos_ListaCamposs(t):
     'LISTA_CAMPOS       : LISTA_CAMPOS LISTAA'
 
-    t[1].append(t[2])
-    t[0] = t[1]
+    #t[1].append(t[2])
+    #t[0] = t[1]
 
 
 def p_ListaCampos_Lista(t):
     'LISTA_CAMPOS    : LISTAA'
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Lista_NombreS(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS S'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Lista_Nombre(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Lista_CampoS(t):
     'LISTAA          : CAMPOS S'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Lista_Campo(t):
     'LISTAA          : CAMPOS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Lista_ExprecionesCase(t):
     'LISTAA          :  EXPRESIONES_C'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Lista_SubsQuery(t):
     'LISTAA    :   SUBQUERYS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Campos_id(t):
     'CAMPOS          : ID'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Campos_Asterisco(t):
     'CAMPOS          : ASTERISCO'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Alias_id(t):
     'ALIAS          : ID'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_S_ComaLista(t):
     'S          : COMA LISTAA'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_S_AsAlias(t):
     'S          : AS ALIAS'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasMos(t):
     'S          : AS ALIAS COMA LISTAA'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasMos(t):
     'S          :  ALIAS COMA LISTAA'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_Aliass(t):
     'S          :  ALIAS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -629,7 +564,7 @@ def p_S_Aliass(t):
 
 def p_Disctint_Rw(t):
     'DISTINCTNT          : DISTINCT'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -639,61 +574,61 @@ def p_Disctint_Rw(t):
 def p_NombresTablas_NombresTablas(t):
     'NOMBRES_TABLAS       : NOMBRES_TABLAS TABLA'
 
-    t[1].append(t[2])
-    t[0] = t[1]
+    #t[1].append(t[2])
+    #t[0] = t[1]
 
 
 def p_NombresTablas_Tabla(t):
     'NOMBRES_TABLAS    : TABLA'
 
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Tabla_NombreT(t):
     'TABLA   : NOMBRE_T'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Tabla_NombreTS(t):
     'TABLA   : NOMBRE_T S1'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Tabla_SubQuerys(t):
     'TABLA   : SUBQUERYS'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Ss_ComaLista(t):
     'S1          : COMA TABLA'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAlias(t):
     'S1          : AS ALIAS'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasComa(t):
     'S1          : AS ALIAS COMA TABLA'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasCo(t):
     'S1          :  ALIAS COMA TABLA'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_AliasSolo(t):
     'S1          :  ALIAS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -702,43 +637,43 @@ def p_S_AliasSolo(t):
 def p_Cuerpo_Where(t):
     'CUERPO   : WHERE CONDICIONES'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Cuerpo_Mores(t):
     'CUERPO   : MORES'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_MORES_ListaCampos(t):
     'MORES       : MORES MOREE'
 
-    t[1].append(t[2])
-    t[0] = t[1]
+    #t[1].append(t[2])
+    #t[0] = t[1]
 
 
 def p_MORES_Lista(t):
     'MORES    : MOREE'
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Mores_Inners(t):
     'MOREE   : INNERS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Mores_Groups(t):
     'MOREE   : GROUPS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Mores_Limits(t):
     'MOREE   : LIMITS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -748,52 +683,51 @@ def p_Mores_Limits(t):
 def p_Condiciones_Lista(t):
     'CONDICIONES : CONDICIONES CONDICION'
 
-    t[1].append(t[2])
-    t[0] = t[1]
+    #t[1].append(t[2])
+    #t[0] = t[1]
 
 
 def p_Condiciones_Condicion(t):
     'CONDICIONES : CONDICION'
 
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Condicion_CondicionRel(t):
-    'CONDICION : CONDICION_REL SIMBOLO_LOGICO  CONDICION_REL  OTRO_LOGICO'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
+   'CONDICION : CONDICION_REL SIMBOLO_LOGICO  CONDICION_REL  OTRO_LOGICO'
+   #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 def p_Condicion_CondicionRel_Sin(t):
     'CONDICION : CONDICION_REL SIMBOLO_LOGICO CONDICION_REL'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Condicion_CondiRel(t):
     'CONDICION : CONDICION_REL'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_CondicionRel_Expresionn(t):
     'CONDICION_REL : EXPRESIONNE OPERADOR EXPRESIONNE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_CondicionRel_Negacion(t):
     'CONDICION_REL : SIMBOLO_NEG  EXPRESIONNE'
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_CondicionRel_Expre(t):
     'CONDICION_REL : EXPRESIONNE'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_OtroLogico_SimboloLogic(t):
     'OTRO_LOGICO : SIMBOLO_LOGICO CONDICIONES'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -803,38 +737,38 @@ def p_OtroLogico_SimboloLogic(t):
 def p_Expresion_Nombre(t):
     'EXPRESIONNE : NOMBRE_C PUNTO CAMPOSC'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Expresion_CampoC(t):
     'EXPRESIONNE : CAMPOSC'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Expresion_SubQuery(t):
     'EXPRESIONNE : SUBQUERYS'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_SimboloLogico_Logicos(t):
     ''' SIMBOLO_LOGICO : AND
                       | OR '''
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_SimboloNegacion_sim(t):
     'SIMBOLO_NEG  :  NOT'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_NombreC_id(t):
     'NOMBRE_C : ID'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_CamposC_id(t):
@@ -843,7 +777,7 @@ def p_CamposC_id(t):
                     | FLOTANTE
                     | CADENASIMPLE
                     | CADENADOBLE '''
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_SimboloRela_Simbolos(t):
@@ -854,7 +788,7 @@ def p_SimboloRela_Simbolos(t):
                     | MENORIGUAL
                     | MAYORIGUAL '''
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -863,114 +797,114 @@ def p_SimboloRela_Simbolos(t):
 def p_Inners_Lista(t):
     'INNERS : INNERS INNERR'
 
-    t[1].append(t[2])
-    t[0] = t[1]
+    #t[1].append(t[2])
+    #t[0] = t[1]
 
 
 def p_Inners_Inner(t):
     'INNERS : INNERR'
 
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Inner_InnerJoin(t):
     'INNERR : TIPOS_INNER JOIN TABLA_REF ON CONDICIONES'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_Inner_Join(t):
     'INNERR :  JOIN TABLA_REF ON CONDICIONES'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Inner_InnerJoinUsing(t):
     'INNERR : TIPOS_INNER JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
 
 
 def p_Inner_JoinUsing(t):
     'INNERR :  JOIN TABLA_REF USING PARIZQ SUB_COLUMN PARDER '
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
 def p_Inner_Where(t):
     'INNERR   : WHERE CONDICIONES'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_SubColumn_join(t):
     'SUB_COLUMN  :  JOIN EXPRESIONNE'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_SubColumn_Expresione(t):
     'SUB_COLUMN  :  EXPRESIONNE'
 
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_TiposInner_InnerOuter(t):
     ''' TIPOS_INNER :  INNER OUTER'''
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_TiposInner_Inner(t):
     ''' TIPOS_INNER :  INNER'''
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_TiposInner_LefOuter(t):
     ''' TIPOS_INNER :  LEFT OUTER'''
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_TiposInner_Left(t):
     ''' TIPOS_INNER :  LEFT'''
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_TiposInner_RightOuter(t):
     ''' TIPOS_INNER :  RIGHT OUTER'''
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_TiposInner_Right(t):
     ''' TIPOS_INNER :  RIGHT'''
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_TiposInner_FullOuter(t):
     ''' TIPOS_INNER :  FULL OUTER'''
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_TiposInner_Full(t):
     ''' TIPOS_INNER :  FULL'''
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_TablaRef_Id(t):
     'TABLA_REF : ID'
 
-    t[0] = t[1]
+    #t[0] = t[1]
 
 
 def p_TablaRef_IdAS(t):
     'TABLA_REF : ID AS ID'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_TablaRef_IdSinAs(t):
     'TABLA_REF : ID  ID'
 
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -979,172 +913,170 @@ def p_TablaRef_IdSinAs(t):
 def p_Groups_ListaG(t):
     'GROUPS : GROUPS GROUPP'
 
-    t[1].append(t[2])
-    t[0] = t[1]
+    #t[1].append(t[2])
+    #t[0] = t[1]
 
 
 def p_Groups_ListaG2(t):
     'GROUPS    : GROUPP'
 
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Group_GroupBy(t):
     'GROUPP    : GROUP BY EXPRE_LIST MORE_ORDER'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Group_GroupBySin(t):
     'GROUPP    : GROUP BY EXPRE_LIST'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_ExpreList_Lista(t):
     'EXPRE_LIST : EXPRE_LIST  EXPRES'
 
-    t[1].append(t[2])
-    t[0] = t[1]
+   # t[1].append(t[2])
+   # t[0] = t[1]
 
 
 def p_ExpreList_Expresion(t):
     'EXPRE_LIST    : EXPRES'
 
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Expre_Campo1(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Expre_Campo2(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Expre_Campo3(t):
     'EXPRES    :  CAMPOS S2 '
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_Expre_Campo4(t):
     'EXPRES    :  CAMPOS '
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_Expre_Campo5(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2 STATE '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_Expre_Campo6(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS STATE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Expre_Campo7(t):
     'EXPRES    :  CAMPOS S2 STATE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Expre_Campo8(t):
     'EXPRES    :  CAMPOS STATE '
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_S2_Coma(t):
     'S2 : COMA EXPRES'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_S2_2(t):
     'S2 : AS ALIAS'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
-def p_Ss_AsAliasComa(t):
+def p_Ss_AsAliasComa_(t):
     'S2 :  AS ALIAS COMA EXPRES'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_S2_3(t):
     'S2 :  ALIAS'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_Ss_AsAlias3(t):
     'S2 :   ALIAS COMA EXPRES'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_MoreOrder_Having(t):
     'MORE_ORDER  :  HAVING CONDICIONES'
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_State_orden1(t):
     'STATE : ASC'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_State_orden2(t):
     'STATE : ASC NULLS FIRST'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_State_orden3(t):
     'STATE : ASC NULLS LAST'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_State_orden4(t):
     'STATE : DESC '
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 def p_State_orden5(t):
     'STATE : DESC NULLS FIRST'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_State_orden6(t):
     'STATE : DESC NULLS LAST'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-# -----------------------------------------------------------------------------------------------------------------
-# Limits
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
+#-----------------------------------------------------------------------------------------------------------------
+#Limits
 
 def p_Limits_ListaLimits(t):
     'LIMITS  :  LIMITS LIMITT'
-    t[1].append(t[2])
-    t[0] = t[1]
+   # t[1].append(t[2])
+   # t[0] = t[1]
 
 
 def p_Limits_Limit(t):
     'LIMITS  :  LIMITT'
-    t[0] = [t[1]]
+  #  t[0] = [t[1]]
 
 
 def p_Limit_Reservada(t):
     'LIMITT  :  LIMIT EXPRE_NUM'
 
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_Limit_Offset(t):
     'LIMITT  : OFFSET EXPRE_NUM '
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Expresion_Atributos(t):
     '''EXPRE_NUM : ENTERO
                  | ALL '''
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1152,112 +1084,112 @@ def p_Expresion_Atributos(t):
 
 def p_SubQuerys_Lista(t):
     'SUBQUERYS :  SUBQUERYS QUERY'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_SubQuerys_Query(t):
     'SUBQUERYS :  QUERY'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Query_Ate(t):
     'QUERY : ATE_QUE  PARIZQ QUE PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Query_AteAs(t):
     'QUERY : ATE_QUE PARIZQ QUE  PARDER AS_NO'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_Query_Query(t):
     'QUERY :   PARIZQ QUE PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Query_QueryAs(t):
     'QUERY :  PARIZQ QUE PARDER AS_NO'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_AsNo_Coma(t):
     'AS_NO : COMA QUERY'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_AsNo_As(t):
     'AS_NO : AS NO_N'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_AsNo_AsComa(t):
     'AS_NO : AS NO_N COMA QUERY'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_AsNo_SinAs(t):
     'AS_NO :  NO_N'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_AsNo_SinAsComa(t):
     'AS_NO :  NO_N COMA QUERY'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_NoN_Id(t):
     'NO_N  :  ID'
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 def p_AteQue_Exist(t):
     'ATE_QUE  :  EXISTS'
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 def p_AteQue_Expre(t):
     'ATE_QUE  :  EXPRESIONNE OPCIONALESS'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_AteQue_ExpreOps(t):
     'ATE_QUE  :  EXPRESIONNE OPERADOR OPCIONALESS2'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_AteQue_ID(t):
     'ATE_QUE  :  ID'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_Opcionales_In(t):
     'OPCIONALESS : IN'
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 def p_Opcionales_NotIn(t):
     'OPCIONALESS : NOT IN'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_Opcionales2_Any(t):
     'OPCIONALESS2 : ANY'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_Opcionales2_All(t):
     'OPCIONALESS2 : ALL'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Opcionales2_Some(t):
     'OPCIONALESS2 : SOME'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_Que_InstruccionQuery(t):
     'QUE : QUE_SUBS'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1265,22 +1197,22 @@ def p_Que_InstruccionQuery(t):
 
 def p_SubConsultas_comandos(t):
     'QUE_SUBS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_SubConsultas_comandosS(t):
     'QUE_SUBS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_SubConsultas_comandosS1(t):
     'QUE_SUBS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
 def p_SubConsultas_comandosS2(t):
     'QUE_SUBS       : SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS  '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1288,35 +1220,35 @@ def p_SubConsultas_comandosS2(t):
 
 def p_Unions_Lista(t):
     'UNIONS  : UNIONS UNIONN'
-    t[1].append(t[2])
-    t[0] = t[1]
+    #t[1].append(t[2])
+    #t[0] = t[1]
 
 
 def p_Unions_Comando(t):
     'UNIONS  : UNIONN'
-    t[0] = [t[1]]
+    #t[0] = [t[1]]
 
 
 def p_Unions_DQLComandos(t):
     'UNIONN  :    COMPORTAMIENTO  ALL DQL_COMANDOS '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Unions_DQLComandos2(t):
     'UNIONN  :    COMPORTAMIENTO  DQL_COMANDOS '
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Unions_DQLComandos3(t):
     'UNIONN  :    PUNTOCOMA '
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_Comportamiento_Comandos(t):
     '''COMPORTAMIENTO : UNION
                       | INTERSECT
                       | EXCEPT'''
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1326,62 +1258,62 @@ def p_Comportamiento_Comandos(t):
 def p_ExpresionesC_Case(t):
     'EXPRESIONES_C  :  CASE WHEN_LIST  CUERPOO'
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_ExpresionesC_Greatest(t):
     'EXPRESIONES_C  :  GREATEST PARIZQ EXPRESIONNE PARDER '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_ExpresionesC_Least(t):
     'EXPRESIONES_C  :  LEAST PARIZQ EXPRESIONNE PARDER '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Cuerpos_When(t):
     'CUERPOO  :  WHEN CONDICIONES EXPRESIONNE END'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Cuerpo_WhenElse(t):
     'CUERPOO  :  WHEN CONDICIONES  EXPRESIONNE ELSE EXPRESIONNE END'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
 def p_Cuerpo_End(t):
     'CUERPOO  :  END'
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 def p_Cuerpo_EndID(t):
     'CUERPOO  :  END ID'
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_whenList_Lista(t):
     'WHEN_LIST  :  WHEN_LIST WHEN_UNI'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_whenList_Uni(t):
     'WHEN_LIST  :  WHEN_UNI'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_WhenUni_Then(t):
     'WHEN_UNI  :   WHEN CONDICIONES THEN EXPRESIONNE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_WhenUni_ExpreThen(t):
     'WHEN_UNI  :   WHEN CONDICIONES EXPRESIONNE THEN EXPRESIONNE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_WhenUni_ExpreElseThen(t):
     'WHEN_UNI  :   WHEN CONDICIONES EXPRESIONNE ELSE EXPRESIONNE THEN EXPRESIONNE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
 
 
 # MI GRANATICA CESAR SAZO------------------------
@@ -1391,127 +1323,115 @@ def p_WhenUni_ExpreElseThen(t):
 
 def p_instruccion_dml_comandos_CREATE_TABLE(t):
     'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_CREATE_TABLE2(t):
     'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER  INHERITS PARIZQ ID PARDER PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_CUERPO(t):
     'CUERPO_CREATE_TABLE       : LISTA_DE_COLUMNAS'
-    t[1].append(t[1])
-    t[0] = t[1]
+  #  t[1].append(t[1])
+  #  t[0] = t[1]
 
 
 # LISTA DE LAS FILAS COMPLETAS---------------------------------------------------------------------------------
 def p_CREATE_TABLE_LISTA_CAMPOS(t):
     'LISTA_DE_COLUMNAS       : LISTA_DE_COLUMNAS LISTA2'
-    t[1].append(t[2])
-    t[0] = t[1]
+ #   t[1].append(t[2])
+ #   t[0] = t[1]
 
 
 def p_CREATE_TABLE_LISTA_CAMPOS2(t):
     'LISTA_DE_COLUMNAS    : LISTA2'
-    t[0] = [t[1]]
+ #   t[0] = [t[1]]
 
 
 def p_Create_TABLE_CAMPOS(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Create_TABLE_CAMPOS2(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Create_TABLE_CAMPOS3(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
+#    t[0] = str(t[1])  + str(t[2])  + str(t[3])
 
 def p_Create_TABLE_CAMPOS3_2(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
+ #   t[0] = str(t[1])  + str(t[2])  + str(t[3])
 
 def p_Create_TABLE_CAMPOS4(t):
     'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
 
 def p_Create_TABLE_CAMPOS42(t):
     'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
 
 def p_Create_TABLE_CAMPOS4_(t):
     'LISTA2  : UNIQUE PARIZQ LISTA_DE_IDS PARDER COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4])
 
 
 def p_Create_TABLE_CAMPOS4_2(t):
     'LISTA2  : UNIQUE PARIZQ LISTA_DE_IDS PARDER '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4])
 
 
 def p_Create_TABLE_CAMPOS9(t):
     'LISTA2  :  CONSTRAINT  ID PRIMARY KEY  PARIZQ LISTA_DE_IDS PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
+  #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
 
 def p_Create_TABLE_CAMPOS9_2(t):
     'LISTA2  :  CONSTRAINT  ID PRIMARY KEY  PARIZQ LISTA_DE_IDS PARDER COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
+  #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
 
 # PENDIENTE LISTADO DE ID'S
 def p_Create_TABLE_CAMPOS5(t):
     'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
+  #  t[0] =str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
 
 def p_Create_TABLE_CAMPOS6(t):
     'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(
-        t[9]) + str(t[10]) + str(t[11])
-
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) + str(t[11])
 
 def p_Create_TABLE_CAMPOS7(t):
     'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
-
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5])
 
 def p_Create_TABLE_CAMPOS8(t):
     'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(
-        t[9]) + str(t[10])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10])
 
 
 # LISTADO DE IDS--------------------------------------------------------
 def p_CREATE_TABLE_LISTA_IDS(t):
     'LISTA_DE_IDS      : LISTA_DE_IDS LISTA_ID_'
-    t[1].append(t[2])
-    t[0] = t[1]
+   # t[1].append(t[2])
+   # t[0] = t[1]
 
 
 def p_CREATE_TABLE_LISTA_IDS2(t):
     'LISTA_DE_IDS    : LISTA_ID_'
-    t[0] = [t[1]]
+   # t[0] = [t[1]]
 
 
 def p_CREATE_TABLE_LISTA_IDS3(t):
     'LISTA_ID_  :  ID COMA'
-    t[0] = str(t[1]) + str(t[2])
-
+   # t[0] = str(t[1]) +  str(t[2])
 
 def p_CREATE_TABLE_LISTA_IDS4(t):
     'LISTA_ID_  :  ID'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 # TIPO DE LAS VARIABLES DE CADA CAMPO DECLARADAS--------------------------------------------------------------
@@ -1531,28 +1451,28 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | CHAR PARIZQ EXPNUMERICA PARDER
                     | TEXT
                     | BOOLEAN'''
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 # LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES--------------------------------------------------------------
 def p_CREATE_TABLE_LISTA3_CAMPOS(t):
     'VALIDACIONES_CREATE_TABLE    : LISTA3'
-    t[0] = [t[1]]
+  #  t[0] = [t[1]]
 
 
 def p_Create_TABLE_CAMPOS_3(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE '
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_Create_TABLE_CAMPOS_4(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_Create_TABLE_CAMPOS_5(t):
     'LISTA3          : LISTA3  VALIDACION_CAMPO_CREATE '
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
@@ -1563,7 +1483,7 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
                                 | DEFAULT DECIMAL
                                 | DEFAULT ENTERO
                                 | DEFAULT ID'''
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
@@ -1572,148 +1492,149 @@ def p_Create_TABLE_TIPO_CAMPO3(t):
 
 def p_Create_TABLE_TIPO_CAMPO4(t):
     '''VALIDACION_CAMPO_CREATE  : NULL  '''
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 # CONDICIONES CON EL CONSTRAIN------------------------------------------------------------------------------------------------------------
 def p_Create_TABLE_TIPO_CAMPO5(t):
     'VALIDACION_CAMPO_CREATE  : CONSTRAINT ID  UNIQUE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
+ #   t[0] = str(t[1])+str(t[2])+str(t[3])
 
 def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+  #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
+
+
 
 
 # -----------------------------------------------------------------------------------------------------------------
 # INSERT
 def p_instruccion_dml_comandos_INSERT(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DATOS PUNTOCOMA '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_INSERT2(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DEFAULT VALUES PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_INSERT_DATOS(t):
     'DATOS       : PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
-
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+ str(t[5]) + str(t[6])+ str(t[7])
 
 def p_instruccion_dml_comandos_INSERT_DATOS2(t):
     'DATOS       : VALUES PARIZQ VALORES PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNAS(t):
     'COLUMNAS       : COLUMNAS COLUMNA'
-    t[1].append(t[2])
-    t[0] = t[1]
+  #  t[1].append(t[2])
+  #  t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNAS2(t):
     'COLUMNAS       : COLUMNA'
-    t[0] = [t[1]]
+  #  t[0] = [t[1]]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA(t):
     'COLUMNA       : ID COMA'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA2(t):
     'COLUMNA       : ID'
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES(t):
     'VALORES       : VALORES VALOR'
-    t[1].append(t[2])
-    t[0] = t[1]
+  #  t[1].append(t[2])
+ #   t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES2(t):
     'VALORES       :  VALOR'
-    t[0] = [t[1]]
+ #   t[0] = [t[1]]
 
 
 def p_instruccion_dml_comandos_INSERT_VALOR(t):
     'VALOR       : EXPRESION_GLOBAL COMA'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t):
     'VALOR       : EXPRESION_GLOBAL'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
 # UPDATE
 def p_instruccion_dml_comandos_UPDATE(t):
     'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_UPDATE2(t):
     'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPOS(t):
     'CAMPOSN       : CAMPOSN CAMPO'
-    t[1].append(t[2])
-    t[0] = t[1]
+  #  t[1].append(t[2])
+  #  t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t):
     'CAMPOSN       :  CAMPO'
-    t[0] = [t[1]]
+   # t[0] = [t[1]]
 
 
 # -------------------------------------------------------
 def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
     'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO2(t):
     'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL C'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO3(t):
     'CAMPO       :  ID IGUAL EXPRESION_GLOBAL'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO4(t):
     'CAMPO       :  ID IGUAL EXPRESION_GLOBAL C'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_instruccion_dml_comandos_UPDATE_C(t):
     'C       :  COMA CAMPO'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 # -----------------------------------------------------------------------------------------------------------------
 # DELETE
 def p_instruccion_dml_comandos_DELETE(t):
     'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS WHERE CONDICIONES PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_DELETE2(t):
     'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
     print('\n' + str(t[0]) + '\n')
 
 
@@ -1721,7 +1642,42 @@ def p_instruccion_dml_comandos_DELETE2(t):
 # DROP TABLES
 def p_instruccion_dml_comandos_DROP_TABLE(t):
     'DML_COMANDOS       : DROP TABLE ID PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    global contador
+
+    n1 = tag + str(contador)
+    contador = contador + 1
+
+    n2 = tag + str(contador)
+    contador = contador + 1
+
+    n3 = tag + str(contador)
+    contador = contador + 1
+
+    n4 = tag + str(contador)
+    contador = contador + 1
+
+    n5 = tag + str(contador)
+    contador = contador + 1
+
+    n6 = tag + str(contador)
+    contador = contador + 1
+
+    ast.node(n1, 'DROP_TABLE' )
+    ast.node(n2, 'DROP' )
+    ast.node(n3, 'TABLE' )
+    ast.node(n4, 'ID' )
+    ast.node(n5, ';' )
+    ast.node(n6, '<<b>ID</b>.lexval = ' + str(t[3]) + '>' )
+
+    ast.edge(n1,n2)
+    ast.edge(n1,n3)
+    ast.edge(n1,n4)
+    ast.edge(n1,n5)
+    ast.edge(n4,n6)
+
+    t[0] = { 'valor' : 'DROP_TABLE', 'nombre' : n1, 'valor2': alias.metodo_prueba("sda") }
+
     print('\n' + str(t[0]) + '\n')
 
 
@@ -1729,58 +1685,55 @@ def p_instruccion_dml_comandos_DROP_TABLE(t):
 # ALTER TABLES
 def p_instruccion_dml_comandos_ALTER_TABLE(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN ID TIPO_CAMPO PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE2(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN CAMPOSC PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE3(t):
     'DML_COMANDOS       : ALTER TABLE ID  RENAME COLUMN ID TO ID PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])+ str(t[8]) + str(t[9])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE4(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP CONSTRAINT ID  PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE5(t):
     'DML_COMANDOS       : ALTER TABLE ID  ALTER COLUMN ID SET NOT NULL  PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(
-        t[9]) + str(t[10])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(
-        t[9]) + str(t[10]) + str(t[11]) + str(t[12])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(
-        t[9]) + str(t[10]) + str(t[11])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
     'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE9(t):
     'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
@@ -1793,7 +1746,7 @@ def p_expresion_global(t):
                         | EXPNUMERICA
                         | EXPCADENA'''
 
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
     print('\n' + str(t[1]) + '\n')
 
 
@@ -1805,106 +1758,106 @@ def p_comando_ddl(t):
                     | ALTER_DATABASE
                     | DROP_DATABASE'''
 
-    t[0] = str(t[1])
+ #   t[0] = str(t[1])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_create_database(t):
     'CREATE_DATABASE : CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
 
 
 def p_replace_op(t):
     'REPLACE_OP : OR REPLACE'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_replace_op_e(t):
     'REPLACE_OP : '
-    t[0] = ''
+   # t[0] = ''
 
 
 def p_if_not_exists(t):
     'IF_NOT_EXISTIS : IF NOT EXISTS'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_if_not_exists_e(t):
     'IF_NOT_EXISTIS : '
-    t[0] = ''
+   # t[0] = ''
 
 
 def p_owner_database(t):
     'OWNER_DATABASE : OWNER IGUAL ID'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_owner_database_e(t):
     'OWNER_DATABASE : '
-    t[0] = ''
+   # t[0] = ''
 
 
 def p_mode_database(t):
     'MODE_DATABASE : MODE IGUAL ENTERO'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_mode_database_e(t):
     'MODE_DATABASE : '
-    t[0] = ''
+   # t[0] = ''
 
 
 def p_show_databases(t):
     'SHOW_DATABASES : SHOW DATABASES SHOW_DATABASES_LIKE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_show_databases_like(t):
     'SHOW_DATABASES_LIKE : LIKE CADENADOBLE'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_show_databases_like_e(t):
     'SHOW_DATABASES_LIKE : '
-    t[0] = ''
+    #t[0] = ''
 
 
 def p_alter_database(t):
     'ALTER_DATABASE : ALTER DATABASE ID ALTER_DATABASE_OP'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_alter_database_op(t):
     '''ALTER_DATABASE_OP : RENAME TO ID
                         |  OWNER TO ALTER_TABLE_OP_OW'''
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_alter_database_op_ow(t):
     '''ALTER_TABLE_OP_OW : ID
                         |  CURRENT_USER
                         |  SESSION_USER'''
-    t[0] = str(t[1])
+ #   t[0] = str(t[1])
 
 
 def p_alter_database_op_e(t):
     'ALTER_DATABASE_OP : '
-    t[0] = ''
+   # t[0] = ''
 
 
 def p_drop_database(t):
     'DROP_DATABASE : DROP DATABASE IF_EXISTS_DATABASE ID'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_if_exists_database(t):
     'IF_EXISTS_DATABASE : IF EXISTS'
-    t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_if_exists_database_e(t):
     'IF_EXISTS_DATABASE : '
-    t[0] = ''
+  #  t[0] = ''
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1913,7 +1866,7 @@ def p_if_exists_database_e(t):
 # SELECT DATE/TIME
 def p_instruccion_tiempo(t):
     'DQL_COMANDOS       : SELECT EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
 
     print('\n * ' + str(t[0]) + ' * \n')
 
@@ -1924,67 +1877,67 @@ def p_Tipo_Tiempo(t):
                         | MINUTE
                         | SECOND '''
 
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_instruccion_tiempo2(t):
     'DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9])
 
     print('\n ** ' + str(t[0]) + ' ** \n')
 
 
 def p_instruccion_tiempo3(t):
     'DQL_COMANDOS       : SELECT TIPO_CURRENT PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
     print('\n ** ' + str(t[0]) + ' ** \n')
 
 
 def p_Tipo_Current(t):
     '''TIPO_CURRENT     : CURRENT_DATE
                         | CURRENT_TIME '''
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_instruccion_tiempo4(t):
     'DQL_COMANDOS       : SELECT TIMESTAMP  CADENASIMPLE PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n ** ' + str(t[0]) + ' ** \n')
 
 
 def p_instruccion_tiempo5(t):
     'DQL_COMANDOS       : SELECT NOW PARIZQ PARDER PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
     print('\n ** ' + str(t[0]) + ' ** \n')
 
 
 def p_instrucion_ctypes(t):
     'DQL_COMANDOS       : CREATE TYPE MOOD AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
     print('\n *** ' + str(t[0]) + ' *** \n')
 
 
 def p_listas_cs(t):
     'LISTAS_CS       : LISTA_CS'
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
     print("Listas cs")
 
 
 def p_lista_cs2(t):
     'LISTA_CS       : CADENASIMPLE'
-    t[0] = str(t[1])
+  #  t[0] = str(t[1])
     print("cadenaSimple")
 
 
 def p_lista_cs(t):
     'LISTA_CS       : CADENASIMPLE CS'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
     print("-Lista cs")
 
 
 def p_cs2(t):
     'CS     : COMA LISTA_CS'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
     print("Coma Lista")
 
 
@@ -1997,13 +1950,13 @@ def p_expnumerica(t):
                    | EXPNUMERICA ASTERISCO EXPNUMERICA
                    | EXPNUMERICA DIVISION EXPNUMERICA
                    | EXPNUMERICA PORCENTAJE EXPNUMERICA'''
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
-    print('\n' + t[0] + '\n')
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    print('\n'+t[0]+'\n')
 
 
 def p_expnumerica_agrupacion(t):
     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_expnumerica_valor(t):
@@ -2012,7 +1965,7 @@ def p_expnumerica_valor(t):
                    | FLOTANTE
                    | DEFAULT'''
 
-    t[0] = str(t[1])
+   # t[0] = str(t[1])
 
 
 def p_expresion_binario(t):
@@ -2023,29 +1976,29 @@ def p_expresion_binario(t):
                 |   EXPBINARIO LEFTSHIFT EXPNUMERICA
                 |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
 
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
     print(t[0])
 
 
 def p_expresion_binario_n(t):
     'EXPBINARIO : VIRGULILLA EXPBINARIO'
-    t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
 
 
 def p_expresion_binario_val(t):
     'EXPBINARIO : CADENABINARIA'
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_expresoin_cadena(t):
     'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_expresion_cadena_val(t):
     '''EXPCADENA : CADENASIMPLE
                  | CADENADOBLE'''
-    t[0] = str(t[1])
+    #t[0] = str(t[1])
 
 
 def p_error(t):
@@ -2074,21 +2027,6 @@ def parse():
     # Errores
     global LErroresSintacticos, LErroresLexicos
 
-    HayRecursion = 0
-    ListadoArbol = []  # list for save nodes
-    contador = 0
-    ContadorSentencias = 1
-    ContadorNode = 1
-    ListaSentencias = []  # para guardar las sentencias y despues apuntarlas
-    ListaSentencias_ = []
-
-    SenteciaProducida = 0
-
-    res = []
-    Grafica = ''
-
-    LErroresSintacticos[:] = []
-    LErroresLexicos[:] = []
 
     # Input2 = input
 
@@ -2105,18 +2043,7 @@ def parse():
     lexer.lineno = 1
     parser.restart()
 
-    os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
-    os.system('dot -Tpng ./Reportes/ast.dot -o ./Reportes/ast.png')
 
-    # if len(LErroresLexicos) > 0 or len(LErroresSintacticos) > 0:
-    #    if instructions == None:
-    #         instructions = []
-    #     else:
-    #        instructions[:] = []
-    #    return instructions
+
 
     return instructions
-
-
-
-
