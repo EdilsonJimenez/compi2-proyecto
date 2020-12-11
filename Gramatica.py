@@ -335,6 +335,7 @@ Input2 = ''  # Input2
 #llamado de instruccion
 from AST import *
 from Instruccion import *
+from expresiones import *
 
 precedence = (
     ('left', 'OR'),
@@ -347,13 +348,6 @@ precedence = (
 )
 
 
-# Definición de la gramática
-from graphviz import Digraph
-ast = Digraph('AST', filename='c:/source/ast.gv', node_attr={'color': 'white', 'fillcolor': 'white','style': 'filled', 'shape': 'record'})
-ast.attr(rankdir='BT',ordering='in')
-ast.edge_attr.update(arrowhead='none')
-contador = 1
-tag = 'N'
 
 
 
@@ -363,7 +357,6 @@ tag = 'N'
 def p_init(t) :
     'INICIO     : INSTRUCCIONES'
     t[0] = t[1]
-
     arbolito = AST(t[0])
     arbolito.crearReporte()
 
@@ -372,18 +365,7 @@ def p_instrucciones_lista(t) :
     t[1].append(t[2])
     t[0] = t[1]
 
-    #REGION DE GRAFICA
-   #t[0] = [t[1]]
-    global contador
-
-    n1 = tag + str(contador)
-    contador = contador + 1
-
-    ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[2]['valor']) )
-    ast.edge(t[2]['nombre'],'INICIO')
-
-    ast.render('grafo', format='png', view=True)
-
+   
 
 
     # endregion
@@ -394,16 +376,7 @@ def p_instrucciones_instruccion(t) :
     t[0] = [t[1]]
 
 
-    global contador
-
-    n1 = tag + str(contador)
-    contador = contador + 1
-
-    #ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
-    #ast.edge(t[1]['nombre'],'INICIO')
-
-    #ast.render('grafo', format='png', view=True)
-
+  
 
 
 def p_instruccion(t):
@@ -412,17 +385,7 @@ def p_instruccion(t):
                     | DML_COMANDOS'''
     t[0] = t[1]
 
-    global contador
-
-    n1 = tag + str(contador)
-    contador = contador + 1
-
-    #ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
-    #ast.edge(t[1]['nombre'],n1)
-
-    #t[0] = { 'valor' : t[1]['valor'], 'nombre' : n1 }
-    #t[0] = t[1]
-
+  
 
 
 
@@ -1508,8 +1471,7 @@ def p_Create_TABLE_TIPO_CAMPO6(t):
 # INSERT
 def p_instruccion_dml_comandos_INSERT(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DATOS PUNTOCOMA '
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    print('\n' + str(t[0]) + '\n')
+     t[0] = Insert_Dato(t[3],t[4])
 
 
 def p_instruccion_dml_comandos_INSERT2(t):
@@ -1520,53 +1482,55 @@ def p_instruccion_dml_comandos_INSERT2(t):
 
 def p_instruccion_dml_comandos_INSERT_DATOS(t):
     'DATOS       : PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES PARDER'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+ str(t[5]) + str(t[6])+ str(t[7])
+    
 
 def p_instruccion_dml_comandos_INSERT_DATOS2(t):
     'DATOS       : VALUES PARIZQ VALORES PARDER'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] = t[3]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNAS(t):
     'COLUMNAS       : COLUMNAS COLUMNA'
-  #  t[1].append(t[2])
-  #  t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = [t[1]]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNAS2(t):
     'COLUMNAS       : COLUMNA'
-  #  t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA(t):
     'COLUMNA       : ID COMA'
-  #  t[0] = str(t[1]) + str(t[2])
+    t[0] = [t[1]]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA2(t):
     'COLUMNA       : ID'
-  #  t[0] = str(t[1])
+    t[0] = [t[1]]
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES(t):
     'VALORES       : VALORES VALOR'
-  #  t[1].append(t[2])
- #   t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
+  
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES2(t):
     'VALORES       :  VALOR'
- #   t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_instruccion_dml_comandos_INSERT_VALOR(t):
     'VALOR       : EXPRESION_GLOBAL COMA'
-   # t[0] = str(t[1]) + str(t[2])
+    t[0] = t[1]
+    
 
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t):
     'VALOR       : EXPRESION_GLOBAL'
-   # t[0] = str(t[1])
+    t[0] = t[1]
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1642,43 +1606,7 @@ def p_instruccion_dml_comandos_DROP_TABLE(t):
     t[0] = DropTable(t[3])
 
 
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    global contador
-
-    n1 = tag + str(contador)
-    contador = contador + 1
-
-    n2 = tag + str(contador)
-    contador = contador + 1
-
-    n3 = tag + str(contador)
-    contador = contador + 1
-
-    n4 = tag + str(contador)
-    contador = contador + 1
-
-    n5 = tag + str(contador)
-    contador = contador + 1
-
-    n6 = tag + str(contador)
-    contador = contador + 1
-
-    ast.node(n1, 'DROP_TABLE' )
-    ast.node(n2, 'DROP' )
-    ast.node(n3, 'TABLE' )
-    ast.node(n4, 'ID' )
-    ast.node(n5, ';' )
-    ast.node(n6, '<<b>ID</b>.lexval = ' + str(t[3]) + '>' )
-
-    ast.edge(n1,n2)
-    ast.edge(n1,n3)
-    ast.edge(n1,n4)
-    ast.edge(n1,n5)
-    ast.edge(n4,n6)
-
-    #t[0] = { 'valor' : 'DROP_TABLE', 'nombre' : n1, 'valor2': alias.metodo_prueba("sda") }
-
-    # print('\n' + str(t[0]) + '\n')
+  
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1745,9 +1673,7 @@ def p_expresion_global(t):
     '''EXPRESION_GLOBAL : EXPBINARIO
                         | EXPNUMERICA
                         | EXPCADENA'''
-
-  #  t[0] = str(t[1])
-    print('\n' + str(t[1]) + '\n')
+    t[0] = t[1]
 
 
 # DDL
@@ -1950,13 +1876,22 @@ def p_expnumerica(t):
                    | EXPNUMERICA ASTERISCO EXPNUMERICA
                    | EXPNUMERICA DIVISION EXPNUMERICA
                    | EXPNUMERICA PORCENTAJE EXPNUMERICA'''
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
-    print('\n'+t[0]+'\n')
+    if t[2] == '+'  : 
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
+    elif t[2] == '-': 
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MENOS)
+    elif t[2] == '*': 
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MULTI)
+    elif t[2] == '/': 
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.DIVIDIDO)
+    elif t[2] == '%': 
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.RESIDUO)
+      
 
 
 def p_expnumerica_agrupacion(t):
     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = ExpresionValor(t[2])
 
 
 def p_expnumerica_valor(t):
@@ -1964,8 +1899,7 @@ def p_expnumerica_valor(t):
                    | ENTERO
                    | FLOTANTE
                    | DEFAULT'''
-
-   # t[0] = str(t[1])
+    t[0] = ExpresionValor(t[1])
 
 
 def p_expresion_binario(t):
@@ -1975,9 +1909,7 @@ def p_expresion_binario(t):
                 |   EXPBINARIO NUMERAL EXPBINARIO
                 |   EXPBINARIO LEFTSHIFT EXPNUMERICA
                 |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
-
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
-    print(t[0])
+    
 
 
 def p_expresion_binario_n(t):
@@ -1992,13 +1924,13 @@ def p_expresion_binario_val(t):
 
 def p_expresoin_cadena(t):
     'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    #t[0] = t[1]
 
 
 def p_expresion_cadena_val(t):
     '''EXPCADENA : CADENASIMPLE
                  | CADENADOBLE'''
-    #t[0] = str(t[1])
+    t[0] = ExpresionValor(t[1])
 
 
 def p_error(t):

@@ -5,4 +5,8 @@ Node1[label="DROP TRABLE"]
 Node0->Node1;
 Node2[label="tablaMaestro"]
 Node1->Node2;
+Node3[label="DROP TRABLE"]
+Node0->Node3;
+Node4[label="tablaMaestro2"]
+Node3->Node4;
 }
