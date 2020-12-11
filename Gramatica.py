@@ -205,8 +205,6 @@ t_RIGHTSHIFT = r'>>'
 # Importacion de Objetos Del Analisis
 
 
-
-import prueba as alias
 #importamos el Generador  AST
 
 import Generador as g
@@ -318,9 +316,6 @@ LErroresLexicos[:] = []  # LErroresLexicos
 
 
 
-
-
-
 # Listas que se Utilizaran para el manejo de la Gramatica Generada
 ListaProduccionesG = []  # ListaProduccionesG
 ListaProduccionesG[:] = []  # ListaProduccionesG
@@ -333,7 +328,7 @@ Input2 = ''  # Input2
 
 
 #llamado de instruccion
-from AST import *
+from Ast2 import *
 from Instruccion import *
 from expresiones import *
 
@@ -352,12 +347,14 @@ precedence = (
 
 
 
+
 # Definición de la gramática
 
 def p_init(t) :
     'INICIO     : INSTRUCCIONES'
     t[0] = t[1]
-    arbolito = AST(t[0])
+
+    arbolito = Ast2(t[0])
     arbolito.crearReporte()
 
 def p_instrucciones_lista(t) :
@@ -376,7 +373,15 @@ def p_instrucciones_instruccion(t) :
     t[0] = [t[1]]
 
 
-  
+
+
+
+
+    #ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
+    #ast.edge(t[1]['nombre'],'INICIO')
+
+    #ast.render('grafo', format='png', view=True)
+
 
 
 def p_instruccion(t):
@@ -385,7 +390,14 @@ def p_instruccion(t):
                     | DML_COMANDOS'''
     t[0] = t[1]
 
-  
+
+
+    #ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
+    #ast.edge(t[1]['nombre'],n1)
+
+    #t[0] = { 'valor' : t[1]['valor'], 'nombre' : n1 }
+    #t[0] = t[1]
+
 
 
 
@@ -394,6 +406,7 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    t[0]= Select()
 
     # endregion
 
@@ -1606,7 +1619,14 @@ def p_instruccion_dml_comandos_DROP_TABLE(t):
     t[0] = DropTable(t[3])
 
 
-  
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
+
+
+
+    #t[0] = { 'valor' : 'DROP_TABLE', 'nombre' : n1, 'valor2': alias.metodo_prueba("sda") }
+
+    # print('\n' + str(t[0]) + '\n')
 
 
 # -----------------------------------------------------------------------------------------------------------------

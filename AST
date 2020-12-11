@@ -1,0 +1,9 @@
+digraph AST {
+	edge [arrowhead=none]
+	node [color="#31CEF0" shape=box style=cyan4]
+	Node0 [label="[label=\"AST\"]"]
+	Node1 [label="DROP TRABLE"]
+	Node0 -> Node1
+	Node2 [label=tablaMaestro]
+	Node1 -> Node2
+}
