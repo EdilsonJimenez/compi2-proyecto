@@ -7,3 +7,7 @@ class NodoSemantico_Objeto(ObjetoSemantico):
         self.lexema = lexema
         self.linea = linea
         self.columna = columna
+
+    def imprimir_prueba(self,Cadena):
+        print(str(Cadena))
+        return 'holas'
