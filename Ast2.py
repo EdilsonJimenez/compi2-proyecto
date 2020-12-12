@@ -400,8 +400,41 @@ class Ast2:
 
     # Recorrido de los Alias
     # ----------------------------------------------------------------------------------------------------------
+
+
     def RecorrerTiposAlias(self, Lista_Alias, padre):
+        i = Lista_Alias
         # Alias de los Campos
+        if isinstance(i, Alias_Campos_ListaCampos):
+            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+            self.GrafoAlias_Campos_ListaCampos(i.NombreT, i.Lista_Alias, padre)
+
+        # Alias de las Nombres de las Tablas
+        if isinstance(i, Alias_Table_ListaTablas):
+            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+            self.GrafoAlias_Table_ListaTablas(i.NombreT, i.Lista_Alias, padre)
+        else:
+            print("No Ningun Tipo")
+
+
+
+    def grafoDropTable(self, id, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DROP TABLE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), id)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+    def RecorrerTiposAlias(self, Lista_Alias, padre):
+        print("Verificando tipos de alias")
+        # Alias de los Campos
+        print("Verificando tipos de alias")
         i=Lista_Alias
         if isinstance(i, Alias_Campos_ListaCampos):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
