@@ -1,40 +1,11 @@
 digraph AST {
 	edge [arrowhead=none]
-<<<<<<< HEAD
-	node [color="#31CEF0" shape=box style=cyan4]
-	Node0 [label=AST]
-	Node1 [label="DROP TRABLE"]
-=======
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
 	Node1 [label="CREATE TABLE"]
->>>>>>> 1980812dab9e00aa846beec3997efa37882953aa
 	Node0 -> Node1
 	Node2 [label=Profesion]
 	Node1 -> Node2
-<<<<<<< HEAD
-	Node3 [label=INSTRUCCION_SELECT]
-	Node0 -> Node3
-	Node4 [label=SELECT]
-	Node3 -> Node4
-	Node5 [label=LISTA_CAMPOS]
-	Node3 -> Node5
-	Node6 [label=ACCESO_CAMPO]
-	Node5 -> Node6
-	Node7 [label="*"]
-	Node6 -> Node7
-	Node8 [label=FROM]
-	Node3 -> Node8
-	Node9 [label=LISTA_TABLAS]
-	Node3 -> Node9
-	Node10 [label=Nombre_Tabla]
-	Node9 -> Node10
-	Node11 [label=tabla1]
-	Node10 -> Node11
-	Node12
-	Node3 -> Node12
-=======
-<<<<<<< HEAD
 	Node3 [label="CREATE TABLE"]
 	Node0 -> Node3
 	Node4 [label=Estudiantes]
@@ -47,55 +18,110 @@ digraph AST {
 	Node0 -> Node7
 	Node8 [label=Mitabla]
 	Node7 -> Node8
-=======
-	Node3 [label=products]
-	Node2 -> Node3
-	Node4 [label=producto2]
-	Node2 -> Node4
-	Node5 [label="VALORES TABLA"]
-	Node1 -> Node5
-	Node6 [label="VALOR NUEVO"]
-	Node5 -> Node6
-	7 [label=ExpresionAritmetica]
-	8 [label=exp1]
-	7 -> 8
-	8 -> 9
-	9 [label=ExpresionValor]
-	9 -> 10
-	10 [label=5]
-	11 [label="+"]
-	7 -> 11
-	12 [label=exp2]
-	7 -> 12
-	12 -> 13
-	13 [label=ExpresionAritmetica]
-	14 [label=exp1]
-	13 -> 14
-	14 -> 15
-	15 [label=ExpresionValor]
+	Node9 [label=INSERT]
+	Node0 -> Node9
+	Node10 [label="ID TABLA"]
+	Node9 -> Node10
+	Node11 [label=products]
+	Node10 -> Node11
+	Node12 [label=producto2]
+	Node10 -> Node12
+	Node13 [label="VALORES TABLA"]
+	Node9 -> Node13
+	Node14 [label="VALOR NUEVO"]
+	Node13 -> Node14
+	15 [label=ExpresionAritmetica]
+	16 [label=exp1]
 	15 -> 16
-	16 [label=5]
-	17 [label="*"]
-	13 -> 17
-	18 [label=exp2]
-	13 -> 18
-	18 -> 19
-	19 [label=ExpresionValor]
-	19 -> 20
-	20 [label=9]
-	Node6 -> 7
-	Node22 [label="VALOR NUEVO"]
-	Node5 -> Node22
+	16 -> 17
+	17 [label=ExpresionValor]
+	17 -> 18
+	18 [label=5]
+	19 [label="+"]
+	15 -> 19
+	20 [label=exp2]
+	15 -> 20
+	20 -> 21
+	21 [label=ExpresionAritmetica]
+	22 [label=exp1]
+	21 -> 22
+	22 -> 23
 	23 [label=ExpresionValor]
 	23 -> 24
-	24 [label=4]
-	Node22 -> 23
-	Node26 [label="VALOR NUEVO"]
-	Node5 -> Node26
+	24 [label=5]
+	25 [label="*"]
+	21 -> 25
+	26 [label=exp2]
+	21 -> 26
+	26 -> 27
 	27 [label=ExpresionValor]
 	27 -> 28
-	28 [label=hola]
-	Node26 -> 27
->>>>>>> master
->>>>>>> 1980812dab9e00aa846beec3997efa37882953aa
+	28 [label=9]
+	Node14 -> 15
+	Node30 [label="VALOR NUEVO"]
+	Node13 -> Node30
+	31 [label=ExpresionValor]
+	31 -> 32
+	32 [label=4]
+	Node30 -> 31
+	Node34 [label="VALOR NUEVO"]
+	Node13 -> Node34
+	35 [label=ExpresionValor]
+	35 -> 36
+	36 [label=hola]
+	Node34 -> 35
+	Node38 [label=INSTRUCCION_SELECT]
+	Node0 -> Node38
+	Node39 [label=SELECT]
+	Node38 -> Node39
+	Node40 [label=LISTA_CAMPOS]
+	Node38 -> Node40
+	Node41 [label=ACCESO_CAMPO]
+	Node40 -> Node41
+	Node42 [label="nombre.id"]
+	Node41 -> Node42
+	Node43 [label=Lista_Alias]
+	Node41 -> Node43
+	Node44 [label=Alias_Produccion]
+	Node43 -> Node44
+	Node45 [label=As]
+	Node44 -> Node45
+	Node46 [label=j]
+	Node44 -> Node46
+	Node47 [label=Lista_Sentencias]
+	Node44 -> Node47
+	Node48 [label=ACCESO_CAMPO]
+	Node47 -> Node48
+	Node49 [label="nombre.id"]
+	Node48 -> Node49
+	Node50 [label=FROM]
+	Node38 -> Node50
+	Node51 [label=LISTA_TABLAS]
+	Node38 -> Node51
+	Node52 [label=Nombre_Tabla]
+	Node51 -> Node52
+	Node53 [label=tabla1]
+	Node52 -> Node53
+	Node54 [label=Lista_Alias]
+	Node52 -> Node54
+	Node55 [label=Alias_Produccion]
+	Node54 -> Node55
+	Node56 [label=","]
+	Node55 -> Node56
+	Node57 [label=Tabla]
+	Node55 -> Node57
+	Node58 [label=Nombre_Tabla]
+	Node57 -> Node58
+	Node59 [label=tabla]
+	Node58 -> Node59
+	Node60 [label=Lista_Alias]
+	Node58 -> Node60
+	Node61 [label=Alias_Produccion]
+	Node60 -> Node61
+	Node62 [label=As]
+	Node61 -> Node62
+	Node63 [label=j]
+	Node61 -> Node63
+	Node64
+	Node38 -> Node64
 }

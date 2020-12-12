@@ -23,6 +23,8 @@ class Select(Instruccion) :
 # Campos Accedidos
 #---------------------------------------------------------------------------------------------------
 
+
+#Campos Accedidos por Lista
 class Campo_Accedido(Instruccion): #Nombre.columna  Lista_Posible
 
     def __init__(self, NombreT, Columna, Lista_Alias=[]):
@@ -30,16 +32,33 @@ class Campo_Accedido(Instruccion): #Nombre.columna  Lista_Posible
         self.Columna       = Columna
         self.Lista_Alias   = Lista_Alias
 
+
+#Campos Accedidos por Lista
+class Campo_AccedidoSinLista(Instruccion): #Nombre.columna  Lista_Posible
+
+    def __init__(self, NombreT, Columna):
+        self.NombreT       = NombreT
+        self.Columna       = Columna
+
+
 #---------------------------------------------------------------------------------------------------
 
 
 #Nombre Tabla Accedidos
 #---------------------------------------------------------------------------------------------------
-class AccesoTabla(Instruccion): #Tabla
+
+class AccesoTabla(Instruccion): #Tabla Lista
 
     def __init__(self, NombreT,Lista_Alias=[]):
         self.NombreT     = NombreT
         self.Lista_Alias = Lista_Alias
+
+#Accediendo sin lista
+class AccesoTablaSinLista(Instruccion): #Tabla
+
+    def __init__(self, NombreT):
+        self.NombreT     = NombreT
+
 #---------------------------------------------------------------------------------------------------
 
 
@@ -50,17 +69,33 @@ class AccesoTabla(Instruccion): #Tabla
 # Alias
 #Alias Campos
 #---------------------------------------------------------------------------------------------------
+#Alias Campos con lista
 class Alias_Campos_ListaCampos(Instruccion):
     def __init__(self, Alias,Lista_Sentencias=[]):
         self.Alias = Alias
         self.Lista_Sentencias = Lista_Sentencias
 
+#Alias Campos sin lista
+class Alias_Campos_ListaCamposSinLista(Instruccion):
+    def __init__(self, Alias):
+        self.Alias = Alias
+
+
 #Alias Tablas
 #---------------------------------------------------------------------------------------------------
+
+#Alias campos Con Lista
 class Alias_Table_ListaTablas(Instruccion):
     def __init__(self, Alias,Lista_Sentencias=[]):
         self.Alias = Alias
         self.Lista_Sentencias = Lista_Sentencias
+
+#Alias campos Sin Lista
+class Alias_Table_ListaTablasSinLista(Instruccion):
+    def __init__(self, Alias,Lista_Sentencias=[]):
+        self.Alias = Alias
+        self.Lista_Sentencias = Lista_Sentencias
+
 
 
 
