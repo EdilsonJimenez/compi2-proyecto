@@ -190,7 +190,7 @@ t_PARIZQ = r'\('
 t_PARDER = r'\)'
 t_PUNTOCOMA = r';'
 t_IGUALQUE  = r'=='
-t_DIFERENTE = r'!='
+t_DIFERENTE = r'(!=) | (<>)'
 t_NEGACION = r'\!'
 t_MAYOR = r'>'
 t_MENOR = r'<'
@@ -218,7 +218,7 @@ import sys
 
 # EXPRESIONES REGULARES DEL LENGUAJE
 def t_FLOTANTE(t):
-    r'\d+\.\d+'
+    r'(\d+(\.\d*)|\.\d+)([eE][+-]?\d+)?'
     try:
         t.value = float(t.value)
     except ValueError:
@@ -235,6 +235,10 @@ def t_ENTERO(t):
         t.value = 0
     return t
 
+def t_CADENABINARIA(t):
+    r'B\'(1|0)+\''
+    t.value = t.value[2:-1]
+    return t
 
 def t_CADENASIMPLE(t):
     r'\'.*?\''
@@ -252,10 +256,7 @@ def t_ID(t):
     t.type = reservadas.get(t.value.lower(), 'ID')  # Check for reserved words
     return t
 
-def t_CADENABINARIA(t):
-    r'B\'(1|0)+\''
-    t.value = t.value[2:-1]
-    return t
+
 
 def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
@@ -347,14 +348,16 @@ from expresiones import *
 
 
 precedence = (
-    ('right', 'NOT'),
-    ('left', 'AND'),
     ('left', 'OR'),
-    ('left', 'DIFERENTE', 'IGUAL', 'MAYOR', 'MENOR', 'MENORIGUAL', 'MAYORIGUAL'),
+    ('left', 'AND'),
+    ('right', 'NOT'),
+    ('nonassoc', 'MENOR', 'MAYOR', 'MENORIGUAL', 'MAYORIGUAL', 'IGUAL', 'DIFERENTE'),
+    ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
+    ('right', 'VIRGULILLA'),
     ('left', 'PUNTO'),
     ('left', 'MAS', 'MENOS'),
     ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
-    ('PARIZQ', 'PARDER')
+    # ('PARIZQ', 'PARDER')
 )
 
 
@@ -1461,14 +1464,14 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
     print(str(t[1]))
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
-    'TIPO_CAMPO   : CHARACTER VARYING PARIZQ EXPNUMERICA PARDER'
+    'TIPO_CAMPO   : CHARACTER VARYING PARIZQ expresion_aritmetica PARDER'
     t[0] = valorTipo(t[1], t[4])
     print(str(t[1]))
 
 def p_Create_TABLE_TIPO_CAMPO4(t):
-    '''TIPO_CAMPO   : VARCHAR PARIZQ EXPNUMERICA PARDER
-                    | CHARACTER PARIZQ EXPNUMERICA PARDER
-                    | CHAR PARIZQ EXPNUMERICA PARDER'''
+    '''TIPO_CAMPO   : VARCHAR PARIZQ expresion_aritmetica PARDER
+                    | CHARACTER PARIZQ expresion_aritmetica PARDER
+                    | CHAR PARIZQ expresion_aritmetica PARDER'''
     t[0] = valorTipo(t[1], t[3])
     print(str(t[1]))
 
@@ -1937,11 +1940,10 @@ def p_cs2(t):
 # --------------------------------------------------------------------------------------------------------
 
 def p_expresion_global(t):
-    '''expresion  : expresion_aritmetica
-                | expresion_relacional
+    '''expresion : expresion_aritmetica
                 | expresion_logica
                 | expresion_unaria
-                | EXPBINARIO'''
+                | expresion_binario'''
     t[0] = t[1]
 
 def p_expresion_aritmetica(t):
@@ -1964,9 +1966,8 @@ def p_expresion_aritmetica(t):
 
 
 def p_expresion_relacional(t) :
-    '''expresion_relacional : expresion_aritmetica IGUALQUE expresion_aritmetica
+    '''expresion_relacional :  expresion_aritmetica IGUAL expresion_aritmetica
                             | expresion_aritmetica DIFERENTE expresion_aritmetica
-                            | expresion_aritmetica IGUAL expresion_aritmetica
                             | expresion_aritmetica MAYORIGUAL expresion_aritmetica
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
                             | expresion_aritmetica MAYOR expresion_aritmetica                            
@@ -1986,6 +1987,8 @@ def p_expresion_relacional(t) :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORQUE)
     elif t[2] == '<' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORQUE)
+    elif t[2] == '=' :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
     else :
         t[0]=[1]
 
@@ -1994,14 +1997,31 @@ def p_expresion_logica(t) :
     '''expresion_logica :   expresion_logica AND expresion_logica
                         |   expresion_logica OR expresion_logica
                         |   NOT expresion_logica 
-                        |   PARIZQ expresion_logica PARDER 
-                        |   expresion_relacional'''
+                        |   PARIZQ expresion_logica PARDER  '''
     if t[2] == 'AND' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.AND)
     elif t[2] == 'OR' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.OR)
     elif t[1] == 'NOT' :
         t[0] = UnitariaLogicaNOT(t[2])
+    elif t[0] == '(':
+        t[0]=t[2]
+
+
+def p_expresion_logica_relacion(t):
+    'expresion_logica :  expresion_relacional'
+    t[0] = t[1]
+
+# def p_expresion_logica_paren(t) :
+#     'expresion_logica : PARIZQ expresion_logica PARDER'
+#     t[0] = t[1]
+
+
+# #LO TENGO EN LOGICA
+# def p_unaria_notlogica(t) :
+#     'expresion_unaria : NOT expresion_logica '
+#     t[0] = UnitariaLogicaNOT(t[2])
+
 
 
 #LO TENGO EN NUMERICA ARISMETICA
@@ -2032,56 +2052,61 @@ def p_valor_cadena(t):
                             | CADENADOBLE'''
     t[0] = ExpresionValor(t[1])
 
+def p_valor_cadenabinaria(t):
+    '''expresion_aritmetica : CADENABINARIA'''
+    t[0] = ExpresionValor(t[1])
+
 
 def p_valor_abs(t) :
     'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'
     t[0] = ExpresionValor(t[2])
 
-
-#PPROBLEMAS CON LAS EXPRESIONES======================================
-#===================================================================
-#PPROBLEMAS CON LAS EXPRESIONES======================================
-#===================================================================
-def p_expnumerica_agrupacion(t):
-    '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
-    print("SI ENTRO PARENTESIS ppp")
-    t[0] = ExpresionValor(t[2])
-
-def p_expnumerica_valor(t):
-    '''EXPNUMERICA : ID
-                   | ENTERO
-                   | FLOTANTE
-                   | DEFAULT'''
-    print("SI ENTRO ER")
-    t[0] = ExpresionValor(t[1])
-
-def p_expnumerica(t):
-    '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
-                   | EXPNUMERICA DIVISION EXPNUMERICA
-                   | EXPNUMERICA PORCENTAJE EXPNUMERICA
-                   | EXPNUMERICA MENOS EXPNUMERICA
-                   | EXPNUMERICA MAS EXPNUMERICA'''
+# def p_expnumerica(t):
+#     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
+#                    | EXPNUMERICA DIVISION EXPNUMERICA
+#                    | EXPNUMERICA PORCENTAJE EXPNUMERICA
+#                    | EXPNUMERICA MENOS EXPNUMERICA
+#                    | EXPNUMERICA MAS EXPNUMERICA'''
 
 def p_expresion_binario(t):
-    '''EXPBINARIO : EXPBINARIO DOBLEPLECA EXPBINARIO
-                |   EXPBINARIO AMPERSAND EXPBINARIO
-                |   EXPBINARIO PLECA EXPBINARIO
-                |   EXPBINARIO NUMERAL EXPBINARIO
-                |   EXPBINARIO LEFTSHIFT EXPNUMERICA
-                |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
+    '''expresion_binario : expresion_aritmetica DOBLEPLECA expresion_aritmetica
+                |   expresion_aritmetica AMPERSAND expresion_aritmetica
+                |   expresion_aritmetica PLECA expresion_aritmetica
+                |   expresion_aritmetica NUMERAL expresion_aritmetica
+                |   expresion_aritmetica LEFTSHIFT expresion_aritmetica
+                |   expresion_aritmetica RIGHTSHIFT expresion_aritmetica'''
 
 def p_expresion_binario_n(t):
-    'EXPBINARIO : VIRGULILLA EXPBINARIO'
+    'expresion_binario : VIRGULILLA expresion_binario'
 
-def p_expresion_binario_val(t):
-    'EXPBINARIO : CADENABINARIA'
+# def p_expresion_binario_val(t):
+#     'expresion_binario : expresion_aritmetica'
 
-def p_expresoin_cadena(t):
-    'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
+#PPROBLEMAS CON LAS EXPRESIONES======================================
+#===================================================================
+#PPROBLEMAS CON LAS EXPRESIONES======================================
+#===================================================================
+# def p_expnumerica_agrupacion(t):
+#     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
+#     print("SI ENTRO PARENTESIS ppp")
+#     t[0] = ExpresionValor(t[2])
+#
+# def p_expnumerica_valor(t):
+#     '''EXPNUMERICA : ID
+#                    | ENTERO
+#                    | FLOTANTE
+#                    | DEFAULT'''
+#     print("SI ENTRO ER")
+#     t[0] = ExpresionValor(t[1])
 
-def p_expresion_cadena_val(t):
-    '''EXPCADENA : CADENASIMPLE
-                 | CADENADOBLE'''
+
+
+# def p_expresion_cadena(t):
+#     'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
+#
+# def p_expresion_cadena_val(t):
+#     '''EXPCADENA : CADENASIMPLE
+#                  | CADENADOBLE'''
 
 #PPROBLEMAS CON LAS EXPRESIONES======================================
 #===================================================================

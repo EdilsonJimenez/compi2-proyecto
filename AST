@@ -2,6 +2,7 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
+<<<<<<< HEAD
 	Node1 [label="CREATE TABLE"]
 	Node0 -> Node1
 	Node2 [label="Id: Estudiantes"]
@@ -42,4 +43,46 @@ digraph AST {
 	Node0 -> Node19
 	Node20 [label=Mitabla]
 	Node19 -> Node20
+=======
+	Node1 [label=INSERT]
+	Node0 -> Node1
+	Node2 [label="ID TABLA"]
+	Node1 -> Node2
+	Node3 [label=products]
+	Node2 -> Node3
+	Node4 [label=producto2]
+	Node2 -> Node4
+	Node5 [label="VALORES TABLA"]
+	Node1 -> Node5
+	Node6 [label="VALOR NUEVO"]
+	Node5 -> Node6
+	7 [label=ExpresionRelacional]
+	8 [label=exp1]
+	7 -> 8
+	8 -> 9
+	9 [label=ExpresionValor]
+	9 -> 10
+	10 [label=size]
+	11 [label="=="]
+	7 -> 11
+	12 [label=exp2]
+	7 -> 12
+	12 -> 13
+	13 [label=ExpresionValor]
+	13 -> 14
+	14 [label=20]
+	Node6 -> 7
+	Node16 [label="VALOR NUEVO"]
+	Node5 -> Node16
+	17 [label=ExpresionValor]
+	17 -> 18
+	18 [label=4]
+	Node16 -> 17
+	Node20 [label="VALOR NUEVO"]
+	Node5 -> Node20
+	21 [label=ExpresionValor]
+	21 -> 22
+	22 [label=hola]
+	Node20 -> 21
+>>>>>>> master
 }
