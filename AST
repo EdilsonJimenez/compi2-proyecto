@@ -2,7 +2,6 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-<<<<<<< HEAD
 	Node1 [label="CREATE TABLE"]
 	Node0 -> Node1
 	Node2 [label="Id: Estudiantes"]
@@ -43,6 +42,4 @@ digraph AST {
 	Node0 -> Node19
 	Node20 [label=Mitabla]
 	Node19 -> Node20
-=======
->>>>>>> master
 }

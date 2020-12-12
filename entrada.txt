@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-
 CREATE TABLE Estudiantes ( mi text null default 10 not null, campo INT null) inherits (Uni);
 DROP TABLE Mitabla;
 
-=======
 DELETE FROM products WHERE price = 10;
->>>>>>> master
