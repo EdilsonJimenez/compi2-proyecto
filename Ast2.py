@@ -87,18 +87,126 @@ class Ast2:
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"VALORES TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i)) 
-        print("valio")
-        
+       #GRAFICANDO EXPRESION===========================
         for i in valores:
             print("valores")
             print(i)
-            #self.inc();
-            #dot.node('Node'+  str(self.i), str(i.val))
-            #dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+            self.inc();
+            dot.node('Node'+  str(self.i), "VALOR NUEVO")
+            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
             #LLAMAMOS A GRAFICAR EXPRESION
+            padrenuevo4 = self.i
+            self.graficar_expresion(i)
+            self.inc()
+            dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
 
-       
+    
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR EXPRESION-----------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
 
+    def graficar_expresion(self, expresiones):  
+        global  dot,tag,i    
+        if isinstance(expresiones,ExpresionAritmetica): 
+            self.graficar_arit_log_rel_bb(expresiones,"Aritmetica")
+        elif isinstance(expresiones,ExpresionRelacional) :
+            self.graficar_arit_log_rel_bb(expresiones,"Relacional")
+        elif isinstance(expresiones,ExpresionLogica) :
+            self.graficar_arit_log_rel_bb(expresiones,"Logica")
+        elif isinstance(expresiones,UnitariaNegAritmetica) :
+            self.graficarUnaria(expresiones,"NegAritmetica")
+        elif isinstance(expresiones,UnitariaLogicaNOT) :
+            self.graficarUnaria(expresiones,"LogicaNOT")
+        elif isinstance(expresiones,UnitariaNotBB) :
+            self.graficarUnaria(expresiones,"NotBB")
+        elif isinstance(expresiones,ExpresionValor) :
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'ExpresionValor')
+            dot.edge(str(padreID),str(padreID+1))
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),str(expresiones.val))
+        elif isinstance(expresiones, UnariaReferencia) :
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),' ExpresionReferencia')
+            dot.edge(str(padreID),str(padreID+1))
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),expresiones.tipoVar.id)
+        elif isinstance(expresiones,'PARENTESIS FALTA'):
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'( valor )')
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresiones.variable)
+
+            
+    def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
+        global  dot,tag,i
+        self.inc()
+        padreID=self.i
+        padre=padreID
+        dot.node(str(padreID),'Expresion'+tipo_exp)
+        self.inc()
+        padreID=self.i
+        dot.node(str(padreID),'exp1')
+        dot.edge(str(padre),str(padreID))
+        dot.edge(str(padreID),str(padreID+1))
+        self.graficar_expresion(expresion.exp1)
+        self.inc()
+        padreID=self.i
+        dot.node(str(padreID),self.getVar(expresion.operador))
+        dot.edge(str(padre),str(padreID))
+        self.inc()
+        padreID=self.i
+        dot.node(str(padreID),'exp2')
+        dot.edge(str(padre),str(padreID))
+        dot.edge(str(padreID),str(padreID+1))
+        self.graficar_expresion(expresion.exp2)   
+        
+    def graficarUnaria(self,expresion,tipo_exp=""):
+        self.inc()
+        padreID=self.i
+        dot.node(str(padreID),'Expresion'+tipo_exp)
+        dot.edge(str(padreID),str(padreID+1))
+        if isinstance(expresion,UnitariaNegAritmetica):
+            self.graficar_expresion(expresion.exp)
+        else:
+            self.graficar_expresion(expresion.expresion)
+    
+    def getVar(self, padreID):
+        if padreID==OPERACION_ARITMETICA.MAS:
+            return '+'
+        elif padreID==OPERACION_ARITMETICA.MENOS:
+            return '-'
+        elif padreID==OPERACION_ARITMETICA.MULTI:
+            return '*'
+        elif padreID==OPERACION_ARITMETICA.DIVIDIDO:
+            return '/'
+        elif padreID==OPERACION_ARITMETICA.RESIDUO:
+            return '%'
+        elif padreID==OPERACION_LOGICA.AND:
+            return 'AND'
+        elif padreID==OPERACION_LOGICA.OR:
+            return 'OR'
+        elif padreID==OPERACION_RELACIONAL.IGUALQUE:
+            return '=='
+        elif padreID==OPERACION_RELACIONAL.DISTINTO:
+            return '!='
+        elif padreID==OPERACION_RELACIONAL.MAYORIGUAL:
+            return '>='
+        elif padreID==OPERACION_RELACIONAL.MENORIGUAL:
+            return '!='
+        elif padreID==OPERACION_RELACIONAL.MAYORQUE:
+            return '>'
+        elif padreID==OPERACION_RELACIONAL.MAYORQUE:
+            return '<'
+        else:
+            return 'op'
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR CREATE TABLE-------------------------------------------------------------------
     def grafoCreateTable(self, id, cuerpo, inher, padre):
         global dot, i
         aqui = cuerpo
@@ -141,6 +249,4 @@ class Ast2:
 #  self.contador+1
 # self.c +='Node'+str(self.contador)+'[label="'+NombreT+]
 
-#----------------------------------------------------------------------------------------------------------
-#-----------------------GRAFICAR EXPRESION-----------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------
+
