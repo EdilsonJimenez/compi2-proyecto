@@ -133,24 +133,27 @@ reservadas = {
 
 tokens = [
              # SIMBOLOS UTILIZADOS EN EL LENGUAJE
+             'MAS',
+             'MENOS',
+             'ASTERISCO',
+             'DIVISION',
+             'PORCENTAJE',
+             'IGUAL',
+             'PARIZQ',
+             'PARDER',
+             'PUNTOCOMA',
+             #NOT
+             #AND
+             #OR
+             'IGUALQUE',
              'DIFERENTE',
              'NEGACION',
-             'IGUAL',
              'MAYOR',
              'MENOR',
              'MENORIGUAL',
              'MAYORIGUAL',
-
-             'PARIZQ',
-             'PARDER',
              'COMA',
              'PUNTO',
-             'PUNTOCOMA',
-             'ASTERISCO',
-             'DIVISION',
-             'PORCENTAJE',
-             'MAS',
-             'MENOS',
 
              # Operadores de cadenas de bits
              'DOBLEPLECA',
@@ -176,24 +179,25 @@ tokens = [
          ] + list(reservadas.values())
 
 # TOKENS DE LOS SIMBOLOS UTILIZADOS EN EL LENGUAJE
+
+t_MAS       = r'\+'
+t_MENOS     = r'-'
+t_ASTERISCO = r'\*'
+t_DIVISION = r'/'
+t_PORCENTAJE = r'%'
+t_IGUAL = r'='
+t_PARIZQ = r'\('
+t_PARDER = r'\)'
+t_PUNTOCOMA = r';'
+t_IGUALQUE  = r'=='
 t_DIFERENTE = r'!='
 t_NEGACION = r'\!'
-t_IGUAL = r'='
 t_MAYOR = r'>'
 t_MENOR = r'<'
 t_MENORIGUAL = r'<='
 t_MAYORIGUAL = r'>='
-
-t_PARIZQ = r'\('
-t_PARDER = r'\)'
 t_COMA = r','
 t_PUNTO = r'\.'
-t_PUNTOCOMA = r';'
-t_ASTERISCO = r'\*'
-t_DIVISION = r'/'
-t_PORCENTAJE = r'%'
-t_MAS = r'\+'
-t_MENOS = r'-'
 t_DOBLEPLECA = r'\|\|'
 t_AMPERSAND = r'&'
 t_PLECA = r'\|'
@@ -213,32 +217,8 @@ import sys
 
 
 # EXPRESIONES REGULARES DEL LENGUAJE
-def t_CADENABINARIA(t):
-    r'B\'(1|0)+\''
-    t.value = t.value[2:-1]
-    return t
-
-
-def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reservadas.get(t.value.lower(), 'ID')  # Check for reserved words
-    return t
-
-
-def t_ENTERO(t):
-    r'\d+'
-    try:
-        t.value = int(t.value)
-
-    except ValueError:
-        print("Integer value too large %d", t.value)
-        t.value = 0
-
-    return t
-
-
 def t_FLOTANTE(t):
-    r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'
+    r'\d+\.\d+'
     try:
         t.value = float(t.value)
     except ValueError:
@@ -246,19 +226,46 @@ def t_FLOTANTE(t):
         t.value = 0
     return t
 
+def t_ENTERO(t):
+    r'\d+'
+    try:
+        t.value = int(t.value)
+    except ValueError:
+        print("Integer value too large %d", t.value)
+        t.value = 0
+    return t
+
 
 def t_CADENASIMPLE(t):
     r'\'.*?\''
-
-    t.value = t.value[1:-1]  # remuevo las comillas simples
+    t.value = t.value[1:-1]
     return t
 
 
 def t_CADENADOBLE(t):
     r'\".*?\"'
-    t.value = t.value[1:-1]  # remuevo las comillas dobles
+    t.value = t.value[1:-1]
     return t
 
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reservadas.get(t.value.lower(), 'ID')  # Check for reserved words
+    return t
+
+def t_CADENABINARIA(t):
+    r'B\'(1|0)+\''
+    t.value = t.value[2:-1]
+    return t
+
+def t_FECHA(t):
+    r'/\*(.|\n)*?\*/'
+    t.lexer.lineno += t.value.count('\n')
+
+t_ignore = " \t"
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += t.value.count("\n")
 
 def t_COMENTARIOMULTI(t):
     r'/\*(.|\n)*?\*/'
@@ -270,24 +277,19 @@ def t_COMENTARIONORMAL(t):
     t.lexer.lineno += 1
 
 
-def t_FECHA(t):
-    r'/\*(.|\n)*?\*/'
-    t.lexer.lineno += t.value.count('\n')
-
-
-# CARACTERES IGNORADOS DEL LENGUAJE
-
-t_ignore = "\b|\f|\n|\r|\t"
-
-
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += t.value.count("\n")
-
 
 def t_error(t):
-    # print("Illegal character '%s'" % t.value[0])
+    print("Caracter NO Valido: '%s'" % t.value[0])
     t.lexer.skip(1)
+
+
+
+
+
+
+
+
+
 
 
 # Construyendo el analizador léxico
@@ -332,19 +334,28 @@ from Ast2 import *
 from Instruccion import *
 from expresiones import *
 
+#precedence = (
+  #  ('left', 'OR'),
+   # ('left', 'AND'),
+   # ('right', 'NOT'),
+   # ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
+  #  ('right', 'VIRGULILLA'),
+  #  ('left', 'MAS', 'MENOS'),
+   # ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
+#)
+
+
+
 precedence = (
-    ('left', 'OR'),
-    ('left', 'AND'),
     ('right', 'NOT'),
-    ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
-    ('right', 'VIRGULILLA'),
+    ('left', 'AND'),
+    ('left', 'OR'),
+    ('left', 'DIFERENTE', 'IGUAL', 'MAYOR', 'MENOR', 'MENORIGUAL', 'MAYORIGUAL'),
+    ('left', 'PUNTO'),
     ('left', 'MAS', 'MENOS'),
     ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
+    ('PARIZQ', 'PARDER')
 )
-
-
-
-
 
 
 
@@ -362,7 +373,7 @@ def p_instrucciones_lista(t) :
     t[1].append(t[2])
     t[0] = t[1]
 
-   
+
 
 
     # endregion
@@ -492,14 +503,17 @@ def p_Campos_id(t):
 
 def p_Campos_Asterisco(t):
     'CAMPOS          : ASTERISCO'
+
     t[0] = t[1]
+
+
 
 
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
-    t[0] = t[1]
 
-    #t[0] = str(t[1])
+    t[0] = ExpresionValor(t[1])
+
 
 
 def p_Alias_id(t):
@@ -719,7 +733,6 @@ def p_CondicionRel_Expre(t):
 
 def p_OtroLogico_SimboloLogic(t):
     'OTRO_LOGICO : SIMBOLO_LOGICO CONDICIONES'
-
     #t[0] = str(t[1]) + str(t[2])
 
 
@@ -789,7 +802,6 @@ def p_SimboloRela_Simbolos(t):
 
 def p_Inners_Lista(t):
     'INNERS : INNERS INNERR'
-
     #t[1].append(t[2])
     #t[0] = t[1]
 
@@ -1316,42 +1328,39 @@ def p_WhenUni_ExpreElseThen(t):
 
 def p_instruccion_dml_comandos_CREATE_TABLE(t):
     'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
-    print('\n' + str(t[0]) + '\n')
+    t[0] = CreateTable(t[3], 'Cuerpo ', None)
 
 
 def p_instruccion_dml_comandos_CREATE_TABLE2(t):
-    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER  INHERITS PARIZQ ID PARDER PUNTOCOMA'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
-    print('\n' + str(t[0]) + '\n')
+    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER INHER PUNTOCOMA'
+    t[0] = CreateTable(t[3], 'Cuerpo', t[7])
+
+def p_instruccions_dml_inherit(t):
+    'INHER      : INHERITS PARIZQ ID PARDER'
+    t[0] = Inherits(t[3])
+    print(str(t[3]))
 
 
 def p_instruccion_dml_comandos_CUERPO(t):
     'CUERPO_CREATE_TABLE       : LISTA_DE_COLUMNAS'
-  #  t[1].append(t[1])
-  #  t[0] = t[1]
 
 
 # LISTA DE LAS FILAS COMPLETAS---------------------------------------------------------------------------------
 def p_CREATE_TABLE_LISTA_CAMPOS(t):
     'LISTA_DE_COLUMNAS       : LISTA_DE_COLUMNAS LISTA2'
- #   t[1].append(t[2])
- #   t[0] = t[1]
+
 
 
 def p_CREATE_TABLE_LISTA_CAMPOS2(t):
     'LISTA_DE_COLUMNAS    : LISTA2'
- #   t[0] = [t[1]]
 
 
 def p_Create_TABLE_CAMPOS(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
+    t[0] = CampoTabla(None)
 
 def p_Create_TABLE_CAMPOS2(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Create_TABLE_CAMPOS3(t):
@@ -1409,22 +1418,22 @@ def p_Create_TABLE_CAMPOS8(t):
 # LISTADO DE IDS--------------------------------------------------------
 def p_CREATE_TABLE_LISTA_IDS(t):
     'LISTA_DE_IDS      : LISTA_DE_IDS LISTA_ID_'
-   # t[1].append(t[2])
-   # t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_CREATE_TABLE_LISTA_IDS2(t):
     'LISTA_DE_IDS    : LISTA_ID_'
-   # t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_CREATE_TABLE_LISTA_IDS3(t):
     'LISTA_ID_  :  ID COMA'
-   # t[0] = str(t[1]) +  str(t[2])
+    t[0] = ExpresionValor(t[1])
 
 def p_CREATE_TABLE_LISTA_IDS4(t):
     'LISTA_ID_  :  ID'
-    #t[0] = str(t[1])
+    t[0] = ExpresionValor(t[1])
 
 
 # TIPO DE LAS VARIABLES DE CADA CAMPO DECLARADAS--------------------------------------------------------------
@@ -1437,35 +1446,47 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | REAL
                     | MONEY
                     | FLOAT
+                    | TEXT
+                    | BOOLEAN '''
+    t[0] = valorTipo(t[1], None)
+    print(str(t[1]))
+
+def p_Create_TABLE_TIPO_CAMPO2(t):
+    'TIPO_CAMPO   : DOUBLE PRECISION'
+    t[0] = valorTipo(t[1], None)
+    print(str(t[1]))
+
+def p_Create_TABLE_TIPO_CAMPO3(t):
+    'TIPO_CAMPO   : CHARACTER VARYING PARIZQ EXPNUMERICA PARDER'
+    t[0] = valorTipo(t[1], None)
+    print(str(t[1]))
+
+def p_Create_TABLE_TIPO_CAMPO3(t):
+    '''TIPO_CAMPO   : VARCHAR PARIZQ EXPNUMERICA PARDER
+                    | BOOLEAN
                     | DOUBLE PRECISION
                     | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
                     | VARCHAR PARIZQ EXPNUMERICA PARDER
                     | CHARACTER PARIZQ EXPNUMERICA PARDER
-                    | CHAR PARIZQ EXPNUMERICA PARDER
-                    | TEXT
-                    | BOOLEAN'''
-   # t[0] = str(t[1])
+                    | CHAR PARIZQ EXPNUMERICA PARDER'''
+    t[0] = valorTipo(t[1], t[3])
+    print(str(t[1]))
 
-
-# LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES--------------------------------------------------------------
+# LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES---------------------------------------------------
 def p_CREATE_TABLE_LISTA3_CAMPOS(t):
     'VALIDACIONES_CREATE_TABLE    : LISTA3'
-  #  t[0] = [t[1]]
 
 
 def p_Create_TABLE_CAMPOS_3(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE '
-   # t[0] = str(t[1])
 
 
 def p_Create_TABLE_CAMPOS_4(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
-   # t[0] = str(t[1])
 
 
 def p_Create_TABLE_CAMPOS_5(t):
     'LISTA3          : LISTA3  VALIDACION_CAMPO_CREATE '
-  #  t[0] = str(t[1])
 
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
@@ -1476,46 +1497,48 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
                                 | DEFAULT DECIMAL
                                 | DEFAULT ENTERO
                                 | DEFAULT ID'''
-  #  t[0] = str(t[1]) + str(t[2])
+    t[0] = CampoValidacion(t[1], t[2])
 
+def p_Create_TABLE_TIPO_CAMPO4(t):
+    '''VALIDACION_CAMPO_CREATE  : NULL'''
+    t[0] = CampoValidacion(t[1], None)
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
     'VALIDACION_CAMPO_CREATE_VACIO  :  '
 
 
-def p_Create_TABLE_TIPO_CAMPO4(t):
-    '''VALIDACION_CAMPO_CREATE  : NULL  '''
-  #  t[0] = str(t[1])
+
+
 
 
 # CONDICIONES CON EL CONSTRAIN------------------------------------------------------------------------------------------------------------
 def p_Create_TABLE_TIPO_CAMPO5(t):
     'VALIDACION_CAMPO_CREATE  : CONSTRAINT ID  UNIQUE'
- #   t[0] = str(t[1])+str(t[2])+str(t[3])
+
 
 def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
-  #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
-
+#FIN CREATE TABLE
 
 
 
 # -----------------------------------------------------------------------------------------------------------------
 # INSERT
 def p_instruccion_dml_comandos_INSERT(t):
-    'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DATOS PUNTOCOMA '
-    #t[0] = Insert_Dato(t[3],t[4])
+    'DML_COMANDOS       : INSERT INTO  LISTA_DE_IDS DATOS PUNTOCOMA '
+    t[0] = Insert_Datos(t[3],t[4])
+
 
 
 def p_instruccion_dml_comandos_INSERT2(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DEFAULT VALUES PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
+  # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_INSERT_DATOS(t):
     'DATOS       : PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES PARDER'
-    
+
 
 def p_instruccion_dml_comandos_INSERT_DATOS2(t):
     'DATOS       : VALUES PARIZQ VALORES PARDER'
@@ -1535,19 +1558,20 @@ def p_instruccion_dml_comandos_INSERT_COLUMNAS2(t):
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA(t):
     'COLUMNA       : ID COMA'
-    t[0] = [t[1]]
+    t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA2(t):
     'COLUMNA       : ID'
-    t[0] = [t[1]]
+    t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES(t):
     'VALORES       : VALORES VALOR'
+    print("SI ENTRO VALORES")
     t[1].append(t[2])
     t[0] = t[1]
-  
+
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES2(t):
@@ -1556,26 +1580,26 @@ def p_instruccion_dml_comandos_INSERT_VALORES2(t):
 
 
 def p_instruccion_dml_comandos_INSERT_VALOR(t):
-    'VALOR       : EXPRESION_GLOBAL COMA'
+    'VALOR       : expresion COMA'
     t[0] = t[1]
-    
+
 
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t):
-    'VALOR       : EXPRESION_GLOBAL'
+    'VALOR       : expresion'
     t[0] = t[1]
 
 
 # -----------------------------------------------------------------------------------------------------------------
 # UPDATE
 def p_instruccion_dml_comandos_UPDATE(t):
-    'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_UPDATE2(t):
-    'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN PUNTOCOMA'
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
 
@@ -1593,22 +1617,22 @@ def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t):
 
 # -------------------------------------------------------
 def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
-    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL'
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion'
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO2(t):
-    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL C'
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion C'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO3(t):
-    'CAMPO       :  ID IGUAL EXPRESION_GLOBAL'
+    'CAMPO       :  ID IGUAL expresion'
  #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO4(t):
-    'CAMPO       :  ID IGUAL EXPRESION_GLOBAL C'
+    'CAMPO       :  ID IGUAL expresion C'
  #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
@@ -1620,13 +1644,13 @@ def p_instruccion_dml_comandos_UPDATE_C(t):
 # -----------------------------------------------------------------------------------------------------------------
 # DELETE
 def p_instruccion_dml_comandos_DELETE(t):
-    'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS WHERE CONDICIONES PUNTOCOMA'
+    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS WHERE CONDICIONES PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_DELETE2(t):
-    'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS PUNTOCOMA'
+    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
     print('\n' + str(t[0]) + '\n')
@@ -1704,16 +1728,6 @@ def p_instruccion_dml_comandos_ALTER_TABLE9(t):
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
-
-# --------------------------------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------------------------------
-
-
-def p_expresion_global(t):
-    '''EXPRESION_GLOBAL : EXPBINARIO
-                        | EXPNUMERICA
-                        | EXPCADENA'''
-    t[0] = t[1]
 
 
 # DDL
@@ -1910,37 +1924,136 @@ def p_cs2(t):
 # -----------------------------------------------------------------------------------------------------------------
 # Expresiones numericas
 
-def p_expnumerica(t):
-    '''EXPNUMERICA : EXPNUMERICA MAS EXPNUMERICA
-                   | EXPNUMERICA MENOS EXPNUMERICA
-                   | EXPNUMERICA ASTERISCO EXPNUMERICA
-                   | EXPNUMERICA DIVISION EXPNUMERICA
-                   | EXPNUMERICA PORCENTAJE EXPNUMERICA'''
-    if t[2] == '+'  : 
+
+# --------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------
+# -------------------EXPRESION EXPRESION EXPRESION EXPRESION EXPRESION------------------------------------
+# -------------------EXPRESION EXPRESION EXPRESION EXPRESION EXPRESION------------------------------------
+# -------------------EXPRESION EXPRESION EXPRESION EXPRESION EXPRESION------------------------------------
+# --------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------
+
+def p_expresion_global(t):
+    '''expresion  : expresion_aritmetica
+                | expresion_relacional
+                | expresion_logica
+                | expresion_unaria
+                | EXPBINARIO'''
+    t[0] = t[1]
+
+def p_expresion_aritmetica(t):
+    '''expresion_aritmetica : expresion_aritmetica MAS expresion_aritmetica
+                            | expresion_aritmetica MENOS expresion_aritmetica
+                            | expresion_aritmetica ASTERISCO expresion_aritmetica
+                            | expresion_aritmetica DIVISION expresion_aritmetica
+                            | expresion_aritmetica PORCENTAJE expresion_aritmetica'''
+    if t[2] == '+'  :
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
-    elif t[2] == '-': 
+    elif t[2] == '-':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MENOS)
-    elif t[2] == '*': 
+    elif t[2] == '*':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MULTI)
-    elif t[2] == '/': 
+    elif t[2] == '/':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.DIVIDIDO)
-    elif t[2] == '%': 
+    elif t[2] == '%':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.RESIDUO)
-      
 
 
+
+def p_expresion_relacional(t) :
+    '''expresion_relacional :  expresion_aritmetica IGUALQUE expresion_aritmetica
+                            | expresion_aritmetica DIFERENTE expresion_aritmetica
+                            | expresion_aritmetica MAYORIGUAL expresion_aritmetica
+                            | expresion_aritmetica MENORIGUAL expresion_aritmetica
+                            | expresion_aritmetica MAYOR expresion_aritmetica
+                            | expresion_aritmetica MENOR expresion_aritmetica'''
+
+    if t[2] == '==' :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
+    elif t[2] == '!=' :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.DISTINTO)
+    elif t[2] == '>=' :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORIGUAL)
+    elif t[2] == '<=' :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORIGUAL)
+    elif t[2] == '>'  :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORQUE)
+    elif t[2] == '<' :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORQUE)
+
+
+def p_expresion_logica(t) :
+    '''expresion_logica :   expresion_relacional AND expresion_relacional
+                        |   expresion_relacional OR expresion_relacional
+                        |   expresion_relacional'''
+    if t[2] == 'AND' :
+        t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.AND)
+    elif t[2] == 'OR' :
+        t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.OR)
+
+#LO TENGO EN LOGICA
+def p_unaria_notlogica(t) :
+    'expresion_unaria : NOT expresion_relacional '
+    t[0] = UnitariaLogicaNOT(t[2])
+
+#LO TENGO EN NUMERICA ARISMETICA
+def p_unitaria_negativo(t):
+    'expresion_unaria : MENOS expresion_aritmetica'
+    t[0] = UnitariaNegAritmetica(t[2])
+
+
+#VALORES--------------------------------------------------
+def p_valor_id(t):
+    '''expresion_aritmetica : ID'''
+    t[0] = ExpresionValor(t[1])
+
+def p_valor_number(t):
+    '''expresion_aritmetica : ENTERO'''
+    t[0] = ExpresionValor(t[1])
+
+def p_valor_flotante(t):
+    'expresion_aritmetica : FLOTANTE'
+    t[0] = ExpresionValor(t[1])
+
+def p_valor_default(t):
+    'expresion_aritmetica : DEFAULT'
+    t[0] = ExpresionValor(t[1])
+
+def p_valor_cadena(t):
+    '''expresion_aritmetica : CADENASIMPLE
+                            | CADENADOBLE'''
+    t[0] = ExpresionValor(t[1])
+
+
+def p_valor_abs(t) :
+    'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'
+    t[0] = ExpresionValor(t[1])
+
+
+#PPROBLEMAS CON LAS EXPRESIONES======================================
+#===================================================================
+#PPROBLEMAS CON LAS EXPRESIONES======================================
+#===================================================================
 def p_expnumerica_agrupacion(t):
     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
+    print("SI ENTRO PARENTESIS ppp")
     t[0] = ExpresionValor(t[2])
-
 
 def p_expnumerica_valor(t):
     '''EXPNUMERICA : ID
                    | ENTERO
                    | FLOTANTE
                    | DEFAULT'''
+    print("SI ENTRO ER")
     t[0] = ExpresionValor(t[1])
 
+def p_expnumerica(t):
+    '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
+                   | EXPNUMERICA DIVISION EXPNUMERICA
+                   | EXPNUMERICA PORCENTAJE EXPNUMERICA
+                   | EXPNUMERICA MENOS EXPNUMERICA
+                   | EXPNUMERICA MAS EXPNUMERICA'''
 
 def p_expresion_binario(t):
     '''EXPBINARIO : EXPBINARIO DOBLEPLECA EXPBINARIO
@@ -1949,30 +2062,24 @@ def p_expresion_binario(t):
                 |   EXPBINARIO NUMERAL EXPBINARIO
                 |   EXPBINARIO LEFTSHIFT EXPNUMERICA
                 |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
-    
-
 
 def p_expresion_binario_n(t):
     'EXPBINARIO : VIRGULILLA EXPBINARIO'
-   # t[0] = str(t[1]) + str(t[2])
-
 
 def p_expresion_binario_val(t):
     'EXPBINARIO : CADENABINARIA'
-    #t[0] = str(t[1])
-
 
 def p_expresoin_cadena(t):
     'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
-    #t[0] = t[1]
-
 
 def p_expresion_cadena_val(t):
     '''EXPCADENA : CADENASIMPLE
                  | CADENADOBLE'''
-    t[0] = ExpresionValor(t[1])
 
-
+#PPROBLEMAS CON LAS EXPRESIONES======================================
+#===================================================================
+#PPROBLEMAS CON LAS EXPRESIONES======================================
+#===================================================================
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)
 

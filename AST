@@ -1,11 +1,18 @@
 digraph AST {
 	edge [arrowhead=none]
+<<<<<<< HEAD
 	node [color="#31CEF0" shape=box style=cyan4]
 	Node0 [label=AST]
 	Node1 [label="DROP TRABLE"]
+=======
+	node [color="#31CEF0" shape=box]
+	Node0 [label="\"AST\""]
+	Node1 [label="CREATE TABLE"]
+>>>>>>> 1980812dab9e00aa846beec3997efa37882953aa
 	Node0 -> Node1
-	Node2 [label=tablaMaestro]
+	Node2 [label=Profesion]
 	Node1 -> Node2
+<<<<<<< HEAD
 	Node3 [label=INSTRUCCION_SELECT]
 	Node0 -> Node3
 	Node4 [label=SELECT]
@@ -26,4 +33,69 @@ digraph AST {
 	Node10 -> Node11
 	Node12
 	Node3 -> Node12
+=======
+<<<<<<< HEAD
+	Node3 [label="CREATE TABLE"]
+	Node0 -> Node3
+	Node4 [label=Estudiantes]
+	Node3 -> Node4
+	Node5 [label=INHERITS]
+	Node3 -> Node5
+	Node6 [label=Uni]
+	Node5 -> Node6
+	Node7 [label="DROP TABLE"]
+	Node0 -> Node7
+	Node8 [label=Mitabla]
+	Node7 -> Node8
+=======
+	Node3 [label=products]
+	Node2 -> Node3
+	Node4 [label=producto2]
+	Node2 -> Node4
+	Node5 [label="VALORES TABLA"]
+	Node1 -> Node5
+	Node6 [label="VALOR NUEVO"]
+	Node5 -> Node6
+	7 [label=ExpresionAritmetica]
+	8 [label=exp1]
+	7 -> 8
+	8 -> 9
+	9 [label=ExpresionValor]
+	9 -> 10
+	10 [label=5]
+	11 [label="+"]
+	7 -> 11
+	12 [label=exp2]
+	7 -> 12
+	12 -> 13
+	13 [label=ExpresionAritmetica]
+	14 [label=exp1]
+	13 -> 14
+	14 -> 15
+	15 [label=ExpresionValor]
+	15 -> 16
+	16 [label=5]
+	17 [label="*"]
+	13 -> 17
+	18 [label=exp2]
+	13 -> 18
+	18 -> 19
+	19 [label=ExpresionValor]
+	19 -> 20
+	20 [label=9]
+	Node6 -> 7
+	Node22 [label="VALOR NUEVO"]
+	Node5 -> Node22
+	23 [label=ExpresionValor]
+	23 -> 24
+	24 [label=4]
+	Node22 -> 23
+	Node26 [label="VALOR NUEVO"]
+	Node5 -> Node26
+	27 [label=ExpresionValor]
+	27 -> 28
+	28 [label=hola]
+	Node26 -> 27
+>>>>>>> master
+>>>>>>> 1980812dab9e00aa846beec3997efa37882953aa
 }
