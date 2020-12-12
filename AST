@@ -1,9 +1,29 @@
 digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box style=cyan4]
-	Node0 [label="[label=\"AST\"]"]
+	Node0 [label=AST]
 	Node1 [label="DROP TRABLE"]
 	Node0 -> Node1
 	Node2 [label=tablaMaestro]
 	Node1 -> Node2
+	Node3 [label=INSTRUCCION_SELECT]
+	Node0 -> Node3
+	Node4 [label=SELECT]
+	Node3 -> Node4
+	Node5 [label=LISTA_CAMPOS]
+	Node3 -> Node5
+	Node6 [label=ACCESO_CAMPO]
+	Node5 -> Node6
+	Node7 [label="*"]
+	Node6 -> Node7
+	Node8 [label=FROM]
+	Node3 -> Node8
+	Node9 [label=LISTA_TABLAS]
+	Node3 -> Node9
+	Node10 [label=Nombre_Tabla]
+	Node9 -> Node10
+	Node11 [label=tabla1]
+	Node10 -> Node11
+	Node12
+	Node3 -> Node12
 }

@@ -9,52 +9,60 @@ class DropTable(Instruccion):
 
 
 
-
-
-
-
-
-
-
 #---------------------------------------------------------------------------------------------------
 class Select(Instruccion) :
-
-    def __init__(self,  Lista_Campos=[],Nombres_Tablas=[],Cuepo=[],Unions=[]) :
+    def __init__(self,  unionn, Lista_Campos=[], Nombres_Tablas=[] ) :
         self.Lista_Campos   = Lista_Campos
         self.Nombres_Tablas = Nombres_Tablas
-        self.Cuepo          =  Cuepo
-        self.Unions         = Unions
+        self.unionn         = unionn
+
+
+
+
 
 # Campos Accedidos
 #---------------------------------------------------------------------------------------------------
 
-class Campo_Accedido(Instruccion): #Nombre.columna
+class Campo_Accedido(Instruccion): #Nombre.columna  Lista_Posible
 
-    def __init__(self, NombreT, Columna):
-        self.NombreT = NombreT
-        self.Columna = Columna
-
+    def __init__(self, NombreT, Columna, Lista_Alias=[]):
+        self.NombreT       = NombreT
+        self.Columna       = Columna
+        self.Lista_Alias   = Lista_Alias
 
 #---------------------------------------------------------------------------------------------------
 
-class Campo_AccedidoSolo(Instruccion):  # Nombre
-    def __init__(self,NombreT):
-        self.NombreT = NombreT
+
+#Nombre Tabla Accedidos
+#---------------------------------------------------------------------------------------------------
+class AccesoTabla(Instruccion): #Tabla
+
+    def __init__(self, NombreT,Lista_Alias=[]):
+        self.NombreT     = NombreT
+        self.Lista_Alias = Lista_Alias
+#---------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 # Alias
+#Alias Campos
 #---------------------------------------------------------------------------------------------------
-class Alias_Table(Instruccion):
-
-    def __init__(self, As, Alias):
-        self.As = As
+class Alias_Campos_ListaCampos(Instruccion):
+    def __init__(self, Alias,Lista_Sentencias=[]):
         self.Alias = Alias
+        self.Lista_Sentencias = Lista_Sentencias
 
 #---------------------------------------------------------------------------------------------------
-class Alias_TableSinAs(Instruccion):
-    def __init__(self, Alias):
+
+
+#Alias Tablas
+#---------------------------------------------------------------------------------------------------
+class Alias_Table_ListaTablas(Instruccion):
+    def __init__(self, Alias,Lista_Sentencias=[]):
         self.Alias = Alias
-
+        self.Lista_Sentencias = Lista_Sentencias
 
 #---------------------------------------------------------------------------------------------------
-

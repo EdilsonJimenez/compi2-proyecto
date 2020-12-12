@@ -406,7 +406,7 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    t[0]= Select()
+    #t[0]= Select()
 
     # endregion
 
@@ -425,44 +425,52 @@ def p_instruccion_dql_comandosS2(t):
 
     print('\n' + str(t[0]) + '\n')
 
+def p_instruccion_dql_comandos3(t):
+    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    t[0]= Select(t[5],t[2],t[4])
 
 # ------------------------------------------------------------------------------------------------------------------
 
 # Lista de Campos
 def p_ListaCampos_ListaCamposs(t):
     'LISTA_CAMPOS       : LISTA_CAMPOS LISTAA'
-
-    #t[1].append(t[2])
-    #t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_ListaCampos_Lista(t):
     'LISTA_CAMPOS    : LISTAA'
-    #t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_Lista_NombreS(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS S'
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] =Campo_Accedido(t[1],t[3],t[4])
 
 
 def p_Lista_Nombre(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS'
+    t[0] = Campo_Accedido(t[1], t[3],"")
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Lista_CampoS(t):
     'LISTAA          : CAMPOS S'
+    t[0] = Campo_Accedido("",t[1],t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Lista_Campo(t):
     'LISTAA          : CAMPOS'
-
+    t[0] = Campo_Accedido("",t[1],"")
     #t[0] = str(t[1])
+
+
 
 
 def p_Lista_ExprecionesCase(t):
@@ -479,54 +487,59 @@ def p_Lista_SubsQuery(t):
 
 def p_Campos_id(t):
     'CAMPOS          : ID'
-
-    #t[0] = str(t[1])
+    t[0] = t[1]
 
 
 def p_Campos_Asterisco(t):
     'CAMPOS          : ASTERISCO'
-
-    #t[0] = str(t[1])
+    t[0] = t[1]
 
 
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
+    t[0] = t[1]
 
     #t[0] = str(t[1])
 
 
 def p_Alias_id(t):
     'ALIAS          : ID'
+    t[0] = t[1]
 
     #t[0] = str(t[1])
 
 
 def p_S_ComaLista(t):
     'S          : COMA LISTAA'
+    t[0] = Alias_Campos_ListaCampos("",t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_S_AsAlias(t):
     'S          : AS ALIAS'
+    t[0] = Alias_Campos_ListaCampos(t[2],"")
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasMos(t):
     'S          : AS ALIAS COMA LISTAA'
+    t[0] = Alias_Campos_ListaCampos(t[2],t[4])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasMos(t):
     'S          :  ALIAS COMA LISTAA'
+    t[0] = Alias_Campos_ListaCampos(t[2], t[3])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_Aliass(t):
     'S          :  ALIAS'
+    t[0] = Alias_Campos_ListaCampos(t[1],"")
 
     #t[0] = str(t[1])
 
@@ -547,26 +560,28 @@ def p_Disctint_Rw(t):
 def p_NombresTablas_NombresTablas(t):
     'NOMBRES_TABLAS       : NOMBRES_TABLAS TABLA'
 
-    #t[1].append(t[2])
-    #t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_NombresTablas_Tabla(t):
     'NOMBRES_TABLAS    : TABLA'
 
-    #t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_Tabla_NombreT(t):
     'TABLA   : NOMBRE_T'
 
-    #t[0] = str(t[1])
+    t[0] = AccesoTabla(t[1],"")
+
+
 
 
 def p_Tabla_NombreTS(t):
     'TABLA   : NOMBRE_T S1'
+    t[0] = AccesoTabla(t[1],t[2])
 
-    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Tabla_SubQuerys(t):
@@ -576,30 +591,35 @@ def p_Tabla_SubQuerys(t):
 
 def p_Ss_ComaLista(t):
     'S1          : COMA TABLA'
+    t[0]=Alias_Table_ListaTablas("",t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAlias(t):
     'S1          : AS ALIAS'
+    t[0] = Alias_Table_ListaTablas(t[2],"")
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasComa(t):
     'S1          : AS ALIAS COMA TABLA'
+    t[0] = Alias_Table_ListaTablas(t[2], t[4])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasCo(t):
     'S1          :  ALIAS COMA TABLA'
+    t[0] = Alias_Table_ListaTablas(t[1], t[3])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_AliasSolo(t):
     'S1          :  ALIAS'
+    t[0] = Alias_Table_ListaTablas(t[1], "")
 
     #t[0] = str(t[1])
 
@@ -1484,7 +1504,7 @@ def p_Create_TABLE_TIPO_CAMPO6(t):
 # INSERT
 def p_instruccion_dml_comandos_INSERT(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DATOS PUNTOCOMA '
-     t[0] = Insert_Dato(t[3],t[4])
+    #t[0] = Insert_Dato(t[3],t[4])
 
 
 def p_instruccion_dml_comandos_INSERT2(t):
