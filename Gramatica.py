@@ -417,9 +417,9 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    #t[0]= Select()
+    t[0]= Select2(t[6],t[5],t[2],t[4])
 
-    # endregion
+
 
 
 
@@ -644,9 +644,8 @@ def p_S_AliasSolo(t):
 # Cuerpo
 
 def p_Cuerpo_Where(t):
-    'CUERPO   : WHERE CONDICIONES'
-
-    #t[0] = str(t[1]) + str(t[2])
+    'CUERPO   : WHERE expresion'
+    t[0] =Cuerpo_Condiciones(t[2])
 
 
 def p_Cuerpo_Mores(t):

@@ -32,7 +32,7 @@ digraph AST {
 	14 -> 15
 	15 [label=ExpresionValor]
 	15 -> 16
-	16 [label="("]
+	16 [label=<expresiones.ExpresionAritmetica object at 0x000001CC2BCEEDC0>]
 	17 [label="*"]
 	13 -> 17
 	18 [label=exp2]
@@ -54,4 +54,162 @@ digraph AST {
 	27 -> 28
 	28 [label=hola]
 	Node26 -> 27
+	Node30 [label="CREATE TABLE"]
+	Node0 -> Node30
+	Node31 [label="Id: Profesion"]
+	Node30 -> Node31
+	Node32 [label=CAMPO]
+	Node30 -> Node32
+	Node33 [label="Id: mi"]
+	Node32 -> Node33
+	Node34 [label="Tipo: text"]
+	Node32 -> Node34
+	Node35 [label="CREATE TABLE"]
+	Node0 -> Node35
+	Node36 [label="Id: Estudiantes"]
+	Node35 -> Node36
+	Node37 [label=CAMPO]
+	Node35 -> Node37
+	Node38 [label="Id: mi"]
+	Node37 -> Node38
+	Node39 [label="Tipo: text"]
+	Node37 -> Node39
+	Node40 [label=INHERITS]
+	Node35 -> Node40
+	Node41 [label="Id: Uni"]
+	Node40 -> Node41
+	Node42 [label="DROP TABLE"]
+	Node0 -> Node42
+	Node43 [label=Mitabla]
+	Node42 -> Node43
+	Node44 [label=INSERT]
+	Node0 -> Node44
+	Node45 [label="ID TABLA"]
+	Node44 -> Node45
+	Node46 [label=products]
+	Node45 -> Node46
+	Node47 [label=producto2]
+	Node45 -> Node47
+	Node48 [label="VALORES TABLA"]
+	Node44 -> Node48
+	Node49 [label="VALOR NUEVO"]
+	Node48 -> Node49
+	50 [label=ExpresionAritmetica]
+	51 [label=exp1]
+	50 -> 51
+	51 -> 52
+	52 [label=ExpresionValor]
+	52 -> 53
+	53 [label=5]
+	54 [label="+"]
+	50 -> 54
+	55 [label=exp2]
+	50 -> 55
+	55 -> 56
+	56 [label=ExpresionAritmetica]
+	57 [label=exp1]
+	56 -> 57
+	57 -> 58
+	58 [label=ExpresionValor]
+	58 -> 59
+	59 [label=5]
+	60 [label="*"]
+	56 -> 60
+	61 [label=exp2]
+	56 -> 61
+	61 -> 62
+	62 [label=ExpresionValor]
+	62 -> 63
+	63 [label=9]
+	Node49 -> 50
+	Node65 [label="VALOR NUEVO"]
+	Node48 -> Node65
+	66 [label=ExpresionValor]
+	66 -> 67
+	67 [label=4]
+	Node65 -> 66
+	Node69 [label="VALOR NUEVO"]
+	Node48 -> Node69
+	70 [label=ExpresionValor]
+	70 -> 71
+	71 [label=hola]
+	Node69 -> 70
+	Node73 [label=INSTRUCCION_SELECT]
+	Node0 -> Node73
+	Node74 [label=SELECT]
+	Node73 -> Node74
+	Node75 [label=LISTA_CAMPOS]
+	Node73 -> Node75
+	Node76 [label=ACCESO_CAMPO]
+	Node75 -> Node76
+	Node77 [label="nombre.id"]
+	Node76 -> Node77
+	Node78 [label=Lista_Alias]
+	Node76 -> Node78
+	Node79 [label=Alias_Produccion]
+	Node78 -> Node79
+	Node80 [label=As]
+	Node79 -> Node80
+	Node81 [label=j]
+	Node79 -> Node81
+	Node82 [label=Lista_Sentencias]
+	Node79 -> Node82
+	Node83 [label=ACCESO_CAMPO]
+	Node82 -> Node83
+	Node84 [label="nombre.id"]
+	Node83 -> Node84
+	Node85 [label=FROM]
+	Node73 -> Node85
+	Node86 [label=LISTA_TABLAS]
+	Node73 -> Node86
+	Node87 [label=Nombre_Tabla]
+	Node86 -> Node87
+	Node88 [label=tabla1]
+	Node87 -> Node88
+	Node89 [label=Lista_Alias]
+	Node87 -> Node89
+	Node90 [label=Alias_Produccion]
+	Node89 -> Node90
+	Node91 [label=","]
+	Node90 -> Node91
+	Node92 [label=Tabla]
+	Node90 -> Node92
+	Node93 [label=Nombre_Tabla]
+	Node92 -> Node93
+	Node94 [label=tabla]
+	Node93 -> Node94
+	Node95 [label=Lista_Alias]
+	Node93 -> Node95
+	Node96 [label=Alias_Produccion]
+	Node95 -> Node96
+	Node97 [label=As]
+	Node96 -> Node97
+	Node98 [label=j]
+	Node96 -> Node98
+	Node99 [label=CUERPO]
+	Node73 -> Node99
+	Node100 [label=Cuerpo]
+	Node99 -> Node100
+	Node101 [label=Where]
+	Node100 -> Node101
+	Node102 [label=CONDICION]
+	Node100 -> Node102
+	103 [label=ExpresionAritmetica]
+	104 [label=exp1]
+	103 -> 104
+	104 -> 105
+	105 [label=ExpresionValor]
+	105 -> 106
+	106 [label=2]
+	107 [label="+"]
+	103 -> 107
+	108 [label=exp2]
+	103 -> 108
+	108 -> 109
+	109 [label=ExpresionValor]
+	109 -> 110
+	110 [label=2]
+	Node102 -> 103
+	Node112
+	Node73 -> Node112
 }

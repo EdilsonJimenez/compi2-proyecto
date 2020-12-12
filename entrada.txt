@@ -8,4 +8,4 @@ DROP TABLE Mitabla;
 INSERT INTO products,producto2 VALUES (5+5*9,4,'hola');
 
 
-select nombre.id as j , nombre.id  from tabla1, tabla as j ; 
+select nombre.id as j , nombre.id  from tabla1, tabla as j where 2+2=23; 
