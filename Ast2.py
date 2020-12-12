@@ -401,8 +401,10 @@ class Ast2:
     # Recorrido de los Alias
     # ----------------------------------------------------------------------------------------------------------
 
+
     def RecorrerTiposAlias(self, Lista_Alias, padre):
 
+        print("Verificando tipos de alias")
         # Alias de los Campos
         i=Lista_Alias
         if isinstance(i, Alias_Campos_ListaCampos):
