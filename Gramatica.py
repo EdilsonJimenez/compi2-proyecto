@@ -140,7 +140,7 @@ tokens = [
              'PORCENTAJE',
              'IGUAL',
              'PARIZQ',
-             'PARDER',             
+             'PARDER',
              'PUNTOCOMA',
              #NOT
              #AND
@@ -239,13 +239,13 @@ def t_ENTERO(t):
 def t_CADENASIMPLE(t):
     r'\'.*?\''
     t.value = t.value[1:-1]
-    return t 
+    return t
 
 
 def t_CADENADOBLE(t):
     r'\".*?\"'
     t.value = t.value[1:-1]
-    return t 
+    return t
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -256,11 +256,11 @@ def t_CADENABINARIA(t):
     r'B\'(1|0)+\''
     t.value = t.value[2:-1]
     return t
-    
+
 def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
-    
+
 t_ignore = " \t"
 
 def t_newline(t):
@@ -275,20 +275,20 @@ def t_COMENTARIOMULTI(t):
 def t_COMENTARIONORMAL(t):
     r'--.*\n'
     t.lexer.lineno += 1
-    
+
 
 
 def t_error(t):
     print("Caracter NO Valido: '%s'" % t.value[0])
     t.lexer.skip(1)
-   
 
 
 
 
 
 
-    
+
+
 
 
 
@@ -373,7 +373,7 @@ def p_instrucciones_lista(t) :
     t[1].append(t[2])
     t[0] = t[1]
 
-   
+
 
 
     # endregion
@@ -417,7 +417,7 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    t[0]= Select()
+    #t[0]= Select()
 
     # endregion
 
@@ -436,44 +436,52 @@ def p_instruccion_dql_comandosS2(t):
 
     print('\n' + str(t[0]) + '\n')
 
+def p_instruccion_dql_comandos3(t):
+    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    t[0]= Select(t[5],t[2],t[4])
 
 # ------------------------------------------------------------------------------------------------------------------
 
 # Lista de Campos
 def p_ListaCampos_ListaCamposs(t):
     'LISTA_CAMPOS       : LISTA_CAMPOS LISTAA'
-
-    #t[1].append(t[2])
-    #t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_ListaCampos_Lista(t):
     'LISTA_CAMPOS    : LISTAA'
-    #t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_Lista_NombreS(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS S'
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] =Campo_Accedido(t[1],t[3],t[4])
 
 
 def p_Lista_Nombre(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS'
+    t[0] = Campo_Accedido(t[1], t[3],"")
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Lista_CampoS(t):
     'LISTAA          : CAMPOS S'
+    t[0] = Campo_Accedido("",t[1],t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Lista_Campo(t):
     'LISTAA          : CAMPOS'
-
+    t[0] = Campo_Accedido("",t[1],"")
     #t[0] = str(t[1])
+
+
 
 
 def p_Lista_ExprecionesCase(t):
@@ -490,53 +498,62 @@ def p_Lista_SubsQuery(t):
 
 def p_Campos_id(t):
     'CAMPOS          : ID'
-
-    #t[0] = str(t[1])
+    t[0] = t[1]
 
 
 def p_Campos_Asterisco(t):
     'CAMPOS          : ASTERISCO'
-    t[0] = str(t[1])
+
+    t[0] = t[1]
+
+
 
 
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
+
     t[0] = ExpresionValor(t[1])
-    
+
 
 
 def p_Alias_id(t):
     'ALIAS          : ID'
+    t[0] = t[1]
 
     #t[0] = str(t[1])
 
 
 def p_S_ComaLista(t):
     'S          : COMA LISTAA'
+    t[0] = Alias_Campos_ListaCampos("",t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_S_AsAlias(t):
     'S          : AS ALIAS'
+    t[0] = Alias_Campos_ListaCampos(t[2],"")
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasMos(t):
     'S          : AS ALIAS COMA LISTAA'
+    t[0] = Alias_Campos_ListaCampos(t[2],t[4])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasMos(t):
     'S          :  ALIAS COMA LISTAA'
+    t[0] = Alias_Campos_ListaCampos(t[2], t[3])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_Aliass(t):
     'S          :  ALIAS'
+    t[0] = Alias_Campos_ListaCampos(t[1],"")
 
     #t[0] = str(t[1])
 
@@ -557,26 +574,28 @@ def p_Disctint_Rw(t):
 def p_NombresTablas_NombresTablas(t):
     'NOMBRES_TABLAS       : NOMBRES_TABLAS TABLA'
 
-    #t[1].append(t[2])
-    #t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_NombresTablas_Tabla(t):
     'NOMBRES_TABLAS    : TABLA'
 
-    #t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_Tabla_NombreT(t):
     'TABLA   : NOMBRE_T'
 
-    #t[0] = str(t[1])
+    t[0] = AccesoTabla(t[1],"")
+
+
 
 
 def p_Tabla_NombreTS(t):
     'TABLA   : NOMBRE_T S1'
+    t[0] = AccesoTabla(t[1],t[2])
 
-    #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Tabla_SubQuerys(t):
@@ -586,30 +605,35 @@ def p_Tabla_SubQuerys(t):
 
 def p_Ss_ComaLista(t):
     'S1          : COMA TABLA'
+    t[0]=Alias_Table_ListaTablas("",t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAlias(t):
     'S1          : AS ALIAS'
+    t[0] = Alias_Table_ListaTablas(t[2],"")
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasComa(t):
     'S1          : AS ALIAS COMA TABLA'
+    t[0] = Alias_Table_ListaTablas(t[2], t[4])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasCo(t):
     'S1          :  ALIAS COMA TABLA'
+    t[0] = Alias_Table_ListaTablas(t[1], t[3])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_AliasSolo(t):
     'S1          :  ALIAS'
+    t[0] = Alias_Table_ListaTablas(t[1], "")
 
     #t[0] = str(t[1])
 
@@ -1501,7 +1525,7 @@ def p_Create_TABLE_TIPO_CAMPO6(t):
 def p_instruccion_dml_comandos_INSERT(t):
     'DML_COMANDOS       : INSERT INTO  LISTA_DE_IDS DATOS PUNTOCOMA '
     t[0] = Insert_Datos(t[3],t[4])
-    
+
 
 
 def p_instruccion_dml_comandos_INSERT2(t):
@@ -1512,7 +1536,7 @@ def p_instruccion_dml_comandos_INSERT2(t):
 
 def p_instruccion_dml_comandos_INSERT_DATOS(t):
     'DATOS       : PARIZQ COLUMNAS PARDER VALUES PARIZQ VALORES PARDER'
-    
+
 
 def p_instruccion_dml_comandos_INSERT_DATOS2(t):
     'DATOS       : VALUES PARIZQ VALORES PARDER'
@@ -1545,7 +1569,7 @@ def p_instruccion_dml_comandos_INSERT_VALORES(t):
     print("SI ENTRO VALORES")
     t[1].append(t[2])
     t[0] = t[1]
-  
+
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES2(t):
@@ -1556,7 +1580,7 @@ def p_instruccion_dml_comandos_INSERT_VALORES2(t):
 def p_instruccion_dml_comandos_INSERT_VALOR(t):
     'VALOR       : expresion COMA'
     t[0] = t[1]
-    
+
 
 
 def p_instruccion_dml_comandos_INSERT_VALOR2(t):
@@ -1922,15 +1946,15 @@ def p_expresion_aritmetica(t):
                             | expresion_aritmetica ASTERISCO expresion_aritmetica
                             | expresion_aritmetica DIVISION expresion_aritmetica
                             | expresion_aritmetica PORCENTAJE expresion_aritmetica'''
-    if t[2] == '+'  : 
-        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)        
-    elif t[2] == '-': 
+    if t[2] == '+'  :
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
+    elif t[2] == '-':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MENOS)
-    elif t[2] == '*': 
+    elif t[2] == '*':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MULTI)
-    elif t[2] == '/': 
+    elif t[2] == '/':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.DIVIDIDO)
-    elif t[2] == '%': 
+    elif t[2] == '%':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.RESIDUO)
 
 
@@ -1943,17 +1967,17 @@ def p_expresion_relacional(t) :
                             | expresion_aritmetica MAYOR expresion_aritmetica
                             | expresion_aritmetica MENOR expresion_aritmetica'''
 
-    if t[2] == '==' : 
+    if t[2] == '==' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
-    elif t[2] == '!=' : 
+    elif t[2] == '!=' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.DISTINTO)
-    elif t[2] == '>=' : 
+    elif t[2] == '>=' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORIGUAL)
-    elif t[2] == '<=' : 
+    elif t[2] == '<=' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORIGUAL)
-    elif t[2] == '>'  : 
+    elif t[2] == '>'  :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORQUE)
-    elif t[2] == '<' : 
+    elif t[2] == '<' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORQUE)
 
 
@@ -1961,9 +1985,9 @@ def p_expresion_logica(t) :
     '''expresion_logica :   expresion_relacional AND expresion_relacional
                         |   expresion_relacional OR expresion_relacional
                         |   expresion_relacional'''
-    if t[2] == 'AND' : 
+    if t[2] == 'AND' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.AND)
-    elif t[2] == 'OR' : 
+    elif t[2] == 'OR' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.OR)
 
 #LO TENGO EN LOGICA
@@ -1975,7 +1999,7 @@ def p_unaria_notlogica(t) :
 def p_unitaria_negativo(t):
     'expresion_unaria : MENOS expresion_aritmetica'
     t[0] = UnitariaNegAritmetica(t[2])
-    
+
 
 #VALORES--------------------------------------------------
 def p_valor_id(t):
@@ -1993,7 +2017,7 @@ def p_valor_flotante(t):
 def p_valor_default(t):
     'expresion_aritmetica : DEFAULT'
     t[0] = ExpresionValor(t[1])
-    
+
 def p_valor_cadena(t):
     '''expresion_aritmetica : CADENASIMPLE
                             | CADENADOBLE'''
@@ -2016,10 +2040,10 @@ def p_expnumerica_agrupacion(t):
 
 def p_expnumerica_valor(t):
     '''EXPNUMERICA : ID
-                   | ENTERO 
+                   | ENTERO
                    | FLOTANTE
                    | DEFAULT'''
-    print("SI ENTRO ER")              
+    print("SI ENTRO ER")
     t[0] = ExpresionValor(t[1])
 
 def p_expnumerica(t):
@@ -2028,7 +2052,7 @@ def p_expnumerica(t):
                    | EXPNUMERICA PORCENTAJE EXPNUMERICA
                    | EXPNUMERICA MENOS EXPNUMERICA
                    | EXPNUMERICA MAS EXPNUMERICA'''
-   
+
 def p_expresion_binario(t):
     '''EXPBINARIO : EXPBINARIO DOBLEPLECA EXPBINARIO
                 |   EXPBINARIO AMPERSAND EXPBINARIO
@@ -2036,7 +2060,7 @@ def p_expresion_binario(t):
                 |   EXPBINARIO NUMERAL EXPBINARIO
                 |   EXPBINARIO LEFTSHIFT EXPNUMERICA
                 |   EXPBINARIO RIGHTSHIFT EXPNUMERICA'''
-    
+
 def p_expresion_binario_n(t):
     'EXPBINARIO : VIRGULILLA EXPBINARIO'
 
