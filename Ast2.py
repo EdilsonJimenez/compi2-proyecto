@@ -401,6 +401,7 @@ class Ast2:
     # Recorrido de los Alias
     # ----------------------------------------------------------------------------------------------------------
 
+
     def RecorrerTiposAlias(self, Lista_Alias, padre):
         i = Lista_Alias
         # Alias de los Campos
@@ -430,8 +431,10 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-
+    def RecorrerTiposAlias(self, Lista_Alias, padre):
+        print("Verificando tipos de alias")
         # Alias de los Campos
+        print("Verificando tipos de alias")
         i=Lista_Alias
         if isinstance(i, Alias_Campos_ListaCampos):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
@@ -582,12 +585,12 @@ class Ast2:
             self.inc()
             padreID=self.i
             dot.node(str(padreID),expresiones.tipoVar.id)
-        elif isinstance(expresiones,'PARENTESIS FALTA'):
-            self.inc()
-            padreID=self.i
-            dot.node(str(padreID),'( valor )')
-            dot.edge(str(padreID),str(padreID+1))
-            self.graficar_expresion(expresiones.variable)
+        # elif isinstance(expresiones,'PARENTESIS FALTA'):
+        #     self.inc()
+        #     padreID=self.i
+        #     dot.node(str(padreID),'( valor )')
+        #     dot.edge(str(padreID),str(padreID+1))
+        #     self.graficar_expresion(expresiones.variable)
 
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :

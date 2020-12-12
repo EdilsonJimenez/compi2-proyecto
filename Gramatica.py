@@ -1651,9 +1651,8 @@ def p_instruccion_dml_comandos_UPDATE_C(t):
 # -----------------------------------------------------------------------------------------------------------------
 # DELETE
 def p_instruccion_dml_comandos_DELETE(t):
-    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS WHERE CONDICIONES PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    print('\n' + str(t[0]) + '\n')
+    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS WHERE expresion PUNTOCOMA'
+    t[0] = Delete_Datos(t[3],t[5])
 
 
 def p_instruccion_dml_comandos_DELETE2(t):
@@ -1972,8 +1971,10 @@ def p_expresion_relacional(t) :
                             | expresion_aritmetica DIFERENTE expresion_aritmetica
                             | expresion_aritmetica MAYORIGUAL expresion_aritmetica
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
-                            | expresion_aritmetica MAYOR expresion_aritmetica
-                            | expresion_aritmetica MENOR expresion_aritmetica'''
+                            | expresion_aritmetica MAYOR expresion_aritmetica                            
+                            | expresion_aritmetica MENOR expresion_aritmetica
+                            | PARIZQ expresion_relacional PARDER
+                            | expresion_aritmetica'''
 
     if t[2] == '==' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
@@ -1987,29 +1988,35 @@ def p_expresion_relacional(t) :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORQUE)
     elif t[2] == '<' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORQUE)
+    else :
+        t[0]=[1]
 
 
 def p_expresion_logica(t) :
-    '''expresion_logica :   expresion_relacional AND expresion_relacional
-                        |   expresion_relacional OR expresion_relacional'''
+    '''expresion_logica :   expresion_logica AND expresion_logica
+                        |   expresion_logica OR expresion_logica
+                        |   NOT expresion_logica 
+                        |   PARIZQ expresion_logica PARDER'''
     if t[2] == 'AND' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.AND)
     elif t[2] == 'OR' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.OR)
+    elif t[1] == 'NOT' :
+        t[0] = UnitariaLogicaNOT(t[2])
 
 def p_expresion_logica_relacion(t):
     'expresion_logica :  expresion_relacional'
     t[0] = t[1]
 
-def p_expresion_logica_paren(t) :
-    'expresion_logica : PARIZQ expresion_logica PARDER'
-    t[0] = t[1]
+# def p_expresion_logica_paren(t) :
+#     'expresion_logica : PARIZQ expresion_logica PARDER'
+#     t[0] = t[1]
 
 
-#LO TENGO EN LOGICA
-def p_unaria_notlogica(t) :
-    'expresion_unaria : NOT expresion_logica '
-    t[0] = UnitariaLogicaNOT(t[2])
+# #LO TENGO EN LOGICA
+# def p_unaria_notlogica(t) :
+#     'expresion_unaria : NOT expresion_logica '
+#     t[0] = UnitariaLogicaNOT(t[2])
 
 
 

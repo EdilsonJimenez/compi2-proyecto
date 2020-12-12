@@ -14,3 +14,4 @@ select nombre.id as j , nombre.id  from tabla1, tabla as j ;
 
 INSERT INTO products,producto2 VALUES (size = 20,4,'hola');
 
+DELETE FROM products WHERE price = 10;
