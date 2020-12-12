@@ -1994,7 +1994,7 @@ def p_valor_cadena(t):
 
 def p_valor_abs(t) :
     'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'
-    t[0] = ExpresionValor(t[1])
+    t[0] = ExpresionValor(t[2])
 
 
 #PPROBLEMAS CON LAS EXPRESIONES======================================
