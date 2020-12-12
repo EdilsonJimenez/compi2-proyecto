@@ -403,6 +403,34 @@ class Ast2:
 
 
     def RecorrerTiposAlias(self, Lista_Alias, padre):
+        i = Lista_Alias
+        # Alias de los Campos
+        if isinstance(i, Alias_Campos_ListaCampos):
+            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+            self.GrafoAlias_Campos_ListaCampos(i.NombreT, i.Lista_Alias, padre)
+
+        # Alias de las Nombres de las Tablas
+        if isinstance(i, Alias_Table_ListaTablas):
+            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+            self.GrafoAlias_Table_ListaTablas(i.NombreT, i.Lista_Alias, padre)
+        else:
+            print("No Ningun Tipo")
+
+
+
+    def grafoDropTable(self, id, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DROP TABLE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), id)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
 
         print("Verificando tipos de alias")
         # Alias de los Campos
@@ -631,7 +659,6 @@ class Ast2:
 #-----------------------GRAFICAR CREATE TABLE-------------------------------------------------------------------
     def grafoCreateTable(self, id, cuerpo, inher, padre):
         global dot, i
-        aqui = cuerpo
 
         self.inc()
         nuevoPadre = self.i
@@ -639,14 +666,52 @@ class Ast2:
         dot.edge(padre, 'Node' + str(self.i))
 
         self.inc()
-        dot.node('Node' + str(self.i), id)
+        dot.node('Node' + str(self.i), 'Id: '+id)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
+        for k in cuerpo:
+            if isinstance(k, CampoTabla):
+                self.grafoCampoTabla(k, nuevoPadre)
+
+        # Graficar INHERITS DE CREATE TABLE
         if inher is not None:
             print("Si tiene un inher")
             self.grafoInhertis(inher.id, nuevoPadre)
         else:
             print("No tiene inherits")
+
+    def grafoCampoTabla(self, campo, padre):
+        global dot, i
+
+        self.inc();
+        nuevop = self.i
+        dot.node('Node' + str(self.i), "CAMPO")
+        dot.edge('Node' + str(padre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Id: '+str(campo.id))
+        dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Tipo: '+str(campo.tipo))
+        dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+
+        for k in campo.validaciones:
+            if isinstance(k, CampoValidacion):
+                if (k.id != None and k.valor !=None):
+                    self.grafoCampoValidaciones(k, nuevop)
+
+    def grafoCampoValidaciones(self, validacion, padre):
+        global dot, i
+
+        self.inc();
+        nuevop = self.i
+        dot.node('Node' + str(self.i), "Validacion:")
+        dot.edge('Node' + str(padre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Id: '+str(validacion.id))
+        dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
     def grafoInhertis(self, id, padre):
         global dot, i
@@ -657,7 +722,7 @@ class Ast2:
         dot.edge('Node' + str(padre), 'Node' + str(self.i))
 
         self.inc()
-        dot.node('Node' + str(self.i), id)
+        dot.node('Node' + str(self.i), 'Id: '+id)
         dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
 # ----------------------------------------------------------------------------------------------------------
