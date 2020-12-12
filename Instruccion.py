@@ -52,6 +52,7 @@ class Insert_Datos(Instruccion):
     def __init__(self, id_table,valores):
         self.id_table = id_table
         self.valores = valores
+        
 # ***************************** CREATE TABLE Y INHERITS ****************************************
 class Inherits(Instruccion):
     def __init__(self, id):
