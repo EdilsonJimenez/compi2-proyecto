@@ -2008,9 +2008,6 @@ def p_expresion_logica(t) :
     elif t[0] == '(':
         t[0]=t[2]
 
-def p_expresion_logica(t) :
-    'expresion_logica :   expresion_relacional'    
-    t[0]= t[1]
 
 def p_expresion_logica_relacion(t):
     'expresion_logica :  expresion_relacional'
