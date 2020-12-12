@@ -132,3 +132,20 @@ class valorTipo(Expresion):
     def __init__(self, valor, expresion):
         self.valor = valor
         self.expresion = expresion
+
+
+# --------------------------------------------------------
+class CampoTabla(Expresion):
+    def __init__(self, id, tipo, validaciones):
+        self.id = id
+        self.tipo = tipo
+
+        self.validaciones = validaciones
+
+#---------------------------------------------------------
+class CampoValidacion(Expresion):
+    def __init__(self, id, valor):
+        self.id = id
+        self.valor = valor
+
+
