@@ -7,15 +7,6 @@ class DropTable(Instruccion):
         self.id = id
 
 
-
-
-
-
-
-
-
-
-
 #---------------------------------------------------------------------------------------------------
 class Select(Instruccion) :
 
@@ -57,4 +48,8 @@ class Alias_TableSinAs(Instruccion):
 
 
 #---------------------------------------------------------------------------------------------------
-
+#INSERTAR DATOS CESAR
+class Insert_Datos(Instruccion):
+    def __init__(self, id_table,valores):
+        self.id_table = id_table
+        self.valores = valores

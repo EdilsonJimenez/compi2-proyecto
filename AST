@@ -2,8 +2,18 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box style=cyan4]
 	Node0 [label="[label=\"AST\"]"]
-	Node1 [label="DROP TRABLE"]
+	Node1 [label=INSERT]
 	Node0 -> Node1
-	Node2 [label=tablaMaestro]
+	Node2 [label="ID TABLA"]
 	Node1 -> Node2
+	Node3 [label=products]
+	Node2 -> Node3
+	Node4 [label=producto2]
+	Node2 -> Node4
+	Node5 [label="VALORES TABLA"]
+	Node1 -> Node5
+	Node6 [label="DROP TRABLE"]
+	Node0 -> Node6
+	Node7 [label=tablaMaestro]
+	Node6 -> Node7
 }

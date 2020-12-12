@@ -1389,22 +1389,22 @@ def p_Create_TABLE_CAMPOS8(t):
 # LISTADO DE IDS--------------------------------------------------------
 def p_CREATE_TABLE_LISTA_IDS(t):
     'LISTA_DE_IDS      : LISTA_DE_IDS LISTA_ID_'
-   # t[1].append(t[2])
-   # t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_CREATE_TABLE_LISTA_IDS2(t):
     'LISTA_DE_IDS    : LISTA_ID_'
-   # t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_CREATE_TABLE_LISTA_IDS3(t):
     'LISTA_ID_  :  ID COMA'
-   # t[0] = str(t[1]) +  str(t[2])
+    t[0] = ExpresionValor(t[1])
 
 def p_CREATE_TABLE_LISTA_IDS4(t):
     'LISTA_ID_  :  ID'
-    #t[0] = str(t[1])
+    t[0] = ExpresionValor(t[1])
 
 
 # TIPO DE LAS VARIABLES DE CADA CAMPO DECLARADAS--------------------------------------------------------------
@@ -1483,13 +1483,14 @@ def p_Create_TABLE_TIPO_CAMPO6(t):
 # -----------------------------------------------------------------------------------------------------------------
 # INSERT
 def p_instruccion_dml_comandos_INSERT(t):
-    'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DATOS PUNTOCOMA '
-     t[0] = Insert_Dato(t[3],t[4])
+    'DML_COMANDOS       : INSERT INTO  LISTA_DE_IDS DATOS PUNTOCOMA '
+    t[0] = Insert_Datos(t[3],t[4])
+    
 
 
 def p_instruccion_dml_comandos_INSERT2(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DEFAULT VALUES PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
+  # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
     print('\n' + str(t[0]) + '\n')
 
 
@@ -1499,6 +1500,7 @@ def p_instruccion_dml_comandos_INSERT_DATOS(t):
 
 def p_instruccion_dml_comandos_INSERT_DATOS2(t):
     'DATOS       : VALUES PARIZQ VALORES PARDER'
+    print("ENTRO DATOS PRIMERO")
     t[0] = t[3]
 
 
@@ -1515,16 +1517,17 @@ def p_instruccion_dml_comandos_INSERT_COLUMNAS2(t):
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA(t):
     'COLUMNA       : ID COMA'
-    t[0] = [t[1]]
+    t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_INSERT_COLUMNA2(t):
     'COLUMNA       : ID'
-    t[0] = [t[1]]
+    t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_INSERT_VALORES(t):
     'VALORES       : VALORES VALOR'
+    print("SI ENTRO VALORES")
     t[1].append(t[2])
     t[0] = t[1]
   
@@ -1532,6 +1535,7 @@ def p_instruccion_dml_comandos_INSERT_VALORES(t):
 
 def p_instruccion_dml_comandos_INSERT_VALORES2(t):
     'VALORES       :  VALOR'
+    print("SI ENTRO VALORES")
     t[0] = [t[1]]
 
 
@@ -1549,13 +1553,13 @@ def p_instruccion_dml_comandos_INSERT_VALOR2(t):
 # -----------------------------------------------------------------------------------------------------------------
 # UPDATE
 def p_instruccion_dml_comandos_UPDATE(t):
-    'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_UPDATE2(t):
-    'DML_COMANDOS       : UPDATE   NOMBRES_TABLAS SET CAMPOSN PUNTOCOMA'
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
 
@@ -1573,12 +1577,12 @@ def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t):
 
 # -------------------------------------------------------
 def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
-    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL'
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL EXPRESION_GLOBAL'
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO2(t):
-    'CAMPO       :  NOMBRES_TABLAS PUNTO ID IGUAL EXPRESION_GLOBAL C'
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL EXPRESION_GLOBAL C'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
@@ -1600,13 +1604,13 @@ def p_instruccion_dml_comandos_UPDATE_C(t):
 # -----------------------------------------------------------------------------------------------------------------
 # DELETE
 def p_instruccion_dml_comandos_DELETE(t):
-    'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS WHERE CONDICIONES PUNTOCOMA'
+    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS WHERE CONDICIONES PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
     print('\n' + str(t[0]) + '\n')
 
 
 def p_instruccion_dml_comandos_DELETE2(t):
-    'DML_COMANDOS       : DELETE FROM NOMBRES_TABLAS PUNTOCOMA'
+    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
     print('\n' + str(t[0]) + '\n')
@@ -1690,9 +1694,10 @@ def p_instruccion_dml_comandos_ALTER_TABLE9(t):
 
 
 def p_expresion_global(t):
-    '''EXPRESION_GLOBAL : EXPBINARIO
-                        | EXPNUMERICA
-                        | EXPCADENA'''
+    '''EXPRESION_GLOBAL : EXPNUMERICA
+                        | EXPCADENA
+                        | EXPBINARIO'''  
+    print("ENTRO EXPRESION GLOBAL")  
     t[0] = t[1]
 
 
@@ -1896,21 +1901,28 @@ def p_expnumerica(t):
                    | EXPNUMERICA ASTERISCO EXPNUMERICA
                    | EXPNUMERICA DIVISION EXPNUMERICA
                    | EXPNUMERICA PORCENTAJE EXPNUMERICA'''
-    if t[2] == '+'  : 
+    print("-----ENTRO EXPRESION CON OPERADORES---------")               
+    if str(t[2]) == '+'  : 
+        print("-----ENTRO1-----")
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
     elif t[2] == '-': 
+        print("-----ENTRO1-----")
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MENOS)
     elif t[2] == '*': 
+        print("-----ENTRO1-----")
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MULTI)
     elif t[2] == '/': 
+        print("-----ENTRO1-----")
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.DIVIDIDO)
     elif t[2] == '%': 
+        print("-----ENTRO1-----")
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.RESIDUO)
       
 
 
 def p_expnumerica_agrupacion(t):
     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
+    print("SI ENTRO PARENTESIS ppp")
     t[0] = ExpresionValor(t[2])
 
 
@@ -1919,6 +1931,7 @@ def p_expnumerica_valor(t):
                    | ENTERO
                    | FLOTANTE
                    | DEFAULT'''
+    print("SI ENTRO ER")              
     t[0] = ExpresionValor(t[1])
 
 
