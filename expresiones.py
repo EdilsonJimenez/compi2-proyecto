@@ -126,3 +126,9 @@ class ExpresionBitABit(Expresion) :
         self.exp1=exp1
         self.exp2=exp2
         self.operador=operador
+
+# ------------------------------------------------------
+class valorTipo(Expresion):
+    def __init__(self, valor, expresion):
+        self.valor = valor
+        self.expresion = expresion

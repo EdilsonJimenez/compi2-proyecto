@@ -490,7 +490,7 @@ def p_Campos_Asterisco(t):
 
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
-    t[0] = tipoDato()
+    t[0] = ExpresionValor(t[1])
 
 
 def p_Alias_id(t):
@@ -1414,15 +1414,19 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | REAL
                     | MONEY
                     | FLOAT
+                    | TEXT
+                    | BOOLEAN
+
                     | DOUBLE PRECISION
+
                     | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
+
                     | VARCHAR PARIZQ EXPNUMERICA PARDER
                     | CHARACTER PARIZQ EXPNUMERICA PARDER
-                    | CHAR PARIZQ EXPNUMERICA PARDER
-                    | TEXT
-                    | BOOLEAN'''
-   # t[0] = str(t[1])
+                    | CHAR PARIZQ EXPNUMERICA PARDER'''
 
+def p_Create_TABLE_TIPO_CAMPO2(t):
+    '''TIPO_CAMPO   : '''
 
 # LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES--------------------------------------------------------------
 def p_CREATE_TABLE_LISTA3_CAMPOS(t):

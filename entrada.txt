@@ -1,9 +1,1 @@
-<<<<<<< Updated upstream
-INSERT INTO products,producto2 VALUES (9+9+9+9);
-=======
-
->>>>>>> Stashed changes
-DROP TABLE tablaMaestro;
-DROP TABLE tablaMaestro3;
-CREATE TABLE miTabla(esta text) INHERITS (ciudad);
-DROP TABLE tablitaGrande;
+INSERT INTO products,producto2 VALUES ((9*2)(8*8));
