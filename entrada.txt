@@ -1,11 +1,2 @@
 
-INSERT INTO products,producto2 VALUES (5+(5+5)*9,4,'hola');
-
-CREATE TABLE Profesion ( mi text);
-CREATE TABLE Estudiantes ( mi text) inherits (Uni);
-DROP TABLE Mitabla;
-
-INSERT INTO products,producto2 VALUES (5+5*9,4,'hola');
-
-
-select nombre.id as j , nombre.id  from tabla1, tabla as j where 2+2=23; 
+INSERT INTO products,producto2 VALUES (size = 20,4,'hola');

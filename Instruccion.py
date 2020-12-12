@@ -117,8 +117,6 @@ class Cuerpo_Condiciones(Instruccion):
 
 #---------------------------------------------------------------------------------------------------
 #INSERTAR DATOS CESAR
-
-
 class Insert_Datos(Instruccion):
     def __init__(self, id_table,valores):
         self.id_table = id_table
@@ -136,3 +134,7 @@ class CreateTable(Instruccion):
         self.inhe = inhe
 
 #---------------------------------------------------------------------------------------------------
+class Delete_Datos(Instruccion):
+    def __init__(self, id_table,valore_where):
+        self.id_table = id_table
+        self.valore_where = valore_where

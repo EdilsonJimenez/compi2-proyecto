@@ -14,21 +14,21 @@ digraph AST {
 	Node1 -> Node5
 	Node6 [label="VALOR NUEVO"]
 	Node5 -> Node6
-	7 [label=ExpresionAritmetica]
+	7 [label=ExpresionRelacional]
 	8 [label=exp1]
 	7 -> 8
 	8 -> 9
 	9 [label=ExpresionValor]
 	9 -> 10
-	10 [label=5]
-	11 [label="+"]
+	10 [label=size]
+	11 [label="=="]
 	7 -> 11
 	12 [label=exp2]
 	7 -> 12
 	12 -> 13
-	13 [label=ExpresionAritmetica]
-	14 [label=exp1]
+	13 [label=ExpresionValor]
 	13 -> 14
+<<<<<<< HEAD
 	14 -> 15
 	15 [label=ExpresionValor]
 	15 -> 16
@@ -212,4 +212,20 @@ digraph AST {
 	Node102 -> 103
 	Node112
 	Node73 -> Node112
+=======
+	14 [label=20]
+	Node6 -> 7
+	Node16 [label="VALOR NUEVO"]
+	Node5 -> Node16
+	17 [label=ExpresionValor]
+	17 -> 18
+	18 [label=4]
+	Node16 -> 17
+	Node20 [label="VALOR NUEVO"]
+	Node5 -> Node20
+	21 [label=ExpresionValor]
+	21 -> 22
+	22 [label=hola]
+	Node20 -> 21
+>>>>>>> 88d72cfde424c4a7dc076cb8585dfff50d6d60f7
 }
