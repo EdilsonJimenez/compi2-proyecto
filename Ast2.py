@@ -585,12 +585,6 @@ class Ast2:
             self.inc()
             padreID=self.i
             dot.node(str(padreID),expresiones.tipoVar.id)
-        elif isinstance(expresiones,'PARENTESIS FALTA'):
-            self.inc()
-            padreID=self.i
-            dot.node(str(padreID),'( valor )')
-            dot.edge(str(padreID),str(padreID+1))
-            self.graficar_expresion(expresiones.variable)
 
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :

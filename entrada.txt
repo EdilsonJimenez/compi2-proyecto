@@ -1,1 +1,1 @@
-DELETE FROM products WHERE price = 10;
+INSERT INTO products,producto2 VALUES (size = 20,4,'hola');
