@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-=======
-CREATE TABLE Profesion ( mi text);
-CREATE TABLE Estudiantes ( mi text) inherits (Uni);
+
+CREATE TABLE Estudiantes ( mi text null default 10 not null, campo INT null) inherits (Uni);
 DROP TABLE Mitabla;
 
-INSERT INTO products,producto2 VALUES (5+5*9,4,'hola');
-
->>>>>>> master
-select nombre.id as j , nombre.id  from tabla1, tabla as j ; 

@@ -1347,7 +1347,6 @@ def p_instruccions_dml_inherit(t):
 def p_instruccion_dml_comandos_CUERPO(t):
     'CUERPO_CREATE_TABLE       : LISTA_DE_COLUMNAS'
     t[0] = t[1]
-    print("Tiene un cuerpo")
 
 # LISTA DE LAS FILAS COMPLETAS---------------------------------------------------------------------------------
 def p_CREATE_TABLE_LISTA_CAMPOS(t):

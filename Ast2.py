@@ -400,37 +400,7 @@ class Ast2:
 
     # Recorrido de los Alias
     # ----------------------------------------------------------------------------------------------------------
-
     def RecorrerTiposAlias(self, Lista_Alias, padre):
-        i = Lista_Alias
-        # Alias de los Campos
-        if isinstance(i, Alias_Campos_ListaCampos):
-            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-            self.GrafoAlias_Campos_ListaCampos(i.NombreT, i.Lista_Alias, padre)
-
-        # Alias de las Nombres de las Tablas
-        if isinstance(i, Alias_Table_ListaTablas):
-            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-            self.GrafoAlias_Table_ListaTablas(i.NombreT, i.Lista_Alias, padre)
-        else:
-            print("No Ningun Tipo")
-
-
-
-    def grafoDropTable(self, id, padre):
-        global dot, i
-
-        self.inc()
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "DROP TABLE")
-        dot.edge(padre, 'Node' + str(self.i))
-
-        self.inc()
-        dot.node('Node' + str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-
-
         # Alias de los Campos
         i=Lista_Alias
         if isinstance(i, Alias_Campos_ListaCampos):
@@ -453,8 +423,6 @@ class Ast2:
             self.GrafoAlias_Table_ListaTablasSinLista(i.Alias, padre)
         else:
             print("No Ningun Tipo")
-
-
 
 
     # Instruccion SELECT
@@ -697,6 +665,8 @@ class Ast2:
             if isinstance(k, CampoValidacion):
                 if (k.id != None and k.valor !=None):
                     self.grafoCampoValidaciones(k, nuevop)
+                elif (k.id != None and k.valor ==None):
+                    self.grafoCampoValidaciones(k, nuevop)
 
     def grafoCampoValidaciones(self, validacion, padre):
         global dot, i
@@ -706,9 +676,14 @@ class Ast2:
         dot.node('Node' + str(self.i), "Validacion:")
         dot.edge('Node' + str(padre), 'Node' + str(self.i))
 
-        self.inc()
-        dot.node('Node' + str(self.i), 'Id: '+str(validacion.id))
-        dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+        if (validacion.valor == None):
+            self.inc()
+            dot.node('Node' + str(self.i), 'Id: ' + str(validacion.id))
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+        else:
+            self.inc()
+            dot.node('Node' + str(self.i), 'Id: '+str(validacion.id)+' '+str(validacion.valor))
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
     def grafoInhertis(self, id, padre):
         global dot, i
