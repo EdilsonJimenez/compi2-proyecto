@@ -72,11 +72,12 @@ class Ast2:
     # CAMPOS ACCEDIDOS
     # ----------------------------------------------------------------------------------------------------------
 
+    # Objeto Que Accede A este Tipo "Campo_Accedido"
+    # Campos Accedidos Con Lista
     def GrafoCampo_Accedido(self, NombreT, Columna, Lista_Alias, padre):
         global dot
-
         # NombreT.Campo Lista
-        if (NombreT != "") and (Columna != "") and ((Lista_Alias) != False):
+        if ((NombreT != "") and (Columna != "") and (Lista_Alias != False )):
             self.inc();
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
@@ -87,25 +88,12 @@ class Ast2:
 
             # Recorrido De la Lista de Alias
             self.inc();
-            dot.node('Node' + str(self.i), Lista_Alias)
+            dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
 
-            # Recorrer lista alias
-
-        # NombreT.Campo
-        elif (NombreT != "") and (Columna != "") and (Lista_Alias == False):
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
-            dot.edge(padre, 'Node' + str(self.i))
-            self.inc();
-            dot.node('Node' + str(self.i), NombreT + '.' + Columna)
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-
         # Campo Lista
-        elif (NombreT == "") and (Columna != "") and (Lista_Alias != False):
+        elif ((NombreT == "") and (Columna != "") and (Lista_Alias != False)):
             self.inc();
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
@@ -120,10 +108,28 @@ class Ast2:
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             # Recorrer la lista de alias
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
+        else:
+            print("Error Sintactico")
 
+
+
+        #Objeto Que Accede A este Tipo "Campo_AccedidoSinLista"
+        # Campos Accedidos Sin Lista
+    def GrafoCampo_AccedidoSinLista(self, NombreT, Columna, padre):
+        global dot
+         # NombreT.Campo
+        if ((NombreT != "") and (Columna != "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), NombreT + '.' + Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         # Campo
-        elif (NombreT == "") and (Columna != "") and (Lista_Alias == False):
+        elif ((NombreT == "") and (Columna != "")):
             self.inc();
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
@@ -131,32 +137,22 @@ class Ast2:
             self.inc();
             dot.node('Node' + str(self.i), Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
         else:
             print("Error Sintactico")
 
 
 
 
+
     # NOMBRE TABLAS ACCEDIDOS
     # ----------------------------------------------------------------------------------------------------------
+
+
+    #Objeto Que accede "AccesoTabla"
+    #Nombres Lista Accedidos  Con lista
     def GrafoAccesoTabla(self, NombreT, Lista_Alias, padre):
         global dot
-
-        # Nombre
-        if (NombreT != "") and (Lista_Alias == False):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Nombre_Tabla")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), NombreT)
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-        # Nombre Lista
-        elif (NombreT != "") and (Lista_Alias != False):
+        if ((NombreT != "") and (Lista_Alias != False)):
 
             self.inc();
             nuevoPadre = self.i
@@ -174,17 +170,41 @@ class Ast2:
             # Verificar el Tipo que viene
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
 
-
         else:
             print("Error sintactico")
 
+
+    #Objeto Que accede "AccesoTablaSinLista"
+    #Nombres Lista Accedidos  Sin lista
+    def GrafoAccesoTablaSinLista(self, NombreT, padre):
+        global dot
+        # Nombre
+        if ((NombreT != "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Nombre_Tabla")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), NombreT)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        else:
+            print("Error sintactico")
+
+
+
+
+
     # ALIAS CAMPOS
     # ----------------------------------------------------------------------------------------------------------
+
+    #Objeto que tiene Acceso "Alias_Campos_ListaCampos"
+    #Acceso a los Campos Con lista
     def GrafoAlias_Campos_ListaCampos(self, Alias, Lista_Sentencias, padre):
         global dot
 
         # as Alias , Lista    and    alias, lista
-        if (Alias != "") and (Lista_Sentencias != 0):
+        if ((Alias != "") and (Lista_Sentencias != False)):
 
             self.inc();
             nuevoPadre = self.i
@@ -202,29 +222,10 @@ class Ast2:
             self.inc();
             dot.node('Node' + str(self.i), "Lista_Sentencias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
             self.RecorrerListadeCampos(Lista_Sentencias, 'Node' + str(self.i))
 
-
-        # as Alias
-        elif (Alias != "") and (Lista_Sentencias == False):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "As")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), Alias)
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-
         # Lista
-        elif (Alias == "") and (Lista_Sentencias != False):
+        elif ((Alias == "") and (Lista_Sentencias != False)):
 
             self.inc();
             nuevoPadre = self.i
@@ -240,14 +241,56 @@ class Ast2:
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             self.RecorrerListadeCampos(Lista_Sentencias, 'Node' + str(self.i))
+        else:
+           print("Verificar Errores Sintacticos")
+
+
+
+    #Objeto que tiene Acceso "Alias_Campos_ListaCamposSinLista"
+    #Acceso a los Campos Sin lista
+    def GrafoAlias_Campos_ListaCamposSinLista(self, Alias, padre):
+        global dot
+
+        # as Alias
+        if ((Alias != "") ):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Alias_Produccion")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "As")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Alias)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        else:
+           print("Verificar Errores Sintacticos")
+
+
+
+
+
+
+
+
+
+
+
+
 
     # ALIAS Tablas
     # ----------------------------------------------------------------------------------------------------------
+
+    #Objeto que tiene acceso "Alias_Table_ListaTablas"
+    #Acceso a Alias de las Tablas Con Lista
     def GrafoAlias_Table_ListaTablas(self, Alias, Lista_Sentencias, padre):
         global dot
 
         # as Alias , Lista    and    alias, lista
-        if (Alias != "") and (Lista_Sentencias != False):
+        if ((Alias != "") and (Lista_Sentencias != False)):
 
             self.inc();
             nuevoPadre = self.i
@@ -265,29 +308,10 @@ class Ast2:
             self.inc();
             dot.node('Node' + str(self.i), "Tabla")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
             self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
 
-
-        # as Alias
-        elif (Alias != "") and (Lista_Sentencias == False):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "As")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), Alias)
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-
         # Lista
-        elif (Alias == "") and (Lista_Sentencias != False):
+        elif ((Alias == "") and (Lista_Sentencias != False)):
 
             self.inc();
             nuevoPadre = self.i
@@ -301,8 +325,41 @@ class Ast2:
             self.inc();
             dot.node('Node' + str(self.i), "Tabla")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
             self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
+
+
+
+    #Objeto que tiene acceso "Alias_Table_ListaTablasSinLista"
+    #Acceso a Alias de las Tablas Sin Lista
+    def GrafoAlias_Table_ListaTablasSinLista(self, Alias, padre):
+        global dot
+
+        # as Alias
+        if (Alias != "" ):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Alias_Produccion")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "As")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Alias)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        else:
+            print("Verificar Errores Sintacticos")
+
+
+
+
+
+
+
+
 
     # Recorrido de la lista de Campos
     # ----------------------------------------------------------------------------------------------------------
@@ -312,6 +369,10 @@ class Ast2:
             if isinstance(i, Campo_Accedido):
                 print("Es un Campo Accedido Por la Tabla" + i.NombreT)
                 self.GrafoCampo_Accedido(i.NombreT, i.Columna, i.Lista_Alias, padre)
+
+            elif isinstance(i, Campo_AccedidoSinLista):
+                print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+                self.GrafoCampo_AccedidoSinLista(i.NombreT, i.Columna, padre)
 
             else:
                 print("No Ningun Tipo")
@@ -326,9 +387,14 @@ class Ast2:
 
     def RecorrerListadeNombres(self, Nombres, padre):
         for i in Nombres:
+
             if isinstance(i, AccesoTabla):
                 print("Es un Campo Accedido Por la Tabla" + i.NombreT)
                 self.GrafoAccesoTabla(i.NombreT, i.Lista_Alias, padre)
+
+            elif isinstance(i, AccesoTablaSinLista):
+                print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+                self.GrafoAccesoTablaSinLista(i.NombreT, padre)
             else:
                 print("No Ningun Tipo")
 
@@ -365,6 +431,28 @@ class Ast2:
 
 
 
+        # Alias de los Campos
+        i=Lista_Alias
+        if isinstance(i, Alias_Campos_ListaCampos):
+            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+            self.GrafoAlias_Campos_ListaCampos(i.Alias, i.Lista_Sentencias, padre)
+
+        # Alias de los Campos Sin Lista
+        elif isinstance(i, Alias_Campos_ListaCamposSinLista):
+           print("Es un Campo Accedido Por la Tabla" + i.Alias)
+           self.GrafoAlias_Campos_ListaCamposSinLista(i.Alias, padre)
+
+           # Alias de las Nombres de las Tablas
+        elif isinstance(i, Alias_Table_ListaTablas):
+            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+            self.GrafoAlias_Table_ListaTablas(i.Alias, i.Lista_Sentencias, padre)
+
+        # Alias de las Nombres de las Tablas Sin Lista
+        elif isinstance(i, Alias_Table_ListaTablasSinLista):
+            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+            self.GrafoAlias_Table_ListaTablasSinLista(i.Alias, padre)
+        else:
+            print("No Ningun Tipo")
 
 
 
@@ -402,13 +490,33 @@ class Ast2:
         dot.node('Node' + str(self.i), Uniones)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
+
+
+
+
+
+
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------- GRAFO DROP TABLE-------------------------------------------------------------------
+    def grafoDropTable(self, id, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DROP TABLE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), id)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
 #----------------------------------------------------------------------------------------------------------
 #-----------------------GRAFICAR INSERTAR-------------------------------------------------------------------
     def grafoInsert_Data(self, id, valores, padre):
         global  dot,tag,i
-        self.inc()
-        nuevoPadre = self.i
 
+        self.inc()
+        nuevoPadre=self.i
         dot.node('Node'+str(self.i),"INSERT")
         dot.edge(padre,'Node'+str(self.i))
 

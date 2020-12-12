@@ -464,7 +464,7 @@ def p_Lista_NombreS(t):
 
 def p_Lista_Nombre(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS'
-    t[0] = Campo_Accedido(t[1], t[3],"")
+    t[0] = Campo_AccedidoSinLista(t[1], t[3])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
@@ -478,7 +478,7 @@ def p_Lista_CampoS(t):
 
 def p_Lista_Campo(t):
     'LISTAA          : CAMPOS'
-    t[0] = Campo_Accedido("",t[1],"")
+    t[0] = Campo_AccedidoSinLista("",t[1])
     #t[0] = str(t[1])
 
 
@@ -523,7 +523,7 @@ def p_Alias_id(t):
 
 
 def p_S_ComaLista(t):
-    'S          : COMA LISTAA'
+    'S          : COMA LISTA_CAMPOS'
     t[0] = Alias_Campos_ListaCampos("",t[2])
 
     #t[0] = str(t[1]) + str(t[2])
@@ -531,28 +531,28 @@ def p_S_ComaLista(t):
 
 def p_S_AsAlias(t):
     'S          : AS ALIAS'
-    t[0] = Alias_Campos_ListaCampos(t[2],"")
+    t[0] = Alias_Campos_ListaCamposSinLista(t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasMos(t):
-    'S          : AS ALIAS COMA LISTAA'
+    'S          : AS ALIAS COMA LISTA_CAMPOS'
     t[0] = Alias_Campos_ListaCampos(t[2],t[4])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasMos(t):
-    'S          :  ALIAS COMA LISTAA'
-    t[0] = Alias_Campos_ListaCampos(t[2], t[3])
+    'S          :  ALIAS COMA LISTA_CAMPOS'
+    t[0] = Alias_Campos_ListaCampos(t[1], t[3])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_Aliass(t):
     'S          :  ALIAS'
-    t[0] = Alias_Campos_ListaCampos(t[1],"")
+    t[0] = Alias_Campos_ListaCamposSinLista(t[1])
 
     #t[0] = str(t[1])
 
@@ -586,7 +586,7 @@ def p_NombresTablas_Tabla(t):
 def p_Tabla_NombreT(t):
     'TABLA   : NOMBRE_T'
 
-    t[0] = AccesoTabla(t[1],"")
+    t[0] = AccesoTablaSinLista(t[1])
 
 
 
@@ -603,28 +603,31 @@ def p_Tabla_SubQuerys(t):
 
 
 def p_Ss_ComaLista(t):
-    'S1          : COMA TABLA'
+    'S1          : COMA NOMBRES_TABLAS'
     t[0]=Alias_Table_ListaTablas("",t[2])
+
+
+
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAlias(t):
     'S1          : AS ALIAS'
-    t[0] = Alias_Table_ListaTablas(t[2],"")
+    t[0] = Alias_Table_ListaTablasSinLista(t[2])
 
     #t[0] = str(t[1]) + str(t[2])
 
 
 def p_Ss_AsAliasComa(t):
-    'S1          : AS ALIAS COMA TABLA'
+    'S1          : AS ALIAS COMA NOMBRES_TABLAS'
     t[0] = Alias_Table_ListaTablas(t[2], t[4])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasCo(t):
-    'S1          :  ALIAS COMA TABLA'
+    'S1          :  ALIAS COMA NOMBRES_TABLAS'
     t[0] = Alias_Table_ListaTablas(t[1], t[3])
 
     #t[0] = str(t[1]) + str(t[2]) + str(t[3])
@@ -632,7 +635,7 @@ def p_Ss_AliasCo(t):
 
 def p_S_AliasSolo(t):
     'S1          :  ALIAS'
-    t[0] = Alias_Table_ListaTablas(t[1], "")
+    t[0] = Alias_Table_ListaTablasSinLista(t[1])
 
     #t[0] = str(t[1])
 

@@ -6,6 +6,7 @@ digraph AST {
 	Node0 -> Node1
 	Node2 [label="Id: Estudiantes"]
 	Node1 -> Node2
+<<<<<<< HEAD
 	Node3 [label=CAMPO]
 	Node1 -> Node3
 	Node4 [label="Id: mi"]
@@ -44,4 +45,124 @@ digraph AST {
 	Node0 -> Node20
 	Node21 [label=Mitabla]
 	Node20 -> Node21
+=======
+	Node3 [label="CREATE TABLE"]
+	Node0 -> Node3
+	Node4 [label=Estudiantes]
+	Node3 -> Node4
+	Node5 [label=INHERITS]
+	Node3 -> Node5
+	Node6 [label=Uni]
+	Node5 -> Node6
+	Node7 [label="DROP TABLE"]
+	Node0 -> Node7
+	Node8 [label=Mitabla]
+	Node7 -> Node8
+	Node9 [label=INSERT]
+	Node0 -> Node9
+	Node10 [label="ID TABLA"]
+	Node9 -> Node10
+	Node11 [label=products]
+	Node10 -> Node11
+	Node12 [label=producto2]
+	Node10 -> Node12
+	Node13 [label="VALORES TABLA"]
+	Node9 -> Node13
+	Node14 [label="VALOR NUEVO"]
+	Node13 -> Node14
+	15 [label=ExpresionAritmetica]
+	16 [label=exp1]
+	15 -> 16
+	16 -> 17
+	17 [label=ExpresionValor]
+	17 -> 18
+	18 [label=5]
+	19 [label="+"]
+	15 -> 19
+	20 [label=exp2]
+	15 -> 20
+	20 -> 21
+	21 [label=ExpresionAritmetica]
+	22 [label=exp1]
+	21 -> 22
+	22 -> 23
+	23 [label=ExpresionValor]
+	23 -> 24
+	24 [label=5]
+	25 [label="*"]
+	21 -> 25
+	26 [label=exp2]
+	21 -> 26
+	26 -> 27
+	27 [label=ExpresionValor]
+	27 -> 28
+	28 [label=9]
+	Node14 -> 15
+	Node30 [label="VALOR NUEVO"]
+	Node13 -> Node30
+	31 [label=ExpresionValor]
+	31 -> 32
+	32 [label=4]
+	Node30 -> 31
+	Node34 [label="VALOR NUEVO"]
+	Node13 -> Node34
+	35 [label=ExpresionValor]
+	35 -> 36
+	36 [label=hola]
+	Node34 -> 35
+	Node38 [label=INSTRUCCION_SELECT]
+	Node0 -> Node38
+	Node39 [label=SELECT]
+	Node38 -> Node39
+	Node40 [label=LISTA_CAMPOS]
+	Node38 -> Node40
+	Node41 [label=ACCESO_CAMPO]
+	Node40 -> Node41
+	Node42 [label="nombre.id"]
+	Node41 -> Node42
+	Node43 [label=Lista_Alias]
+	Node41 -> Node43
+	Node44 [label=Alias_Produccion]
+	Node43 -> Node44
+	Node45 [label=As]
+	Node44 -> Node45
+	Node46 [label=j]
+	Node44 -> Node46
+	Node47 [label=Lista_Sentencias]
+	Node44 -> Node47
+	Node48 [label=ACCESO_CAMPO]
+	Node47 -> Node48
+	Node49 [label="nombre.id"]
+	Node48 -> Node49
+	Node50 [label=FROM]
+	Node38 -> Node50
+	Node51 [label=LISTA_TABLAS]
+	Node38 -> Node51
+	Node52 [label=Nombre_Tabla]
+	Node51 -> Node52
+	Node53 [label=tabla1]
+	Node52 -> Node53
+	Node54 [label=Lista_Alias]
+	Node52 -> Node54
+	Node55 [label=Alias_Produccion]
+	Node54 -> Node55
+	Node56 [label=","]
+	Node55 -> Node56
+	Node57 [label=Tabla]
+	Node55 -> Node57
+	Node58 [label=Nombre_Tabla]
+	Node57 -> Node58
+	Node59 [label=tabla]
+	Node58 -> Node59
+	Node60 [label=Lista_Alias]
+	Node58 -> Node60
+	Node61 [label=Alias_Produccion]
+	Node60 -> Node61
+	Node62 [label=As]
+	Node61 -> Node62
+	Node63 [label=j]
+	Node61 -> Node63
+	Node64
+	Node38 -> Node64
+>>>>>>> master
 }
