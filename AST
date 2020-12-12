@@ -2,14 +2,20 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=INSERT]
+	Node1 [label="CREATE TABLE"]
 	Node0 -> Node1
-	Node2 [label="ID TABLA"]
+	Node2 [label=Profesion]
 	Node1 -> Node2
-	Node3 [label=products]
-	Node2 -> Node3
-	Node4 [label=producto2]
-	Node2 -> Node4
-	Node5 [label="VALORES TABLA"]
-	Node1 -> Node5
+	Node3 [label="CREATE TABLE"]
+	Node0 -> Node3
+	Node4 [label=Estudiantes]
+	Node3 -> Node4
+	Node5 [label=INHERITS]
+	Node3 -> Node5
+	Node6 [label=Uni]
+	Node5 -> Node6
+	Node7 [label="DROP TABLE"]
+	Node0 -> Node7
+	Node8 [label=Mitabla]
+	Node7 -> Node8
 }

@@ -1308,6 +1308,7 @@ def p_instruccion_dml_comandos_CREATE_TABLE2(t):
 def p_instruccions_dml_inherit(t):
     'INHER      : INHERITS PARIZQ ID PARDER'
     t[0] = Inherits(t[3])
+    print(str(t[3]))
 
 
 def p_instruccion_dml_comandos_CUERPO(t):
@@ -1322,17 +1323,14 @@ def p_CREATE_TABLE_LISTA_CAMPOS(t):
 
 def p_CREATE_TABLE_LISTA_CAMPOS2(t):
     'LISTA_DE_COLUMNAS    : LISTA2'
- #   t[0] = [t[1]]
 
 
 def p_Create_TABLE_CAMPOS(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
+    t[0] = CampoTabla(None)
 
 def p_Create_TABLE_CAMPOS2(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Create_TABLE_CAMPOS3(t):
@@ -1419,38 +1417,42 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | MONEY
                     | FLOAT
                     | TEXT
-                    | BOOLEAN
-
-                    | DOUBLE PRECISION
-
-                    | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
-
-                    | VARCHAR PARIZQ EXPNUMERICA PARDER
-                    | CHARACTER PARIZQ EXPNUMERICA PARDER
-                    | CHAR PARIZQ EXPNUMERICA PARDER'''
+                    | BOOLEAN '''
+    t[0] = valorTipo(t[1], None)
+    print(str(t[1]))
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
-    '''TIPO_CAMPO   : '''
+    'TIPO_CAMPO   : DOUBLE PRECISION'
+    t[0] = valorTipo(t[1], None)
+    print(str(t[1]))
 
-# LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES--------------------------------------------------------------
+def p_Create_TABLE_TIPO_CAMPO3(t):
+    'TIPO_CAMPO   : CHARACTER VARYING PARIZQ EXPNUMERICA PARDER'
+    t[0] = valorTipo(t[1], None)
+    print(str(t[1]))
+
+def p_Create_TABLE_TIPO_CAMPO3(t):
+    '''TIPO_CAMPO   : VARCHAR PARIZQ EXPNUMERICA PARDER
+                    | CHARACTER PARIZQ EXPNUMERICA PARDER
+                    | CHAR PARIZQ EXPNUMERICA PARDER'''
+    t[0] = valorTipo(t[1], t[3])
+    print(str(t[1]))
+
+# LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES---------------------------------------------------
 def p_CREATE_TABLE_LISTA3_CAMPOS(t):
     'VALIDACIONES_CREATE_TABLE    : LISTA3'
-  #  t[0] = [t[1]]
 
 
 def p_Create_TABLE_CAMPOS_3(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE '
-   # t[0] = str(t[1])
 
 
 def p_Create_TABLE_CAMPOS_4(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
-   # t[0] = str(t[1])
 
 
 def p_Create_TABLE_CAMPOS_5(t):
     'LISTA3          : LISTA3  VALIDACION_CAMPO_CREATE '
-  #  t[0] = str(t[1])
 
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
@@ -1461,26 +1463,27 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
                                 | DEFAULT DECIMAL
                                 | DEFAULT ENTERO
                                 | DEFAULT ID'''
-  #  t[0] = str(t[1]) + str(t[2])
+    t[0] = CampoValidacion(t[1], t[2])
 
+def p_Create_TABLE_TIPO_CAMPO4(t):
+    '''VALIDACION_CAMPO_CREATE  : NULL'''
+    t[0] = CampoValidacion(t[1], None)
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
     'VALIDACION_CAMPO_CREATE_VACIO  :  '
 
 
-def p_Create_TABLE_TIPO_CAMPO4(t):
-    '''VALIDACION_CAMPO_CREATE  : NULL  '''
-  #  t[0] = str(t[1])
+
+
 
 
 # CONDICIONES CON EL CONSTRAIN------------------------------------------------------------------------------------------------------------
 def p_Create_TABLE_TIPO_CAMPO5(t):
     'VALIDACION_CAMPO_CREATE  : CONSTRAINT ID  UNIQUE'
- #   t[0] = str(t[1])+str(t[2])+str(t[3])
+
 
 def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
-  #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
 #FIN CREATE TABLE
 
 

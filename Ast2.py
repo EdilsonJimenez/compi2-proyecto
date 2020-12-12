@@ -62,9 +62,6 @@ class Ast2:
         dot.node('Node' + str(self.i), id)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
-        dot.node('Node'+  str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 #----------------------------------------------------------------------------------------------------------
 #-----------------------GRAFICAR INSERTAR-------------------------------------------------------------------
     def grafoInsert_Data(self, id, valores, padre):
