@@ -431,7 +431,7 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-
+    def RecorrerTiposAlias(self, Lista_Alias, padre):
         print("Verificando tipos de alias")
         # Alias de los Campos
         print("Verificando tipos de alias")

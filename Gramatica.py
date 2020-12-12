@@ -1468,7 +1468,6 @@ def p_Create_TABLE_TIPO_CAMPO3(t):
 
 def p_Create_TABLE_TIPO_CAMPO4(t):
     '''TIPO_CAMPO   : VARCHAR PARIZQ EXPNUMERICA PARDER
-                    | VARCHAR PARIZQ EXPNUMERICA PARDER
                     | CHARACTER PARIZQ EXPNUMERICA PARDER
                     | CHAR PARIZQ EXPNUMERICA PARDER'''
     t[0] = valorTipo(t[1], t[3])
@@ -1492,7 +1491,7 @@ def p_Create_TABLE_CAMPOS_4(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
     t[0] = [t[1]]
 
-def p_Create_TABLE_TIPO_CAMPO2(t):
+def p_Create_TABLE_TIPO_CAMPO2_2(t):
     '''VALIDACION_CAMPO_CREATE  : NOT NULL
                                 | PRIMARY KEY
                                 | DEFAULT CADENASIMPLE
@@ -1503,11 +1502,11 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
     t[0] = CampoValidacion(t[1], t[2])
     print("VALIDACION DEFAULT CASI")
 
-def p_Create_TABLE_TIPO_CAMPO4(t):
+def p_Create_TABLE_TIPO_CAMPO4_2(t):
     '''VALIDACION_CAMPO_CREATE  : NULL'''
     t[0] = CampoValidacion(t[1], None)
 
-def p_Create_TABLE_TIPO_CAMPO3(t):
+def p_Create_TABLE_TIPO_CAMPO3_2(t):
     'VALIDACION_CAMPO_CREATE_VACIO  :  '
     t[0] = CampoValidacion(None, None)
     print("VALIDACION VACIA")
@@ -1649,9 +1648,8 @@ def p_instruccion_dml_comandos_UPDATE_C(t):
 # -----------------------------------------------------------------------------------------------------------------
 # DELETE
 def p_instruccion_dml_comandos_DELETE(t):
-    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS WHERE CONDICIONES PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    print('\n' + str(t[0]) + '\n')
+    'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS WHERE expresion PUNTOCOMA'
+    t[0] = Delete_Datos(t[3],t[5])
 
 
 def p_instruccion_dml_comandos_DELETE2(t):
@@ -1967,12 +1965,15 @@ def p_expresion_aritmetica(t):
 
 
 def p_expresion_relacional(t) :
-    '''expresion_relacional :  expresion_aritmetica IGUALQUE expresion_aritmetica
+    '''expresion_relacional : expresion_aritmetica IGUALQUE expresion_aritmetica
                             | expresion_aritmetica DIFERENTE expresion_aritmetica
+                            | expresion_aritmetica IGUAL expresion_aritmetica
                             | expresion_aritmetica MAYORIGUAL expresion_aritmetica
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
-                            | expresion_aritmetica MAYOR expresion_aritmetica
-                            | expresion_aritmetica MENOR expresion_aritmetica'''
+                            | expresion_aritmetica MAYOR expresion_aritmetica                            
+                            | expresion_aritmetica MENOR expresion_aritmetica
+                            | PARIZQ expresion_relacional PARDER
+                            | expresion_aritmetica'''
 
     if t[2] == '==' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
@@ -1986,21 +1987,23 @@ def p_expresion_relacional(t) :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORQUE)
     elif t[2] == '<' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORQUE)
+    else :
+        t[0]=[1]
 
 
 def p_expresion_logica(t) :
-    '''expresion_logica :   expresion_relacional AND expresion_relacional
-                        |   expresion_relacional OR expresion_relacional
+    '''expresion_logica :   expresion_logica AND expresion_logica
+                        |   expresion_logica OR expresion_logica
+                        |   NOT expresion_logica 
+                        |   PARIZQ expresion_logica PARDER 
                         |   expresion_relacional'''
     if t[2] == 'AND' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.AND)
     elif t[2] == 'OR' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.OR)
+    elif t[1] == 'NOT' :
+        t[0] = UnitariaLogicaNOT(t[2])
 
-#LO TENGO EN LOGICA
-def p_unaria_notlogica(t) :
-    'expresion_unaria : NOT expresion_relacional '
-    t[0] = UnitariaLogicaNOT(t[2])
 
 #LO TENGO EN NUMERICA ARISMETICA
 def p_unitaria_negativo(t):
