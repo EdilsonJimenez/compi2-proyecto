@@ -94,7 +94,7 @@ class Ast2:
         
         for i in valores:
             print("valores")
-            print(i.val)
+            print(i)
             #self.inc();
             #dot.node('Node'+  str(self.i), str(i.val))
             #dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))

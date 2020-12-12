@@ -133,24 +133,26 @@ reservadas = {
 
 tokens = [
              # SIMBOLOS UTILIZADOS EN EL LENGUAJE
+             'MAS',
+             'MENOS',
+             'MAS2',
+             'MENOS2',
+             'ASTERISCO',
+             'DIVISION',
+             'PORCENTAJE',
+             'IGUAL',
+             'PARIZQ',
+
+             'PARDER',
+             'PUNTOCOMA',
              'DIFERENTE',
              'NEGACION',
-             'IGUAL',
              'MAYOR',
              'MENOR',
              'MENORIGUAL',
              'MAYORIGUAL',
-
-             'PARIZQ',
-             'PARDER',
              'COMA',
              'PUNTO',
-             'PUNTOCOMA',
-             'ASTERISCO',
-             'DIVISION',
-             'PORCENTAJE',
-             'MAS',
-             'MENOS',
 
              # Operadores de cadenas de bits
              'DOBLEPLECA',
@@ -176,24 +178,25 @@ tokens = [
          ] + list(reservadas.values())
 
 # TOKENS DE LOS SIMBOLOS UTILIZADOS EN EL LENGUAJE
+t_MAS2       = r'\+'
+t_MENOS2     = r'-'
+t_MAS       = r'\+'
+t_MENOS     = r'-'
+t_ASTERISCO = r'\*'
+t_DIVISION = r'/'
+t_PORCENTAJE = r'%'
+t_IGUAL = r'='
+t_PARIZQ = r'\('
+t_PARDER = r'\)'
+t_PUNTOCOMA = r';'
 t_DIFERENTE = r'!='
 t_NEGACION = r'\!'
-t_IGUAL = r'='
 t_MAYOR = r'>'
 t_MENOR = r'<'
 t_MENORIGUAL = r'<='
 t_MAYORIGUAL = r'>='
-
-t_PARIZQ = r'\('
-t_PARDER = r'\)'
 t_COMA = r','
 t_PUNTO = r'\.'
-t_PUNTOCOMA = r';'
-t_ASTERISCO = r'\*'
-t_DIVISION = r'/'
-t_PORCENTAJE = r'%'
-t_MAS = r'\+'
-t_MENOS = r'-'
 t_DOBLEPLECA = r'\|\|'
 t_AMPERSAND = r'&'
 t_PLECA = r'\|'
@@ -277,7 +280,7 @@ def t_FECHA(t):
 
 # CARACTERES IGNORADOS DEL LENGUAJE
 
-t_ignore = "\b|\f|\n|\r|\t"
+t_ignore = " \t"
 
 
 def t_newline(t):
@@ -491,6 +494,7 @@ def p_Campos_Asterisco(t):
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
     t[0] = ExpresionValor(t[1])
+    
 
 
 def p_Alias_id(t):
@@ -1896,28 +1900,6 @@ def p_cs2(t):
 # -----------------------------------------------------------------------------------------------------------------
 # Expresiones numericas
 
-def p_expnumerica(t):
-    '''EXPNUMERICA : EXPNUMERICA MAS EXPNUMERICA
-                   | EXPNUMERICA MENOS EXPNUMERICA
-                   | EXPNUMERICA ASTERISCO EXPNUMERICA
-                   | EXPNUMERICA DIVISION EXPNUMERICA
-                   | EXPNUMERICA PORCENTAJE EXPNUMERICA'''
-    print("-----ENTRO EXPRESION CON OPERADORES---------")               
-    if str(t[2]) == '+'  : 
-        print("-----ENTRO1-----")
-        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
-    elif t[2] == '-': 
-        print("-----ENTRO1-----")
-        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MENOS)
-    elif t[2] == '*': 
-        print("-----ENTRO1-----")
-        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MULTI)
-    elif t[2] == '/': 
-        print("-----ENTRO1-----")
-        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.DIVIDIDO)
-    elif t[2] == '%': 
-        print("-----ENTRO1-----")
-        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.RESIDUO)
       
 
 
@@ -1935,6 +1917,30 @@ def p_expnumerica_valor(t):
     print("SI ENTRO ER")              
     t[0] = ExpresionValor(t[1])
 
+
+def p_expnumerica(t):
+    '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
+                   | EXPNUMERICA DIVISION EXPNUMERICA
+                   | EXPNUMERICA PORCENTAJE EXPNUMERICA
+                   | EXPNUMERICA MENOS2 EXPNUMERICA
+                   | EXPNUMERICA MAS2 EXPNUMERICA'''
+    print("-----ENTRO EXPRESION CON OPERADORES---------")               
+    if str(t[2]) == '+'  : 
+        print("-----ENTRO1-----")
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
+    elif t[2] == '-': 
+        print("-----ENTRO1-----")
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MENOS)
+    elif t[2] == '*': 
+        print("-----ENTRO1-----")
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MULTI)
+    elif t[2] == '/': 
+        print("-----ENTRO1-----")
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.DIVIDIDO)
+    elif t[2] == '%': 
+        print("-----ENTRO1-----")
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.RESIDUO)
+    print("-----ENTRO EXPRESION CON OPERADORES---------")  
 
 def p_expresion_binario(t):
     '''EXPBINARIO : EXPBINARIO DOBLEPLECA EXPBINARIO
