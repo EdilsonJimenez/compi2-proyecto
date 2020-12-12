@@ -139,6 +139,7 @@ class CampoTabla(Expresion):
     def __init__(self, id, tipo, validaciones):
         self.id = id
         self.tipo = tipo
+
         self.validaciones = validaciones
 
 #---------------------------------------------------------

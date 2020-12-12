@@ -1,2 +1,1 @@
-CREATE TABLE Profesion ( mi text);
-DROP TABLE Mitabla;
+select nombre.id as j , nombre.id  from tabla1, tabla as j ; 
