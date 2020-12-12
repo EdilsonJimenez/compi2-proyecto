@@ -406,6 +406,7 @@ class Ast2:
 
         print("Verificando tipos de alias")
         # Alias de los Campos
+        print("Verificando tipos de alias")
         i=Lista_Alias
         if isinstance(i, Alias_Campos_ListaCampos):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
