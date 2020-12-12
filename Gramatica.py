@@ -1333,7 +1333,7 @@ def p_CREATE_TABLE_LISTA_CAMPOS2(t):
 
 def p_Create_TABLE_CAMPOS(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE COMA'
-    t[0] = CampoTabla(None)
+    t[0] = CampoTabla()
 
 def p_Create_TABLE_CAMPOS2(t):
     'LISTA2          : NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE'
@@ -1434,14 +1434,11 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
     'TIPO_CAMPO   : CHARACTER VARYING PARIZQ EXPNUMERICA PARDER'
-    t[0] = valorTipo(t[1], None)
+    t[0] = valorTipo(t[1], t[4])
     print(str(t[1]))
 
-def p_Create_TABLE_TIPO_CAMPO3(t):
+def p_Create_TABLE_TIPO_CAMPO4(t):
     '''TIPO_CAMPO   : VARCHAR PARIZQ EXPNUMERICA PARDER
-                    | BOOLEAN
-                    | DOUBLE PRECISION
-                    | CHARACTER VARYING PARIZQ EXPNUMERICA PARDER
                     | VARCHAR PARIZQ EXPNUMERICA PARDER
                     | CHARACTER PARIZQ EXPNUMERICA PARDER
                     | CHAR PARIZQ EXPNUMERICA PARDER'''
@@ -1451,19 +1448,20 @@ def p_Create_TABLE_TIPO_CAMPO3(t):
 # LISTA DE LOS ATRIBUTOS O COMPLEMENTOS DE CADA UNA DE LAS VARIABLES---------------------------------------------------
 def p_CREATE_TABLE_LISTA3_CAMPOS(t):
     'VALIDACIONES_CREATE_TABLE    : LISTA3'
-
+    t[0] = t[1]
 
 def p_Create_TABLE_CAMPOS_3(t):
     'LISTA3          :  VALIDACION_CAMPO_CREATE '
-
-
-def p_Create_TABLE_CAMPOS_4(t):
-    'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
-
+    t[0] = t[1]
 
 def p_Create_TABLE_CAMPOS_5(t):
     'LISTA3          : LISTA3  VALIDACION_CAMPO_CREATE '
+    t[1].append(t[2])
+    t[0] = t[1]
 
+def p_Create_TABLE_CAMPOS_4(t):
+    'LISTA3          :  VALIDACION_CAMPO_CREATE_VACIO '
+    t[0] = t[1]
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
     '''VALIDACION_CAMPO_CREATE  : NOT NULL
@@ -1473,7 +1471,7 @@ def p_Create_TABLE_TIPO_CAMPO2(t):
                                 | DEFAULT DECIMAL
                                 | DEFAULT ENTERO
                                 | DEFAULT ID'''
-    t[0] = CampoValidacion(t[1], t[2])
+    [t[0]] = CampoValidacion(t[1], t[2])
 
 def p_Create_TABLE_TIPO_CAMPO4(t):
     '''VALIDACION_CAMPO_CREATE  : NULL'''
@@ -1481,11 +1479,11 @@ def p_Create_TABLE_TIPO_CAMPO4(t):
 
 def p_Create_TABLE_TIPO_CAMPO3(t):
     'VALIDACION_CAMPO_CREATE_VACIO  :  '
+    t[0] = CampoValidacion(None, None)
 
 
 
-
-
+#***************************************************************************************************************
 
 # CONDICIONES CON EL CONSTRAIN------------------------------------------------------------------------------------------------------------
 def p_Create_TABLE_TIPO_CAMPO5(t):

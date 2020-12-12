@@ -1,17 +1,2 @@
 CREATE TABLE Profesion ( mi text);
-CREATE TABLE Estudiantes ( mi text) inherits (Uni);
 DROP TABLE Mitabla;
-
-
-CREATE TABLE libros(
-    id integer PRIMARY KEY,
-    titulo varchar(20)
-    );
-
-CREATE TABLE libros(
-    id integer,
-    titulo varchar(20),
-
-    CONSTRAINT pk_id PRIMARY KEY (id)
-    );
-
