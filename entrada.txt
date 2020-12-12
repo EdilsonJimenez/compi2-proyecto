@@ -1,2 +1,1 @@
-INSERT INTO products,producto2 VALUES ((9*2)(8*8));
-INSERT INTO products,producto2 VALUES (9/9);
+INSERT INTO products,producto2 VALUES (5+5*9,4,'hola');
