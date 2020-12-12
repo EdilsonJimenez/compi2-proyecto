@@ -6,7 +6,6 @@ class DropTable(Instruccion):
     def __init__(self, id):
         self.id = id
 
-
 #---------------------------------------------------------------------------------------------------
 class Select(Instruccion) :
 
@@ -53,3 +52,14 @@ class Insert_Datos(Instruccion):
     def __init__(self, id_table,valores):
         self.id_table = id_table
         self.valores = valores
+# ***************************** CREATE TABLE Y INHERITS ****************************************
+class Inherits(Instruccion):
+    def __init__(self, id):
+        self.id = id
+
+class CreateTable(Instruccion):
+    def __init__(self, id, cuerpo, inhe):
+        self.id = id
+        self.cuerpo = cuerpo
+        self.inhe = inhe
+

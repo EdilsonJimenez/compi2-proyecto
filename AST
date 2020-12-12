@@ -1,11 +1,18 @@
 digraph AST {
 	edge [arrowhead=none]
+<<<<<<< Updated upstream
 	node [color="#31CEF0" shape=box style=cyan4]
 	Node0 [label="[label=\"AST\"]"]
 	Node1 [label=INSERT]
+=======
+	node [color="#31CEF0" shape=box]
+	Node0 [label="\"AST\""]
+	Node1 [label="DROP TABLE"]
+>>>>>>> Stashed changes
 	Node0 -> Node1
 	Node2 [label="ID TABLA"]
 	Node1 -> Node2
+<<<<<<< Updated upstream
 	Node3 [label=products]
 	Node2 -> Node3
 	Node4 [label=producto2]
@@ -16,4 +23,22 @@ digraph AST {
 	Node0 -> Node6
 	Node7 [label=tablaMaestro]
 	Node6 -> Node7
+=======
+	Node3 [label="DROP TABLE"]
+	Node0 -> Node3
+	Node4 [label=tablaMaestro3]
+	Node3 -> Node4
+	Node5 [label="CREATE TABLE"]
+	Node0 -> Node5
+	Node6 [label=miTabla]
+	Node5 -> Node6
+	Node7 [label=INHERITS]
+	Node5 -> Node7
+	Node8 [label=ciudad]
+	Node7 -> Node8
+	Node9 [label="DROP TABLE"]
+	Node0 -> Node9
+	Node10 [label=tablitaGrande]
+	Node9 -> Node10
+>>>>>>> Stashed changes
 }

@@ -485,14 +485,12 @@ def p_Campos_id(t):
 
 def p_Campos_Asterisco(t):
     'CAMPOS          : ASTERISCO'
-
-    #t[0] = str(t[1])
+    t[0] = str(t[1])
 
 
 def p_NombreT_id(t):
     'NOMBRE_T        : ID'
-
-    #t[0] = str(t[1])
+    t[0] = tipoDato()
 
 
 def p_Alias_id(t):
@@ -1296,27 +1294,26 @@ def p_WhenUni_ExpreElseThen(t):
 
 def p_instruccion_dml_comandos_CREATE_TABLE(t):
     'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
-    print('\n' + str(t[0]) + '\n')
+    t[0] = CreateTable(t[3], 'Cuerpo ', None)
 
 
 def p_instruccion_dml_comandos_CREATE_TABLE2(t):
-    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER  INHERITS PARIZQ ID PARDER PUNTOCOMA'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
-    print('\n' + str(t[0]) + '\n')
+    'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER INHER PUNTOCOMA'
+    t[0] = CreateTable(t[3], 'Cuerpo', t[7])
+
+def p_instruccions_dml_inherit(t):
+    'INHER      : INHERITS PARIZQ ID PARDER'
+    t[0] = Inherits(t[3])
 
 
 def p_instruccion_dml_comandos_CUERPO(t):
     'CUERPO_CREATE_TABLE       : LISTA_DE_COLUMNAS'
-  #  t[1].append(t[1])
-  #  t[0] = t[1]
 
 
 # LISTA DE LAS FILAS COMPLETAS---------------------------------------------------------------------------------
 def p_CREATE_TABLE_LISTA_CAMPOS(t):
     'LISTA_DE_COLUMNAS       : LISTA_DE_COLUMNAS LISTA2'
- #   t[1].append(t[2])
- #   t[0] = t[1]
+
 
 
 def p_CREATE_TABLE_LISTA_CAMPOS2(t):
@@ -1476,7 +1473,7 @@ def p_Create_TABLE_TIPO_CAMPO5(t):
 def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
   #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
-
+#FIN CREATE TABLE
 
 
 
