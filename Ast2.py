@@ -628,6 +628,8 @@ class Ast2:
         elif isinstance(expresiones,UnitariaNotBB) :
             self.graficarUnaria(expresiones,"NotBB")
         #NUEVAS UNITARIAS
+        elif isinstance(expresiones,UnitariaArismeticaABS) :
+            self.graficarUnaria(expresiones,"ABS")
         elif isinstance(expresiones,UnitariaLogicaIS_NOT_NULL) :
             self.graficarUnaria(expresiones,"IS_NOT_NULL")
         elif isinstance(expresiones,UnitariaLogicaIS_NOT_TRUE) :
@@ -671,26 +673,43 @@ class Ast2:
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
         global  dot,tag,i
-        self.inc()
-        padreID=self.i
-        padre=padreID
-        dot.node(str(padreID),'Expresion'+tipo_exp)
-        self.inc()
-        padreID=self.i
-        dot.node(str(padreID),'exp1')
-        dot.edge(str(padre),str(padreID))
-        dot.edge(str(padreID),str(padreID+1))
-        self.graficar_expresion(expresion.exp1)
-        self.inc()
-        padreID=self.i
-        dot.node(str(padreID),self.getVar(expresion.operador))
-        dot.edge(str(padre),str(padreID))
-        self.inc()
-        padreID=self.i
-        dot.node(str(padreID),'exp2')
-        dot.edge(str(padre),str(padreID))
-        dot.edge(str(padreID),str(padreID+1))
-        self.graficar_expresion(expresion.exp2)
+        if expresion.exp1 and expresion.exp2:
+            self.inc()
+            padreID=self.i
+            padre=padreID
+            dot.node(str(padreID),'Expresion'+tipo_exp)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'exp1')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresion.exp1)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),self.getVar(expresion.operador))
+            dot.edge(str(padre),str(padreID))
+            self.inc()
+            padreID=self.i        
+            dot.node(str(padreID),'exp2')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresion.exp2)
+        elif  expresion.exp2 == None:
+            self.inc()
+            padreID=self.i
+            padre=padreID
+            dot.node(str(padreID),'Expresion'+tipo_exp)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'exp1')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresion.exp1)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),self.getVar(expresion.operador))
+            dot.edge(str(padre),str(padreID))
+        
 
     def graficarUnaria(self,expresion,tipo_exp=""):
         self.inc()
@@ -750,6 +769,8 @@ class Ast2:
             return 'IS_NOT_DISTINCT'
         elif padreID==OPERACION_LOGICA.IS_DISTINCT:
             return 'IS_DISTINCT'
+        elif padreID==FUNCION_NATIVA.ABS:
+            return 'ABS'
         else:
             return 'op'
 #----------------------------------------------------------------------------------------------------------

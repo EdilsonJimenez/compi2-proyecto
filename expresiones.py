@@ -211,3 +211,8 @@ class ExpresionFuncion(Expresion):
         self.exp2 = exp2
         self.exp3 = exp3
         self.exp4 = exp4
+
+#CLASES EDILSON
+class UnitariaArismeticaABS() :
+    def __init__(self, expresion):
+        self.expresion=expresion

@@ -2090,16 +2090,14 @@ def p_expresion_logica_predicados_3(t):
                         | expresion_aritmetica IS NOT TRUE                       
                         | expresion_aritmetica IS NOT FALSE
                         | expresion_aritmetica IS NOT UNKNOWN'''
-    print("ENTRO A NOT NULL----")
     if  t[4] == 'NULL':
-        print("ENTRO A NOT NULL222")
-        t[0] = UnitariaLogicaIS_NOT_NULL(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_NULL)
     elif  t[4] == 'TRUE':
-        t[0] = UnitariaLogicaIS_NOT_TRUE(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_TRUE)
     elif  t[4] == 'FALSE':
-        t[0] = UnitariaLogicaIS_NOT_FALSE(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_FALSE)
     elif  t[4] == 'UNKNOWN':
-        t[0] = UnitariaLogicaIS_NOT_UNKNOWN(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_UNKNOWN)
 
 
 def p_expresion_logica_predicados_4(t):
@@ -2108,13 +2106,13 @@ def p_expresion_logica_predicados_4(t):
                         | expresion_aritmetica IS FALSE
                         | expresion_aritmetica IS UNKNOWN'''
     if  t[3] == 'NULL':
-        t[0] = UnitariaLogicaIS_IS_NULL(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NULL)
     elif  t[3] == 'TRUE':
-        t[0] = UnitariaLogicaIS_IS_TRUE(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_TRUE)
     elif t[3] == 'FALSE':
-        t[0] = UnitariaLogicaIS_IS_FALSE(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_FALSE)
     elif  t[3] == 'UNKNOWN':
-        t[0] = UnitariaLogicaIS__UNKNOWN(t[1])
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_UNKNOWN)
 
 
 # def p_expresion_logica_paren(t) :
@@ -2227,7 +2225,7 @@ def p_funciones_math(t):
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER'''
     if t[1] == 'ABS':
-        t[0] = ExpresionFuncion(FUNCION_NATIVA.ABS, t[3], None, None, None)
+        t[0] = ExpresionLogica(None,t[3],FUNCION_NATIVA.ABS)
 
 
 
