@@ -11,6 +11,20 @@ class OPERACION_LOGICA(Enum) :
     AND = 1
     OR = 2
     XOR = 3
+    #nuevas logias Edilson
+    BETWEEN = 4
+    NOT_BETWEEN = 5
+    IS_DISTINCT = 6
+    IS_NOT_DISTINCT = 7
+    IS_NULL= 8
+    IS_NOT_NULL = 9
+    IS_TRUE= 10
+    IS_NOT_TRUE= 11
+    IS_FALSE= 12
+    IS_NOT_FALSE= 13
+    IS_UNKNOWN= 14
+    IS_NOT_UNKNOWN= 15
+
 
 class OPERACION_RELACIONAL(Enum) :
     IGUALQUE = 1
@@ -78,6 +92,38 @@ class UnariaReferencia() :
     def __init__(self,tipoVar):
         self.tipoVar=tipoVar
 
+#NUEVAS UNITARIAS
+class UnitariaLogicaIS_NOT_NULL() :
+    def __init__(self, expresion):
+        self.expresion=expresion
+
+class UnitariaLogicaIS_NOT_TRUE() :
+    def __init__(self, expresion):
+        self.expresion=expresion
+
+class UnitariaLogicaIS_NOT_FALSE() :
+    def __init__(self, expresion):
+        self.expresion=expresion
+
+class UnitariaLogicaIS_NOT_UNKNOWN() :
+    def __init__(self, expresion):
+        self.expresion=expresion
+
+class UnitariaLogicaIS_IS_NULL() :
+    def __init__(self, expresion):
+        self.expresion=expresion
+
+class UnitariaLogicaIS_IS_TRUE() :
+    def __init__(self, expresion):
+        self.expresion=expresion
+
+class UnitariaLogicaIS_IS_FALSE() :
+    def __init__(self, expresion):
+        self.expresion=expresion
+
+class UnitariaLogicaIS__UNKNOWN() :
+    def __init__(self, expresion):
+        self.expresion=expresion
 #------------------------------------------------------------------------
 
 class Expresion:

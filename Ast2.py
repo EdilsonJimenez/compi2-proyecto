@@ -627,6 +627,24 @@ class Ast2:
             self.graficarUnaria(expresiones,"LogicaNOT")
         elif isinstance(expresiones,UnitariaNotBB) :
             self.graficarUnaria(expresiones,"NotBB")
+        #NUEVAS UNITARIAS
+        elif isinstance(expresiones,UnitariaLogicaIS_NOT_NULL) :
+            self.graficarUnaria(expresiones,"IS_NOT_NULL")
+        elif isinstance(expresiones,UnitariaLogicaIS_NOT_TRUE) :
+            self.graficarUnaria(expresiones,"IS_NOT_TRUE")
+        elif isinstance(expresiones,UnitariaLogicaIS_NOT_FALSE) :
+            self.graficarUnaria(expresiones,"IS_NOT_FALSE")
+        elif isinstance(expresiones,UnitariaLogicaIS_NOT_UNKNOWN) :
+            self.graficarUnaria(expresiones,"IS_NOT_UNKNOWN")
+        elif isinstance(expresiones,UnitariaLogicaIS_IS_NULL) :
+            self.graficarUnaria(expresiones,"IS_NULL")
+        elif isinstance(expresiones,UnitariaLogicaIS_IS_TRUE) :
+            self.graficarUnaria(expresiones,"IS_TRUE")
+        elif isinstance(expresiones,UnitariaLogicaIS_IS_FALSE) :
+            self.graficarUnaria(expresiones,"IS_FALSE")
+        elif isinstance(expresiones,UnitariaLogicaIS__UNKNOWN) :
+            self.graficarUnaria(expresiones,"IS_UNKNOW")
+        #----------------------------------------
         elif isinstance(expresiones,ExpresionValor) :
             self.inc()
             padreID=self.i
@@ -711,6 +729,27 @@ class Ast2:
             return '>'
         elif padreID==OPERACION_RELACIONAL.MAYORQUE:
             return '<'
+        #NUEVAS COSAS
+        elif padreID==OPERACION_LOGICA.IS_NOT_NULL:
+            return 'IS_NOT_NULL'
+        elif padreID==OPERACION_LOGICA.IS_NOT_TRUE:
+            return 'IS_NOT_TRUE'
+        elif padreID==OPERACION_LOGICA.IS_NOT_FALSE:
+            return 'IS_NOT_FALSE'
+        elif padreID==OPERACION_LOGICA.IS_NOT_UNKNOWN:
+            return 'IS_NOT_UNKNOWN'
+        elif padreID==OPERACION_LOGICA.IS_NULL:
+            return 'IS_NULL'
+        elif padreID==OPERACION_LOGICA.IS_TRUE:
+            return 'IS_TRUE'
+        elif padreID==OPERACION_LOGICA.IS_FALSE:
+            return 'IS_FALSE'
+        elif padreID==OPERACION_LOGICA.IS_UNKNOWN:
+            return 'IS_NOT_UNKNOWN'
+        elif padreID==OPERACION_LOGICA.IS_NOT_DISTINCT:
+            return 'IS_NOT_DISTINCT'
+        elif padreID==OPERACION_LOGICA.IS_DISTINCT:
+            return 'IS_DISTINCT'
         else:
             return 'op'
 #----------------------------------------------------------------------------------------------------------
