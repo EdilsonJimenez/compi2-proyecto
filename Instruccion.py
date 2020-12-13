@@ -72,6 +72,23 @@ class AccesoTablaSinLista(Instruccion): #Tabla
 
 
 
+#Campos Accedidos desde Group By
+#---------------------------------------------------------------------------------------------------
+
+class AccesoGroupBy(Instruccion): #Tabla Lista
+
+    def __init__(self, NombreT,Columna,Estado,Lista_Alias=[]):
+        self.NombreT      = NombreT
+        self.Columna      = Columna
+        self.Lista_Alias  = Lista_Alias
+        self.Estado = Estado
+
+
+#---------------------------------------------------------------------------------------------------
+
+
+
+
 
 # Alias
 #Alias Campos
@@ -99,9 +116,26 @@ class Alias_Table_ListaTablas(Instruccion):
 
 #Alias campos Sin Lista
 class Alias_Table_ListaTablasSinLista(Instruccion):
+    def __init__(self, Alias):
+        self.Alias = Alias
+
+
+
+#Alias Group By
+#---------------------------------------------------------------------------------------------------
+
+#Alias campos Con Lista
+class Alias_Tablas_Group(Instruccion):
     def __init__(self, Alias,Lista_Sentencias=[]):
         self.Alias = Alias
         self.Lista_Sentencias = Lista_Sentencias
+
+#Alias campos Sin Lista
+class Alias_Tablas_GroupSinLista(Instruccion):
+    def __init__(self, Alias):
+        self.Alias = Alias
+
+
 
 
 
@@ -113,6 +147,48 @@ class Cuerpo_Condiciones(Instruccion):
 
     def __init__(self,Cuerpo=[]):
         self.Cuerpo = Cuerpo
+
+
+
+#Cuerpo Tipo Where condiciones
+#---------------------------------------------------------------------------------------------------
+class Cuerpo_TipoWhere(Instruccion):
+    def __init__(self,Cuerpo=[]):
+        self.Cuerpo = Cuerpo
+
+
+
+#Cuerpo Tipo Group By
+#---------------------------------------------------------------------------------------------------
+class Cuerpo_TipoGroup(Instruccion):
+    def __init__(self,Cuerpo=[]):
+        self.Cuerpo = Cuerpo
+
+
+#TIPOS DE GROUP BY
+#---------------------------------------------------------------------------------------------------
+#Group By  Con Having y condiciones
+
+class GroupBy():
+    def __init__(self,Lista_Campos=[],Condiciones=[]):
+        self.Lista_Campos = Lista_Campos
+        self.Condiciones  = Condiciones
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #---------------------------------------------------------------------------------------------------
