@@ -12,82 +12,94 @@ digraph AST {
 	Node1 -> Node4
 	Node5 [label="VALOR CONDICION SET"]
 	Node4 -> Node5
-	6 [label=ExpresionRelacional]
+	6 [label=ExpresionLogica]
 	7 [label=exp1]
 	6 -> 7
 	7 -> 8
 	8 [label=ExpresionValor]
 	8 -> 9
 	9 [label=price]
-	10 [label="=="]
+	10 [label=IS_DISTINCT]
 	6 -> 10
 	11 [label=exp2]
 	6 -> 11
 	11 -> 12
-	12 [label=ExpresionValor]
+	12 [label=ExpresionAritmetica]
+	13 [label=exp1]
 	12 -> 13
-	13 [label=10]
-	Node5 -> 6
-	Node15 [label="VALOR CONDICION SET"]
-	Node4 -> Node15
-	16 [label=ExpresionRelacional]
-	17 [label=exp1]
-	16 -> 17
+	13 -> 14
+	14 [label=ExpresionValor]
+	14 -> 15
+	15 [label=33]
+	16 [label="+"]
+	12 -> 16
+	17 [label=exp2]
+	12 -> 17
 	17 -> 18
 	18 [label=ExpresionValor]
 	18 -> 19
-	19 [label=costo]
-	20 [label="=="]
-	16 -> 20
-	21 [label=exp2]
-	16 -> 21
-	21 -> 22
-	22 [label=ExpresionValor]
+	19 [label=6]
+	Node5 -> 6
+	Node21 [label="VALOR CONDICION SET"]
+	Node4 -> Node21
+	22 [label=ExpresionRelacional]
+	23 [label=exp1]
 	22 -> 23
-	23 [label=9]
-	Node15 -> 16
-	Node25 [label=WHERE]
-	Node1 -> Node25
-	Node26 [label="VALOR CONDICION WHERE"]
-	Node25 -> Node26
-	27 [label=ExpresionLogica]
-	28 [label=exp1]
+	23 -> 24
+	24 [label=ExpresionValor]
+	24 -> 25
+	25 [label=costo]
+	26 [label="=="]
+	22 -> 26
+	27 [label=exp2]
+	22 -> 27
 	27 -> 28
+	28 [label=ExpresionValor]
 	28 -> 29
-	29 [label=ExpresionRelacional]
-	30 [label=exp1]
-	29 -> 30
-	30 -> 31
-	31 [label=ExpresionValor]
-	31 -> 32
-	32 [label=4]
-	33 [label="=="]
-	29 -> 33
-	34 [label=exp2]
-	29 -> 34
+	29 [label=9]
+	Node21 -> 22
+	Node31 [label=WHERE]
+	Node1 -> Node31
+	Node32 [label="VALOR CONDICION WHERE"]
+	Node31 -> Node32
+	33 [label=ExpresionLogica]
+	34 [label=exp1]
+	33 -> 34
 	34 -> 35
-	35 [label=ExpresionValor]
+	35 [label=ExpresionRelacional]
+	36 [label=exp1]
 	35 -> 36
-	36 [label=4]
-	37 [label=AND]
-	27 -> 37
-	38 [label=exp2]
-	27 -> 38
-	38 -> 39
-	39 [label=ExpresionRelacional]
-	40 [label=exp1]
-	39 -> 40
+	36 -> 37
+	37 [label=ExpresionValor]
+	37 -> 38
+	38 [label=4]
+	39 [label="=="]
+	35 -> 39
+	40 [label=exp2]
+	35 -> 40
 	40 -> 41
 	41 [label=ExpresionValor]
 	41 -> 42
-	42 [label=5]
-	43 [label="=="]
-	39 -> 43
+	42 [label=4]
+	43 [label=AND]
+	33 -> 43
 	44 [label=exp2]
-	39 -> 44
+	33 -> 44
 	44 -> 45
-	45 [label=ExpresionValor]
+	45 [label=ExpresionRelacional]
+	46 [label=exp1]
 	45 -> 46
-	46 [label=4]
-	Node26 -> 27
+	46 -> 47
+	47 [label=ExpresionValor]
+	47 -> 48
+	48 [label=5]
+	49 [label="=="]
+	45 -> 49
+	50 [label=exp2]
+	45 -> 50
+	50 -> 51
+	51 [label=ExpresionValor]
+	51 -> 52
+	52 [label=4]
+	Node32 -> 33
 }

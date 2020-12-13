@@ -1614,7 +1614,7 @@ def p_instruccion_dml_comandos_UPDATE2(t):
     'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
-    
+
 def p_instruccion_dml_comandos_UPDATE_CAMPOS(t):
     'CAMPOSN       : CAMPOSN CAMPO'
     t[1].append(t[2])
@@ -2017,18 +2017,51 @@ def p_expresion_logica_relacion(t):
     t[0] = t[1]
 
 def p_expresion_logica_predicados(t):
+    '''expresion_logica : expresion_aritmetica NOT BETWEEN expresion_aritmetica AND expresion_aritmetica                    
+                        | expresion_aritmetica IS NOT DISTINCT FROM expresion_aritmetica '''
+    if t[2] == 'IS' :
+        t[0] = ExpresionLogica(t[1],t[6],OPERACION_LOGICA.IS_NOT_DISTINCT)
+   
+    
+
+def p_expresion_logica_predicados_2(t):
     '''expresion_logica : expresion_aritmetica BETWEEN expresion_aritmetica AND expresion_aritmetica
-                        | expresion_aritmetica NOT BETWEEN expresion_aritmetica AND expresion_aritmetica
-                        | expresion_aritmetica IS DISTINCT FROM expresion_aritmetica
-                        | expresion_aritmetica IS NOT DISTINCT FROM expresion_aritmetica
-                        | expresion_aritmetica IS NULL
-                        | expresion_aritmetica IS NOT NULL
-                        | expresion_aritmetica IS TRUE
-                        | expresion_aritmetica IS NOT TRUE
-                        | expresion_aritmetica IS FALSE
+                        | expresion_aritmetica IS DISTINCT FROM expresion_aritmetica'''
+    if t[2] == 'IS' :
+        t[0] = ExpresionLogica(t[1],t[5],OPERACION_LOGICA.IS_DISTINCT)
+
+
+#ES UNARIA TODAS
+def p_expresion_logica_predicados_3(t):
+    '''expresion_logica : expresion_aritmetica IS NOT NULL                     
+                        | expresion_aritmetica IS NOT TRUE                       
                         | expresion_aritmetica IS NOT FALSE
-                        | expresion_aritmetica IS UNKNOWN
                         | expresion_aritmetica IS NOT UNKNOWN'''
+    print("ENTRO A NOT NULL----")
+    if  t[4] == 'NULL':
+        print("ENTRO A NOT NULL222")
+        t[0] = UnitariaLogicaIS_NOT_NULL(t[1])
+    elif  t[4] == 'TRUE':
+        t[0] = UnitariaLogicaIS_NOT_TRUE(t[1])
+    elif  t[4] == 'FALSE':
+        t[0] = UnitariaLogicaIS_NOT_FALSE(t[1])
+    elif  t[4] == 'UNKNOWN':
+        t[0] = UnitariaLogicaIS_NOT_UNKNOWN(t[1])
+
+
+def p_expresion_logica_predicados_4(t):
+    '''expresion_logica : expresion_aritmetica IS NULL
+                        | expresion_aritmetica IS TRUE
+                        | expresion_aritmetica IS FALSE
+                        | expresion_aritmetica IS UNKNOWN'''
+    if  t[3] == 'NULL':
+        t[0] = UnitariaLogicaIS_IS_NULL(t[1])
+    elif  t[3] == 'TRUE':
+        t[0] = UnitariaLogicaIS_IS_TRUE(t[1])
+    elif t[3] == 'FALSE':
+        t[0] = UnitariaLogicaIS_IS_FALSE(t[1])
+    elif  t[3] == 'UNKNOWN':
+        t[0] = UnitariaLogicaIS__UNKNOWN(t[1])
 
 
 # def p_expresion_logica_paren(t) :
