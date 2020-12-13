@@ -1723,7 +1723,7 @@ def p_instruccion_dml_comandos_DELETE2(t):
 # -----------------------------------------------------------------------------------------------------------------
 # DROP TABLES
 def p_instruccion_dml_comandos_DROP_TABLE(t):
-    'DML_COMANDOS       : DROP TABLE ID PUNTOCOMA'
+    'DML_COMANDOS       : DROP TABLE LISTA_DE_IDS PUNTOCOMA'
     t[0] = DropTable(t[3])
 
 
@@ -1737,13 +1737,34 @@ def p_instruccion_dml_comandos_DROP_TABLE(t):
     # print('\n' + str(t[0]) + '\n')
 
 
+# LISTADO DE IDS--------------------------------------------------------
+def p_CREATE_TABLE_LISTA_IDS_(t):
+    'LISTA_ALTER_EM      : LISTA_ALTER_EM LISTA_ALTER_EM_'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_CREATE_TABLE_LISTA_IDS2_(t):
+    'LISTA_ALTER_EM    : LISTA_ALTER_EM_'
+    t[0] = [t[1]]
+
+
+def p_CREATE_TABLE_LISTA_IDS3_(t):
+    'LISTA_ALTER_EM_  :  ID TIPO_CAMPO COMA'
+    t[0] = ExpresionValor2(t[1],t[2])
+
+def p_CREATE_TABLE_LISTA_IDS4_(t):
+    'LISTA_ALTER_EM_  :   ID TIPO_CAMPO'
+    t[0] = ExpresionValor2(t[1],t[2])
+
+
 # -----------------------------------------------------------------------------------------------------------------
 # ALTER TABLES
 def p_instruccion_dml_comandos_ALTER_TABLE(t):
-    'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN ID TIPO_CAMPO PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
-    print('\n' + str(t[0]) + '\n')
-
+    'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN LISTA_ALTER_EM PUNTOCOMA'
+    t[0] = Alter_Table_AddColumn(t[3],t[6])
+  
+#LISTA_DE_IDS TIPO_CAMPO
 
 def p_instruccion_dml_comandos_ALTER_TABLE2(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN CAMPOSC PUNTOCOMA'

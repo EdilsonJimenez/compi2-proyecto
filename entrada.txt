@@ -1,2 +1,1 @@
-UPDATE products SET  ABS(id_valo), costo = 9 WHERE 4 = 4 AND 5 = 4;
-
+ALTER TABLE tabless ADD COLUMN columna1 integer,columna2 integer;

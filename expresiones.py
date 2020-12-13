@@ -216,3 +216,9 @@ class ExpresionFuncion(Expresion):
 class UnitariaArismeticaABS() :
     def __init__(self, expresion):
         self.expresion=expresion
+
+#-----------------------------------------------------------------
+class ExpresionValor2(Expresion) :
+    def __init__(self, val ,tipo ):
+        self.val = val
+        self.tipo = tipo

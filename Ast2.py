@@ -31,7 +31,7 @@ class Ast2:
         for i in sente:
             #VIENE UN DROP TABLE
             if isinstance(i, DropTable):
-                print("Si es un drop table *" + i.id)
+                print("Si es un drop table *")
                 self.grafoDropTable(i.id, padre)
 
             elif isinstance(i, Select):
@@ -61,21 +61,16 @@ class Ast2:
                 print("Es Una Instruccion Update")
                 self.grafoUpdate__Data(i.id_table,i.valores_set,i.valor_where,padre)
 
+            elif isinstance(i, Alter_Table_AddColumn):
+                print("Es Una Instruccion Alter Add Column")
+                self.grafoAlter_AddColumn(i.id_table,i.id_columnas,padre)
+
             else:
                 print("No es droptable")
 
 
 
-    def grafoDropTable(self, id, padre):
-        global dot
-        self.inc();
-
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "DROP TRABLE")
-        dot.edge(padre, 'Node' + str(self.i))
-        self.inc();
-        dot.node('Node' + str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+    
 
 
     # ----------------------------------------------------------------------------------------------------------
@@ -559,16 +554,24 @@ class Ast2:
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------- GRAFO DROP TABLE-------------------------------------------------------------------
     def grafoDropTable(self, id, padre):
-        global dot, i
+        global  dot,tag,i
 
         self.inc()
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "DROP TABLE")
-        dot.edge(padre, 'Node' + str(self.i))
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"DROP_TABLE")
+        dot.edge(padre,'Node'+str(self.i))
 
-        self.inc()
-        dot.node('Node' + str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        for i in id:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val)
+            dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+        
 
 #----------------------------------------------------------------------------------------------------------
 #-----------------------GRAFICAR INSERTAR-------------------------------------------------------------------
@@ -628,24 +631,7 @@ class Ast2:
         elif isinstance(expresiones,UnitariaNotBB) :
             self.graficarUnaria(expresiones,"NotBB")
         #NUEVAS UNITARIAS
-        elif isinstance(expresiones,UnitariaArismeticaABS) :
-            self.graficarUnaria(expresiones,"ABS")
-        elif isinstance(expresiones,UnitariaLogicaIS_NOT_NULL) :
-            self.graficarUnaria(expresiones,"IS_NOT_NULL")
-        elif isinstance(expresiones,UnitariaLogicaIS_NOT_TRUE) :
-            self.graficarUnaria(expresiones,"IS_NOT_TRUE")
-        elif isinstance(expresiones,UnitariaLogicaIS_NOT_FALSE) :
-            self.graficarUnaria(expresiones,"IS_NOT_FALSE")
-        elif isinstance(expresiones,UnitariaLogicaIS_NOT_UNKNOWN) :
-            self.graficarUnaria(expresiones,"IS_NOT_UNKNOWN")
-        elif isinstance(expresiones,UnitariaLogicaIS_IS_NULL) :
-            self.graficarUnaria(expresiones,"IS_NULL")
-        elif isinstance(expresiones,UnitariaLogicaIS_IS_TRUE) :
-            self.graficarUnaria(expresiones,"IS_TRUE")
-        elif isinstance(expresiones,UnitariaLogicaIS_IS_FALSE) :
-            self.graficarUnaria(expresiones,"IS_FALSE")
-        elif isinstance(expresiones,UnitariaLogicaIS__UNKNOWN) :
-            self.graficarUnaria(expresiones,"IS_UNKNOW")
+        
         #----------------------------------------
         elif isinstance(expresiones,ExpresionValor) :
             self.inc()
@@ -944,3 +930,37 @@ class Ast2:
         self.graficar_expresion(i)
         self.inc()
         dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
+
+
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR ALTER TABLE ADD COLUM-------------------------------------------------------------------
+    def grafoAlter_AddColumn(self, id_tablas,id_columnas, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"ALTER TABLE ADD COLUMN")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        self.inc();
+        dot.node('Node'+  str(self.i), str(id_tablas))
+        dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"COLUMNAS")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       
+        for i in id_columnas:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
+            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+
+        

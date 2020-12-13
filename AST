@@ -2,86 +2,16 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=UPDATE]
+	Node1 [label="ALTER TABLE ADD COLUMN"]
 	Node0 -> Node1
 	Node2 [label="ID TABLA"]
 	Node1 -> Node2
-	Node3 [label=products]
+	Node3 [label=tabless]
 	Node2 -> Node3
-	Node4 [label=SET]
+	Node4 [label=COLUMNAS]
 	Node1 -> Node4
-	Node5 [label="VALOR CONDICION SET"]
+	Node5 [label="columna1 Tipo: integer"]
 	Node4 -> Node5
-	6 [label=ExpresionLogica]
-	7 [label=exp1]
-	6 -> 7
-	7 -> 8
-	8 [label=ExpresionValor]
-	8 -> 9
-	9 [label=id_valo]
-	10 [label=ABS]
-	6 -> 10
-	Node5 -> 6
-	Node12 [label="VALOR CONDICION SET"]
-	Node4 -> Node12
-	13 [label=ExpresionRelacional]
-	14 [label=exp1]
-	13 -> 14
-	14 -> 15
-	15 [label=ExpresionValor]
-	15 -> 16
-	16 [label=costo]
-	17 [label="=="]
-	13 -> 17
-	18 [label=exp2]
-	13 -> 18
-	18 -> 19
-	19 [label=ExpresionValor]
-	19 -> 20
-	20 [label=9]
-	Node12 -> 13
-	Node22 [label=WHERE]
-	Node1 -> Node22
-	Node23 [label="VALOR CONDICION WHERE"]
-	Node22 -> Node23
-	24 [label=ExpresionLogica]
-	25 [label=exp1]
-	24 -> 25
-	25 -> 26
-	26 [label=ExpresionRelacional]
-	27 [label=exp1]
-	26 -> 27
-	27 -> 28
-	28 [label=ExpresionValor]
-	28 -> 29
-	29 [label=4]
-	30 [label="=="]
-	26 -> 30
-	31 [label=exp2]
-	26 -> 31
-	31 -> 32
-	32 [label=ExpresionValor]
-	32 -> 33
-	33 [label=4]
-	34 [label=AND]
-	24 -> 34
-	35 [label=exp2]
-	24 -> 35
-	35 -> 36
-	36 [label=ExpresionRelacional]
-	37 [label=exp1]
-	36 -> 37
-	37 -> 38
-	38 [label=ExpresionValor]
-	38 -> 39
-	39 [label=5]
-	40 [label="=="]
-	36 -> 40
-	41 [label=exp2]
-	36 -> 41
-	41 -> 42
-	42 [label=ExpresionValor]
-	42 -> 43
-	43 [label=4]
-	Node23 -> 24
+	Node6 [label="columna2 Tipo: integer"]
+	Node4 -> Node6
 }

@@ -145,3 +145,10 @@ class Update_Datos(Instruccion):
         self.id_table = id_table
         self.valores_set = valores_set
         self.valor_where = valor_where
+
+
+#Clase para el Alter Table----------------------------
+class Alter_Table_AddColumn(Instruccion):
+    def __init__(self, id_table,id_columnas):
+        self.id_table = id_table
+        self.id_columnas = id_columnas
