@@ -66,6 +66,53 @@ class FUNCION_NATIVA(Enum):
     EXP = 7
     FACTORIAL = 8
     FLOOR = 9
+    GCD = 10
+    LN = 11
+    LOG = 12
+    MOD = 13
+    PI = 14
+    POWER = 15
+    RADIANS = 16
+    ROUND = 17
+    SIGN = 18
+    SQRT = 19
+    WIDTH_BUCKET = 20
+    TRUNC = 21
+    RANDOM = 22
+    ACOS = 23
+    ACOSD = 24
+    ASIN = 25
+    ASIND = 26
+    ATAN = 27
+    ATAND = 28
+    ATAN2 = 29
+    ATAN2D = 30
+    COS = 31
+    COSD = 32
+    COT = 33
+    COTD = 34
+    SIN = 35
+    SIND = 36
+    TAN = 37
+    TAND = 38
+    SINH = 39
+    COSH = 40
+    TANH = 41
+    ASINH = 42
+    ACOSH = 43
+    ATANH = 44
+    LENGTH = 45
+    SUBSTRING = 46
+    TRIM = 47
+    MD5 = 48
+    SHA256 = 49
+    SUBSTR = 50
+    GET_BYTE = 51
+    SET_BYTE = 52
+    CONVERT = 53
+    ENCODE = 54
+    DECODE = 55
+
 
 #------------------------------------------------------------------------
 

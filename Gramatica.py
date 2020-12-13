@@ -2225,8 +2225,104 @@ def p_funciones_math(t):
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER'''
     if t[1] == 'ABS':
-        t[0] = ExpresionLogica(None,t[3],FUNCION_NATIVA.ABS)
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ABS)
+    elif t[1] == 'CBRT':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CBRT)
+    elif t[1] == 'CEIL':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CEIL)
+    elif t[1] == 'CEILING':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CEILING)
+    elif t[1] == 'DEGREES':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.DEGREES)
+    elif t[1] == 'EXP':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.EXP)
+    elif t[1] == 'FACTORIAL':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.FACTORIAL)
+    elif t[1] == 'FLOOR':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.FLOOR)
+    elif t[1] == 'LN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LN)
+    elif t[1] == 'LOG':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LOG)
+    elif t[1] == 'RADIANS':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.RADIANS)
+    elif t[1] == 'ROUND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ROUND)
+    elif t[1] == 'SIGN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIGN)
+    elif t[1] == 'SQRT':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SQRT)
+    elif t[1] == 'TRUNC':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TRUNC)
+    elif t[1] == 'ACOS':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOS)
+    elif t[1] == 'ACOSD':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOSD)
+    elif t[1] == 'ASIN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASIN)
+    elif t[1] == 'ASIND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASIND)
+    elif t[1] == 'ATAN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATAN)
+    elif t[1] == 'ATAND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATAND)
+    elif t[1] == 'COS':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COS)
+    elif t[1] == 'COSD':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COSD)
+    elif t[1] == 'COT':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COT)
+    elif t[1] == 'COTD':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COTD)
+    elif t[1] == 'SIN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIN)
+    elif t[1] == 'SIND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIND)
+    elif t[1] == 'TAN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TAN)
+    elif t[1] == 'TAND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TAND)
+    elif t[1] == 'SINH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SINH)
+    elif t[1] == 'COSH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COSH)
+    elif t[1] == 'TANH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TANH)
+    elif t[1] == 'ASINH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASINH)
+    elif t[1] == 'ACOSH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOSH)
+    elif t[1] == 'ATANH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATANH)
+    elif t[1] == 'LENGTH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LENGTH)
+    elif t[1] == 'TRIM':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TRIM)
+    elif t[1] == 'MD5':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.MD5)
+    elif t[1] == 'SHA256':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SHA256)
 
+    elif t[1] == 'DIV':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.DIV)
+    elif t[1] == 'GCD':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.GCD)
+    elif t[1] == 'MOD':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.MOD)
+    elif t[1] == 'POWER':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.POWER)
+    elif t[1] == 'ATAN2':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ATAN2)
+    elif t[1] == 'ATAN2D':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ATAN2D)
+    elif t[1] == 'GET_BYTE':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.GET_BYTE)
+    elif t[1] == 'ENCODE':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ENCODE)
+    elif t[1] == 'DECODE':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.DECODE)
+    # elif t[1] == 'SUBSTR':
+    #     t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SUBSTR)
 
 
 
