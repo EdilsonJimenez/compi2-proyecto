@@ -1,6 +1,7 @@
 # -----------------------------------------------------------------------------
 # SQL OGANIZACION DE LENGUAJES Y COMPILADORES 2
 # -----------------------------------------------------------------------------
+from unittest import case
 
 reservadas = {
 
@@ -2192,6 +2193,8 @@ def p_funciones_math(t):
                             | CONVERT PARIZQ expresion_aritmetica AS TIPO_CAMPO PARDER
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER'''
+    if t[1] == 'ABS':
+        t[0] = ExpresionFuncion(FUNCION_NATIVA.ABS, t[3], None, None, None)
 
 
 

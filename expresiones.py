@@ -42,8 +42,16 @@ class TIPO_DATO(Enum) :
     ARREGLO = 4
     CHAR = 5
 
-
-
+class FUNCION_NATIVA(Enum):
+    ABS = 1
+    CBRT = 2
+    CEIL = 3
+    CEILING = 4
+    DEGREES = 5
+    DIV = 6
+    EXP = 7
+    FACTORIAL = 8
+    FLOOR = 9
 
 #------------------------------------------------------------------------
 
@@ -149,3 +157,11 @@ class CampoValidacion(Expresion):
         self.valor = valor
 
 
+#-----------------------------------------------------------
+class ExpresionFuncion(Expresion):
+    def __init__(self, funcion, exp1, exp2, exp3, exp4):
+        self.funcion = funcion
+        self.exp1 = exp1
+        self.exp2 = exp2
+        self.exp3 = exp3
+        self.exp4 = exp4
