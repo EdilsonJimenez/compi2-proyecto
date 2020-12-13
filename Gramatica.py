@@ -426,9 +426,9 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    #t[0]= Select()
+    t[0]= Select2(t[6],t[5],t[2],t[4])
 
-    # endregion
+
 
 
 
@@ -654,8 +654,8 @@ def p_S_AliasSolo(t):
 
 def p_Cuerpo_Where(t):
     'CUERPO   : WHERE expresion'
-
-    #t[0] = str(t[1]) + str(t[2])
+    
+    t[0] =Cuerpo_Condiciones(t[2])
 
 
 def p_Cuerpo_Mores(t):
@@ -1994,6 +1994,8 @@ def p_expresion_relacional(t) :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORQUE)
     elif t[2] == '<' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORQUE)
+    elif t[2] == '=' :
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
     else :
         t[0]=[1]
 
@@ -2002,13 +2004,16 @@ def p_expresion_logica(t) :
     '''expresion_logica :   expresion_logica AND expresion_logica
                         |   expresion_logica OR expresion_logica
                         |   NOT expresion_logica 
-                        |   PARIZQ expresion_logica PARDER'''
+                        |   PARIZQ expresion_logica PARDER  '''
     if t[2] == 'AND' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.AND)
     elif t[2] == 'OR' :
         t[0] = ExpresionLogica(t[1],t[3],OPERACION_LOGICA.OR)
     elif t[1] == 'NOT' :
         t[0] = UnitariaLogicaNOT(t[2])
+    elif t[0] == '(':
+        t[0]=t[2]
+
 
 def p_expresion_logica_relacion(t):
     'expresion_logica :  expresion_relacional'

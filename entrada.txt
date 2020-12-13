@@ -33,3 +33,4 @@ where nombre is distinct from 'sujeto1';
 select *
 from tbcolaborador
 where nombre is not distinct from 'sujeto1';
+INSERT INTO products,producto2 VALUES (size = 20,4,'hola');

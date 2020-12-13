@@ -32,7 +32,7 @@ digraph AST {
 	14 -> 15
 	15 [label=ExpresionValor]
 	15 -> 16
-	16 [label=<expresiones.ExpresionAritmetica object at 0x0000014468120D90>]
+	16 [label=<expresiones.ExpresionAritmetica object at 0x000001DECBB73EE0>]
 	17 [label="*"]
 	13 -> 17
 	18 [label=exp2]
@@ -200,17 +200,232 @@ digraph AST {
 	Node100 -> Node104
 	Node105 [label="VALOR NUEVO"]
 	Node104 -> Node105
-	Node105 -> 106
-	Node107 [label="VALOR NUEVO"]
-	Node104 -> Node107
+	106 [label=ExpresionRelacional]
+	107 [label=exp1]
+	106 -> 107
+	107 -> 108
 	108 [label=ExpresionValor]
 	108 -> 109
-	109 [label=4]
-	Node107 -> 108
-	Node111 [label="VALOR NUEVO"]
-	Node104 -> Node111
+	109 [label=size]
+	110 [label="=="]
+	106 -> 110
+	111 [label=exp2]
+	106 -> 111
+	111 -> 112
 	112 [label=ExpresionValor]
 	112 -> 113
-	113 [label=hola]
-	Node111 -> 112
+	113 [label=20]
+	Node105 -> 106
+	Node115 [label="VALOR NUEVO"]
+	Node104 -> Node115
+	116 [label=ExpresionValor]
+	116 -> 117
+	117 [label=4]
+	Node115 -> 116
+	Node119 [label="VALOR NUEVO"]
+	Node104 -> Node119
+	120 [label=ExpresionValor]
+	120 -> 121
+	121 [label=hola]
+	Node119 -> 120
+	Node123 [label=INSTRUCCION_SELECT]
+	Node0 -> Node123
+	Node124 [label=SELECT]
+	Node123 -> Node124
+	Node125 [label=LISTA_CAMPOS]
+	Node123 -> Node125
+	Node126 [label=ACCESO_CAMPO]
+	Node125 -> Node126
+	Node127 [label="*"]
+	Node126 -> Node127
+	Node128 [label=FROM]
+	Node123 -> Node128
+	Node129 [label=LISTA_TABLAS]
+	Node123 -> Node129
+	Node130 [label=Nombre_Tabla]
+	Node129 -> Node130
+	Node131 [label=tbsujeto]
+	Node130 -> Node131
+	Node132 [label=CUERPO]
+	Node123 -> Node132
+	Node133 [label=Cuerpo]
+	Node132 -> Node133
+	Node134 [label=Where]
+	Node133 -> Node134
+	Node135 [label=CONDICION]
+	Node133 -> Node135
+	Node135 -> 136
+	Node137
+	Node123 -> Node137
+	Node138 [label=INSTRUCCION_SELECT]
+	Node0 -> Node138
+	Node139 [label=SELECT]
+	Node138 -> Node139
+	Node140 [label=LISTA_CAMPOS]
+	Node138 -> Node140
+	Node141 [label=ACCESO_CAMPO]
+	Node140 -> Node141
+	Node142 [label="*"]
+	Node141 -> Node142
+	Node143 [label=FROM]
+	Node138 -> Node143
+	Node144 [label=LISTA_TABLAS]
+	Node138 -> Node144
+	Node145 [label=Nombre_Tabla]
+	Node144 -> Node145
+	Node146 [label=tbcolaborador]
+	Node145 -> Node146
+	Node147 [label=CUERPO]
+	Node138 -> Node147
+	Node148 [label=Cuerpo]
+	Node147 -> Node148
+	Node149 [label=Where]
+	Node148 -> Node149
+	Node150 [label=CONDICION]
+	Node148 -> Node150
+	Node150 -> 151
+	Node152
+	Node138 -> Node152
+	Node153 [label=INSTRUCCION_SELECT]
+	Node0 -> Node153
+	Node154 [label=SELECT]
+	Node153 -> Node154
+	Node155 [label=LISTA_CAMPOS]
+	Node153 -> Node155
+	Node156 [label=ACCESO_CAMPO]
+	Node155 -> Node156
+	Node157 [label="*"]
+	Node156 -> Node157
+	Node158 [label=FROM]
+	Node153 -> Node158
+	Node159 [label=LISTA_TABLAS]
+	Node153 -> Node159
+	Node160 [label=Nombre_Tabla]
+	Node159 -> Node160
+	Node161 [label=tbcolaborador]
+	Node160 -> Node161
+	Node162 [label=CUERPO]
+	Node153 -> Node162
+	Node163 [label=Cuerpo]
+	Node162 -> Node163
+	Node164 [label=Where]
+	Node163 -> Node164
+	Node165 [label=CONDICION]
+	Node163 -> Node165
+	166 [label=ExpresionRelacional]
+	167 [label=exp1]
+	166 -> 167
+	167 -> 168
+	168 [label=ExpresionValor]
+	168 -> 169
+	169 [label=nombre]
+	170 [label="=="]
+	166 -> 170
+	171 [label=exp2]
+	166 -> 171
+	171 -> 172
+	172 [label=ExpresionValor]
+	172 -> 173
+	173 [label=true]
+	Node165 -> 166
+	Node175
+	Node153 -> Node175
+	Node176 [label=INSTRUCCION_SELECT]
+	Node0 -> Node176
+	Node177 [label=SELECT]
+	Node176 -> Node177
+	Node178 [label=LISTA_CAMPOS]
+	Node176 -> Node178
+	Node179 [label=ACCESO_CAMPO]
+	Node178 -> Node179
+	Node180 [label="*"]
+	Node179 -> Node180
+	Node181 [label=FROM]
+	Node176 -> Node181
+	Node182 [label=LISTA_TABLAS]
+	Node176 -> Node182
+	Node183 [label=Nombre_Tabla]
+	Node182 -> Node183
+	Node184 [label=tbcolaborador]
+	Node183 -> Node184
+	Node185 [label=CUERPO]
+	Node176 -> Node185
+	Node186 [label=Cuerpo]
+	Node185 -> Node186
+	Node187 [label=Where]
+	Node186 -> Node187
+	Node188 [label=CONDICION]
+	Node186 -> Node188
+	Node188 -> 189
+	Node190
+	Node176 -> Node190
+	Node191 [label=INSTRUCCION_SELECT]
+	Node0 -> Node191
+	Node192 [label=SELECT]
+	Node191 -> Node192
+	Node193 [label=LISTA_CAMPOS]
+	Node191 -> Node193
+	Node194 [label=ACCESO_CAMPO]
+	Node193 -> Node194
+	Node195 [label="*"]
+	Node194 -> Node195
+	Node196 [label=FROM]
+	Node191 -> Node196
+	Node197 [label=LISTA_TABLAS]
+	Node191 -> Node197
+	Node198 [label=Nombre_Tabla]
+	Node197 -> Node198
+	Node199 [label=tbcolaborador]
+	Node198 -> Node199
+	Node200 [label=CUERPO]
+	Node191 -> Node200
+	Node201 [label=Cuerpo]
+	Node200 -> Node201
+	Node202 [label=Where]
+	Node201 -> Node202
+	Node203 [label=CONDICION]
+	Node201 -> Node203
+	Node203 -> 204
+	Node205
+	Node191 -> Node205
+	Node206 [label=INSERT]
+	Node0 -> Node206
+	Node207 [label="ID TABLA"]
+	Node206 -> Node207
+	Node208 [label=products]
+	Node207 -> Node208
+	Node209 [label=producto2]
+	Node207 -> Node209
+	Node210 [label="VALORES TABLA"]
+	Node206 -> Node210
+	Node211 [label="VALOR NUEVO"]
+	Node210 -> Node211
+	212 [label=ExpresionRelacional]
+	213 [label=exp1]
+	212 -> 213
+	213 -> 214
+	214 [label=ExpresionValor]
+	214 -> 215
+	215 [label=size]
+	216 [label="=="]
+	212 -> 216
+	217 [label=exp2]
+	212 -> 217
+	217 -> 218
+	218 [label=ExpresionValor]
+	218 -> 219
+	219 [label=20]
+	Node211 -> 212
+	Node221 [label="VALOR NUEVO"]
+	Node210 -> Node221
+	222 [label=ExpresionValor]
+	222 -> 223
+	223 [label=4]
+	Node221 -> 222
+	Node225 [label="VALOR NUEVO"]
+	Node210 -> Node225
+	226 [label=ExpresionValor]
+	226 -> 227
+	227 [label=hola]
+	Node225 -> 226
 }

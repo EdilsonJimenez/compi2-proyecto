@@ -17,6 +17,13 @@ class Select(Instruccion) :
         self.unionn         = unionn
 
 
+#---------------------------------------------------------------------------------------------------
+class Select2(Instruccion) :
+    def __init__(self,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+        self.unionn         = unionn
+        self.Cuerpo = Cuerpo
 
 
 
@@ -97,6 +104,15 @@ class Alias_Table_ListaTablasSinLista(Instruccion):
         self.Lista_Sentencias = Lista_Sentencias
 
 
+
+#Cuerpo Consulta
+#---------------------------------------------------------------------------------------------------
+#where Condiciones
+
+class Cuerpo_Condiciones(Instruccion):
+
+    def __init__(self,Cuerpo=[]):
+        self.Cuerpo = Cuerpo
 
 
 #---------------------------------------------------------------------------------------------------
