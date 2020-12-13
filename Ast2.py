@@ -49,6 +49,9 @@ class Ast2:
             elif isinstance(i, CreateTable):
                 self.grafoCreateTable(i.id, i.cuerpo, i.inhe, padre)
 
+            elif isinstance(i, CreateDataBase):
+                self.grafoCreateDataBase(i.replace, i.exists, i.idBase, i.idOwner ,i.Modo, padre)
+
             else:
                 print("No es droptable")
 
@@ -670,6 +673,10 @@ class Ast2:
         for k in cuerpo:
             if isinstance(k, CampoTabla):
                 self.grafoCampoTabla(k, nuevoPadre)
+            elif isinstance(k, constraintTabla):
+                print("* Graficar CONTRAINTS")
+                self.grafoConstraintTabla(k, nuevoPadre)
+
 
         # Graficar INHERITS DE CREATE TABLE
         if inher is not None:
@@ -677,6 +684,63 @@ class Ast2:
             self.grafoInhertis(inher.id, nuevoPadre)
         else:
             print("No tiene inherits")
+
+    def grafoConstraintTabla(self, contraint:constraintTabla, padre):
+        global dot, i
+
+        '''CONSTRAINTS OPTIONS: '''
+
+        self.inc();
+        nuevop = self.i
+        dot.node('Node' + str(self.i), "CONSTRAINT:")
+        dot.edge('Node' + str(padre), 'Node' + str(self.i))
+
+        if contraint.valor != None:
+            self.inc()
+            dot.node('Node' + str(self.i), 'Valor: '+str(contraint.valor))
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+
+        if contraint.id != None:
+            self.inc()
+            dot.node('Node' + str(self.i), 'Id: ' + str(contraint.id))
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+
+        if contraint.condiciones != None:
+            for i in contraint.condiciones:
+                print(i)
+                self.inc();
+                dot.node('Node' + str(self.i), "VALOR NUEVO")
+                dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+                # LLAMAMOS A GRAFICAR EXPRESION
+                padrenuevo4 = self.i
+                self.graficar_expresion(i)
+                self.inc()
+                dot.edge('Node' + str(padrenuevo4), str(padrenuevo4 + 1))
+
+        if contraint.listas_id != None:
+            self.inc()
+            miP = self.i
+            dot.node('Node' + str(self.i), 'COLUMNA')
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+            self.grafoListaIDs(contraint.listas_id, miP)
+
+        if contraint.idRef != None:
+            self.inc()
+            dot.node('Node' + str(self.i), 'ID TABLA REF: ' + str(contraint.idRef))
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+
+        if contraint.referencia != None:
+            self.inc()
+            miP = self.i
+            dot.node('Node' + str(self.i), 'COLUMNA REFERENCIA')
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+            self.grafoListaIDs(contraint.referencia, miP)
+
+    def grafoListaIDs(self, lista : ExpresionValor, padre):
+        for v in lista:
+            self.inc();
+            dot.node('Node'+ str(self.i), str(v.val))
+            dot.edge('Node' + str(padre), 'Node'+str(self.i))
 
     def grafoCampoTabla(self, campo, padre):
         global dot, i
@@ -696,9 +760,9 @@ class Ast2:
 
         for k in campo.validaciones:
             if isinstance(k, CampoValidacion):
-                if (k.id != None and k.valor !=None):
+                if k.id != None and k.valor != None:
                     self.grafoCampoValidaciones(k, nuevop)
-                elif (k.id != None and k.valor ==None):
+                elif k.id != None and k.valor == None:
                     self.grafoCampoValidaciones(k, nuevop)
 
     def grafoCampoValidaciones(self, validacion, padre):
@@ -706,16 +770,16 @@ class Ast2:
 
         self.inc();
         nuevop = self.i
-        dot.node('Node' + str(self.i), "Validacion:")
+        dot.node('Node' + str(self.i), "VALIDACION")
         dot.edge('Node' + str(padre), 'Node' + str(self.i))
 
         if (validacion.valor == None):
             self.inc()
-            dot.node('Node' + str(self.i), 'Id: ' + str(validacion.id))
+            dot.node('Node' + str(self.i), str(validacion.id))
             dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
         else:
             self.inc()
-            dot.node('Node' + str(self.i), 'Id: '+str(validacion.id)+' '+str(validacion.valor))
+            dot.node('Node' + str(self.i), str(validacion.id)+' '+str(validacion.valor))
             dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
     def grafoInhertis(self, id, padre):
@@ -730,6 +794,37 @@ class Ast2:
         dot.node('Node' + str(self.i), 'Id: '+id)
         dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
+    def grafoCreateDataBase(self, replace, exists, idBase, idOwner, Modo, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "CREATE DATABASE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Id: '+ idBase)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if replace == 1:
+            self.inc()
+            dot.node('Node' + str(self.i), 'Or Replace')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if exists == 1:
+            self.inc()
+            dot.node('Node' + str(self.i), 'If Not Exists')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if idOwner != 0:
+            self.inc()
+            dot.node('Node' + str(self.i), 'Owner: ' + str(idOwner))
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if Modo != 0:
+            self.inc()
+            dot.node('Node' + str(self.i), 'Mode: ' + str(Modo))
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 # ----------------------------------------------------------------------------------------------------------
 
 # def GrafoAccesoTabla(self,NombreT,Columna,padre):

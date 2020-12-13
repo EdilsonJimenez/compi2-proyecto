@@ -2,87 +2,20 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-<<<<<<< HEAD
-	Node1 [label="CREATE TABLE"]
+	Node1 [label="CREATE DATABASE"]
 	Node0 -> Node1
-	Node2 [label="Id: Estudiantes"]
+	Node2 [label="Id: miBase"]
 	Node1 -> Node2
-	Node3 [label=CAMPO]
+	Node3 [label="Or Replace"]
 	Node1 -> Node3
-	Node4 [label="Id: mi"]
-	Node3 -> Node4
-	Node5 [label="Tipo: text"]
-	Node3 -> Node5
-	Node6 [label="Validacion:"]
-	Node3 -> Node6
-	Node7 [label="Id: null"]
-	Node6 -> Node7
-	Node8 [label="Validacion:"]
-	Node3 -> Node8
-	Node9 [label="Id: default 10"]
-	Node8 -> Node9
-	Node10 [label="Validacion:"]
-	Node3 -> Node10
-	Node11 [label="Id: not null"]
-	Node10 -> Node11
-	Node12 [label=CAMPO]
-	Node1 -> Node12
-	Node13 [label="Id: campo"]
-	Node12 -> Node13
-	Node14 [label="Tipo: INT"]
-	Node12 -> Node14
-	Node15 [label="Validacion:"]
-	Node12 -> Node15
-	Node16 [label="Id: null"]
-	Node15 -> Node16
-	Node17 [label=INHERITS]
-	Node1 -> Node17
-	Node18 [label="Id: Uni"]
-	Node17 -> Node18
-	Node19 [label="DROP TABLE"]
-	Node0 -> Node19
-	Node20 [label=Mitabla]
-	Node19 -> Node20
-=======
-	Node1 [label=INSERT]
-	Node0 -> Node1
-	Node2 [label="ID TABLA"]
-	Node1 -> Node2
-	Node3 [label=products]
-	Node2 -> Node3
-	Node4 [label=producto2]
-	Node2 -> Node4
-	Node5 [label="VALORES TABLA"]
+	Node4 [label="Owner: Oscar"]
+	Node1 -> Node4
+	Node5 [label="If Not Exists"]
 	Node1 -> Node5
-	Node6 [label="VALOR NUEVO"]
-	Node5 -> Node6
-	7 [label=ExpresionRelacional]
-	8 [label=exp1]
-	7 -> 8
-	8 -> 9
-	9 [label=ExpresionValor]
-	9 -> 10
-	10 [label=size]
-	11 [label="=="]
-	7 -> 11
-	12 [label=exp2]
-	7 -> 12
-	12 -> 13
-	13 [label=ExpresionValor]
-	13 -> 14
-	14 [label=20]
-	Node6 -> 7
-	Node16 [label="VALOR NUEVO"]
-	Node5 -> Node16
-	17 [label=ExpresionValor]
-	17 -> 18
-	18 [label=4]
-	Node16 -> 17
-	Node20 [label="VALOR NUEVO"]
-	Node5 -> Node20
-	21 [label=ExpresionValor]
-	21 -> 22
-	22 [label=hola]
-	Node20 -> 21
->>>>>>> master
+	Node6 [label="Mode: 3"]
+	Node1 -> Node6
+	Node7 [label="DROP TABLE"]
+	Node0 -> Node7
+	Node8 [label=Mitabla]
+	Node7 -> Node8
 }

@@ -102,7 +102,7 @@ class Alias_Table_ListaTablasSinLista(Instruccion):
 #---------------------------------------------------------------------------------------------------
 #INSERTAR DATOS CESAR
 class Insert_Datos(Instruccion):
-    def __init__(self, id_table,valores):
+    def __init__(self, id_table, valores):
         self.id_table = id_table
         self.valores = valores
 
@@ -122,3 +122,25 @@ class Delete_Datos(Instruccion):
     def __init__(self, id_table,valore_where):
         self.id_table = id_table
         self.valore_where = valore_where
+
+# --------------------------------------------------------------------------------------------------
+class constraintTabla(Instruccion):
+    def __init__(self, valor, id, condiciones, listas_id, referencia, idRef):
+        self.valor = valor
+        self.id = id
+        self.condiciones = condiciones
+        self.listas_id = listas_id
+        self.referencia = referencia
+        self.idRef = idRef
+
+class CreateDataBase(Instruccion):
+    def __init__(self, replace, exists, idBase, idOwner, Modo ):
+        self.replace = replace
+        self.exists = exists
+        self.idBase = idBase
+        self.idOwner = idOwner
+        self.Modo = Modo
+
+class ShowDatabases(Instruccion):
+    def __init__(self, cadenaLike):
+        self.cadenaLike = cadenaLike

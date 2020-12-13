@@ -85,12 +85,12 @@ class Variable(Expresion) :
         self.id=id
         self.tipoVar=tipoVar
 
-class ExpresionValor(Expresion) :
-    def __init__(self, val = 0) :
+class ExpresionValor(Expresion):
+    def __init__(self, val=0):
         self.val = val
 
 class AccesoArray(Expresion) :
-    def __init__(self,tipoVar,params=[]) :
+    def __init__(self, tipoVar, params=[]) :
         self.tipoVar=tipoVar
         self.params=params
 #------------------------------------------------------

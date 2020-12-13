@@ -1,7 +1,23 @@
-CREATE TABLE Estudiantes ( mi text null default 10 not null, campo INT null) inherits (Uni);
+CREATE OR REPLACE DATABASE IF NOT EXISTS miBase OWNER = Oscar MODE = 3;
+
+/*CREATE TABLE Estudiante (
+    carne INT NOT NULL PRIMARY KEY
+    nombre TEXT NOT NULL,
+    apellido TEXT NOT NULL,
+    CONSTRAINT carne CHECK ( carne > 2000 )
+    CONSTRAINT campo UNIQUE,
+    CONSTRAINT estudio CHECK( a > b),
+    UNIQUE( abc, cba),
+    CONSTRAINT miLLave PRIMARY KEY ( carne, codigo),
+    PRIMARY KEY (carne),
+    FOREIGN KEY (llave, carne, otro) REFERENCES mi_clase(otra, lista)
+); */
+
+
 DROP TABLE Mitabla;
 
+/*
 DELETE FROM products WHERE price = 10;
 
-INSERT INTO products,producto2 VALUES (size = 20,4,'hola');
+INSERT INTO products,producto2 VALUES (9+9+9*6);*/
 

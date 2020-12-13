@@ -1373,55 +1373,54 @@ def p_Create_TABLE_CAMPOS2(t):
 
 def p_Create_TABLE_CAMPOS3(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE '
-#    t[0] = str(t[1])  + str(t[2])  + str(t[3])
+    t[0] = constraintTabla(t[3], t[2], None, None, None, None)
 
 def p_Create_TABLE_CAMPOS3_2(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE COMA'
- #   t[0] = str(t[1])  + str(t[2])  + str(t[3])
+    t[0] = constraintTabla(t[3], t[2], None, None, None, None)
 
 def p_Create_TABLE_CAMPOS4(t):
-    'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
+    'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ VALORES PARDER'
+    t[0] = constraintTabla(t[3], t[2], t[5], None, None, None)
 
 def p_Create_TABLE_CAMPOS42(t):
-    'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER COMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
+    'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ VALORES PARDER COMA'
+    t[0] = constraintTabla(t[3], t[2], t[5], None, None, None)
 
 def p_Create_TABLE_CAMPOS4_(t):
     'LISTA2  : UNIQUE PARIZQ LISTA_DE_IDS PARDER COMA'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4])
+    t[0] = constraintTabla(t[1], None, None, t[3], None, None)
 
 
 def p_Create_TABLE_CAMPOS4_2(t):
     'LISTA2  : UNIQUE PARIZQ LISTA_DE_IDS PARDER '
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4])
+    t[0] = constraintTabla(t[1], None, None, t[3], None, None)
 
 
 def p_Create_TABLE_CAMPOS9(t):
     'LISTA2  :  CONSTRAINT  ID PRIMARY KEY  PARIZQ LISTA_DE_IDS PARDER'
-  #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
+    t[0] = constraintTabla(str(t[3]+' '+t[4]), t[2], None, t[6], None, None)
 
 def p_Create_TABLE_CAMPOS9_2(t):
     'LISTA2  :  CONSTRAINT  ID PRIMARY KEY  PARIZQ LISTA_DE_IDS PARDER COMA'
-  #  t[0] = str(t[1])+str(t[2])+str(t[3])+str(t[4])+str(t[5])+str(t[6])
+    t[0] = constraintTabla(str(t[3]+' '+t[4]), t[2], None, t[6], None, None)
 
 # PENDIENTE LISTADO DE ID'S
 def p_Create_TABLE_CAMPOS5(t):
     'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER COMA'
-  #  t[0] =str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6])
+    t[0] = constraintTabla(str(t[1]+' '+t[2]), None, None, t[4], None, None)
 
 def p_Create_TABLE_CAMPOS6(t):
     'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER COMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) + str(t[11])
+    t[0] = constraintTabla(str(t[1]+' '+t[2]), None, None, t[4], t[9], t[7])
 
 def p_Create_TABLE_CAMPOS7(t):
     'LISTA2  :  PRIMARY KEY PARIZQ LISTA_DE_IDS PARDER '
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5])
+    t[0] = constraintTabla(str(t[1]+' '+t[2]), None, None, t[4], None, None)
 
 def p_Create_TABLE_CAMPOS8(t):
     'LISTA2  :  FOREIGN KEY PARIZQ LISTA_DE_IDS PARDER REFERENCES ID PARIZQ LISTA_DE_IDS PARDER '
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) +str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) +str(t[10])
-
+    t[0] = constraintTabla(str(t[1]+' '+t[2]), None, None, t[4], t[9], t[7])
 
 # LISTADO DE IDS--------------------------------------------------------
 def p_CREATE_TABLE_LISTA_IDS(t):
@@ -1742,58 +1741,51 @@ def p_comando_ddl(t):
                     | SHOW_DATABASES
                     | ALTER_DATABASE
                     | DROP_DATABASE'''
-
- #   t[0] = str(t[1])
-    print('\n' + str(t[0]) + '\n')
+    t[0] = t[1]
 
 
 def p_create_database(t):
-    'CREATE_DATABASE : CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+    'CREATE_DATABASE : CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE PUNTOCOMA'
+    t[0] = CreateDataBase(t[2], t[4], t[5], t[6], t[7])
 
 
 def p_replace_op(t):
     'REPLACE_OP : OR REPLACE'
-  #  t[0] = str(t[1]) + str(t[2])
-
+    t[0] = 1
 
 def p_replace_op_e(t):
     'REPLACE_OP : '
-   # t[0] = ''
-
+    t[0] = 0
 
 def p_if_not_exists(t):
     'IF_NOT_EXISTIS : IF NOT EXISTS'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
+    t[0] = 1
 
 def p_if_not_exists_e(t):
     'IF_NOT_EXISTIS : '
-   # t[0] = ''
-
+    t[0] = 0
 
 def p_owner_database(t):
     'OWNER_DATABASE : OWNER IGUAL ID'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = t[3]
 
 
 def p_owner_database_e(t):
     'OWNER_DATABASE : '
-   # t[0] = ''
-
+    t[0] = 0
 
 def p_mode_database(t):
     'MODE_DATABASE : MODE IGUAL ENTERO'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = t[3]
 
 
 def p_mode_database_e(t):
     'MODE_DATABASE : '
-   # t[0] = ''
+    t[0] = 0
 
 
 def p_show_databases(t):
-    'SHOW_DATABASES : SHOW DATABASES SHOW_DATABASES_LIKE'
+    'SHOW_DATABASES : SHOW DATABASES SHOW_DATABASES_LIKE PUNTOCOMA'
    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
@@ -1808,7 +1800,7 @@ def p_show_databases_like_e(t):
 
 
 def p_alter_database(t):
-    'ALTER_DATABASE : ALTER DATABASE ID ALTER_DATABASE_OP'
+    'ALTER_DATABASE : ALTER DATABASE ID ALTER_DATABASE_OP PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
@@ -1831,7 +1823,7 @@ def p_alter_database_op_e(t):
 
 
 def p_drop_database(t):
-    'DROP_DATABASE : DROP DATABASE IF_EXISTS_DATABASE ID'
+    'DROP_DATABASE : DROP DATABASE IF_EXISTS_DATABASE ID PUNTOCOMA'
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
