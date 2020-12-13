@@ -20,7 +20,11 @@ select distinct puesto,salario from tbempleado;
 
 select *
 from tbsujeto
-where edad between 5 and 25;
+where edad between 5 and 25 and x > 0 or 90 < y;
+
+select *
+from tbsujeto
+where B'1010101' between B'1010101' and B'1010101' and B'1010101' || B'1010101' > B'1010101' or 90 < y;
 
 select * from tbcolaborador where nombre = 10 and x = 10;
 
@@ -34,3 +38,4 @@ select *
 from tbcolaborador
 where nombre is not distinct from 'sujeto1';
 INSERT INTO products,producto2 VALUES (size = 20,4,'hola');
+

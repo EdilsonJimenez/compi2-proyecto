@@ -132,8 +132,62 @@ reservadas = {
     'is' : 'IS',
     'unknown' : 'UNKNOWN',
     'true': 'TRUE',
-    'false': 'FALSE'
-
+    'false': 'FALSE',
+    'acos': 'ACOS',
+    'acosd': 'ACOSD',
+    'asin': 'ASIN',
+    'asind': 'ASIND',
+    'atan': 'ATAN',
+    'atand': 'ATAND',
+    'atan2': 'ATAN2',
+    'atan2d': 'ATAN2D',
+    'cos': 'COS',
+    'cosd': 'COSD',
+    'cot': 'COT',
+    'cotd': 'COTD',
+    'sin': 'SIN',
+    'sind': 'SIND',
+    'tan': 'TAN',
+    'tand': 'TAND',
+    'sinh': 'SINH',
+    'cosh': 'COSH',
+    'tanh': 'TANH',
+    'asinh': 'ASINH',
+    'acosh': 'ACOSH',
+    'atanh': 'ATANH',
+    'length': 'LENGTH',
+    'trim': 'TRIM',
+    'md5': 'MD5',
+    'sha256': 'SHA256',
+    'substr': 'SUBSTR',
+    'get_byte': 'GET_BYTE',
+    'set_byte': 'SET_BYTE',
+    'convert': 'CONVERT',
+    'encode': 'ENCODE',
+    'decode': 'DECODE',
+    'abs': 'ABS',
+    'cbrt': 'CBRT',
+    'ceil': 'CEIL',
+    'ceiling': 'CEILING',
+    'degrees': 'DEGREES',
+    'div': 'DIV',
+    'exp': 'EXP',
+    'factorial': 'FACTORIAL',
+    'floor': 'FLOOR',
+    'gcd': 'GCD',
+    'ln': 'LN',
+    'log': 'LOG',
+    'mod': 'MOD',
+    'pi': 'PI',
+    'powers': 'POWERS',
+    'radians': 'RADIANS',
+    'round': 'ROUND',
+    'sign': 'SIGN',
+    'sqrt': 'SQRT',
+    'width_bucket': 'WIDTH_BUCKET',
+    'trunc': 'TRUNC',
+    'random': 'RANDOM',
+    'power' : 'POWER'
 
 }
 
@@ -1948,9 +2002,8 @@ def p_cs2(t):
 
 def p_expresion_global(t):
     '''expresion : expresion_aritmetica
-                | expresion_logica
-                | expresion_unaria
-                | expresion_binario'''
+                 | expresion_logica
+                 | expresion_unaria'''
     t[0] = t[1]
 
 def p_expresion_aritmetica(t):
@@ -1979,8 +2032,7 @@ def p_expresion_relacional(t) :
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
                             | expresion_aritmetica MAYOR expresion_aritmetica                            
                             | expresion_aritmetica MENOR expresion_aritmetica
-                            | PARIZQ expresion_relacional PARDER
-                            | expresion_aritmetica'''
+                            | PARIZQ expresion_relacional PARDER'''
 
     if t[2] == '==' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
@@ -2087,6 +2139,66 @@ def p_valor_abs(t) :
     'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'
     t[0] = ExpresionValor(t[2])
 
+def p_funciones_math(t):
+    '''expresion_aritmetica : ABS PARIZQ expresion_aritmetica PARDER
+                            | CBRT PARIZQ expresion_aritmetica PARDER
+                            | CEIL PARIZQ expresion_aritmetica PARDER
+                            | CEILING PARIZQ expresion_aritmetica PARDER
+                            | DEGREES PARIZQ expresion_aritmetica PARDER
+                            | DIV PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | EXP PARIZQ expresion_aritmetica PARDER
+                            | FACTORIAL PARIZQ expresion_aritmetica PARDER
+                            | FLOOR PARIZQ expresion_aritmetica PARDER
+                            | GCD PARIZQ expresion_aritmetica  COMA expresion_aritmetica PARDER
+                            | LN PARIZQ expresion_aritmetica PARDER
+                            | LOG PARIZQ expresion_aritmetica PARDER
+                            | MOD PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | PI PARIZQ PARDER
+                            | POWER PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | RADIANS PARIZQ expresion_aritmetica PARDER
+                            | ROUND PARIZQ expresion_aritmetica PARDER
+                            | SIGN PARIZQ expresion_aritmetica PARDER
+                            | SQRT PARIZQ expresion_aritmetica PARDER
+                            | WIDTH_BUCKET PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | TRUNC PARIZQ expresion_aritmetica PARDER
+                            | RANDOM PARIZQ PARDER
+                            | ACOS PARIZQ expresion_aritmetica PARDER
+                            | ACOSD PARIZQ expresion_aritmetica PARDER
+                            | ASIN PARIZQ expresion_aritmetica PARDER
+                            | ASIND PARIZQ expresion_aritmetica PARDER
+                            | ATAN PARIZQ expresion_aritmetica PARDER
+                            | ATAND PARIZQ expresion_aritmetica PARDER
+                            | ATAN2 PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | ATAN2D PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | COS PARIZQ expresion_aritmetica PARDER
+                            | COSD PARIZQ expresion_aritmetica PARDER
+                            | COT PARIZQ expresion_aritmetica PARDER
+                            | COTD PARIZQ expresion_aritmetica PARDER
+                            | SIN PARIZQ expresion_aritmetica PARDER
+                            | SIND PARIZQ expresion_aritmetica PARDER
+                            | TAN PARIZQ expresion_aritmetica PARDER
+                            | TAND PARIZQ expresion_aritmetica PARDER
+                            | SINH PARIZQ expresion_aritmetica PARDER
+                            | COSH PARIZQ expresion_aritmetica PARDER
+                            | TANH PARIZQ expresion_aritmetica PARDER
+                            | ASINH PARIZQ expresion_aritmetica PARDER
+                            | ACOSH PARIZQ expresion_aritmetica PARDER
+                            | ATANH PARIZQ expresion_aritmetica PARDER
+                            | LENGTH PARIZQ expresion_aritmetica PARDER
+                            | SUBSTRING PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | TRIM PARIZQ expresion_aritmetica PARDER
+                            | MD5 PARIZQ expresion_aritmetica PARDER
+                            | SHA256 PARIZQ expresion_aritmetica PARDER
+                            | SUBSTR PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | GET_BYTE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | SET_BYTE PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | CONVERT PARIZQ expresion_aritmetica AS TIPO_CAMPO PARDER
+                            | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER'''
+
+
+
+
 # def p_expnumerica(t):
 #     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
 #                    | EXPNUMERICA DIVISION EXPNUMERICA
@@ -2095,7 +2207,7 @@ def p_valor_abs(t) :
 #                    | EXPNUMERICA MAS EXPNUMERICA'''
 
 def p_expresion_binario(t):
-    '''expresion_binario : expresion_aritmetica DOBLEPLECA expresion_aritmetica
+    '''expresion_aritmetica : expresion_aritmetica DOBLEPLECA expresion_aritmetica
                 |   expresion_aritmetica AMPERSAND expresion_aritmetica
                 |   expresion_aritmetica PLECA expresion_aritmetica
                 |   expresion_aritmetica NUMERAL expresion_aritmetica
@@ -2103,7 +2215,7 @@ def p_expresion_binario(t):
                 |   expresion_aritmetica RIGHTSHIFT expresion_aritmetica'''
 
 def p_expresion_binario_n(t):
-    'expresion_binario : VIRGULILLA expresion_binario'
+    'expresion_aritmetica : VIRGULILLA expresion_aritmetica'
 
 # def p_expresion_binario_val(t):
 #     'expresion_binario : expresion_aritmetica'
