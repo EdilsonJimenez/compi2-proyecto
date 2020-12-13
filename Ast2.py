@@ -49,6 +49,14 @@ class Ast2:
             elif isinstance(i, CreateTable):
                 self.grafoCreateTable(i.id, i.cuerpo, i.inhe, padre)
 
+            elif isinstance(i, Delete_Datos):
+                print("Es Una Instruccion Delete")
+                self.grafoDelete_Data(i.id_table,i.valore_where,padre)
+
+            elif isinstance(i, Update_Datos):
+                print("Es Una Instruccion Update")
+                self.grafoUpdate__Data(i.id_table,i.valores_set,i.valor_where,padre)
+
             else:
                 print("No es droptable")
 
@@ -539,8 +547,6 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
        #GRAFICANDO EXPRESION===========================
         for i in valores:
-            print("valores")
-            print(i)
             self.inc();
             dot.node('Node'+  str(self.i), "VALOR NUEVO")
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
@@ -735,3 +741,94 @@ class Ast2:
 #     self.c +='Node'+ padre + '->'+'Node'+str(self.contador)+';\n'
 #  self.contador+1
 # self.c +='Node'+str(self.contador)+'[label="'+NombreT+]
+
+
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR DELETE-------------------------------------------------------------------
+    def grafoDelete_Data(self, id, valores, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"DELETE")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        for i in id:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val)
+            dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"WHERE")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       #GRAFICANDO EXPRESION===========================
+        i = valores
+        self.inc();
+        dot.node('Node'+  str(self.i), "VALOR CONDICION")
+        dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+        #LLAMAMOS A GRAFICAR EXPRESION
+        padrenuevo4 = self.i
+        self.graficar_expresion(i)
+        self.inc()
+        dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
+       
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR UPDATE-------------------------------------------------------------------
+    def grafoUpdate__Data(self, id, valores_set,valores, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"UPDATE")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        for i in id:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val)
+            dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+        
+        
+        #GRAFICAR============VALORES DEL SET======================
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"SET")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       #GRAFICANDO EXPRESION===========================
+        for i in valores_set:
+            self.inc();
+            dot.node('Node'+  str(self.i), "VALOR CONDICION SET")
+            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+            #LLAMAMOS A GRAFICAR EXPRESION
+            padrenuevo4 = self.i
+            self.graficar_expresion(i)
+            self.inc()
+            dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
+
+        #GRAFICAR============VALORES DEL WHERE======================
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"WHERE")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       #GRAFICANDO EXPRESION===========================
+        i = valores
+        self.inc();
+        dot.node('Node'+  str(self.i), "VALOR CONDICION WHERE")
+        dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+        #LLAMAMOS A GRAFICAR EXPRESION
+        padrenuevo4 = self.i
+        self.graficar_expresion(i)
+        self.inc()
+        dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
