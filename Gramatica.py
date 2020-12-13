@@ -1661,51 +1661,48 @@ def p_instruccion_dml_comandos_INSERT_VALOR2(t):
 # UPDATE
 def p_instruccion_dml_comandos_UPDATE(t):
     'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN WHERE expresion PUNTOCOMA'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    print('\n' + str(t[0]) + '\n')
+    t[0] = Update_Datos(t[2],t[4],t[6])
 
 
 def p_instruccion_dml_comandos_UPDATE2(t):
     'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
-
-
+    
 def p_instruccion_dml_comandos_UPDATE_CAMPOS(t):
     'CAMPOSN       : CAMPOSN CAMPO'
-  #  t[1].append(t[2])
-  #  t[0] = t[1]
-
+    t[1].append(t[2])
+    t[0] = t[1]
 
 def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t):
     'CAMPOSN       :  CAMPO'
-   # t[0] = [t[1]]
-
-
-# -------------------------------------------------------
-def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
-    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
-
-
-def p_instruccion_dml_comandos_UPDATE_CAMPO2(t):
-    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion C'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
+    t[0] = [t[1]]
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO3(t):
-    'CAMPO       :  ID IGUAL expresion'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    'CAMPO       :   expresion'
+    t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO4(t):
-    'CAMPO       :  ID IGUAL expresion C'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    'CAMPO       :   expresion COMA'
+    t[0] = t[1]
 
 
-def p_instruccion_dml_comandos_UPDATE_C(t):
-    'C       :  COMA CAMPO'
-  #  t[0] = str(t[1]) + str(t[2])
+#NO VIENE------------------------------------------
+
+def p_instruccion_dml_comandos_UPDATE2(t):
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
+
+def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion'
+
+def p_instruccion_dml_comandos_UPDATE_CAMPO2(t):
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion COMA'
+
+
+
+
+
 
 
 # -----------------------------------------------------------------------------------------------------------------

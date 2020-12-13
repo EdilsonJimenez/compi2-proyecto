@@ -2,29 +2,29 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=INSERT]
+	Node1 [label=UPDATE]
 	Node0 -> Node1
 	Node2 [label="ID TABLA"]
 	Node1 -> Node2
 	Node3 [label=products]
 	Node2 -> Node3
-	Node4 [label=producto2]
-	Node2 -> Node4
-	Node5 [label="VALORES TABLA"]
-	Node1 -> Node5
-	Node6 [label="VALOR NUEVO"]
-	Node5 -> Node6
-	7 [label=ExpresionAritmetica]
-	8 [label=exp1]
+	Node4 [label=SET]
+	Node1 -> Node4
+	Node5 [label="VALOR CONDICION SET"]
+	Node4 -> Node5
+	6 [label=ExpresionRelacional]
+	7 [label=exp1]
+	6 -> 7
 	7 -> 8
+	8 [label=ExpresionValor]
 	8 -> 9
-	9 [label=ExpresionValor]
-	9 -> 10
-	10 [label=5]
-	11 [label="+"]
-	7 -> 11
-	12 [label=exp2]
-	7 -> 12
+	9 [label=price]
+	10 [label="=="]
+	6 -> 10
+	11 [label=exp2]
+	6 -> 11
+	11 -> 12
+	12 [label=ExpresionValor]
 	12 -> 13
 	13 [label=ExpresionAritmetica]
 	14 [label=exp1]
@@ -38,21 +38,59 @@ digraph AST {
 	18 [label=exp2]
 	13 -> 18
 	18 -> 19
-	19 [label=ExpresionValor]
-	19 -> 20
-	20 [label=9]
-	Node6 -> 7
-	Node22 [label="VALOR NUEVO"]
-	Node5 -> Node22
-	23 [label=ExpresionValor]
-	23 -> 24
-	24 [label=4]
-	Node22 -> 23
-	Node26 [label="VALOR NUEVO"]
-	Node5 -> Node26
-	27 [label=ExpresionValor]
+	19 [label=costo]
+	20 [label="=="]
+	16 -> 20
+	21 [label=exp2]
+	16 -> 21
+	21 -> 22
+	22 [label=ExpresionValor]
+	22 -> 23
+	23 [label=9]
+	Node15 -> 16
+	Node25 [label=WHERE]
+	Node1 -> Node25
+	Node26 [label="VALOR CONDICION WHERE"]
+	Node25 -> Node26
+	27 [label=ExpresionLogica]
+	28 [label=exp1]
 	27 -> 28
-	28 [label=hola]
+	28 -> 29
+	29 [label=ExpresionRelacional]
+	30 [label=exp1]
+	29 -> 30
+	30 -> 31
+	31 [label=ExpresionValor]
+	31 -> 32
+	32 [label=4]
+	33 [label="=="]
+	29 -> 33
+	34 [label=exp2]
+	29 -> 34
+	34 -> 35
+	35 [label=ExpresionValor]
+	35 -> 36
+	36 [label=4]
+	37 [label=AND]
+	27 -> 37
+	38 [label=exp2]
+	27 -> 38
+	38 -> 39
+	39 [label=ExpresionRelacional]
+	40 [label=exp1]
+	39 -> 40
+	40 -> 41
+	41 [label=ExpresionValor]
+	41 -> 42
+	42 [label=5]
+	43 [label="=="]
+	39 -> 43
+	44 [label=exp2]
+	39 -> 44
+	44 -> 45
+	45 [label=ExpresionValor]
+	45 -> 46
+	46 [label=4]
 	Node26 -> 27
 	Node30 [label="CREATE TABLE"]
 	Node0 -> Node30

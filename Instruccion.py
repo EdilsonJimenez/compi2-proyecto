@@ -138,3 +138,10 @@ class Delete_Datos(Instruccion):
     def __init__(self, id_table,valore_where):
         self.id_table = id_table
         self.valore_where = valore_where
+
+#---------------------------------------------------------------------------------------------------
+class Update_Datos(Instruccion):
+    def __init__(self, id_table,valores_set, valor_where):
+        self.id_table = id_table
+        self.valores_set = valores_set
+        self.valor_where = valor_where
