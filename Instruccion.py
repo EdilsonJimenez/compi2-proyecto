@@ -246,6 +246,32 @@ class Update_Datos(Instruccion):
 
 #Clase para el Alter Table----------------------------
 class Alter_Table_AddColumn(Instruccion):
-    def __init__(self, id_table,id_columnas):
+    def __init__(self, id_table, id_columnas):
         self.id_table = id_table
         self.id_columnas = id_columnas
+
+
+class Alter_Table_Drop_Column(Instruccion):
+    def __init__(self, id_table, columnas):
+        self.id_table = id_table
+        self.columnas = columnas
+
+
+class Alter_Table_Rename_Column(Instruccion):
+    def __init__(self, id_table, old_column, new_column):
+        self.id_table = id_table
+        self.old_column = old_column
+        self.new_column = new_column
+
+class Alter_Table_Drop_Constraint(Instruccion):
+    def __init__(self, id_table, id_constraint):
+        self.id_tabla = id_table
+        self.id_constraint = id_constraint
+
+class Alter_table_Alter_Column_Set(Instruccion):
+    def __init__(self, id_table, id_column):
+        self.id_tabla = id_table
+        self.id_column = id_column
+
+
+

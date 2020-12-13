@@ -30,3 +30,11 @@ select gee.ss as d, sd as s from tabla1 as t1 where 4*3;
 
 
 select tabla1.ss as d, sd as s from tabla1 as t1 where 4=3;
+
+ALTER TABLE tabla1 DROP COLUMN columna1, columna2;
+
+ALTER TABLE table1 RENAME COLUMN columna1 TO columna11;
+
+ALTER TABLE tabla1 DROP CONSTRAINT pk_id;
+
+ALTER TABLE tabla2 ALTER COLUMN id SET NOT NULL;
