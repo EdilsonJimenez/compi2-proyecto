@@ -1,1 +1,37 @@
 UPDATE products SET price = 10 , costo = 9 WHERE 4 = 4 AND 5 = 4;
+
+INSERT INTO products, producto2 VALUES (5+(5+5)*9,4,'hola');
+
+CREATE TABLE Profesion ( mi text);
+CREATE TABLE Estudiantes ( mi text) inherits (Uni);
+DROP TABLE Mitabla;
+
+INSERT INTO products,producto2 VALUES (5+5*9,4,'hola');
+
+
+select nombre.id as j , nombre.id  from tabla1, tabla as j ;
+
+
+INSERT INTO products,producto2 VALUES (size = 20,4,'hola');
+
+DELETE FROM products WHERE price = 10 and x < 10 - y;
+
+select distinct puesto from tbempleado;
+select distinct puesto,salario from tbempleado;
+
+select *
+from tbsujeto
+where edad between 5 and 25;
+
+select * from tbcolaborador where nombre = 10 and x = 10;
+
+select * from tbcolaborador where nombre = true ;
+
+select *
+from tbcolaborador
+where nombre is distinct from 'sujeto1';
+
+select *
+from tbcolaborador
+where nombre is not distinct from 'sujeto1';
+INSERT INTO products,producto2 VALUES (size = 20,4,'hola');

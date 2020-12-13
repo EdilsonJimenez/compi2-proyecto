@@ -127,7 +127,13 @@ reservadas = {
     'current_user': 'CURRENT_USER',
     'session_user': 'SESSION_USER',
 
-    'substring': 'SUBSTRING'
+    'substring': 'SUBSTRING',
+    'between' : 'BETWEEN',
+    'is' : 'IS',
+    'unknown' : 'UNKNOWN',
+    'true': 'TRUE',
+    'false': 'FALSE'
+
 
 }
 
@@ -262,7 +268,7 @@ def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
 
-t_ignore = " \t"
+t_ignore = '[ \t\r\n\f\v]'
 
 def t_newline(t):
     r'\n+'
@@ -420,9 +426,9 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    #t[0]= Select()
+    t[0]= Select2(t[6],t[5],t[2],t[4])
 
-    # endregion
+
 
 
 
@@ -647,9 +653,9 @@ def p_S_AliasSolo(t):
 # Cuerpo
 
 def p_Cuerpo_Where(t):
-    'CUERPO   : WHERE CONDICIONES'
-
-    #t[0] = str(t[1]) + str(t[2])
+    'CUERPO   : WHERE expresion'
+    
+    t[0] =Cuerpo_Condiciones(t[2])
 
 
 def p_Cuerpo_Mores(t):
@@ -842,7 +848,7 @@ def p_Inner_JoinUsing(t):
 
 
 def p_Inner_Where(t):
-    'INNERR   : WHERE CONDICIONES'
+    'INNERR   : WHERE expresion'
 
     #t[0] = str(t[1]) + str(t[2])
 
@@ -1603,6 +1609,12 @@ def p_instruccion_dml_comandos_UPDATE(t):
     'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN WHERE expresion PUNTOCOMA'
     t[0] = Update_Datos(t[2],t[4],t[6])
 
+
+def p_instruccion_dml_comandos_UPDATE2(t):
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    print('\n' + str(t[0]) + '\n')
+    
 def p_instruccion_dml_comandos_UPDATE_CAMPOS(t):
     'CAMPOSN       : CAMPOSN CAMPO'
     t[1].append(t[2])
@@ -1958,7 +1970,7 @@ def p_expresion_aritmetica(t):
 
 
 def p_expresion_relacional(t) :
-    '''expresion_relacional :  expresion_aritmetica IGUAL expresion_aritmetica
+    '''expresion_relacional : expresion_aritmetica IGUAL expresion_aritmetica
                             | expresion_aritmetica DIFERENTE expresion_aritmetica
                             | expresion_aritmetica MAYORIGUAL expresion_aritmetica
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
@@ -2004,6 +2016,21 @@ def p_expresion_logica_relacion(t):
     'expresion_logica :  expresion_relacional'
     t[0] = t[1]
 
+def p_expresion_logica_predicados(t):
+    '''expresion_logica : expresion_aritmetica BETWEEN expresion_aritmetica AND expresion_aritmetica
+                        | expresion_aritmetica NOT BETWEEN expresion_aritmetica AND expresion_aritmetica
+                        | expresion_aritmetica IS DISTINCT FROM expresion_aritmetica
+                        | expresion_aritmetica IS NOT DISTINCT FROM expresion_aritmetica
+                        | expresion_aritmetica IS NULL
+                        | expresion_aritmetica IS NOT NULL
+                        | expresion_aritmetica IS TRUE
+                        | expresion_aritmetica IS NOT TRUE
+                        | expresion_aritmetica IS FALSE
+                        | expresion_aritmetica IS NOT FALSE
+                        | expresion_aritmetica IS UNKNOWN
+                        | expresion_aritmetica IS NOT UNKNOWN'''
+
+
 # def p_expresion_logica_paren(t) :
 #     'expresion_logica : PARIZQ expresion_logica PARDER'
 #     t[0] = t[1]
@@ -2048,6 +2075,10 @@ def p_valor_cadenabinaria(t):
     '''expresion_aritmetica : CADENABINARIA'''
     t[0] = ExpresionValor(t[1])
 
+def p_valor_booleano(t):
+    '''expresion_aritmetica : TRUE
+                            | FALSE'''
+    t[0] = ExpresionValor(t[1]);
 
 def p_valor_abs(t) :
     'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'

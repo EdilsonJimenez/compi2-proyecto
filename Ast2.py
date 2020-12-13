@@ -38,6 +38,10 @@ class Ast2:
                 print("Es Una Instruccion Select")
                 self.GrafoSelect(i.Lista_Campos,i.Nombres_Tablas,i.unionn,padre)
 
+            elif isinstance(i, Select2):
+                print("Es Una Instruccion Select")
+                self.GrafoSelect2(i.Lista_Campos,i.Nombres_Tablas,i.Cuerpo,i.unionn,padre)
+
             elif isinstance(i, Insert_Datos):
                 print("Si es un drop Insert *")
                 self.grafoInsert_Data(i.id_table,i.valores, padre)
@@ -74,7 +78,11 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
+    # INSTRUCCIONES NECESARIAS PARA LOS SELECT
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
 
 
     # CAMPOS ACCEDIDOS
@@ -120,7 +128,6 @@ class Ast2:
             print("Error Sintactico")
 
 
-
         #Objeto Que Accede A este Tipo "Campo_AccedidoSinLista"
         # Campos Accedidos Sin Lista
     def GrafoCampo_AccedidoSinLista(self, NombreT, Columna, padre):
@@ -154,7 +161,6 @@ class Ast2:
 
     # NOMBRE TABLAS ACCEDIDOS
     # ----------------------------------------------------------------------------------------------------------
-
 
     #Objeto Que accede "AccesoTabla"
     #Nombres Lista Accedidos  Con lista
@@ -198,10 +204,6 @@ class Ast2:
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         else:
             print("Error sintactico")
-
-
-
-
 
     # ALIAS CAMPOS
     # ----------------------------------------------------------------------------------------------------------
@@ -278,17 +280,6 @@ class Ast2:
            print("Verificar Errores Sintacticos")
 
 
-
-
-
-
-
-
-
-
-
-
-
     # ALIAS Tablas
     # ----------------------------------------------------------------------------------------------------------
 
@@ -362,11 +353,36 @@ class Ast2:
             print("Verificar Errores Sintacticos")
 
 
+    # Grafo Where con Expreciones
+    # ----------------------------------------------------------------------------------------------------------
+    # Where Expreciones
+    def GrafoCuerpo_Condiciones(self,Lista,padre):
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "Cuerpo")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "Where")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.Recorrer_Condiciones(Lista, 'Node' + str(nuevoPadre))
 
 
 
+    #Recorremos Expresion y mandamos el nodo aumentando el padre
+    def Recorrer_Condiciones(self,Lista,padre):
 
+        # GRAFICANDO EXPRESION===========================
+            i = Lista
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICION")
+            dot.edge(padre, 'Node' + str(self.i))
 
+            # LLAMAMOS A GRAFICAR EXPRESION
+            padrenuevo = self.i
+            self.graficar_expresion(i)
+            self.inc()
+            dot.edge('Node' + str(padrenuevo), str(padrenuevo + 1))
 
 
     # Recorrido de la lista de Campos
@@ -384,10 +400,6 @@ class Ast2:
 
             else:
                 print("No Ningun Tipo")
-
-
-
-
 
 
     # Recorrido de la lista de Nombres de Tablas
@@ -411,38 +423,7 @@ class Ast2:
 
 
     def RecorrerTiposAlias(self, Lista_Alias, padre):
-        i = Lista_Alias
-        # Alias de los Campos
-        if isinstance(i, Alias_Campos_ListaCampos):
-            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-            self.GrafoAlias_Campos_ListaCampos(i.NombreT, i.Lista_Alias, padre)
 
-        # Alias de las Nombres de las Tablas
-        if isinstance(i, Alias_Table_ListaTablas):
-            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-            self.GrafoAlias_Table_ListaTablas(i.NombreT, i.Lista_Alias, padre)
-        else:
-            print("No Ningun Tipo")
-
-
-
-    def grafoDropTable(self, id, padre):
-        global dot, i
-
-        self.inc()
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "DROP TABLE")
-        dot.edge(padre, 'Node' + str(self.i))
-
-        self.inc()
-        dot.node('Node' + str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-
-    def RecorrerTiposAlias(self, Lista_Alias, padre):
-        print("Verificando tipos de alias")
-        # Alias de los Campos
-        print("Verificando tipos de alias")
         i=Lista_Alias
         if isinstance(i, Alias_Campos_ListaCampos):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
@@ -464,6 +445,21 @@ class Ast2:
             self.GrafoAlias_Table_ListaTablasSinLista(i.Alias, padre)
         else:
             print("No Ningun Tipo")
+
+
+    # Recorrido del Cuerpo
+    # ----------------------------------------------------------------------------------------------------------
+    def RecorrerCuerpo(self, Cuerpo, padre):
+        i=Cuerpo
+        if isinstance(i, Cuerpo_Condiciones):
+            print("Es un Campo Accedido Por la Cuerpo ")
+            self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
+        else:
+            print("No hay Ningun Tipo")
+
+
+
+
 
 
 
@@ -500,6 +496,59 @@ class Ast2:
         self.inc();
         dot.node('Node' + str(self.i), Uniones)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+    def GrafoSelect2(self,ListaCampos, NombresTablas,cuerpo, Uniones, padre ):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "CUERPO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.RecorrerCuerpo(cuerpo, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), Uniones)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+
+
+
+
+
+
+
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
+    # FIN DE INSTRUCCIONES NECESARIAS PARA LOS SELECT
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
+
 
 
 
@@ -545,6 +594,8 @@ class Ast2:
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"VALORES TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+
        #GRAFICANDO EXPRESION===========================
         for i in valores:
             self.inc();
@@ -554,6 +605,7 @@ class Ast2:
             padrenuevo4 = self.i
             self.graficar_expresion(i)
             self.inc()
+
             dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
 
 
