@@ -31,12 +31,16 @@ class Ast2:
         for i in sente:
             #VIENE UN DROP TABLE
             if isinstance(i, DropTable):
-                print("Si es un drop table *" + i.id)
+                print("Si es un drop table *")
                 self.grafoDropTable(i.id, padre)
 
             elif isinstance(i, Select):
                 print("Es Una Instruccion Select")
                 self.GrafoSelect(i.Lista_Campos,i.Nombres_Tablas,i.unionn,padre)
+
+            elif isinstance(i, Select2):
+                print("Es Una Instruccion Select")
+                self.GrafoSelect2(i.Lista_Campos,i.Nombres_Tablas,i.Cuerpo,i.unionn,padre)
 
             elif isinstance(i, Insert_Datos):
                 print("Si es un drop Insert *")
@@ -52,24 +56,31 @@ class Ast2:
             elif isinstance(i, CreateDataBase):
                 self.grafoCreateDataBase(i.replace, i.exists, i.idBase, i.idOwner ,i.Modo, padre)
 
+            elif isinstance(i, Delete_Datos):
+                print("Es Una Instruccion Delete")
+                self.grafoDelete_Data(i.id_table,i.valore_where,padre)
+
+            elif isinstance(i, Update_Datos):
+                print("Es Una Instruccion Update")
+                self.grafoUpdate__Data(i.id_table,i.valores_set,i.valor_where,padre)
+
+            elif isinstance(i, Alter_Table_AddColumn):
+                print("Es Una Instruccion Alter Add Column")
+                self.grafoAlter_AddColumn(i.id_table,i.id_columnas,padre)
+
             else:
                 print("No es droptable")
 
 
 
-    def grafoDropTable(self, id, padre):
-        global dot
-        self.inc();
-
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "DROP TRABLE")
-        dot.edge(padre, 'Node' + str(self.i))
-        self.inc();
-        dot.node('Node' + str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+    
 
 
-
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
+    # INSTRUCCIONES NECESARIAS PARA LOS SELECT
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
 
 
     # CAMPOS ACCEDIDOS
@@ -115,7 +126,6 @@ class Ast2:
             print("Error Sintactico")
 
 
-
         #Objeto Que Accede A este Tipo "Campo_AccedidoSinLista"
         # Campos Accedidos Sin Lista
     def GrafoCampo_AccedidoSinLista(self, NombreT, Columna, padre):
@@ -149,7 +159,6 @@ class Ast2:
 
     # NOMBRE TABLAS ACCEDIDOS
     # ----------------------------------------------------------------------------------------------------------
-
 
     #Objeto Que accede "AccesoTabla"
     #Nombres Lista Accedidos  Con lista
@@ -193,10 +202,6 @@ class Ast2:
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         else:
             print("Error sintactico")
-
-
-
-
 
     # ALIAS CAMPOS
     # ----------------------------------------------------------------------------------------------------------
@@ -273,17 +278,6 @@ class Ast2:
            print("Verificar Errores Sintacticos")
 
 
-
-
-
-
-
-
-
-
-
-
-
     # ALIAS Tablas
     # ----------------------------------------------------------------------------------------------------------
 
@@ -357,11 +351,36 @@ class Ast2:
             print("Verificar Errores Sintacticos")
 
 
+    # Grafo Where con Expreciones
+    # ----------------------------------------------------------------------------------------------------------
+    # Where Expreciones
+    def GrafoCuerpo_Condiciones(self,Lista,padre):
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "Cuerpo")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "Where")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.Recorrer_Condiciones(Lista, 'Node' + str(nuevoPadre))
 
 
 
+    #Recorremos Expresion y mandamos el nodo aumentando el padre
+    def Recorrer_Condiciones(self,Lista,padre):
 
+        # GRAFICANDO EXPRESION===========================
+            i = Lista
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICION")
+            dot.edge(padre, 'Node' + str(self.i))
 
+            # LLAMAMOS A GRAFICAR EXPRESION
+            padrenuevo = self.i
+            self.graficar_expresion(i)
+            self.inc()
+            dot.edge('Node' + str(padrenuevo), str(padrenuevo + 1))
 
 
     # Recorrido de la lista de Campos
@@ -379,10 +398,6 @@ class Ast2:
 
             else:
                 print("No Ningun Tipo")
-
-
-
-
 
 
     # Recorrido de la lista de Nombres de Tablas
@@ -406,38 +421,7 @@ class Ast2:
 
 
     def RecorrerTiposAlias(self, Lista_Alias, padre):
-        i = Lista_Alias
-        # Alias de los Campos
-        if isinstance(i, Alias_Campos_ListaCampos):
-            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-            self.GrafoAlias_Campos_ListaCampos(i.NombreT, i.Lista_Alias, padre)
 
-        # Alias de las Nombres de las Tablas
-        if isinstance(i, Alias_Table_ListaTablas):
-            print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-            self.GrafoAlias_Table_ListaTablas(i.NombreT, i.Lista_Alias, padre)
-        else:
-            print("No Ningun Tipo")
-
-
-
-    def grafoDropTable(self, id, padre):
-        global dot, i
-
-        self.inc()
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "DROP TABLE")
-        dot.edge(padre, 'Node' + str(self.i))
-
-        self.inc()
-        dot.node('Node' + str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-
-    def RecorrerTiposAlias(self, Lista_Alias, padre):
-        print("Verificando tipos de alias")
-        # Alias de los Campos
-        print("Verificando tipos de alias")
         i=Lista_Alias
         if isinstance(i, Alias_Campos_ListaCampos):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
@@ -459,6 +443,23 @@ class Ast2:
             self.GrafoAlias_Table_ListaTablasSinLista(i.Alias, padre)
         else:
             print("No Ningun Tipo")
+
+
+    # Recorrido del Cuerpo
+    # ----------------------------------------------------------------------------------------------------------
+    def RecorrerCuerpo(self, Cuerpo, padre):
+        i=Cuerpo
+        if isinstance(i, Cuerpo_Condiciones):
+            print("Es un Campo Accedido Por la Cuerpo ")
+            self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
+        else:
+            print("No hay Ningun Tipo")
+
+
+
+
+
+
 
 
     # Instruccion SELECT
@@ -495,6 +496,59 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
+    def GrafoSelect2(self,ListaCampos, NombresTablas,cuerpo, Uniones, padre ):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "CUERPO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.RecorrerCuerpo(cuerpo, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), Uniones)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+
+
+
+
+
+
+
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
+    # FIN DE INSTRUCCIONES NECESARIAS PARA LOS SELECT
+    # ----------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
+
+
+
 
 
 
@@ -503,16 +557,24 @@ class Ast2:
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------- GRAFO DROP TABLE-------------------------------------------------------------------
     def grafoDropTable(self, id, padre):
-        global dot, i
+        global  dot,tag,i
 
         self.inc()
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "DROP TABLE")
-        dot.edge(padre, 'Node' + str(self.i))
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"DROP_TABLE")
+        dot.edge(padre,'Node'+str(self.i))
 
-        self.inc()
-        dot.node('Node' + str(self.i), id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        for i in id:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val)
+            dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+        
 
 #----------------------------------------------------------------------------------------------------------
 #-----------------------GRAFICAR INSERTAR-------------------------------------------------------------------
@@ -538,10 +600,10 @@ class Ast2:
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"VALORES TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+
        #GRAFICANDO EXPRESION===========================
         for i in valores:
-            print("valores")
-            print(i)
             self.inc();
             dot.node('Node'+  str(self.i), "VALOR NUEVO")
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
@@ -549,6 +611,7 @@ class Ast2:
             padrenuevo4 = self.i
             self.graficar_expresion(i)
             self.inc()
+
             dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
 
 
@@ -570,6 +633,9 @@ class Ast2:
             self.graficarUnaria(expresiones,"LogicaNOT")
         elif isinstance(expresiones,UnitariaNotBB) :
             self.graficarUnaria(expresiones,"NotBB")
+        #NUEVAS UNITARIAS
+        
+        #----------------------------------------
         elif isinstance(expresiones,ExpresionValor) :
             self.inc()
             padreID=self.i
@@ -596,26 +662,43 @@ class Ast2:
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
         global  dot,tag,i
-        self.inc()
-        padreID=self.i
-        padre=padreID
-        dot.node(str(padreID),'Expresion'+tipo_exp)
-        self.inc()
-        padreID=self.i
-        dot.node(str(padreID),'exp1')
-        dot.edge(str(padre),str(padreID))
-        dot.edge(str(padreID),str(padreID+1))
-        self.graficar_expresion(expresion.exp1)
-        self.inc()
-        padreID=self.i
-        dot.node(str(padreID),self.getVar(expresion.operador))
-        dot.edge(str(padre),str(padreID))
-        self.inc()
-        padreID=self.i
-        dot.node(str(padreID),'exp2')
-        dot.edge(str(padre),str(padreID))
-        dot.edge(str(padreID),str(padreID+1))
-        self.graficar_expresion(expresion.exp2)
+        if expresion.exp1 and expresion.exp2:
+            self.inc()
+            padreID=self.i
+            padre=padreID
+            dot.node(str(padreID),'Expresion'+tipo_exp)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'exp1')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresion.exp1)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),self.getVar(expresion.operador))
+            dot.edge(str(padre),str(padreID))
+            self.inc()
+            padreID=self.i        
+            dot.node(str(padreID),'exp2')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresion.exp2)
+        elif  expresion.exp2 == None:
+            self.inc()
+            padreID=self.i
+            padre=padreID
+            dot.node(str(padreID),'Expresion'+tipo_exp)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'exp1')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresion.exp1)
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),self.getVar(expresion.operador))
+            dot.edge(str(padre),str(padreID))
+        
 
     def graficarUnaria(self,expresion,tipo_exp=""):
         self.inc()
@@ -654,6 +737,128 @@ class Ast2:
             return '>'
         elif padreID==OPERACION_RELACIONAL.MAYORQUE:
             return '<'
+        #NUEVAS COSAS
+        elif padreID==OPERACION_LOGICA.IS_NOT_NULL:
+            return 'IS_NOT_NULL'
+        elif padreID==OPERACION_LOGICA.IS_NOT_TRUE:
+            return 'IS_NOT_TRUE'
+        elif padreID==OPERACION_LOGICA.IS_NOT_FALSE:
+            return 'IS_NOT_FALSE'
+        elif padreID==OPERACION_LOGICA.IS_NOT_UNKNOWN:
+            return 'IS_NOT_UNKNOWN'
+        elif padreID==OPERACION_LOGICA.IS_NULL:
+            return 'IS_NULL'
+        elif padreID==OPERACION_LOGICA.IS_TRUE:
+            return 'IS_TRUE'
+        elif padreID==OPERACION_LOGICA.IS_FALSE:
+            return 'IS_FALSE'
+        elif padreID==OPERACION_LOGICA.IS_UNKNOWN:
+            return 'IS_NOT_UNKNOWN'
+        elif padreID==OPERACION_LOGICA.IS_NOT_DISTINCT:
+            return 'IS_NOT_DISTINCT'
+        elif padreID==OPERACION_LOGICA.IS_DISTINCT:
+            return 'IS_DISTINCT'
+        elif padreID==FUNCION_NATIVA.ABS:
+            return 'ABS'
+        elif padreID==FUNCION_NATIVA.CBRT:
+            return 'CBRT'
+        elif padreID==FUNCION_NATIVA.CEIL:
+            return 'CEIL'
+        elif padreID==FUNCION_NATIVA.CEILING:
+            return 'CEILING'
+        elif padreID==FUNCION_NATIVA.DEGREES:
+            return 'DEGREES'
+        elif padreID==FUNCION_NATIVA.EXP:
+            return 'EXP'
+        elif padreID==FUNCION_NATIVA.FACTORIAL:
+            return 'FACTORIAL'
+        elif padreID==FUNCION_NATIVA.FLOOR:
+            return 'FLOOR'
+        elif padreID==FUNCION_NATIVA.LN:
+            return 'LN'
+        elif padreID==FUNCION_NATIVA.LOG:
+            return 'LOG'
+        elif padreID==FUNCION_NATIVA.MOD:
+            return 'MOD'
+        elif padreID==FUNCION_NATIVA.RADIANS:
+            return 'RADIANS'
+        elif padreID==FUNCION_NATIVA.ROUND:
+            return 'ROUND'
+        elif padreID==FUNCION_NATIVA.SIGN:
+            return 'SIGN'
+        elif padreID==FUNCION_NATIVA.SQRT:
+            return 'SQRT'
+        elif padreID==FUNCION_NATIVA.TRUNC:
+            return 'TRUNC'
+        elif padreID==FUNCION_NATIVA.ACOS:
+            return 'ACOS'
+        elif padreID==FUNCION_NATIVA.ACOSD:
+            return 'ACOSD'
+        elif padreID==FUNCION_NATIVA.ASIN:
+            return 'ASIN'
+        elif padreID==FUNCION_NATIVA.ASIND:
+            return 'ASIND'
+        elif padreID==FUNCION_NATIVA.ATAN:
+            return 'ATAN'
+        elif padreID==FUNCION_NATIVA.ATAND:
+            return 'ATAND'
+        elif padreID==FUNCION_NATIVA.COS:
+            return 'COS'
+        elif padreID==FUNCION_NATIVA.COSD:
+            return 'COSD'
+        elif padreID==FUNCION_NATIVA.COT:
+            return 'COT'
+        elif padreID==FUNCION_NATIVA.COTD:
+            return 'COTD'
+        elif padreID==FUNCION_NATIVA.COSD:
+            return 'COSD'
+        elif padreID==FUNCION_NATIVA.SIN:
+            return 'SIN'
+        elif padreID==FUNCION_NATIVA.SIND:
+            return 'SIND'
+        elif padreID==FUNCION_NATIVA.TAN:
+            return 'TAN'
+        elif padreID==FUNCION_NATIVA.TAND:
+            return 'TAND'
+        elif padreID==FUNCION_NATIVA.SINH:
+            return 'SINH'
+        elif padreID==FUNCION_NATIVA.COSH:
+            return 'COSH'
+        elif padreID==FUNCION_NATIVA.TANH:
+            return 'TANH'
+        elif padreID==FUNCION_NATIVA.ASINH:
+            return 'ASINH'
+        elif padreID==FUNCION_NATIVA.ACOSH:
+            return 'ACOSH'
+        elif padreID==FUNCION_NATIVA.ATANH:
+            return 'ATANH'
+        elif padreID==FUNCION_NATIVA.LENGTH:
+            return 'LENGTH'
+        elif padreID==FUNCION_NATIVA.TRIM:
+            return 'TRIM'
+        elif padreID==FUNCION_NATIVA.MD5:
+            return 'MD5'
+        elif padreID==FUNCION_NATIVA.SHA256:
+            return 'SHA256'
+        elif padreID==FUNCION_NATIVA.DIV:
+            return 'DIV'
+        elif padreID==FUNCION_NATIVA.GCD:
+            return 'GCD'
+        elif padreID==FUNCION_NATIVA.MOD:
+            return 'MOD'
+        elif padreID==FUNCION_NATIVA.POWER:
+            return 'POWER'
+        elif padreID==FUNCION_NATIVA.ATAN2:
+            return 'ATAN2'
+        elif padreID==FUNCION_NATIVA.ATAN2D:
+            return 'ATAN2D'
+        elif padreID==FUNCION_NATIVA.GET_BYTE:
+            return 'GET_BYTE'
+        elif padreID==FUNCION_NATIVA.ENCODE:
+            return 'ENCODE'
+        elif padreID==FUNCION_NATIVA.DECODE:
+            return 'DECODE'
+
         else:
             return 'op'
 #----------------------------------------------------------------------------------------------------------
@@ -835,3 +1040,128 @@ class Ast2:
 #     self.c +='Node'+ padre + '->'+'Node'+str(self.contador)+';\n'
 #  self.contador+1
 # self.c +='Node'+str(self.contador)+'[label="'+NombreT+]
+
+
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR DELETE-------------------------------------------------------------------
+    def grafoDelete_Data(self, id, valores, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"DELETE")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        for i in id:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val)
+            dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"WHERE")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       #GRAFICANDO EXPRESION===========================
+        i = valores
+        self.inc();
+        dot.node('Node'+  str(self.i), "VALOR CONDICION")
+        dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+        #LLAMAMOS A GRAFICAR EXPRESION
+        padrenuevo4 = self.i
+        self.graficar_expresion(i)
+        self.inc()
+        dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
+       
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR UPDATE-------------------------------------------------------------------
+    def grafoUpdate__Data(self, id, valores_set,valores, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"UPDATE")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        for i in id:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val)
+            dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+        
+        
+        #GRAFICAR============VALORES DEL SET======================
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"SET")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       #GRAFICANDO EXPRESION===========================
+        for i in valores_set:
+            self.inc();
+            dot.node('Node'+  str(self.i), "VALOR CONDICION SET")
+            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+            #LLAMAMOS A GRAFICAR EXPRESION
+            padrenuevo4 = self.i
+            self.graficar_expresion(i)
+            self.inc()
+            dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
+
+        #GRAFICAR============VALORES DEL WHERE======================
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"WHERE")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       #GRAFICANDO EXPRESION===========================
+        i = valores
+        self.inc();
+        dot.node('Node'+  str(self.i), "VALOR CONDICION WHERE")
+        dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+        #LLAMAMOS A GRAFICAR EXPRESION
+        padrenuevo4 = self.i
+        self.graficar_expresion(i)
+        self.inc()
+        dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
+
+
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR ALTER TABLE ADD COLUM-------------------------------------------------------------------
+    def grafoAlter_AddColumn(self, id_tablas,id_columnas, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"ALTER TABLE ADD COLUMN")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID TABLA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        self.inc();
+        dot.node('Node'+  str(self.i), str(id_tablas))
+        dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"COLUMNAS")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       
+        for i in id_columnas:
+            self.inc();
+            dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
+            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+
+        

@@ -2,10 +2,15 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
+<<<<<<< HEAD
 	Node1 [label="CREATE DATABASE"]
+=======
+	Node1 [label="ALTER TABLE ADD COLUMN"]
+>>>>>>> master
 	Node0 -> Node1
 	Node2 [label="Id: miBase"]
 	Node1 -> Node2
+<<<<<<< HEAD
 	Node3 [label="Or Replace"]
 	Node1 -> Node3
 	Node4 [label="Owner: Oscar"]
@@ -18,4 +23,14 @@ digraph AST {
 	Node0 -> Node7
 	Node8 [label=Mitabla]
 	Node7 -> Node8
+=======
+	Node3 [label=tabless]
+	Node2 -> Node3
+	Node4 [label=COLUMNAS]
+	Node1 -> Node4
+	Node5 [label="columna1 Tipo: integer"]
+	Node4 -> Node5
+	Node6 [label="columna2 Tipo: integer"]
+	Node4 -> Node6
+>>>>>>> master
 }

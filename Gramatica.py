@@ -1,6 +1,7 @@
 # -----------------------------------------------------------------------------
 # SQL OGANIZACION DE LENGUAJES Y COMPILADORES 2
 # -----------------------------------------------------------------------------
+from unittest import case
 
 reservadas = {
 
@@ -127,7 +128,67 @@ reservadas = {
     'current_user': 'CURRENT_USER',
     'session_user': 'SESSION_USER',
 
-    'substring': 'SUBSTRING'
+    'substring': 'SUBSTRING',
+    'between' : 'BETWEEN',
+    'is' : 'IS',
+    'unknown' : 'UNKNOWN',
+    'true': 'TRUE',
+    'false': 'FALSE',
+    'acos': 'ACOS',
+    'acosd': 'ACOSD',
+    'asin': 'ASIN',
+    'asind': 'ASIND',
+    'atan': 'ATAN',
+    'atand': 'ATAND',
+    'atan2': 'ATAN2',
+    'atan2d': 'ATAN2D',
+    'cos': 'COS',
+    'cosd': 'COSD',
+    'cot': 'COT',
+    'cotd': 'COTD',
+    'sin': 'SIN',
+    'sind': 'SIND',
+    'tan': 'TAN',
+    'tand': 'TAND',
+    'sinh': 'SINH',
+    'cosh': 'COSH',
+    'tanh': 'TANH',
+    'asinh': 'ASINH',
+    'acosh': 'ACOSH',
+    'atanh': 'ATANH',
+    'length': 'LENGTH',
+    'trim': 'TRIM',
+    'md5': 'MD5',
+    'sha256': 'SHA256',
+    'substr': 'SUBSTR',
+    'get_byte': 'GET_BYTE',
+    'set_byte': 'SET_BYTE',
+    'convert': 'CONVERT',
+    'encode': 'ENCODE',
+    'decode': 'DECODE',
+    'abs': 'ABS',
+    'cbrt': 'CBRT',
+    'ceil': 'CEIL',
+    'ceiling': 'CEILING',
+    'degrees': 'DEGREES',
+    'div': 'DIV',
+    'exp': 'EXP',
+    'factorial': 'FACTORIAL',
+    'floor': 'FLOOR',
+    'gcd': 'GCD',
+    'ln': 'LN',
+    'log': 'LOG',
+    'mod': 'MOD',
+    'pi': 'PI',
+    'powers': 'POWERS',
+    'radians': 'RADIANS',
+    'round': 'ROUND',
+    'sign': 'SIGN',
+    'sqrt': 'SQRT',
+    'width_bucket': 'WIDTH_BUCKET',
+    'trunc': 'TRUNC',
+    'random': 'RANDOM',
+    'power' : 'POWER'
 
 }
 
@@ -262,7 +323,7 @@ def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
 
-t_ignore = " \t"
+t_ignore = '[ \t\r\n\f\v]'
 
 def t_newline(t):
     r'\n+'
@@ -420,9 +481,9 @@ def p_instruccion(t):
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    #t[0]= Select()
+    t[0]= Select2(t[6],t[5],t[2],t[4])
 
-    # endregion
+
 
 
 
@@ -647,9 +708,9 @@ def p_S_AliasSolo(t):
 # Cuerpo
 
 def p_Cuerpo_Where(t):
-    'CUERPO   : WHERE CONDICIONES'
-
-    #t[0] = str(t[1]) + str(t[2])
+    'CUERPO   : WHERE expresion'
+    
+    t[0] =Cuerpo_Condiciones(t[2])
 
 
 def p_Cuerpo_Mores(t):
@@ -842,7 +903,7 @@ def p_Inner_JoinUsing(t):
 
 
 def p_Inner_Where(t):
-    'INNERR   : WHERE CONDICIONES'
+    'INNERR   : WHERE expresion'
 
     #t[0] = str(t[1]) + str(t[2])
 
@@ -1598,9 +1659,8 @@ def p_instruccion_dml_comandos_INSERT_VALOR2(t):
 # -----------------------------------------------------------------------------------------------------------------
 # UPDATE
 def p_instruccion_dml_comandos_UPDATE(t):
-    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN WHERE CONDICIONES PUNTOCOMA'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    print('\n' + str(t[0]) + '\n')
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN WHERE expresion PUNTOCOMA'
+    t[0] = Update_Datos(t[2],t[4],t[6])
 
 
 def p_instruccion_dml_comandos_UPDATE2(t):
@@ -1608,42 +1668,40 @@ def p_instruccion_dml_comandos_UPDATE2(t):
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     print('\n' + str(t[0]) + '\n')
 
-
 def p_instruccion_dml_comandos_UPDATE_CAMPOS(t):
     'CAMPOSN       : CAMPOSN CAMPO'
-  #  t[1].append(t[2])
-  #  t[0] = t[1]
-
+    t[1].append(t[2])
+    t[0] = t[1]
 
 def p_instruccion_dml_comandos_UPDATE_CAMPOS2(t):
     'CAMPOSN       :  CAMPO'
-   # t[0] = [t[1]]
-
-
-# -------------------------------------------------------
-def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
-    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
-
-
-def p_instruccion_dml_comandos_UPDATE_CAMPO2(t):
-    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion C'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-
+    t[0] = [t[1]]
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO3(t):
-    'CAMPO       :  ID IGUAL expresion'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    'CAMPO       :   expresion'
+    t[0] = t[1]
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO4(t):
-    'CAMPO       :  ID IGUAL expresion C'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    'CAMPO       :   expresion COMA'
+    t[0] = t[1]
 
 
-def p_instruccion_dml_comandos_UPDATE_C(t):
-    'C       :  COMA CAMPO'
-  #  t[0] = str(t[1]) + str(t[2])
+#NO VIENE------------------------------------------
+
+def p_instruccion_dml_comandos_UPDATE2(t):
+    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
+
+def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion'
+
+def p_instruccion_dml_comandos_UPDATE_CAMPO2(t):
+    'CAMPO       :  LISTA_DE_IDS PUNTO ID IGUAL expresion COMA'
+
+
+
+
+
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1663,7 +1721,7 @@ def p_instruccion_dml_comandos_DELETE2(t):
 # -----------------------------------------------------------------------------------------------------------------
 # DROP TABLES
 def p_instruccion_dml_comandos_DROP_TABLE(t):
-    'DML_COMANDOS       : DROP TABLE ID PUNTOCOMA'
+    'DML_COMANDOS       : DROP TABLE LISTA_DE_IDS PUNTOCOMA'
     t[0] = DropTable(t[3])
 
 
@@ -1677,13 +1735,34 @@ def p_instruccion_dml_comandos_DROP_TABLE(t):
     # print('\n' + str(t[0]) + '\n')
 
 
+# LISTADO DE IDS--------------------------------------------------------
+def p_CREATE_TABLE_LISTA_IDS_(t):
+    'LISTA_ALTER_EM      : LISTA_ALTER_EM LISTA_ALTER_EM_'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_CREATE_TABLE_LISTA_IDS2_(t):
+    'LISTA_ALTER_EM    : LISTA_ALTER_EM_'
+    t[0] = [t[1]]
+
+
+def p_CREATE_TABLE_LISTA_IDS3_(t):
+    'LISTA_ALTER_EM_  :  ID TIPO_CAMPO COMA'
+    t[0] = ExpresionValor2(t[1],t[2])
+
+def p_CREATE_TABLE_LISTA_IDS4_(t):
+    'LISTA_ALTER_EM_  :   ID TIPO_CAMPO'
+    t[0] = ExpresionValor2(t[1],t[2])
+
+
 # -----------------------------------------------------------------------------------------------------------------
 # ALTER TABLES
 def p_instruccion_dml_comandos_ALTER_TABLE(t):
-    'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN ID TIPO_CAMPO PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
-    print('\n' + str(t[0]) + '\n')
-
+    'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN LISTA_ALTER_EM PUNTOCOMA'
+    t[0] = Alter_Table_AddColumn(t[3],t[6])
+  
+#LISTA_DE_IDS TIPO_CAMPO
 
 def p_instruccion_dml_comandos_ALTER_TABLE2(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN CAMPOSC PUNTOCOMA'
@@ -1933,9 +2012,8 @@ def p_cs2(t):
 
 def p_expresion_global(t):
     '''expresion : expresion_aritmetica
-                | expresion_logica
-                | expresion_unaria
-                | expresion_binario'''
+                 | expresion_logica
+                 | expresion_unaria'''
     t[0] = t[1]
 
 def p_expresion_aritmetica(t):
@@ -1958,14 +2036,13 @@ def p_expresion_aritmetica(t):
 
 
 def p_expresion_relacional(t) :
-    '''expresion_relacional :  expresion_aritmetica IGUAL expresion_aritmetica
+    '''expresion_relacional : expresion_aritmetica IGUAL expresion_aritmetica
                             | expresion_aritmetica DIFERENTE expresion_aritmetica
                             | expresion_aritmetica MAYORIGUAL expresion_aritmetica
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
                             | expresion_aritmetica MAYOR expresion_aritmetica                            
                             | expresion_aritmetica MENOR expresion_aritmetica
-                            | PARIZQ expresion_relacional PARDER
-                            | expresion_aritmetica'''
+                            | PARIZQ expresion_relacional PARDER'''
 
     if t[2] == '==' :
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
@@ -2003,6 +2080,52 @@ def p_expresion_logica(t) :
 def p_expresion_logica_relacion(t):
     'expresion_logica :  expresion_relacional'
     t[0] = t[1]
+
+def p_expresion_logica_predicados(t):
+    '''expresion_logica : expresion_aritmetica NOT BETWEEN expresion_aritmetica AND expresion_aritmetica                    
+                        | expresion_aritmetica IS NOT DISTINCT FROM expresion_aritmetica '''
+    if t[2] == 'IS' :
+        t[0] = ExpresionLogica(t[1],t[6],OPERACION_LOGICA.IS_NOT_DISTINCT)
+   
+    
+
+def p_expresion_logica_predicados_2(t):
+    '''expresion_logica : expresion_aritmetica BETWEEN expresion_aritmetica AND expresion_aritmetica
+                        | expresion_aritmetica IS DISTINCT FROM expresion_aritmetica'''
+    if t[2] == 'IS' :
+        t[0] = ExpresionLogica(t[1],t[5],OPERACION_LOGICA.IS_DISTINCT)
+
+
+#ES UNARIA TODAS
+def p_expresion_logica_predicados_3(t):
+    '''expresion_logica : expresion_aritmetica IS NOT NULL                     
+                        | expresion_aritmetica IS NOT TRUE                       
+                        | expresion_aritmetica IS NOT FALSE
+                        | expresion_aritmetica IS NOT UNKNOWN'''
+    if  t[4] == 'NULL':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_NULL)
+    elif  t[4] == 'TRUE':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_TRUE)
+    elif  t[4] == 'FALSE':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_FALSE)
+    elif  t[4] == 'UNKNOWN':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_UNKNOWN)
+
+
+def p_expresion_logica_predicados_4(t):
+    '''expresion_logica : expresion_aritmetica IS NULL
+                        | expresion_aritmetica IS TRUE
+                        | expresion_aritmetica IS FALSE
+                        | expresion_aritmetica IS UNKNOWN'''
+    if  t[3] == 'NULL':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NULL)
+    elif  t[3] == 'TRUE':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_TRUE)
+    elif t[3] == 'FALSE':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_FALSE)
+    elif  t[3] == 'UNKNOWN':
+        t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_UNKNOWN)
+
 
 # def p_expresion_logica_paren(t) :
 #     'expresion_logica : PARIZQ expresion_logica PARDER'
@@ -2048,10 +2171,172 @@ def p_valor_cadenabinaria(t):
     '''expresion_aritmetica : CADENABINARIA'''
     t[0] = ExpresionValor(t[1])
 
+def p_valor_booleano(t):
+    '''expresion_aritmetica : TRUE
+                            | FALSE'''
+    t[0] = ExpresionValor(t[1]);
 
 def p_valor_abs(t) :
     'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'
     t[0] = ExpresionValor(t[2])
+
+def p_funciones_math(t):
+    '''expresion_aritmetica : ABS PARIZQ expresion_aritmetica PARDER
+                            | CBRT PARIZQ expresion_aritmetica PARDER
+                            | CEIL PARIZQ expresion_aritmetica PARDER
+                            | CEILING PARIZQ expresion_aritmetica PARDER
+                            | DEGREES PARIZQ expresion_aritmetica PARDER
+                            | DIV PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | EXP PARIZQ expresion_aritmetica PARDER
+                            | FACTORIAL PARIZQ expresion_aritmetica PARDER
+                            | FLOOR PARIZQ expresion_aritmetica PARDER
+                            | GCD PARIZQ expresion_aritmetica  COMA expresion_aritmetica PARDER
+                            | LN PARIZQ expresion_aritmetica PARDER
+                            | LOG PARIZQ expresion_aritmetica PARDER
+                            | MOD PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | PI PARIZQ PARDER
+                            | POWER PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | RADIANS PARIZQ expresion_aritmetica PARDER
+                            | ROUND PARIZQ expresion_aritmetica PARDER
+                            | SIGN PARIZQ expresion_aritmetica PARDER
+                            | SQRT PARIZQ expresion_aritmetica PARDER
+                            | WIDTH_BUCKET PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | TRUNC PARIZQ expresion_aritmetica PARDER
+                            | RANDOM PARIZQ PARDER
+                            | ACOS PARIZQ expresion_aritmetica PARDER
+                            | ACOSD PARIZQ expresion_aritmetica PARDER
+                            | ASIN PARIZQ expresion_aritmetica PARDER
+                            | ASIND PARIZQ expresion_aritmetica PARDER
+                            | ATAN PARIZQ expresion_aritmetica PARDER
+                            | ATAND PARIZQ expresion_aritmetica PARDER
+                            | ATAN2 PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | ATAN2D PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | COS PARIZQ expresion_aritmetica PARDER
+                            | COSD PARIZQ expresion_aritmetica PARDER
+                            | COT PARIZQ expresion_aritmetica PARDER
+                            | COTD PARIZQ expresion_aritmetica PARDER
+                            | SIN PARIZQ expresion_aritmetica PARDER
+                            | SIND PARIZQ expresion_aritmetica PARDER
+                            | TAN PARIZQ expresion_aritmetica PARDER
+                            | TAND PARIZQ expresion_aritmetica PARDER
+                            | SINH PARIZQ expresion_aritmetica PARDER
+                            | COSH PARIZQ expresion_aritmetica PARDER
+                            | TANH PARIZQ expresion_aritmetica PARDER
+                            | ASINH PARIZQ expresion_aritmetica PARDER
+                            | ACOSH PARIZQ expresion_aritmetica PARDER
+                            | ATANH PARIZQ expresion_aritmetica PARDER
+                            | LENGTH PARIZQ expresion_aritmetica PARDER
+                            | SUBSTRING PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | TRIM PARIZQ expresion_aritmetica PARDER
+                            | MD5 PARIZQ expresion_aritmetica PARDER
+                            | SHA256 PARIZQ expresion_aritmetica PARDER
+                            | SUBSTR PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | GET_BYTE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | SET_BYTE PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | CONVERT PARIZQ expresion_aritmetica AS TIPO_CAMPO PARDER
+                            | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER'''
+    if t[1] == 'ABS':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ABS)
+    elif t[1] == 'CBRT':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CBRT)
+    elif t[1] == 'CEIL':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CEIL)
+    elif t[1] == 'CEILING':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CEILING)
+    elif t[1] == 'DEGREES':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.DEGREES)
+    elif t[1] == 'EXP':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.EXP)
+    elif t[1] == 'FACTORIAL':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.FACTORIAL)
+    elif t[1] == 'FLOOR':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.FLOOR)
+    elif t[1] == 'LN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LN)
+    elif t[1] == 'LOG':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LOG)
+    elif t[1] == 'RADIANS':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.RADIANS)
+    elif t[1] == 'ROUND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ROUND)
+    elif t[1] == 'SIGN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIGN)
+    elif t[1] == 'SQRT':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SQRT)
+    elif t[1] == 'TRUNC':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TRUNC)
+    elif t[1] == 'ACOS':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOS)
+    elif t[1] == 'ACOSD':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOSD)
+    elif t[1] == 'ASIN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASIN)
+    elif t[1] == 'ASIND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASIND)
+    elif t[1] == 'ATAN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATAN)
+    elif t[1] == 'ATAND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATAND)
+    elif t[1] == 'COS':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COS)
+    elif t[1] == 'COSD':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COSD)
+    elif t[1] == 'COT':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COT)
+    elif t[1] == 'COTD':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COTD)
+    elif t[1] == 'SIN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIN)
+    elif t[1] == 'SIND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIND)
+    elif t[1] == 'TAN':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TAN)
+    elif t[1] == 'TAND':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TAND)
+    elif t[1] == 'SINH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SINH)
+    elif t[1] == 'COSH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COSH)
+    elif t[1] == 'TANH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TANH)
+    elif t[1] == 'ASINH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASINH)
+    elif t[1] == 'ACOSH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOSH)
+    elif t[1] == 'ATANH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATANH)
+    elif t[1] == 'LENGTH':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LENGTH)
+    elif t[1] == 'TRIM':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TRIM)
+    elif t[1] == 'MD5':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.MD5)
+    elif t[1] == 'SHA256':
+        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SHA256)
+
+    elif t[1] == 'DIV':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.DIV)
+    elif t[1] == 'GCD':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.GCD)
+    elif t[1] == 'MOD':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.MOD)
+    elif t[1] == 'POWER':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.POWER)
+    elif t[1] == 'ATAN2':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ATAN2)
+    elif t[1] == 'ATAN2D':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ATAN2D)
+    elif t[1] == 'GET_BYTE':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.GET_BYTE)
+    elif t[1] == 'ENCODE':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ENCODE)
+    elif t[1] == 'DECODE':
+        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.DECODE)
+    # elif t[1] == 'SUBSTR':
+    #     t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SUBSTR)
+
+
 
 # def p_expnumerica(t):
 #     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
@@ -2061,7 +2346,7 @@ def p_valor_abs(t) :
 #                    | EXPNUMERICA MAS EXPNUMERICA'''
 
 def p_expresion_binario(t):
-    '''expresion_binario : expresion_aritmetica DOBLEPLECA expresion_aritmetica
+    '''expresion_aritmetica : expresion_aritmetica DOBLEPLECA expresion_aritmetica
                 |   expresion_aritmetica AMPERSAND expresion_aritmetica
                 |   expresion_aritmetica PLECA expresion_aritmetica
                 |   expresion_aritmetica NUMERAL expresion_aritmetica
@@ -2069,7 +2354,7 @@ def p_expresion_binario(t):
                 |   expresion_aritmetica RIGHTSHIFT expresion_aritmetica'''
 
 def p_expresion_binario_n(t):
-    'expresion_binario : VIRGULILLA expresion_binario'
+    'expresion_aritmetica : VIRGULILLA expresion_aritmetica'
 
 # def p_expresion_binario_val(t):
 #     'expresion_binario : expresion_aritmetica'

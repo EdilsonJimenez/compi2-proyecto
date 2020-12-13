@@ -17,6 +17,13 @@ class Select(Instruccion) :
         self.unionn         = unionn
 
 
+#---------------------------------------------------------------------------------------------------
+class Select2(Instruccion) :
+    def __init__(self,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+        self.unionn         = unionn
+        self.Cuerpo = Cuerpo
 
 
 
@@ -98,6 +105,15 @@ class Alias_Table_ListaTablasSinLista(Instruccion):
 
 
 
+#Cuerpo Consulta
+#---------------------------------------------------------------------------------------------------
+#where Condiciones
+
+class Cuerpo_Condiciones(Instruccion):
+
+    def __init__(self,Cuerpo=[]):
+        self.Cuerpo = Cuerpo
+
 
 #---------------------------------------------------------------------------------------------------
 #INSERTAR DATOS CESAR
@@ -144,3 +160,16 @@ class CreateDataBase(Instruccion):
 class ShowDatabases(Instruccion):
     def __init__(self, cadenaLike):
         self.cadenaLike = cadenaLike
+#---------------------------------------------------------------------------------------------------
+class Update_Datos(Instruccion):
+    def __init__(self, id_table,valores_set, valor_where):
+        self.id_table = id_table
+        self.valores_set = valores_set
+        self.valor_where = valor_where
+
+
+#Clase para el Alter Table----------------------------
+class Alter_Table_AddColumn(Instruccion):
+    def __init__(self, id_table,id_columnas):
+        self.id_table = id_table
+        self.id_columnas = id_columnas
