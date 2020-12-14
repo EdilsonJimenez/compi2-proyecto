@@ -60,9 +60,15 @@ class Ast2:
                 print("Es Una Instruccion Update")
                 self.grafoUpdate__Data(i.id_table,i.valores_set,i.valor_where,padre)
 
+            elif isinstance(i, Alter_COLUMN):
+                print("Es Una Instruccion Alter  Column")
+                self.grafoAlter_Column(i.id_columna,i.id_tipo,padre)
+
             elif isinstance(i, Alter_Table_AddColumn):
                 print("Es Una Instruccion Alter Add Column")
                 self.grafoAlter_AddColumn(i.id_table,i.id_columnas,padre)
+
+            
 
             else:
                 print("No es droptable")
@@ -1533,4 +1539,53 @@ class Ast2:
             dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
 
-        
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR ALTER TABLE ADD COLUM-------------------------------------------------------------------
+    def grafoAlter_Column(self, id_columna,tipo, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"ALTER COLUMN")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID COLUMNA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        self.inc();
+        dot.node('Node'+  str(self.i), str(id_columna))
+        dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"TIPO")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       
+    
+        if isinstance(tipo, valorTipo):
+           
+            if tipo.expresion == None:
+                self.inc();
+                dot.node('Node'+  str(self.i), str(tipo.valor))
+                dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+            else:
+                self.inc();
+                dot.node('Node'+  str(self.i), str(tipo.valor))
+                dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+                self.inc();
+                nuevoPadre4 = self.i
+                dot.node('Node'+  str(self.i), 'EXPRESION')
+                dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+                self.graficar_expresion(tipo.expresion)
+                dot.edge('Node'+str(nuevoPadre4),str(nuevoPadre4+1))
+
+        else:
+            self.inc();
+            dot.node('Node'+  str(self.i), str(tipo))
+            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+
+     
