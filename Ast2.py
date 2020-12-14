@@ -39,17 +39,13 @@ class Ast2:
                 self.GrafoSelect(i.Lista_Campos,i.Nombres_Tablas,i.unionn,padre)
 
             elif isinstance(i, Select2):
-                print("Es Una Instruccion Select")
+                print("Es Una Instruccion Select2")
                 self.GrafoSelect2(i.Lista_Campos,i.Nombres_Tablas,i.Cuerpo,i.unionn,padre)
 
             elif isinstance(i, Insert_Datos):
                 print("Si es un drop Insert *")
                 self.grafoInsert_Data(i.id_table,i.valores, padre)
             #-----------------------------------
-            elif isinstance(i, Campo_Accedido):
-                print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-                self.grafoCampoAccedido(i.NombreT, i.Columna)
-
             elif isinstance(i, CreateTable):
                 self.grafoCreateTable(i.id, i.cuerpo, i.inhe, padre)
 
@@ -63,6 +59,10 @@ class Ast2:
             elif isinstance(i, Update_Datos):
                 print("Es Una Instruccion Update")
                 self.grafoUpdate__Data(i.id_table,i.valores_set,i.valor_where,padre)
+
+            elif isinstance(i, Alter_COLUMN):
+                print("Es Una Instruccion Alter  Column")
+                self.grafoAlter_Column(i.id_columna,i.id_tipo,padre)
 
             elif isinstance(i, Alter_Table_AddColumn):
                 print("Es Una Instruccion Alter Add Column")
@@ -104,6 +104,20 @@ class Ast2:
                 print("Es Una Instruccion CReate Type ENUM")
                 self.grafoCreacionEnum(i.listaCadenas, padre)
 
+                self.grafoAlter_AddColumn(i.id_table,i.id_columnas,padre)
+            elif isinstance(i, Alter_Table_Drop_Column):
+                print("es una instruccion alter drop column")
+                self.grafoAlter_DropColumn(i.id_table, i.columnas, padre)
+            elif isinstance(i, Alter_Table_Rename_Column):
+                self.grafoAlter_RenameColumn(i.id_table, i.old_column, i.new_column, padre)
+            elif isinstance(i, Alter_Table_Drop_Constraint):
+                self.grafoAlter_DropConstraint(i.id_tabla, i.id_constraint, padre)
+            elif isinstance(i, Alter_table_Alter_Column_Set):
+                self.grafoAlter_AlterColumnSet(i.id_tabla, i.id_column, padre )
+            elif isinstance(i, Alter_table_Add_Foreign_Key):
+                self.grafoAlter_AddForeignKey(i.id_table, i.id_column, i.id_column_references, padre)
+            elif isinstance(i, Alter_Table_Add_Constraint):
+                self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column, padre)
             else:
                 print("No es droptable")
 
@@ -132,6 +146,7 @@ class Ast2:
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
+
             self.inc();
             dot.node('Node' + str(self.i), NombreT + '.' + Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
@@ -239,6 +254,170 @@ class Ast2:
         else:
             print("Error sintactico")
 
+
+
+
+    # Campos Accedidos desde el group By
+    # ----------------------------------------------------------------------------------------------------------
+
+    #Objeto Que accede "AccesoGroupBy"  NombreT,Columna,Estado,Lista_Alias=[]
+
+    #Nombres Lista Accedidos  Con lista
+    def GrafoAccesoGroupBy(self, NombreT,Columna, Lista_Alias,Estado, padre):
+        global dot
+
+        # Tabla.Columna Alias
+        if ((NombreT != "") and (Columna != "") and (Lista_Alias != False ) and (Estado == "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), NombreT + '.' + Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la Lista de Alias
+            self.inc();
+            dot.node('Node' + str(self.i), "Lista_Alias")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
+            #Ver tipos de Alias Agregar el de Group By
+
+
+
+
+        # Tabla.Columna
+        elif((NombreT != "") and (Columna != "") and (Lista_Alias == False) and (Estado == "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), NombreT + '.' + Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+        #columna Alias
+        elif ((NombreT == "") and (Columna != "") and (Lista_Alias != False) and (Estado == "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i),Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la Lista de Alias
+            self.inc();
+            dot.node('Node' + str(self.i), "Lista_Alias")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
+            #Agregar Tipo de Alias de Group by
+
+
+
+
+        #Columna
+        elif ((NombreT == "") and (Columna != "") and (Lista_Alias == False) and (Estado == "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+            self.inc();
+            dot.node('Node' + str(self.i), Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        #Tabla.Columna Alias Estado
+        elif ((NombreT != "") and (Columna != "") and (Lista_Alias != False) and (Estado != "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+            self.inc();
+            dot.node('Node' + str(self.i), NombreT + '.' + Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la Lista de Alias
+            self.inc();
+            dot.node('Node' + str(self.i), "Lista_Alias")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
+
+
+            #Recorrer Listado de Estados
+
+        #Tabla.Columna  Estado
+        elif ((NombreT != "") and (Columna != "") and (Lista_Alias == False) and (Estado != "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+            self.inc();
+            dot.node('Node' + str(self.i), NombreT + '.' + Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+            self.inc();
+            dot.node('Node' + str(self.i), Estado)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        #Columna Alias Estado
+        elif ((NombreT == "") and (Columna != "") and (Lista_Alias != False) and (Estado != "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+            self.inc();
+            dot.node('Node' + str(self.i),  Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la Lista de Alias
+            self.inc();
+            dot.node('Node' + str(self.i), "Lista_Alias")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
+            #Agregar el tipo de alias del group by
+
+            # Estado
+            self.inc();
+            dot.node('Node' + str(self.i), Estado)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        #Columna  Estado
+        elif ((NombreT == "") and (Columna != "") and (Lista_Alias == False) and (Estado != "")):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Columna)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Estado
+            self.inc();
+            dot.node('Node' + str(self.i), Estado)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        else:
+            print("Verificar Errores Sintacticos")
+
+
+
+
+
+
+
+
+
     # ALIAS CAMPOS
     # ----------------------------------------------------------------------------------------------------------
 
@@ -314,6 +493,8 @@ class Ast2:
            print("Verificar Errores Sintacticos")
 
 
+
+
     # ALIAS Tablas
     # ----------------------------------------------------------------------------------------------------------
 
@@ -387,6 +568,100 @@ class Ast2:
             print("Verificar Errores Sintacticos")
 
 
+
+
+
+
+    # ALIAS Group By
+    # ----------------------------------------------------------------------------------------------------------
+
+    #Objeto que tiene acceso "Alias_Tablas_Group"
+    #Acceso a Alias de las  Group By
+    def GrafoAlias_Tablas_Group(self, Alias, Lista_Sentencias, padre):
+        global dot
+
+        # as Alias , Lista    and    alias, lista
+        if ((Alias != "") and (Lista_Sentencias != False)):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Alias_Produccion")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "As")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Alias)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "Campos")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            #RecorrerListadeCampos de Group By que son dos posibles
+
+
+            self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
+
+        # Lista
+        elif ((Alias == "") and (Lista_Sentencias != False)):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Alias_Produccion")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), ",")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "Campos")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            # RecorrerListadeCampos de Group By que son dos posibles
+
+
+            self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
+
+
+
+    #Objeto que tiene acceso "Alias_Tablas_GroupSinLista"
+    #Acceso a Alias de los Group By
+
+    def GrafoAlias_Tablas_GroupSinLista(self, Alias, padre):
+        global dot
+
+        # as Alias
+        if (Alias != "" ):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Alias_Produccion")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "As")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Alias)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        else:
+            print("Verificar Errores Sintacticos")
+
+
+
+
+
+
+
+
+
+
+
+
     # Grafo Where con Expreciones
     # ----------------------------------------------------------------------------------------------------------
     # Where Expreciones
@@ -399,6 +674,7 @@ class Ast2:
         self.inc();
         dot.node('Node' + str(self.i), "Where")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
         self.Recorrer_Condiciones(Lista, 'Node' + str(nuevoPadre))
 
 
@@ -423,17 +699,17 @@ class Ast2:
     # ----------------------------------------------------------------------------------------------------------
 
     def RecorrerListadeCampos(self, Campos, padre):
-        for i in Campos:
-            if isinstance(i, Campo_Accedido):
-                print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-                self.GrafoCampo_Accedido(i.NombreT, i.Columna, i.Lista_Alias, padre)
+            for j in Campos:
+                if isinstance(j, Campo_Accedido):
+                    print("Es un Campo Accedido Por la Tabla" + j.NombreT)
+                    self.GrafoCampo_Accedido(j.NombreT, j.Columna, j.Lista_Alias, padre)
 
-            elif isinstance(i, Campo_AccedidoSinLista):
-                print("Es un Campo Accedido Por la Tabla" + i.NombreT)
-                self.GrafoCampo_AccedidoSinLista(i.NombreT, i.Columna, padre)
+                elif isinstance(j, Campo_AccedidoSinLista):
+                    print("Es un Campo Accedido Por la Tabla Sin Lista" + j.NombreT)
+                    self.GrafoCampo_AccedidoSinLista(j.NombreT, j.Columna, padre)
 
-            else:
-                print("No Ningun Tipo")
+                else:
+                    print("No Ningun Tipo  vos ")
 
 
     # Recorrido de la lista de Nombres de Tablas
@@ -452,13 +728,63 @@ class Ast2:
             else:
                 print("No Ningun Tipo")
 
-    # Recorrido de los Alias
+
+
+
+    # Recorrido de la lista de de Los Posibles Group By
     # ----------------------------------------------------------------------------------------------------------
 
+    def RecorrerListraGroups(self, Groups, padre):
+        for i in Groups:
+            if isinstance(i, GroupBy):
+                print("Es un Acceso a Group By")
+                self.GrafoGroupBy(i.Lista_Campos, i.Condiciones, padre)
+            else:
+                print("No Ningun Tipo")
 
+
+    # Recorrido de la lista de de Los Posibles Where
+    # ----------------------------------------------------------------------------------------------------------
+
+    def RecorrerListaWhere(self, Groups, padre):
+        for i in Groups:
+            if isinstance(i, Cuerpo_TipoWhere):
+                print("Es un Acceso a Where")
+                self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
+            else:
+                print("No Ningun Tipo")
+
+
+
+
+    # Recorrido a la lista de campos
+    # ----------------------------------------------------------------------------------------------------------
+
+    def RecorrerListaCamposGroupBy(self, Lista_Campos, padre):
+
+        for i in Lista_Campos:
+            if isinstance(i, AccesoGroupBy):
+                print("Es un Campo Accedido Por la Cuerpo ")
+                self.GrafoAccesoGroupBy(i.NombreT,i.Columna,i.Lista_Alias,i.Estado, padre)
+            else:
+                print("No hay Ningun Tipo")
+
+
+
+
+
+
+
+
+
+
+
+    # Recorrido de los Alias
+    # ----------------------------------------------------------------------------------------------------------
     def RecorrerTiposAlias(self, Lista_Alias, padre):
 
         i=Lista_Alias
+        # Alias de los Campos Con Lista
         if isinstance(i, Alias_Campos_ListaCampos):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Campos_ListaCampos(i.Alias, i.Lista_Sentencias, padre)
@@ -468,15 +794,33 @@ class Ast2:
            print("Es un Campo Accedido Por la Tabla" + i.Alias)
            self.GrafoAlias_Campos_ListaCamposSinLista(i.Alias, padre)
 
-           # Alias de las Nombres de las Tablas
+
+
+
+        # Alias de las Nombres de las Tablas
         elif isinstance(i, Alias_Table_ListaTablas):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Table_ListaTablas(i.Alias, i.Lista_Sentencias, padre)
 
-        # Alias de las Nombres de las Tablas Sin Lista
+        #Alias de las Nombres de las Tablas Sin Lista
         elif isinstance(i, Alias_Table_ListaTablasSinLista):
             print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Table_ListaTablasSinLista(i.Alias, padre)
+
+
+
+
+        #Alias de los Group By Con Lista
+        elif isinstance(i, Alias_Tablas_Group):
+            print("Es un Campo Accedido Por Group by con lista" + i.Alias)
+            self.GrafoAlias_Tablas_Group(i.Alias,i.Lista_Sentencias,padre)
+
+        #Alias de los Group By Sin Lista
+        elif isinstance(i, Alias_Tablas_GroupSinLista):
+            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+            self.GrafoAlias_Tablas_GroupSinLista(i.Alias, padre)
+
+
         else:
             print("No Ningun Tipo")
 
@@ -485,9 +829,13 @@ class Ast2:
     # ----------------------------------------------------------------------------------------------------------
     def RecorrerCuerpo(self, Cuerpo, padre):
         i=Cuerpo
-        if isinstance(i, Cuerpo_Condiciones):
+        if isinstance(Cuerpo,Cuerpo_Condiciones):
             print("Es un Campo Accedido Por la Cuerpo ")
-            self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
+            self.RecorrerListaWhere(Cuerpo.Cuerpo, padre)
+
+        elif isinstance(Cuerpo,Cuerpo_TipoGroup):
+            print("Es un Campo Accedido Por la Group By ")
+            self.RecorrerListraGroups(Cuerpo.Cuerpo, padre)
         else:
             print("No hay Ningun Tipo")
 
@@ -516,7 +864,7 @@ class Ast2:
         self.inc();
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
         self.inc();
         dot.node('Node' + str(self.i), "FROM")
@@ -534,7 +882,6 @@ class Ast2:
 
     def GrafoSelect2(self,ListaCampos, NombresTablas,cuerpo, Uniones, padre ):
         global dot
-
         self.inc();
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
@@ -570,8 +917,48 @@ class Ast2:
 
 
 
+    def GrafoGroupBy(self, Lista_Campos, Condiciones, padre):
+        global dot
+       #Group by ListaCampos Having Condiciones
+        if ((Lista_Campos!=False) and  (Condiciones!=False)):
 
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "INSTRUCCION GROUP BY ")
+            dot.edge(padre, 'Node' + str(self.i))
 
+            self.inc();
+            dot.node('Node' + str(self.i), "GROUP BY")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "HAVING")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.Recorrer_Condiciones(Condiciones, 'Node' + str(self.i))
+
+       #Group by ListaCampos
+        elif ((Lista_Campos != False) and (Condiciones == False)):
+           self.inc();
+           nuevoPadre = self.i
+           dot.node('Node' + str(self.i), "INSTRUCCION GROUP BY ")
+           dot.edge(padre, 'Node' + str(self.i))
+
+           self.inc();
+           dot.node('Node' + str(self.i), "GROUP BY")
+           dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           self.inc();
+           dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+           dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
 
 
 
@@ -794,6 +1181,12 @@ class Ast2:
             return 'IS_NOT_DISTINCT'
         elif padreID==OPERACION_LOGICA.IS_DISTINCT:
             return 'IS_DISTINCT'
+        elif padreID==OPERACION_LOGICA.EXISTS:
+            return 'EXISTS'
+        elif padreID==OPERACION_LOGICA.IN:
+            return 'IN'
+        elif padreID==OPERACION_LOGICA.NOT_IN:
+            return 'NOT_IN'
         elif padreID==FUNCION_NATIVA.ABS:
             return 'ABS'
         elif padreID==FUNCION_NATIVA.CBRT:
@@ -1342,4 +1735,260 @@ class Ast2:
             dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
 
-        
+
+#----------------------------------------------------------------------------------------------------------
+#-----------------------GRAFICAR ALTER TABLE ADD COLUM-------------------------------------------------------------------
+    def grafoAlter_Column(self, id_columna,tipo, padre):
+        global  dot,tag,i
+
+        self.inc()
+        nuevoPadre=self.i
+        dot.node('Node'+str(self.i),"ALTER COLUMN")
+        dot.edge(padre,'Node'+str(self.i))
+
+        self.inc();
+        nuevoPadre2 = self.i
+        dot.node('Node'+str(self.i),"ID COLUMNA")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+
+        self.inc();
+        dot.node('Node'+  str(self.i), str(id_columna))
+        dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
+
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node'+str(self.i),"TIPO")
+        dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
+       
+    
+        if isinstance(tipo, valorTipo):
+           
+            if tipo.expresion == None:
+                self.inc();
+                dot.node('Node'+  str(self.i), str(tipo.valor))
+                dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+            else:
+                self.inc();
+                dot.node('Node'+  str(self.i), str(tipo.valor))
+                dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+                self.inc();
+                nuevoPadre4 = self.i
+                dot.node('Node'+  str(self.i), 'EXPRESION')
+                dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+                self.graficar_expresion(tipo.expresion)
+                dot.edge('Node'+str(nuevoPadre4),str(nuevoPadre4+1))
+
+        else:
+            self.inc();
+            dot.node('Node'+  str(self.i), str(tipo))
+            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+
+     
+    def grafoAlter_DropColumn(self, id_tabla , columnas, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str( id_tabla ))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "DROP COLUMN")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), "COLUMNAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        for columna in columnas:
+            self.inc();
+            dot.node('Node' + str(self.i), columna.val)
+            dot.edge('Node' + str(nuevoPadre3), 'Node' + str(self.i))
+
+    def grafoAlter_RenameColumn(self, id_tabla, old_column, new_column, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str(id_tabla))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "RENAME COLUMN")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), old_column.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), "TO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), new_column.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoAlter_DropConstraint(self, id_tabla, id_constraint, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str(id_tabla))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "DROP CONSTRAINT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_constraint.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoAlter_AlterColumnSet(self, id_tabla, id_column, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str(id_tabla))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER COLUMN")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_column.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "SET NOT NULL")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+    def grafoAlter_AddForeignKey(self, id_tabla, id_column, id_column_references, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str(id_tabla))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ADD FOREIGN KEY")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_column.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "REFERENCES")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_column_references.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+    def grafoAlter_AddConstraint(self, id_tabla, id_constraint, id_column, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str(id_tabla))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ADD CONSTRAINT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_constraint.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "UNIQUE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_column.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+

@@ -477,6 +477,7 @@ def p_instruccion_dql_comandos3(t):
     t[0] = Select(t[5], t[2], t[4])
 
 
+
 # ------------------------------------------------------------------------------------------------------------------
 
 # Lista de Campos
@@ -556,6 +557,8 @@ def p_Alias_id(t):
 def p_S_ComaLista(t):
     'S          : COMA LISTA_CAMPOS'
     t[0] = Alias_Campos_ListaCampos("", t[2])
+#    S          : COMA LISTAA
+#    t[0] = Alias_Campos_ListaCampos("",t[2])
 
     # t[0] = str(t[1]) + str(t[2])
 
@@ -645,14 +648,14 @@ def p_Ss_AsAlias(t):
 
 
 def p_Ss_AsAliasComa(t):
-    'S1          : AS ALIAS COMA NOMBRES_TABLAS'
+    'S1          : AS ALIAS COMA TABLA'
     t[0] = Alias_Table_ListaTablas(t[2], t[4])
 
     # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_Ss_AliasCo(t):
-    'S1          :  ALIAS COMA NOMBRES_TABLAS'
+    'S1          :  ALIAS COMA TABLA'
     t[0] = Alias_Table_ListaTablas(t[1], t[3])
 
     # t[0] = str(t[1]) + str(t[2]) + str(t[3])
@@ -667,29 +670,37 @@ def p_S_AliasSolo(t):
 
 # ------------------------------------------------------------------------------------------------------------------
 # Cuerpo
+def p_CuerpoS_CuerpoS(t):
+    'CUERPOS   : CUERPOS CUERPO'
+    t[1].append(t[2])
+    t[0] = t[1]
 
 def p_Cuerpo_Where(t):
     'CUERPO   : WHERE expresion'
 
     t[0] = Cuerpo_Condiciones(t[2])
+def p_Cuerpos_Cuerpo(t):
+    'CUERPOS   :  CUERPO'
+    t[0] = [t[1]]
+
+
 
 
 def p_Cuerpo_Mores(t):
-    'CUERPO   : MORES'
+    'CUERPO   : MOREE'
+    t[0] = t[1]
 
-    # t[0] = str(t[1])
 
-
-def p_MORES_ListaCampos(t):
-    'MORES       : MORES MOREE'
 
     # t[1].append(t[2])
     # t[0] = t[1]
 
 
-def p_MORES_Lista(t):
-    'MORES    : MOREE'
-    # t[0] = [t[1]]
+#def p_MORES_Lista(t):
+#    MORES    : MOREE <<<<<<<<<<<<<<<<<<<<<<< conflicto
+#    # t[0] = [t[1]]
+
+
 
 
 def p_Mores_Inners(t):
@@ -700,14 +711,42 @@ def p_Mores_Inners(t):
 
 def p_Mores_Groups(t):
     'MOREE   : GROUPS'
-
-    # t[0] = str(t[1])
+    t[0] = Cuerpo_TipoGroup(t[1])
 
 
 def p_Mores_Limits(t):
     'MOREE   : LIMITS'
 
     # t[0] = str(t[1])
+
+
+
+def p_Mores_Condicion(t):
+    'MOREE   : CONDICIONS'
+    t[0] = Cuerpo_Condiciones(t[1])
+
+
+
+def p_CondicionCc(t):
+    'CONDICIONS  : CONDICIONS CONDI'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_CondicionSen(t):
+    'CONDICIONS : CONDI'
+    t[0] = [t[1]]
+
+
+
+def p_Condi_Wheree(t):
+    'CONDI : WHERE expresion'
+    t[0] = Cuerpo_TipoWhere(t[2])
+
+
+
+
+
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -775,7 +814,7 @@ def p_Expresion_Nombre(t):
 
 
 def p_Expresion_CampoC(t):
-    'EXPRESIONNE : CAMPOSC'
+    'EXPRESIONNE : expresion'
 
     # t[0] = str(t[1])
 
@@ -811,8 +850,8 @@ def p_CamposC_id(t):
                     | FLOTANTE
                     | CADENASIMPLE
                     | CADENADOBLE '''
-    # t[0] = str(t[1])
-
+    #t[0] = str(t[1])
+    t[0] = ExpresionValor(t[1])
 
 def p_SimboloRela_Simbolos(t):
     '''OPERADOR     : IGUAL
@@ -946,110 +985,101 @@ def p_TablaRef_IdSinAs(t):
 def p_Groups_ListaG(t):
     'GROUPS : GROUPS GROUPP'
 
-    # t[1].append(t[2])
-    # t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_Groups_ListaG2(t):
     'GROUPS    : GROUPP'
 
-    # t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_Group_GroupBy(t):
-    'GROUPP    : GROUP BY EXPRE_LIST MORE_ORDER'
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    'GROUPP    : GROUP BY EXPRE_LIST HAVING expresion'
+    t[0] =GroupBy(t[3],t[5])
 
 
 def p_Group_GroupBySin(t):
     'GROUPP    : GROUP BY EXPRE_LIST'
+    t[0] = GroupBy(t[3],False)
 
     # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_ExpreList_Lista(t):
     'EXPRE_LIST : EXPRE_LIST  EXPRES'
-
-
-# t[1].append(t[2])
-# t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_ExpreList_Expresion(t):
     'EXPRE_LIST    : EXPRES'
-
-    # t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_Expre_Campo1(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] =AccesoGroupBy(t[1],t[3],"",t[4])
 
 def p_Expre_Campo2(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS '
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = AccesoGroupBy(t[1], t[3], "",False)
 
 
 def p_Expre_Campo3(t):
     'EXPRES    :  CAMPOS S2 '
-
-
-# t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
+    t[0] = AccesoGroupBy("", t[1], "", t[2])
 
 
 def p_Expre_Campo4(t):
     'EXPRES    :  CAMPOS '
-
-
-# t[0] = str(t[1])
+    t[0] = AccesoGroupBy("", t[1], "",False)
+   # t[0] = str(t[1])
 
 
 def p_Expre_Campo5(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2 STATE '
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    t[0] = AccesoGroupBy(t[1], t[3], t[5], t[4])
 
 
 def p_Expre_Campo6(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS STATE'
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] = AccesoGroupBy(t[1], t[3], t[4], False)
 
 
 def p_Expre_Campo7(t):
     'EXPRES    :  CAMPOS S2 STATE'
-
-
-#  t[0] = str(t[1]) + str(t[2]) + str(t[3])
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = AccesoGroupBy("", t[1], t[3], t[2])
 
 
 def p_Expre_Campo8(t):
     'EXPRES    :  CAMPOS STATE '
-
-
-# t[0] = str(t[1]) + str(t[2])
+   # t[0] = str(t[1]) + str(t[2])
+    t[0] = AccesoGroupBy("", t[1], t[2], False)
 
 
 def p_S2_Coma(t):
     'S2 : COMA EXPRES'
-
-
-#  t[0] = str(t[1]) + str(t[2])
+    t[0]=Alias_Campos_ListaCampos("",t[2])
+  #  t[0] = str(t[1]) + str(t[2])
 
 
 def p_S2_2(t):
     'S2 : AS ALIAS'
-
-
-#  t[0] = str(t[1]) + str(t[2])
+  #  t[0] = str(t[1]) + str(t[2])
+    t[0] = Alias_Campos_ListaCamposSinLista(t[2])
 
 
 def p_Ss_AsAliasComa_(t):
     'S2 :  AS ALIAS COMA EXPRES'
+    t[0] = Alias_Campos_ListaCampos(t[2], t[4])
 
 
 # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
@@ -1057,64 +1087,52 @@ def p_Ss_AsAliasComa_(t):
 
 def p_S2_3(t):
     'S2 :  ALIAS'
-
-
-# t[0] = str(t[1])
+   # t[0] = str(t[1])
+    t[0] = Alias_Campos_ListaCamposSinLista(t[1])
 
 
 def p_Ss_AsAlias3(t):
     'S2 :   ALIAS COMA EXPRES'
+    t[0] = Alias_Campos_ListaCampos(t[1], t[3])
 
     # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
-def p_MoreOrder_Having(t):
-    'MORE_ORDER  :  HAVING CONDICIONES'
-    # t[0] = str(t[1]) + str(t[2])
+#def p_MoreOrder_Having(t):
+#    MORE_ORDER  :  HAVING CONDICIONES
+    # t[0] = str(t[1]) + str(t[2])   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< por si acaso 
 
 
 def p_State_orden1(t):
     'STATE : ASC'
-
-
-# t[0] = str(t[1])
+    t[0] = str(t[1])
 
 
 def p_State_orden2(t):
     'STATE : ASC NULLS FIRST'
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_State_orden3(t):
     'STATE : ASC NULLS LAST'
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_State_orden4(t):
     'STATE : DESC '
-
-
-#  t[0] = str(t[1])
+    t[0] = str(t[1])
 
 
 def p_State_orden5(t):
     'STATE : DESC NULLS FIRST'
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_State_orden6(t):
     'STATE : DESC NULLS LAST'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-# -----------------------------------------------------------------------------------------------------------------
-# Limits
+    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+#-----------------------------------------------------------------------------------------------------------------
+#Limits
 
 def p_Limits_ListaLimits(t):
     'LIMITS  :  LIMITS LIMITT'
@@ -1830,55 +1848,52 @@ def p_instruccion_dml_comandos_ALTER_TABLE(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN LISTA_ALTER_EM PUNTOCOMA'
     t[0] = Alter_Table_AddColumn(t[3], t[6])
 
-
-# LISTA_DE_IDS TIPO_CAMPO
+#LISTA_DE_IDS TIPO_CAMPO
 
 def p_instruccion_dml_comandos_ALTER_TABLE2(t):
-    'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN CAMPOSC PUNTOCOMA'
-    #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
+    'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN LISTA_DE_IDS PUNTOCOMA'
+ #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Drop_Column(t[3], t[6])
 
 def p_instruccion_dml_comandos_ALTER_TABLE3(t):
     'DML_COMANDOS       : ALTER TABLE ID  RENAME COLUMN ID TO ID PUNTOCOMA'
     # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])+ str(t[8]) + str(t[9])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Rename_Column(t[3], ExpresionValor(t[6]), ExpresionValor(t[8]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE4(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP CONSTRAINT ID  PUNTOCOMA'
     #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Drop_Constraint(t[3], ExpresionValor(t[6]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE5(t):
     'DML_COMANDOS       : ALTER TABLE ID  ALTER COLUMN ID SET NOT NULL  PUNTOCOMA'
     #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_table_Alter_Column_Set(t[3], ExpresionValor(t[6]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
     #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
     #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Add_Constraint(t[3], ExpresionValor(t[6]), ExpresionValor(t[9]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
     'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
-    print('\n' + str(t[0]) + '\n')
+    t[0] = Alter_COLUMN(t[3],t[5])
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE9(t):
     'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  PUNTOCOMA'
-    #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6])
-    print('\n' + str(t[0]) + '\n')
+    t[0] = Alter_COLUMN(t[3],t[5])
 
 
 # DDL
@@ -2096,7 +2111,7 @@ def p_expresion_relacional(t):
                             | expresion_aritmetica DIFERENTE expresion_aritmetica
                             | expresion_aritmetica MAYORIGUAL expresion_aritmetica
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
-                            | expresion_aritmetica MAYOR expresion_aritmetica                            
+                            | expresion_aritmetica MAYOR expresion_aritmetica
                             | expresion_aritmetica MENOR expresion_aritmetica
                             | PARIZQ expresion_relacional PARDER'''
 
@@ -2121,7 +2136,7 @@ def p_expresion_relacional(t):
 def p_expresion_logica(t):
     '''expresion_logica :   expresion_logica AND expresion_logica
                         |   expresion_logica OR expresion_logica
-                        |   NOT expresion_logica 
+                        |   NOT expresion_logica
                         |   PARIZQ expresion_logica PARDER  '''
     if t[2] == 'AND':
         t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.AND)
@@ -2139,7 +2154,7 @@ def p_expresion_logica_relacion(t):
 
 
 def p_expresion_logica_predicados(t):
-    '''expresion_logica : expresion_aritmetica NOT BETWEEN expresion_aritmetica AND expresion_aritmetica                    
+    '''expresion_logica : expresion_aritmetica NOT BETWEEN expresion_aritmetica AND expresion_aritmetica
                         | expresion_aritmetica IS NOT DISTINCT FROM expresion_aritmetica '''
     if t[2] == 'IS':
         t[0] = ExpresionLogica(t[1], t[6], OPERACION_LOGICA.IS_NOT_DISTINCT)
@@ -2154,8 +2169,8 @@ def p_expresion_logica_predicados_2(t):
 
 # ES UNARIA TODAS
 def p_expresion_logica_predicados_3(t):
-    '''expresion_logica : expresion_aritmetica IS NOT NULL                     
-                        | expresion_aritmetica IS NOT TRUE                       
+    '''expresion_logica : expresion_aritmetica IS NOT NULL
+                        | expresion_aritmetica IS NOT TRUE
                         | expresion_aritmetica IS NOT FALSE
                         | expresion_aritmetica IS NOT UNKNOWN'''
     if t[4] == 'NULL':
@@ -2182,6 +2197,17 @@ def p_expresion_logica_predicados_4(t):
     elif t[3] == 'UNKNOWN':
         t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IS_NOT_UNKNOWN)
 
+def p_expresion_logica_exists_sub(t):
+    '''expresion_logica : EXISTS QUE'''
+    t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.EXISTS)
+
+def p_expresion_logica_in(t):
+    '''expresion_logica : expresion_aritmetica IN QUE
+                        | expresion_aritmetica NOT IN QUE'''
+    if t[2] == 'IN':
+        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IN)
+    elif t[2] == 'NOT':
+        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.NOT_IN)
 
 # def p_expresion_logica_paren(t) :
 #     'expresion_logica : PARIZQ expresion_logica PARDER'
