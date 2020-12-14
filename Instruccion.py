@@ -273,5 +273,15 @@ class Alter_table_Alter_Column_Set(Instruccion):
         self.id_tabla = id_table
         self.id_column = id_column
 
+class Alter_table_Add_Foreign_Key(Instruccion):
+    def __init__(self, id_table, id_column, id_column_references):
+        self.id_table = id_table
+        self.id_column = id_column
+        self.id_column_references = id_column_references
 
+class Alter_Table_Add_Constraint(Instruccion):
+    def __init__(self, id_table, id_constraint, id_column):
+        self.id_table = id_table
+        self.id_constraint = id_constraint
+        self.id_column = id_column
 

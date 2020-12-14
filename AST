@@ -332,4 +332,32 @@ digraph AST {
 	Node163 -> Node167
 	Node168 [label="SET NOT NULL"]
 	Node163 -> Node168
+	Node169 [label=DML_COMANDOS]
+	Node0 -> Node169
+	Node170 [label="ALTER TABLE"]
+	Node169 -> Node170
+	Node171 [label=tabla2]
+	Node169 -> Node171
+	Node172 [label="ADD FOREIGN KEY"]
+	Node169 -> Node172
+	Node173 [label=columa1]
+	Node169 -> Node173
+	Node174 [label=REFERENCES]
+	Node169 -> Node174
+	Node175 [label=columna2]
+	Node169 -> Node175
+	Node176 [label=DML_COMANDOS]
+	Node0 -> Node176
+	Node177 [label="ALTER TABLE"]
+	Node176 -> Node177
+	Node178 [label=table1]
+	Node176 -> Node178
+	Node179 [label="ADD CONSTRAINT"]
+	Node176 -> Node179
+	Node180 [label=some_name]
+	Node176 -> Node180
+	Node181 [label=UNIQUE]
+	Node176 -> Node181
+	Node182 [label=column1]
+	Node176 -> Node182
 }

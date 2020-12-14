@@ -72,6 +72,10 @@ class Ast2:
                 self.grafoAlter_DropConstraint(i.id_tabla, i.id_constraint, padre)
             elif isinstance(i, Alter_table_Alter_Column_Set):
                 self.grafoAlter_AlterColumnSet(i.id_tabla, i.id_column, padre )
+            elif isinstance(i, Alter_table_Add_Foreign_Key):
+                self.grafoAlter_AddForeignKey(i.id_table, i.id_column, i.id_column_references, padre)
+            elif isinstance(i, Alter_Table_Add_Constraint):
+                self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column, padre)
             else:
                 print("No es droptable")
 
@@ -1135,6 +1139,12 @@ class Ast2:
             return 'IS_NOT_DISTINCT'
         elif padreID==OPERACION_LOGICA.IS_DISTINCT:
             return 'IS_DISTINCT'
+        elif padreID==OPERACION_LOGICA.EXISTS:
+            return 'EXISTS'
+        elif padreID==OPERACION_LOGICA.IN:
+            return 'IN'
+        elif padreID==OPERACION_LOGICA.NOT_IN:
+            return 'NOT_IN'
         elif padreID==FUNCION_NATIVA.ABS:
             return 'ABS'
         elif padreID==FUNCION_NATIVA.CBRT:
@@ -1668,5 +1678,83 @@ class Ast2:
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "SET NOT NULL")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+    def grafoAlter_AddForeignKey(self, id_tabla, id_column, id_column_references, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str(id_tabla))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ADD FOREIGN KEY")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_column.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "REFERENCES")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_column_references.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+    def grafoAlter_AddConstraint(self, id_tabla, id_constraint, id_column, padre):
+        global dot, tag, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DML_COMANDOS")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ALTER TABLE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), str(id_tabla))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "ADD CONSTRAINT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_constraint.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre2 = self.i
+        dot.node('Node' + str(self.i), "UNIQUE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        # nuevoPadre3 = self.i
+        dot.node('Node' + str(self.i), id_column.val)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
 
 
