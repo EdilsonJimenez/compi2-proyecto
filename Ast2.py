@@ -66,7 +66,43 @@ class Ast2:
 
             elif isinstance(i, Alter_Table_AddColumn):
                 print("Es Una Instruccion Alter Add Column")
-                self.grafoAlter_AddColumn(i.id_table,i.id_columnas,padre)
+                self.grafoAlter_AddColumn(i.id_table, i.id_columnas, padre)
+
+            elif isinstance(i, ShowDatabases):
+                print("Es Una Instruccion Showdatabases")
+                self.grafoShowDatabases(i.cadenaLike, padre)
+
+            elif isinstance(i, AlterDataBase):
+                print("Es Una Instruccion AlterDataBase")
+                self.grafoAlterDataBase(i.idDB, i.opcion, padre)
+
+            elif isinstance(i, DropDataBase):
+                print("Es Una Instruccion DropDataBase")
+                self.grafoDropDataBase(i.id, i.existe, padre)
+
+            elif isinstance(i, SelectExtract):
+                print("Es Una Instruccion SelectExtract")
+                self.grafoSelectExtract(i.tipoTiempo, i.cadenaFecha, padre)
+
+            elif isinstance(i, SelectDatePart):
+                print("Es Una Instruccion SelectDatePart")
+                self.grafoSelectDatePart(i.cadena, i.cadenaIntervalo, padre)
+
+            elif isinstance(i, SelectTipoCurrent):
+                print("Es Una Instruccion SelectCurrentType")
+                self.grafoSelectTipoCurrent(i.tipoCurrent, padre)
+
+            elif isinstance(i, SelectStamp):
+                print("Es Una Instruccion SelectTIMESTAMP")
+                self.grafoSelectStamp(i.cadena, padre)
+
+            elif isinstance(i, Selectnow):
+                print("Es Una Instruccion Select Now")
+                self.grafoSelectnow(i.constru, padre)
+
+            elif isinstance(i, CreacionEnum):
+                print("Es Una Instruccion CReate Type ENUM")
+                self.grafoCreacionEnum(i.listaCadenas, padre)
 
             else:
                 print("No es droptable")
@@ -959,9 +995,14 @@ class Ast2:
         dot.node('Node' + str(self.i), 'Id: '+str(campo.id))
         dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
-        self.inc()
-        dot.node('Node' + str(self.i), 'Tipo: '+str(campo.tipo))
-        dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+        if isinstance(campo.tipo, valorTipo):
+            self.inc()
+            dot.node('Node' + str(self.i), 'Tipo: ' + str(campo.tipo.valor) + ' '+ str(campo.tipo.expresion))
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+        else:
+            self.inc()
+            dot.node('Node' + str(self.i), 'Tipo: '+str(campo.tipo))
+            dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
         for k in campo.validaciones:
             if isinstance(k, CampoValidacion):
@@ -1030,6 +1071,143 @@ class Ast2:
             self.inc()
             dot.node('Node' + str(self.i), 'Mode: ' + str(Modo))
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoShowDatabases(self, cadenaLike, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "SHOW DATABASE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        if cadenaLike != 0:
+            self.inc()
+            dot.node('Node' + str(self.i), 'LIKE: ' + str(cadenaLike))
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoAlterDataBase(self, idBD, opcion, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "ALTER DATABASE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Id: '+ str(idBD))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if opcion != 0:
+            self.inc()
+            dot.node('Node' + str(self.i), str(opcion))
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoDropDataBase(self, idDB, existe, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DROP DATABASE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Id: '+ str(idDB))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if existe != 0:
+            self.inc()
+            dot.node('Node' + str(self.i), " IF EXISTS")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoSelectExtract(self, tipoTiempo, cadenaSimple, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "SELECT EXTRACT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'FROM TIMESTAMP')
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Tipo: '+ str(tipoTiempo))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Valor: ' + str(cadenaSimple))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoSelectDatePart(self, cadena, intervalo, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "SELECT DATE_PART")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Valor: ' + str(cadena))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'INTERVAL: '+ str(intervalo))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoSelectTipoCurrent(self, tipoCurrent, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "SELECT CURRENT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Tipo: ' + str(tipoCurrent))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoSelectStamp(self, cadena, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "SELECT TIMESTAMP")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Valor: ' + str(cadena))
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoSelectnow(self, constru, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "SELECT NOW")
+        dot.edge(padre, 'Node' + str(self.i))
+
+    def grafoCreacionEnum(self, lista, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "CREATE TYPE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        miP = self.i
+        dot.node('Node' + str(self.i), 'ENUM')
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.grafoListaCadenas(lista, miP)
+
+    def grafoListaCadenas(self, lista, padre):
+        for v in lista:
+            self.inc();
+            dot.node('Node'+ str(self.i), str(v))
+            dot.edge('Node' + str(padre), 'Node'+str(self.i))
+
+
 # ----------------------------------------------------------------------------------------------------------
 
 # def GrafoAccesoTabla(self,NombreT,Columna,padre):

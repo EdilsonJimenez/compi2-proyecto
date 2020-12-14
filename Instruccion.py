@@ -160,9 +160,47 @@ class CreateDataBase(Instruccion):
 class ShowDatabases(Instruccion):
     def __init__(self, cadenaLike):
         self.cadenaLike = cadenaLike
+        print("Se creo")
+
+class AlterDataBase(Instruccion):
+    def __init__(self, idDB, opcion):
+        self.idDB = idDB
+        self.opcion = opcion
+
+class DropDataBase(Instruccion):
+    def __init__(self, id, existe):
+        self.id = id
+        self.existe = existe
+
+class SelectExtract(Instruccion):
+    def __init__(self, tipoTiempo, cadenaFecha):
+        self.tipoTiempo = tipoTiempo
+        self.cadenaFecha = cadenaFecha
+
+class SelectDatePart(Instruccion):
+    def __init__(self, cadena, cadenaIntervalo):
+        self.cadena = cadena
+        self.cadenaIntervalo = cadenaIntervalo
+
+class SelectTipoCurrent(Instruccion):
+    def __init__(self, tipoCurrent):
+        self.tipoCurrent = tipoCurrent
+
+class SelectStamp(Instruccion):
+    def __init__(self, cadena):
+        self.cadena = cadena
+
+class Selectnow(Instruccion):
+    def __init__(self, constru):
+        self.constru = constru
+
+class CreacionEnum(Instruccion):
+    def __init__(self, listaCadenas):
+        self.listaCadenas = listaCadenas
+
 #---------------------------------------------------------------------------------------------------
 class Update_Datos(Instruccion):
-    def __init__(self, id_table,valores_set, valor_where):
+    def __init__(self, id_table, valores_set, valor_where):
         self.id_table = id_table
         self.valores_set = valores_set
         self.valor_where = valor_where
