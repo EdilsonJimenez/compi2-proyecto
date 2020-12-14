@@ -477,7 +477,7 @@ def p_s_asalias(t):
     'S_ASALIAS          : AS ALIAS'
     t[0] = str(t[1]) + str(t[2])
 
-def p_s_asalias(t):
+def p_s_asalias_(t):
     'S_ASALIAS          : '
     t[0] = ''
 
@@ -485,10 +485,10 @@ def p_s_comalista(t):
     'S_COMALISTA:           : COMA LISTAA'
     t[0] = str(t[1]) + str(t[2])
 
-def p_s_comalista(t):
+def p_s_comalista_(t):
     'S_COMALISTA:'
     t[0] = ''
-sss
+
 
 
 

@@ -410,9 +410,9 @@ from expresiones import *
 
 precedence = (
     ('left', 'OR'),
-    ('left', 'AND'),
-    ('right', 'NOT'),
+    ('left', 'AND'),    
     ('nonassoc', 'MENOR', 'MAYOR', 'MENORIGUAL', 'MAYORIGUAL', 'IGUAL', 'DIFERENTE'),
+    ('right', 'NOT'),
     ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
     ('right', 'VIRGULILLA'),
     ('left', 'PUNTO'),
@@ -1547,6 +1547,7 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | TEXT
                     | BOOLEAN '''
     t[0] = t[1]
+    
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
     'TIPO_CAMPO   : DOUBLE PRECISION'
@@ -1693,10 +1694,7 @@ def p_instruccion_dml_comandos_UPDATE(t):
     t[0] = Update_Datos(t[2],t[4],t[6])
 
 
-def p_instruccion_dml_comandos_UPDATE2(t):
-    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    print('\n' + str(t[0]) + '\n')
+
 
 def p_instruccion_dml_comandos_UPDATE_CAMPOS(t):
     'CAMPOSN       : CAMPOSN CAMPO'
@@ -1719,7 +1717,7 @@ def p_instruccion_dml_comandos_UPDATE_CAMPO4(t):
 
 #NO VIENE------------------------------------------
 
-def p_instruccion_dml_comandos_UPDATE2(t):
+def p_instruccion_dml_comandos_UPDATE2_(t):
     'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
 
 def p_instruccion_dml_comandos_UPDATE_CAMPO(t):
@@ -2217,7 +2215,8 @@ def p_valor_booleano(t):
 
 def p_valor_abs(t) :
     'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'
-    t[0] = ExpresionValor(t[2])
+    #t[0] = ExpresionValor(t[2])
+    t[0] = Absoluto(t[2])
 
 def p_funciones_math(t):
     '''expresion_aritmetica : ABS PARIZQ expresion_aritmetica PARDER

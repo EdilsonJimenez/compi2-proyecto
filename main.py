@@ -4,7 +4,8 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 import Gramatica as g
-
+import interprete as Inter
+import ts as TS
 
 
 def print_hi(name):
@@ -14,21 +15,5 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    g.parse()
 
-   #f = open("./entrada.txt", "r")
-   #  input = f.read()
-   #print(input)
-   #parser.parse(input)
-   #"""
-   #Grafica = open('./Reportes/ast.dot', 'w+')  # creamos el archivo
-   #Grafica.write("graph \"\" {")
-    #Grafica.write("\tnode [style=filled];");
-    #Grafica.write("\tnode [shape = box];");
-    #Grafica.write("\tnode [fillcolor=\"cyan4\"];");
-    #Grafica.write("\tnode [color=\"#EE0000\"];");
-    #Grafica.write("\tedge [color=\"#31CEF0\"];\n");
-   #Grafica.close()
-   #g.parse()  """
-   g.parse()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
