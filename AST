@@ -2,34 +2,10 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label="SELECT CURRENT"]
+	Node1 [label="CREATE TYPE"]
 	Node0 -> Node1
-	Node2 [label="Tipo: CURRENT_DATE"]
+	Node2 [label=ENUM]
 	Node1 -> Node2
-	Node3 [label="SELECT CURRENT"]
-	Node0 -> Node3
-	Node4 [label="Tipo: CURRENT_TIME"]
-	Node3 -> Node4
-	Node5 [label="SELECT TIMESTAMP"]
-	Node0 -> Node5
-	Node6 [label="Valor: Hora"]
-	Node5 -> Node6
-	Node7 [label="SELECT NOW"]
-	Node0 -> Node7
-	Node8 [label="CREATE TYPE"]
-	Node0 -> Node8
-	Node9 [label=ENUM]
-	Node8 -> Node9
-	Node10 [label=abc]
-	Node9 -> Node10
-	Node11 [label=cda]
-	Node9 -> Node11
-	Node12 [label=miTipo]
-	Node9 -> Node12
-	Node13 [label="CREATE TYPE"]
-	Node0 -> Node13
-	Node14 [label=ENUM]
-	Node13 -> Node14
-	Node15 [label=integer]
-	Node14 -> Node15
+	Node3 [label=integer]
+	Node2 -> Node3
 }

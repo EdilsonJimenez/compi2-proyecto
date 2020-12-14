@@ -1,15 +1,15 @@
 CREATE TABLE Estudiante   (
-    carne INT NOT NULL
+    carne INT NOT NULL,
     nombre varchar(20+6),
     apellido TEXT NOT NULL,
 );
 SELECT EXTRACT ( YEAR FROM TIMESTAMP '25-6-12 algo');
-SELECT DATE_PARTpp ( 'seconds' , INTERVAL '4 hours 23 minutes 56 seconds' );
+SELECT DATE_PART ( 'seconds' , INTERVAL '4 hours 23 minutes 56 seconds' );
 SELECT CURRENT_DATE;
 SELECT CURRENT_TIME;
 @@@@
 SELECT TIMESTAMP 'Hora';
 SELECT now();
 @
-CREATE TYPE MOOD AS ENUM ('abc', 'cda', 'miTipo');
+CREATE TYPE MOOD AS ENUM ('abc', 'cda', 123);
 CREATE TYPE MOOD AS ENUM ('integer');
