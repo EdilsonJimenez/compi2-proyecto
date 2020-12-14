@@ -104,6 +104,7 @@ class Ast2:
                 print("Es Una Instruccion CReate Type ENUM")
                 self.grafoCreacionEnum(i.listaCadenas, padre)
 
+            elif isinstance(i, Alter_Table_AddColumn):
                 self.grafoAlter_AddColumn(i.id_table,i.id_columnas,padre)
             elif isinstance(i, Alter_Table_Drop_Column):
                 print("es una instruccion alter drop column")
