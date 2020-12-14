@@ -2,106 +2,48 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=INSERT]
+	Node1 [label="SELECT EXTRACT"]
 	Node0 -> Node1
-	Node2 [label="ID TABLA"]
+	Node2 [label="FROM TIMESTAMP"]
 	Node1 -> Node2
-	Node3 [label=products]
-	Node2 -> Node3
-	Node4 [label=producto2]
-	Node2 -> Node4
-	Node5 [label="VALORES TABLA"]
-	Node1 -> Node5
-	Node6 [label="VALOR NUEVO"]
+	Node3 [label="Tipo: YEAR"]
+	Node1 -> Node3
+	Node4 [label="Valor: 25-6-12 algo"]
+	Node1 -> Node4
+	Node5 [label="SELECT DATE_PART"]
+	Node0 -> Node5
+	Node6 [label="Valor: seconds"]
 	Node5 -> Node6
-	7 [label=ExpresionAritmetica]
-	8 [label=exp1]
-	7 -> 8
-	8 -> 9
-	9 [label=ExpresionAritmetica]
-	10 [label=exp1]
-	9 -> 10
-	10 -> 11
-	11 [label=ExpresionAritmetica]
-	12 [label=exp1]
-	11 -> 12
-	12 -> 13
-	13 [label=ExpresionAritmetica]
-	14 [label=exp1]
-	13 -> 14
-	14 -> 15
-	15 [label=ExpresionValor]
-	15 -> 16
-	16 [label=9]
-	17 [label="+"]
-	13 -> 17
-	18 [label=exp2]
-	13 -> 18
-	18 -> 19
-	19 [label=ExpresionValor]
-	19 -> 20
-	20 [label=9]
-	21 [label="+"]
-	11 -> 21
-	22 [label=exp2]
-	11 -> 22
-	22 -> 23
-	23 [label=ExpresionAritmetica]
-	24 [label=exp1]
-	23 -> 24
-	24 -> 25
-	25 [label=ExpresionAritmetica]
-	26 [label=exp1]
-	25 -> 26
-	26 -> 27
-	27 [label=ExpresionValor]
-	27 -> 28
-	28 [label=9]
-	29 [label="*"]
-	25 -> 29
-	30 [label=exp2]
-	25 -> 30
-	30 -> 31
-	31 [label=ExpresionValor]
-	31 -> 32
-	32 [label=6]
-	33 [label="/"]
-	23 -> 33
-	34 [label=exp2]
-	23 -> 34
-	34 -> 35
-	35 [label=ExpresionValor]
-	35 -> 36
-	36 [label=5]
-	37 [label="-"]
-	9 -> 37
-	38 [label=exp2]
-	9 -> 38
-	38 -> 39
-	39 [label=" ( Expresion )"]
-	39 -> 40
-	40 [label=ExpresionAritmetica]
-	41 [label=exp1]
-	40 -> 41
-	41 -> 42
-	42 [label=ExpresionValor]
-	42 -> 43
-	43 [label=6]
-	44 [label="+"]
-	40 -> 44
-	45 [label=exp2]
-	40 -> 45
-	45 -> 46
-	46 [label=ExpresionValor]
-	46 -> 47
-	47 [label=6]
-	48 [label="+"]
-	7 -> 48
-	49 [label=exp2]
-	7 -> 49
-	49 -> 50
-	50 [label=ExpresionValor]
-	50 -> 51
-	51 [label=5]
-	Node6 -> 7
+	Node7 [label="INTERVAL: 4 hours 23 minutes 56 seconds"]
+	Node5 -> Node7
+	Node8 [label="SELECT CURRENT"]
+	Node0 -> Node8
+	Node9 [label="Tipo: CURRENT_DATE"]
+	Node8 -> Node9
+	Node10 [label="SELECT CURRENT"]
+	Node0 -> Node10
+	Node11 [label="Tipo: CURRENT_TIME"]
+	Node10 -> Node11
+	Node12 [label="SELECT TIMESTAMP"]
+	Node0 -> Node12
+	Node13 [label="Valor: Hora"]
+	Node12 -> Node13
+	Node14 [label="SELECT NOW"]
+	Node0 -> Node14
+	Node15 [label="CREATE TYPE"]
+	Node0 -> Node15
+	Node16 [label=ENUM]
+	Node15 -> Node16
+	Node17 [label=abc]
+	Node16 -> Node17
+	Node18 [label=cda]
+	Node16 -> Node18
+	Node19 [label=miTipo]
+	Node16 -> Node19
+	Node20 [label="CREATE TYPE"]
+	Node0 -> Node20
+	Node21 [label=ENUM]
+	Node20 -> Node21
+	Node22 [label=integer]
+	Node21 -> Node22
 }

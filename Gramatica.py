@@ -1751,11 +1751,7 @@ def p_instruccion_dml_comandos_UPDATE(t):
     t[0] = Update_Datos(t[2], t[4], t[6])
 
 
-#REVISION CONFLICTO
-def p_instruccion_dml_comandos_UPDATE2(t):
-    'DML_COMANDOS       : UPDATE   LISTA_DE_IDS SET CAMPOSN PUNTOCOMA'
-    #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    print('\n' + str(t[0]) + '\n')
+
 
 
 def p_instruccion_dml_comandos_UPDATE_CAMPOS(t):
