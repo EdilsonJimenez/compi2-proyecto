@@ -24,7 +24,9 @@ class OPERACION_LOGICA(Enum) :
     IS_NOT_FALSE= 13
     IS_UNKNOWN= 14
     IS_NOT_UNKNOWN= 15
-
+    IN = 16
+    NOT_IN = 17
+    EXISTS = 18
 
 class OPERACION_RELACIONAL(Enum) :
     IGUALQUE = 1

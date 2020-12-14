@@ -836,7 +836,7 @@ def p_Expresion_Nombre(t):
 
 
 def p_Expresion_CampoC(t):
-    'EXPRESIONNE : CAMPOSC'
+    'EXPRESIONNE : expresion'
 
     #t[0] = str(t[1])
 
@@ -873,7 +873,7 @@ def p_CamposC_id(t):
                     | CADENASIMPLE
                     | CADENADOBLE '''
     #t[0] = str(t[1])
-
+    t[0] = ExpresionValor(t[1])
 
 def p_SimboloRela_Simbolos(t):
     '''OPERADOR     : IGUAL
@@ -1790,45 +1790,45 @@ def p_CREATE_TABLE_LISTA_IDS4_(t):
 # ALTER TABLES
 def p_instruccion_dml_comandos_ALTER_TABLE(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN LISTA_ALTER_EM PUNTOCOMA'
-    t[0] = Alter_Table_AddColumn(t[3],t[6])
+    t[0] = Alter_Table_AddColumn(t[3], t[6])
 
 #LISTA_DE_IDS TIPO_CAMPO
 
 def p_instruccion_dml_comandos_ALTER_TABLE2(t):
-    'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN CAMPOSC PUNTOCOMA'
+    'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN LISTA_DE_IDS PUNTOCOMA'
  #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Drop_Column(t[3], t[6])
 
 def p_instruccion_dml_comandos_ALTER_TABLE3(t):
     'DML_COMANDOS       : ALTER TABLE ID  RENAME COLUMN ID TO ID PUNTOCOMA'
    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])+ str(t[8]) + str(t[9])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Rename_Column(t[3], ExpresionValor(t[6]), ExpresionValor(t[8]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE4(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP CONSTRAINT ID  PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Drop_Constraint(t[3], ExpresionValor(t[6]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE5(t):
     'DML_COMANDOS       : ALTER TABLE ID  ALTER COLUMN ID SET NOT NULL  PUNTOCOMA'
  #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_table_Alter_Column_Set(t[3], ExpresionValor(t[6]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
   #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
  #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
-
+    t[0] = Alter_Table_Add_Constraint(t[3], ExpresionValor(t[6]), ExpresionValor(t[9]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
     'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
@@ -2154,6 +2154,17 @@ def p_expresion_logica_predicados_4(t):
     elif  t[3] == 'UNKNOWN':
         t[0] = ExpresionLogica(t[1],None,OPERACION_LOGICA.IS_NOT_UNKNOWN)
 
+def p_expresion_logica_exists_sub(t):
+    '''expresion_logica : EXISTS QUE'''
+    t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.EXISTS)
+
+def p_expresion_logica_in(t):
+    '''expresion_logica : expresion_aritmetica IN QUE
+                        | expresion_aritmetica NOT IN QUE'''
+    if t[2] == 'IN':
+        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IN)
+    elif t[2] == 'NOT':
+        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.NOT_IN)
 
 # def p_expresion_logica_paren(t) :
 #     'expresion_logica : PARIZQ expresion_logica PARDER'
