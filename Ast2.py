@@ -1391,8 +1391,16 @@ class Ast2:
 
         if isinstance(campo.tipo, valorTipo):
             self.inc()
-            dot.node('Node' + str(self.i), 'Tipo: ' + str(campo.tipo.valor) + ' '+ str(campo.tipo.expresion))
+            nuevoPadre3 = self.i
+            dot.node('Node' + str(self.i), 'Tipo: ' + str(campo.tipo.valor))
             dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
+
+            self.inc();
+            nuevoPadre4 = self.i
+            dot.node('Node' + str(self.i), 'EXPRESION')
+            dot.edge('Node' + str(nuevoPadre3), 'Node' + str(self.i))
+            self.graficar_expresion(campo.tipo.expresion)
+            dot.edge('Node' + str(nuevoPadre4), str(nuevoPadre4 + 1))
         else:
             self.inc()
             dot.node('Node' + str(self.i), 'Tipo: '+str(campo.tipo))

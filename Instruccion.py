@@ -274,6 +274,16 @@ class CreacionEnum(Instruccion):
     def __init__(self, listaCadenas):
         self.listaCadenas = listaCadenas
 
+#Prueba clase errores
+class ErrorSintactico():
+    def __init__(self, valor, error, linea):
+        self.valor = valor
+        self.error = error
+        self.linea = linea
+
+    def imprimirError(self):
+        return " Error " + str(self.error) + ", no se esperaba el token: " + str(self.valor) + ", Linea: " + str(self.linea)
+
 #---------------------------------------------------------------------------------------------------
 class Update_Datos(Instruccion):
     def __init__(self, id_table, valores_set, valor_where):

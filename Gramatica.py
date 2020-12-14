@@ -2,6 +2,7 @@
 # SQL OGANIZACION DE LENGUAJES Y COMPILADORES 2
 # -----------------------------------------------------------------------------
 from unittest import case
+import ply.lex as lex
 
 reservadas = {
 
@@ -322,36 +323,39 @@ def t_ID(t):
     return t
 
 
+
 def t_FECHA(t):
     r'/\*(.|\n)*?\*/'
     t.lexer.lineno += t.value.count('\n')
 
 
-t_ignore = '[ \t\r\n\f\v]'
-
+t_ignore = '[ \t\r\f\v]'
 
 def t_newline(t):
     r'\n+'
-    t.lexer.lineno += t.value.count("\n")
-
+    t.lexer.lineno += len(t.value)
 
 def t_COMENTARIOMULTI(t):
     r'/\*(.|\n)*?\*/'
-    t.lexer.lineno += t.value.count('\n')
+    t.lexer.lineno += t.value.count("\n")
+    return t
+
 
 
 def t_COMENTARIONORMAL(t):
     r'--.*\n'
     t.lexer.lineno += 1
-
+    return t
 
 def t_error(t):
-    print("Caracter NO Valido: '%s'" % t.value[0])
+    print("Caracter no es valido:" + str(t.value[0]))
+    Er = ErrorSintactico(str(t.value[0]), "Lexico", t.lexer.lineno)
+    LErroresSintacticos.append(Er)
     t.lexer.skip(1)
 
 
 # Construyendo el analizador léxico
-import ply.lex as lex
+lexer = lex.lex()
 
 # ========================================  DEFINICION DE ESTRUCURAS PARA EL MANEJO DE REPORTES
 
@@ -1464,6 +1468,7 @@ def p_WhenUni_ExpreElseThen(t):
 def p_instruccion_dml_comandos_CREATE_TABLE(t):
     'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
     t[0] = CreateTable(t[3], t[5], None)
+    print("Estoy en create")
 
 
 def p_instruccion_dml_comandos_CREATE_TABLE2(t):
@@ -2261,7 +2266,7 @@ def p_valor_cadenabinaria(t):
 def p_valor_booleano(t):
     '''expresion_aritmetica : TRUE
                             | FALSE'''
-    t[0] = ExpresionValor(t[1]);
+    t[0] = ExpresionValor(t[1])
 
 
 def p_valor_abs(t):
@@ -2445,77 +2450,40 @@ def p_expresion_binario(t):
 def p_expresion_binario_n(t):
     'expresion_aritmetica : VIRGULILLA expresion_aritmetica'
 
-
-# def p_expresion_binario_val(t):
-#     'expresion_binario : expresion_aritmetica'
-
-# PPROBLEMAS CON LAS EXPRESIONES======================================
-# ===================================================================
-# PPROBLEMAS CON LAS EXPRESIONES======================================
-# ===================================================================
-# def p_expnumerica_agrupacion(t):
-#     '''EXPNUMERICA : PARIZQ EXPNUMERICA PARDER'''
-#     print("SI ENTRO PARENTESIS ppp")
-#     t[0] = ExpresionValor(t[2])
-#
-# def p_expnumerica_valor(t):
-#     '''EXPNUMERICA : ID
-#                    | ENTERO
-#                    | FLOTANTE
-#                    | DEFAULT'''
-#     print("SI ENTRO ER")
-#     t[0] = ExpresionValor(t[1])
-
-
-# def p_expresion_cadena(t):
-#     'EXPCADENA : SUBSTRING PARIZQ EXPCADENA COMA EXPNUMERICA COMA EXPNUMERICA PARDER'
-#
-# def p_expresion_cadena_val(t):
-#     '''EXPCADENA : CADENASIMPLE
-#                  | CADENADOBLE'''
-
-# PPROBLEMAS CON LAS EXPRESIONES======================================
-# ===================================================================
-# PPROBLEMAS CON LAS EXPRESIONES======================================
-# ===================================================================
+# ===================== MANEJO DE ERRORES SINTACTICOS ================================
+# ====================================================================================
 def p_error(t):
-    print("Error sintáctico en '%s'" % t.value)
+
+    ErrorS = ErrorSintactico(str(t.value), "Sintactico", str(t.lineno))
+    LErroresSintacticos.append(ErrorS)
+    if not t:
+        print("End of File!")
+        return
+
+    # Read ahead looking for a closing ';'
+    while True:
+        tok = parser.token()  # Get the next token
+        print(str(tok.type))
+        if not tok or tok.type == 'PUNTOCOMA':
+            break
 
 
 import ply.yacc as yacc
-
-# parser = yacc.yacc()
-
-
-lexer = lex.lex()
 parser = yacc.yacc()
-
-
-# def parse():
-
-
-#   print(input)
-#  return parser.parse(input)
-
 
 def parse():
     # Variables Utilizadas
     global Input2, Grafica, HayRecursion, ListadoArbol, contador, ContadorSentencias, ContadorNode, ListaSentencias, ListaSentencias_, SenteciaProducida, res, Grafica
     # Errores
-    global LErroresSintacticos, LErroresLexicos
-
-    # Input2 = input
-
-    Grafica = open('./Reportes/ast.dot', 'a')  # creamos el archivo
-    Grafica.write("\n")
-
-    lexer = lex.lex()
-    parser = yacc.yacc()
+    global LErroresSintacticos, LErroresLexicos, lexer, parser
 
     f = open("./entrada.txt", "r")
     input = f.read()
 
-    instructions = parser.parse(input)
+    instructions = parser.parse(input, lexer=lexer)
+    for i in LErroresSintacticos:
+        print(i.imprimirError())
+
     lexer.lineno = 1
     parser.restart()
 
