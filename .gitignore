@@ -151,3 +151,9 @@ src/parsetab.py
 grafo
 grafo.png
 grafoprueba.png
+ply/__pycache__/__init__.cpython-39.pyc
+ply/__pycache__/yacc.cpython-39.pyc
+AST
+ply/__pycache__/yacc.cpython-39.pyc
+ply/__pycache__/yacc.cpython-39.pyc
+parsetab.py

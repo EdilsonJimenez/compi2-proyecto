@@ -2,6 +2,7 @@ from Instruccion import *
 from graphviz import Digraph
 from graphviz import escape
 from expresiones import *
+import interprete as Inter
 class Ast2:
 
     def __init__(self, sentencias):
@@ -720,11 +721,11 @@ class Ast2:
         for i in Nombres:
 
             if isinstance(i, AccesoTabla):
-                print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+                #print("Es un Campo Accedido Por la Tabla" + i.NombreT)
                 self.GrafoAccesoTabla(i.NombreT, i.Lista_Alias, padre)
 
             elif isinstance(i, AccesoTablaSinLista):
-                print("Es un Campo Accedido Por la Tabla" + i.NombreT)
+                #print("Es un Campo Accedido Por la Tabla" + i.NombreT)
                 self.GrafoAccesoTablaSinLista(i.NombreT, padre)
             else:
                 print("No Ningun Tipo")
@@ -738,7 +739,7 @@ class Ast2:
     def RecorrerListraGroups(self, Groups, padre):
         for i in Groups:
             if isinstance(i, GroupBy):
-                print("Es un Acceso a Group By")
+               # print("Es un Acceso a Group By")
                 self.GrafoGroupBy(i.Lista_Campos, i.Condiciones, padre)
             else:
                 print("No Ningun Tipo")
@@ -750,7 +751,7 @@ class Ast2:
     def RecorrerListaWhere(self, Groups, padre):
         for i in Groups:
             if isinstance(i, Cuerpo_TipoWhere):
-                print("Es un Acceso a Where")
+                #print("Es un Acceso a Where")
                 self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
             else:
                 print("No Ningun Tipo")
@@ -765,7 +766,7 @@ class Ast2:
 
         for i in Lista_Campos:
             if isinstance(i, AccesoGroupBy):
-                print("Es un Campo Accedido Por la Cuerpo ")
+               # print("Es un Campo Accedido Por la Cuerpo ")
                 self.GrafoAccesoGroupBy(i.NombreT,i.Columna,i.Lista_Alias,i.Estado, padre)
             else:
                 print("No hay Ningun Tipo")
@@ -787,12 +788,12 @@ class Ast2:
         i=Lista_Alias
         # Alias de los Campos Con Lista
         if isinstance(i, Alias_Campos_ListaCampos):
-            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+            #print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Campos_ListaCampos(i.Alias, i.Lista_Sentencias, padre)
 
         # Alias de los Campos Sin Lista
         elif isinstance(i, Alias_Campos_ListaCamposSinLista):
-           print("Es un Campo Accedido Por la Tabla" + i.Alias)
+          # print("Es un Campo Accedido Por la Tabla" + i.Alias)
            self.GrafoAlias_Campos_ListaCamposSinLista(i.Alias, padre)
 
 
@@ -800,12 +801,12 @@ class Ast2:
 
         # Alias de las Nombres de las Tablas
         elif isinstance(i, Alias_Table_ListaTablas):
-            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+          #  print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Table_ListaTablas(i.Alias, i.Lista_Sentencias, padre)
 
         #Alias de las Nombres de las Tablas Sin Lista
         elif isinstance(i, Alias_Table_ListaTablasSinLista):
-            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+           # print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Table_ListaTablasSinLista(i.Alias, padre)
 
 
@@ -813,12 +814,12 @@ class Ast2:
 
         #Alias de los Group By Con Lista
         elif isinstance(i, Alias_Tablas_Group):
-            print("Es un Campo Accedido Por Group by con lista" + i.Alias)
+            #print("Es un Campo Accedido Por Group by con lista" + i.Alias)
             self.GrafoAlias_Tablas_Group(i.Alias,i.Lista_Sentencias,padre)
 
         #Alias de los Group By Sin Lista
         elif isinstance(i, Alias_Tablas_GroupSinLista):
-            print("Es un Campo Accedido Por la Tabla" + i.Alias)
+          #  print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Tablas_GroupSinLista(i.Alias, padre)
 
 
@@ -831,11 +832,11 @@ class Ast2:
     def RecorrerCuerpo(self, Cuerpo, padre):
         i=Cuerpo
         if isinstance(Cuerpo,Cuerpo_Condiciones):
-            print("Es un Campo Accedido Por la Cuerpo ")
+           # print("Es un Campo Accedido Por la Cuerpo ")
             self.RecorrerListaWhere(Cuerpo.Cuerpo, padre)
 
         elif isinstance(Cuerpo,Cuerpo_TipoGroup):
-            print("Es un Campo Accedido Por la Group By ")
+           # print("Es un Campo Accedido Por la Group By ")
             self.RecorrerListraGroups(Cuerpo.Cuerpo, padre)
         else:
             print("No hay Ningun Tipo")
@@ -1034,6 +1035,9 @@ class Ast2:
             #LLAMAMOS A GRAFICAR EXPRESION
             padrenuevo4 = self.i
             self.graficar_expresion(i)
+            Respuesta = Inter.procesar_expresion(i,None)
+            print("RESPUESTA DE EXPRESION-----")
+            print(Respuesta)
             self.inc()
 
             dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
@@ -1076,12 +1080,12 @@ class Ast2:
             self.inc()
             padreID=self.i
             dot.node(str(padreID),expresiones.tipoVar.id)
-        # elif isinstance(expresiones,'PARENTESIS FALTA'):
-        #     self.inc()
-        #     padreID=self.i
-        #     dot.node(str(padreID),'( valor )')
-        #     dot.edge(str(padreID),str(padreID+1))
-        #     self.graficar_expresion(expresiones.variable)
+        elif isinstance(expresiones,Absoluto):
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),' ( Expresion )')
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresiones.variable)
 
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
@@ -1309,13 +1313,13 @@ class Ast2:
             if isinstance(k, CampoTabla):
                 self.grafoCampoTabla(k, nuevoPadre)
             elif isinstance(k, constraintTabla):
-                print("* Graficar CONTRAINTS")
+                #print("* Graficar CONTRAINTS")
                 self.grafoConstraintTabla(k, nuevoPadre)
 
 
         # Graficar INHERITS DE CREATE TABLE
         if inher is not None:
-            print("Si tiene un inher")
+           # print("Si tiene un inher")
             self.grafoInhertis(inher.id, nuevoPadre)
         else:
             print("No tiene inherits")
@@ -1342,7 +1346,7 @@ class Ast2:
 
         if contraint.condiciones != None:
             for i in contraint.condiciones:
-                print(i)
+                #print(i)
                 self.inc();
                 dot.node('Node' + str(self.i), "VALOR NUEVO")
                 dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
