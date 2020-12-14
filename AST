@@ -2,36 +2,48 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label="ALTER COLUMN"]
+	Node1 [label="SELECT EXTRACT"]
 	Node0 -> Node1
-	Node2 [label="ID COLUMNA"]
+	Node2 [label="FROM TIMESTAMP"]
 	Node1 -> Node2
-	Node3 [label=address]
-	Node2 -> Node3
-	Node4 [label=TIPO]
+	Node3 [label="Tipo: YEAR"]
+	Node1 -> Node3
+	Node4 [label="Valor: 25-6-12 algo"]
 	Node1 -> Node4
-	Node5 [label=varchar]
-	Node4 -> Node5
-	Node6 [label=EXPRESION]
-	Node4 -> Node6
-	7 [label=ExpresionValor]
-	7 -> 8
-	8 [label=80]
-	Node6 -> 7
-	Node9 [label="ALTER COLUMN"]
-	Node0 -> Node9
-	Node10 [label="ID COLUMNA"]
-	Node9 -> Node10
-	Node11 [label=name]
+	Node5 [label="SELECT DATE_PART"]
+	Node0 -> Node5
+	Node6 [label="Valor: seconds"]
+	Node5 -> Node6
+	Node7 [label="INTERVAL: 4 hours 23 minutes 56 seconds"]
+	Node5 -> Node7
+	Node8 [label="SELECT CURRENT"]
+	Node0 -> Node8
+	Node9 [label="Tipo: CURRENT_DATE"]
+	Node8 -> Node9
+	Node10 [label="SELECT CURRENT"]
+	Node0 -> Node10
+	Node11 [label="Tipo: CURRENT_TIME"]
 	Node10 -> Node11
-	Node12 [label=TIPO]
-	Node9 -> Node12
-	Node13 [label=varchar]
+	Node12 [label="SELECT TIMESTAMP"]
+	Node0 -> Node12
+	Node13 [label="Valor: Hora"]
 	Node12 -> Node13
-	Node14 [label=EXPRESION]
-	Node12 -> Node14
-	15 [label=ExpresionValor]
-	15 -> 16
-	16 [label=100]
-	Node14 -> 15
+	Node14 [label="SELECT NOW"]
+	Node0 -> Node14
+	Node15 [label="CREATE TYPE"]
+	Node0 -> Node15
+	Node16 [label=ENUM]
+	Node15 -> Node16
+	Node17 [label=abc]
+	Node16 -> Node17
+	Node18 [label=cda]
+	Node16 -> Node18
+	Node19 [label=miTipo]
+	Node16 -> Node19
+	Node20 [label="CREATE TYPE"]
+	Node0 -> Node20
+	Node21 [label=ENUM]
+	Node20 -> Node21
+	Node22 [label=integer]
+	Node21 -> Node22
 }
