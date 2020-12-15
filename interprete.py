@@ -285,14 +285,16 @@ class interprete2:
         self.recorrerInstrucciones(self.sentencias)
 
     def recorrerInstrucciones(self, sente):
+        global ts_global
         for i in sente:
             if isinstance(i, CreateDataBase):
-                print("Crear base de datos")
-                self.i_CreateDataBase(i)
-                print()
+                i.Ejecutar()
+            elif isinstance(i, ShowDatabases):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 
+'''
     def i_CreateDataBase(self, DataBase: CreateDataBase):
         global ts_global
         r = ts_global.obtenerCreateDateBase(DataBase.idBase)
@@ -303,10 +305,9 @@ class interprete2:
                 print("> Base de datos creada con exito!")
             elif rM == 1 or rM == 2:
                 print("> Base de datos con conflicto.")
-            ts_global.agregarCreateDataBase(DataBase)
         else:
             print("Si encontre la base de datos.")
             for i in ts_global.createDataBase:
                 x:CreateDataBase = ts_global.obtenerCreateDateBase(i)
-                print(x.Modo)
+                print(x.Modo)'''
 

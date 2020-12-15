@@ -28,15 +28,14 @@ class Funcion():
         self.parametros=parametros
         self.referencia=referencia
 
-class TablaDeSimbolos() :
+class TablaDeSimbolos():
     
-    def __init__(self, simbolos = {},funciones={}, createDataBase={}) :
+    def __init__(self, simbolos = {},funciones={}, BasesDatos={}):
         self.simbolos = simbolos.copy()
         self.funciones = funciones.copy()
-        self.createDataBase = createDataBase.copy()
+        self.BasesDatos = BasesDatos.copy()
 
-    def agregar(self, simbolo) :
-
+    def agregar(self, simbolo):
         self.simbolos[simbolo.id] = simbolo
     
     def agregarFuncion(self,funcion):
@@ -70,7 +69,7 @@ class TablaDeSimbolos() :
         else :
             self.funciones[id].parametros = params 
 
-    def obtener(self, id,rep=0) :
+    def obtener(self, id,rep=0):
         if not id in self.simbolos :
             #print('Error: variable ', id, ' no definida.')
             return None
@@ -82,7 +81,7 @@ class TablaDeSimbolos() :
                 return self.simbolos[id]
         return self.simbolos[id]
 
-    def actualizar(self, id,tipo, valor, dimension=[]) :
+    def actualizar(self, id,tipo, valor, dimension=[]):
         if not id in self.simbolos :
             print('Error: variable ',id, ' no definida.')
         else :
@@ -97,14 +96,17 @@ class TablaDeSimbolos() :
         else:
             del self.simbolos[id]
 
-    def agregarCreateDataBase(self, BD:CreateDataBase):
-        self.createDataBase[BD.idBase] = BD
+    '''def agregarCreateDataBase(self, BD:CreateDataBase):
+        self.createDataBase[BD.idBase] = BD'''
 
-    def obtenerCreateDateBase(self, id):
-        if not id in self.createDataBase:
+    def agregarBasesDatos(self, miBase):
+        self.BasesDatos[miBase.idBase] = miBase
+
+    def obtenerBasesDatos(self, id):
+        if not id in self.BasesDatos:
+            # print('Error: funcion ',id,' no definida.')
             return None
-        return self.createDataBase[id]
-
+        return self.BasesDatos[id]
 
     '''def actualizarCreateDataBase(self, id, tipo):
         if not id in self:

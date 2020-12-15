@@ -26,4 +26,6 @@ digraph AST {
 	Node9 -> Node11
 	Node12 [label="Mode: 1"]
 	Node9 -> Node12
+	Node13 [label="SHOW DATABASE"]
+	Node0 -> Node13
 }
