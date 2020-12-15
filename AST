@@ -10,236 +10,470 @@ digraph AST {
 	Node1 -> Node3
 	Node4 [label=ACCESO_CAMPO]
 	Node3 -> Node4
-	Node5 [label="gee.ss"]
+	Node5 [label="tabla1.campo"]
 	Node4 -> Node5
-	Node6 [label=Lista_Alias]
-	Node4 -> Node6
-	Node7 [label=Alias_Produccion]
+	Node6 [label=ACCESO_CAMPO]
+	Node3 -> Node6
+	Node7 [label=campo2]
 	Node6 -> Node7
-	Node8 [label=As]
-	Node7 -> Node8
-	Node9 [label=d]
-	Node7 -> Node9
-	Node10 [label=Lista_Sentencias]
-	Node7 -> Node10
-	Node11 [label=ACCESO_CAMPO]
+	Node8 [label=Acceso_Case]
+	Node3 -> Node8
+	Node9 [label=CASE]
+	Node8 -> Node9
+	Node10 [label=TIPOS_WHEN]
+	Node8 -> Node10
+	Node11 [label="TIPOS WHEN ENTRADA"]
 	Node10 -> Node11
-	Node12 [label=sd]
+	Node12 [label=when]
 	Node11 -> Node12
-	Node13 [label=Lista_Alias]
+	Node13 [label=CONDICIONES_EXPRESIONES1]
 	Node11 -> Node13
-	Node14 [label=Alias_Produccion]
+	Node14 [label=CONDICION]
 	Node13 -> Node14
-	Node15 [label=As]
-	Node14 -> Node15
-	Node16 [label=s]
-	Node14 -> Node16
-	Node17 [label=FROM]
-	Node1 -> Node17
-	Node18 [label=LISTA_TABLAS]
-	Node1 -> Node18
-	Node19 [label=Nombre_Tabla]
-	Node18 -> Node19
-	Node20 [label=tabla1]
-	Node19 -> Node20
-	Node21 [label=Lista_Alias]
-	Node19 -> Node21
-	Node22 [label=Alias_Produccion]
-	Node21 -> Node22
-	Node23 [label=As]
-	Node22 -> Node23
-	Node24 [label=t1]
-	Node22 -> Node24
-	Node25 [label=CUERPO]
-	Node1 -> Node25
-	Node26 [label="INSTRUCCION GROUP BY "]
+	15 [label=ExpresionRelacional]
+	16 [label=exp1]
+	15 -> 16
+	16 -> 17
+	17 [label=ExpresionValor]
+	17 -> 18
+	18 [label=nombre]
+	19 [label="=="]
+	15 -> 19
+	20 [label=exp2]
+	15 -> 20
+	20 -> 21
+	21 [label=ExpresionValor]
+	21 -> 22
+	22 [label=sujeto3]
+	Node14 -> 15
+	Node24 [label=then]
+	Node11 -> Node24
+	Node25 [label=CONDICIONES_EXPRESIONES3]
+	Node11 -> Node25
+	Node26 [label=CONDICION]
 	Node25 -> Node26
-	Node27 [label="GROUP BY"]
-	Node26 -> Node27
-	Node28 [label=LISTA_CAMPOS]
-	Node26 -> Node28
-	Node29 [label=ACCESO_CAMPO]
-	Node28 -> Node29
-	Node30 [label=id]
-	Node29 -> Node30
-	Node31
-	Node1 -> Node31
-	Node32 [label=INSTRUCCION_SELECT]
-	Node0 -> Node32
-	Node33 [label=SELECT]
+	27 [label=ExpresionValor]
+	27 -> 28
+	28 [label="Juan Carlos"]
+	Node26 -> 27
+	Node30 [label="TIPOS WHEN ENTRADA"]
+	Node10 -> Node30
+	Node31 [label=when]
+	Node30 -> Node31
+	Node32 [label=CONDICIONES_EXPRESIONES1]
+	Node30 -> Node32
+	Node33 [label=CONDICION]
 	Node32 -> Node33
-	Node34 [label=LISTA_CAMPOS]
-	Node32 -> Node34
-	Node35 [label=ACCESO_CAMPO]
-	Node34 -> Node35
-	Node36 [label="*"]
-	Node35 -> Node36
-	Node37 [label=FROM]
-	Node32 -> Node37
-	Node38 [label=LISTA_TABLAS]
-	Node32 -> Node38
-	Node39 [label=Nombre_Tabla]
-	Node38 -> Node39
-	Node40 [label=tabla1]
-	Node39 -> Node40
-	Node41 [label=Lista_Alias]
-	Node39 -> Node41
-	Node42 [label=Alias_Produccion]
-	Node41 -> Node42
-	Node43 [label=As]
-	Node42 -> Node43
-	Node44 [label=t]
-	Node42 -> Node44
-	Node45 [label=CUERPO]
-	Node32 -> Node45
-	Node46 [label=Cuerpo]
-	Node45 -> Node46
-	Node47 [label=Where]
-	Node46 -> Node47
-	Node48 [label=CONDICION]
-	Node46 -> Node48
-	49 [label=ExpresionAritmetica]
-	50 [label=exp1]
-	49 -> 50
-	50 -> 51
-	51 [label=ExpresionValor]
-	51 -> 52
-	52 [label=2]
-	53 [label="*"]
-	49 -> 53
-	54 [label=exp2]
-	49 -> 54
-	54 -> 55
-	55 [label=ExpresionValor]
-	55 -> 56
-	56 [label=3]
-	Node48 -> 49
-	Node58
-	Node32 -> Node58
-	Node59 [label=INSTRUCCION_SELECT]
-	Node0 -> Node59
-	Node60 [label=SELECT]
+	34 [label=ExpresionRelacional]
+	35 [label=exp1]
+	34 -> 35
+	35 -> 36
+	36 [label=ExpresionValor]
+	36 -> 37
+	37 [label=nombre]
+	38 [label="=="]
+	34 -> 38
+	39 [label=exp2]
+	34 -> 39
+	39 -> 40
+	40 [label=ExpresionValor]
+	40 -> 41
+	41 [label=sujeto4]
+	Node33 -> 34
+	Node43 [label=then]
+	Node30 -> Node43
+	Node44 [label=CONDICIONES_EXPRESIONES3]
+	Node30 -> Node44
+	Node45 [label=CONDICION]
+	Node44 -> Node45
+	46 [label=ExpresionValor]
+	46 -> 47
+	47 [label="Luis Espino"]
+	Node45 -> 46
+	Node49 [label=endNombrecambiado]
+	Node8 -> Node49
+	Node50 [label=FROM]
+	Node1 -> Node50
+	Node51 [label=LISTA_TABLAS]
+	Node1 -> Node51
+	Node52 [label=Nombre_Tabla]
+	Node51 -> Node52
+	Node53 [label=tablita1]
+	Node52 -> Node53
+	Node54 [label=Lista_Alias]
+	Node52 -> Node54
+	Node55 [label=Alias_Produccion]
+	Node54 -> Node55
+	Node56 [label=As]
+	Node55 -> Node56
+	Node57 [label=t1]
+	Node55 -> Node57
+	Node58 [label=CUERPO]
+	Node1 -> Node58
+	Node59 [label=Cuerpo]
+	Node58 -> Node59
+	Node60 [label=Where]
 	Node59 -> Node60
-	Node61 [label=LISTA_CAMPOS]
+	Node61 [label=CONDICION]
 	Node59 -> Node61
-	Node62 [label=ACCESO_CAMPO]
-	Node61 -> Node62
-	Node63 [label="gee.ss"]
-	Node62 -> Node63
-	Node64 [label=Lista_Alias]
-	Node62 -> Node64
-	Node65 [label=Alias_Produccion]
-	Node64 -> Node65
-	Node66 [label=As]
-	Node65 -> Node66
-	Node67 [label=d]
-	Node65 -> Node67
-	Node68 [label=Lista_Sentencias]
-	Node65 -> Node68
-	Node69 [label=ACCESO_CAMPO]
-	Node68 -> Node69
-	Node70 [label=sd]
-	Node69 -> Node70
-	Node71 [label=Lista_Alias]
-	Node69 -> Node71
-	Node72 [label=Alias_Produccion]
+	62 [label=ExpresionRelacional]
+	63 [label=exp1]
+	62 -> 63
+	63 -> 64
+	64 [label=ExpresionValor]
+	64 -> 65
+	65 [label=i]
+	66 [label="=="]
+	62 -> 66
+	67 [label=exp2]
+	62 -> 67
+	67 -> 68
+	68 [label=ExpresionValor]
+	68 -> 69
+	69 [label=2]
+	Node61 -> 62
+	Node71 [label=Uniones]
+	Node1 -> Node71
+	Node72 [label=Acceso_UNION]
 	Node71 -> Node72
-	Node73 [label=As]
+	Node73 [label=CONSULTA]
 	Node72 -> Node73
-	Node74 [label=s]
-	Node72 -> Node74
-	Node75 [label=FROM]
-	Node59 -> Node75
-	Node76 [label=LISTA_TABLAS]
-	Node59 -> Node76
-	Node77 [label=Nombre_Tabla]
+	Node74 [label=INSTRUCCION_SELECT]
+	Node73 -> Node74
+	Node75 [label=SELECT]
+	Node74 -> Node75
+	Node76 [label=LISTA_CAMPOS]
+	Node74 -> Node76
+	Node77 [label=ACCESO_CAMPO]
 	Node76 -> Node77
-	Node78 [label=tabla1]
+	Node78 [label="tabla1.campo"]
 	Node77 -> Node78
-	Node79 [label=Lista_Alias]
-	Node77 -> Node79
-	Node80 [label=Alias_Produccion]
+	Node79 [label=ACCESO_CAMPO]
+	Node76 -> Node79
+	Node80 [label=campo2]
 	Node79 -> Node80
-	Node81 [label=As]
-	Node80 -> Node81
-	Node82 [label=t1]
-	Node80 -> Node82
-	Node83 [label=CUERPO]
-	Node59 -> Node83
-	Node84 [label=Cuerpo]
+	Node81 [label=FROM]
+	Node74 -> Node81
+	Node82 [label=LISTA_TABLAS]
+	Node74 -> Node82
+	Node83 [label=Nombre_Tabla]
+	Node82 -> Node83
+	Node84 [label=tablita1]
 	Node83 -> Node84
-	Node85 [label=Where]
-	Node84 -> Node85
-	Node86 [label=CONDICION]
-	Node84 -> Node86
-	87 [label=ExpresionAritmetica]
-	88 [label=exp1]
-	87 -> 88
-	88 -> 89
-	89 [label=ExpresionValor]
-	89 -> 90
-	90 [label=4]
-	91 [label="*"]
-	87 -> 91
-	92 [label=exp2]
-	87 -> 92
-	92 -> 93
-	93 [label=ExpresionValor]
-	93 -> 94
-	94 [label=3]
-	Node86 -> 87
-	Node96
-	Node59 -> Node96
-	Node97 [label=INSTRUCCION_SELECT]
-	Node0 -> Node97
-	Node98 [label=SELECT]
-	Node97 -> Node98
-	Node99 [label=LISTA_CAMPOS]
-	Node97 -> Node99
-	Node100 [label=ACCESO_CAMPO]
+	Node85 [label=Lista_Alias]
+	Node83 -> Node85
+	Node86 [label=Alias_Produccion]
+	Node85 -> Node86
+	Node87 [label=As]
+	Node86 -> Node87
+	Node88 [label=t1]
+	Node86 -> Node88
+	Node89 [label=Acceso_Subconsulta]
+	Node82 -> Node89
+	Node90 [label="(  SubQuery  )"]
+	Node89 -> Node90
+	Node91 [label=INSTRUCCION_SELECT]
+	Node90 -> Node91
+	Node92 [label=SELECT]
+	Node91 -> Node92
+	Node93 [label=distinct]
+	Node91 -> Node93
+	Node94 [label=LISTA_CAMPOS]
+	Node91 -> Node94
+	Node95 [label=ACCESO_CAMPO]
+	Node94 -> Node95
+	Node96 [label=campo1]
+	Node95 -> Node96
+	Node97 [label=FROM]
+	Node91 -> Node97
+	Node98 [label=LISTA_TABLAS]
+	Node91 -> Node98
+	Node99 [label=Nombre_Tabla]
+	Node98 -> Node99
+	Node100 [label=campo2]
 	Node99 -> Node100
-	Node101 [label="tabla1.ss"]
-	Node100 -> Node101
-	Node102 [label=Lista_Alias]
-	Node100 -> Node102
-	Node103 [label=Alias_Produccion]
+	Node101 [label=CUERPO]
+	Node91 -> Node101
+	Node102 [label=Cuerpo]
+	Node101 -> Node102
+	Node103 [label=Where]
 	Node102 -> Node103
-	Node104 [label=As]
-	Node103 -> Node104
-	Node105 [label=d]
-	Node103 -> Node105
-	Node106 [label=Lista_Sentencias]
-	Node103 -> Node106
-	Node107 [label=ACCESO_CAMPO]
-	Node106 -> Node107
-	Node108 [label=sd]
-	Node107 -> Node108
-	Node109 [label=Lista_Alias]
-	Node107 -> Node109
-	Node110 [label=Alias_Produccion]
-	Node109 -> Node110
-	Node111 [label=As]
-	Node110 -> Node111
-	Node112 [label=s]
-	Node110 -> Node112
-	Node113 [label=FROM]
-	Node97 -> Node113
-	Node114 [label=LISTA_TABLAS]
-	Node97 -> Node114
-	Node115 [label=Nombre_Tabla]
+	Node104 [label=CONDICION]
+	Node102 -> Node104
+	105 [label=ExpresionRelacional]
+	106 [label=exp1]
+	105 -> 106
+	106 -> 107
+	107 [label=ExpresionValor]
+	107 -> 108
+	108 [label=id]
+	109 [label="=="]
+	105 -> 109
+	110 [label=exp2]
+	105 -> 110
+	110 -> 111
+	111 [label=ExpresionValor]
+	111 -> 112
+	112 [label=2]
+	Node104 -> 105
+	Node114 [label=Lista_Alias]
+	Node89 -> Node114
+	Node115 [label=Alias_Produccion]
 	Node114 -> Node115
-	Node116 [label=tabla1]
+	Node116 [label=As]
 	Node115 -> Node116
-	Node117 [label=Lista_Alias]
+	Node117 [label=jj]
 	Node115 -> Node117
-	Node118 [label=Alias_Produccion]
-	Node117 -> Node118
-	Node119 [label=As]
+	Node118 [label=CUERPO]
+	Node74 -> Node118
+	Node119 [label=Cuerpo]
 	Node118 -> Node119
-	Node120 [label=t1]
-	Node118 -> Node120
-	Node121 [label=CUERPO]
-	Node97 -> Node121
-	Node122
-	Node97 -> Node122
+	Node120 [label=Where]
+	Node119 -> Node120
+	Node121 [label=CONDICION]
+	Node119 -> Node121
+	122 [label=ExpresionRelacional]
+	123 [label=exp1]
+	122 -> 123
+	123 -> 124
+	124 [label=ExpresionValor]
+	124 -> 125
+	125 [label=i]
+	126 [label="=="]
+	122 -> 126
+	127 [label=exp2]
+	122 -> 127
+	127 -> 128
+	128 [label=ExpresionValor]
+	128 -> 129
+	129 [label=9]
+	Node121 -> 122
+	Node131 [label=Uniones]
+	Node74 -> Node131
+	Node132 [label=Acceso_UNION]
+	Node131 -> Node132
+	Node133 [label=CONSULTA]
+	Node132 -> Node133
+	Node134 [label=INSTRUCCION_SELECT]
+	Node133 -> Node134
+	Node135 [label=SELECT]
+	Node134 -> Node135
+	Node136 [label=LISTA_CAMPOS]
+	Node134 -> Node136
+	Node137 [label=ACCESO_CAMPO]
+	Node136 -> Node137
+	Node138 [label=tabla1]
+	Node137 -> Node138
+	Node139 [label=FROM]
+	Node134 -> Node139
+	Node140 [label=LISTA_TABLAS]
+	Node134 -> Node140
+	Node141 [label=Acceso_Subconsulta]
+	Node140 -> Node141
+	Node142 [label="(  SubQuery  )"]
+	Node141 -> Node142
+	Node143 [label=INSTRUCCION_SELECT]
+	Node142 -> Node143
+	Node144 [label=SELECT]
+	Node143 -> Node144
+	Node145 [label=distinct]
+	Node143 -> Node145
+	Node146 [label=LISTA_CAMPOS]
+	Node143 -> Node146
+	Node147 [label=ACCESO_CAMPO]
+	Node146 -> Node147
+	Node148 [label=campo1]
+	Node147 -> Node148
+	Node149 [label=FROM]
+	Node143 -> Node149
+	Node150 [label=LISTA_TABLAS]
+	Node143 -> Node150
+	Node151 [label=Nombre_Tabla]
+	Node150 -> Node151
+	Node152 [label=campo2]
+	Node151 -> Node152
+	Node153 [label=CUERPO]
+	Node143 -> Node153
+	Node154 [label=Cuerpo]
+	Node153 -> Node154
+	Node155 [label=Where]
+	Node154 -> Node155
+	Node156 [label=CONDICION]
+	Node154 -> Node156
+	157 [label=ExpresionRelacional]
+	158 [label=exp1]
+	157 -> 158
+	158 -> 159
+	159 [label=ExpresionValor]
+	159 -> 160
+	160 [label=id]
+	161 [label="=="]
+	157 -> 161
+	162 [label=exp2]
+	157 -> 162
+	162 -> 163
+	163 [label=ExpresionValor]
+	163 -> 164
+	164 [label=2]
+	Node156 -> 157
+	Node166 [label=Lista_Alias]
+	Node141 -> Node166
+	Node167 [label=Alias_Produccion]
+	Node166 -> Node167
+	Node168 [label=As]
+	Node167 -> Node168
+	Node169 [label=jj]
+	Node167 -> Node169
+	Node170 [label=Acceso_Subconsulta]
+	Node140 -> Node170
+	Node171 [label="(  SubQuery  )"]
+	Node170 -> Node171
+	Node172 [label=INSTRUCCION_SELECT]
+	Node171 -> Node172
+	Node173 [label=SELECT]
+	Node172 -> Node173
+	Node174 [label=distinct]
+	Node172 -> Node174
+	Node175 [label=LISTA_CAMPOS]
+	Node172 -> Node175
+	Node176 [label=ACCESO_CAMPO]
+	Node175 -> Node176
+	Node177 [label=campo1]
+	Node176 -> Node177
+	Node178 [label=FROM]
+	Node172 -> Node178
+	Node179 [label=LISTA_TABLAS]
+	Node172 -> Node179
+	Node180 [label=Nombre_Tabla]
+	Node179 -> Node180
+	Node181 [label=campo2]
+	Node180 -> Node181
+	Node182 [label=CUERPO]
+	Node172 -> Node182
+	Node183 [label=Cuerpo]
+	Node182 -> Node183
+	Node184 [label=Where]
+	Node183 -> Node184
+	Node185 [label=CONDICION]
+	Node183 -> Node185
+	186 [label=ExpresionRelacional]
+	187 [label=exp1]
+	186 -> 187
+	187 -> 188
+	188 [label=ExpresionValor]
+	188 -> 189
+	189 [label=id]
+	190 [label="=="]
+	186 -> 190
+	191 [label=exp2]
+	186 -> 191
+	191 -> 192
+	192 [label=ExpresionValor]
+	192 -> 193
+	193 [label=2]
+	Node185 -> 186
+	Node195 [label=Lista_Alias]
+	Node170 -> Node195
+	Node196 [label=Alias_Produccion]
+	Node195 -> Node196
+	Node197 [label=As]
+	Node196 -> Node197
+	Node198 [label=jj]
+	Node196 -> Node198
+	Node199 [label=Acceso_Subconsulta]
+	Node140 -> Node199
+	Node200 [label="(  SubQuery  )"]
+	Node199 -> Node200
+	Node201 [label=INSTRUCCION_SELECT]
+	Node200 -> Node201
+	Node202 [label=SELECT]
+	Node201 -> Node202
+	Node203 [label=distinct]
+	Node201 -> Node203
+	Node204 [label=LISTA_CAMPOS]
+	Node201 -> Node204
+	Node205 [label=ACCESO_CAMPO]
+	Node204 -> Node205
+	Node206 [label=campo1]
+	Node205 -> Node206
+	Node207 [label=FROM]
+	Node201 -> Node207
+	Node208 [label=LISTA_TABLAS]
+	Node201 -> Node208
+	Node209 [label=Nombre_Tabla]
+	Node208 -> Node209
+	Node210 [label=campo2]
+	Node209 -> Node210
+	Node211 [label=CUERPO]
+	Node201 -> Node211
+	Node212 [label=Cuerpo]
+	Node211 -> Node212
+	Node213 [label=Where]
+	Node212 -> Node213
+	Node214 [label=CONDICION]
+	Node212 -> Node214
+	215 [label=ExpresionRelacional]
+	216 [label=exp1]
+	215 -> 216
+	216 -> 217
+	217 [label=ExpresionValor]
+	217 -> 218
+	218 [label=id]
+	219 [label="=="]
+	215 -> 219
+	220 [label=exp2]
+	215 -> 220
+	220 -> 221
+	221 [label=ExpresionValor]
+	221 -> 222
+	222 [label=2]
+	Node214 -> 215
+	Node224 [label=Lista_Alias]
+	Node199 -> Node224
+	Node225 [label=Alias_Produccion]
+	Node224 -> Node225
+	Node226 [label=As]
+	Node225 -> Node226
+	Node227 [label=jj]
+	Node225 -> Node227
+	Node228 [label=Nombre_Tabla]
+	Node140 -> Node228
+	Node229 [label=tabla1]
+	Node228 -> Node229
+	Node230 [label=CUERPO]
+	Node134 -> Node230
+	Node231 [label=Cuerpo]
+	Node230 -> Node231
+	Node232 [label=Where]
+	Node231 -> Node232
+	Node233 [label=CONDICION]
+	Node231 -> Node233
+	234 [label=ExpresionRelacional]
+	235 [label=exp1]
+	234 -> 235
+	235 -> 236
+	236 [label=ExpresionValor]
+	236 -> 237
+	237 [label=id]
+	238 [label="=="]
+	234 -> 238
+	239 [label=exp2]
+	234 -> 239
+	239 -> 240
+	240 [label=ExpresionValor]
+	240 -> 241
+	241 [label=2]
+	Node233 -> 234
+	Node243 [label="INSTRUCCION LIMIT"]
+	Node230 -> Node243
+	Node244 [label=limit]
+	Node243 -> Node244
+	Node245 [label=10]
+	Node243 -> Node245
+	Node246 [label=Uniones]
+	Node134 -> Node246
+	Node247 [label=Final_Instruccion]
+	Node246 -> Node247
+	Node248 [label=";"]
+	Node247 -> Node248
 }

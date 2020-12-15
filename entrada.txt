@@ -1,32 +1,19 @@
-CREATE OR REPLACE DATABASE IF NOT EXISTS miBase OWNER = Oscar MODE = 3;
-
-/*CREATE TABLE Estudiante (
-    carne INT NOT NULL PRIMARY KEY
-    nombre TEXT NOT NULL,
-    apellido TEXT NOT NULL,
-    CONSTRAINT carne CHECK ( carne > 2000 )
-    CONSTRAINT campo UNIQUE,
-    CONSTRAINT estudio CHECK( a > b),
-    UNIQUE( abc, cba),
-    CONSTRAINT miLLave PRIMARY KEY ( carne, codigo),
-    PRIMARY KEY (carne),
-    FOREIGN KEY (llave, carne, otro) REFERENCES mi_clase(otra, lista)
-); */
 
 
-DROP TABLE Mitabla;
+select tabla1.campo, campo2,case 
+ when nombre = 'sujeto3' then 'Juan Carlos'
+ when nombre = 'sujeto4' then 'Luis Espino'
+ end Nombrecambiado 
+from tablita1 as t1
+where i=2 
+union 
+select tabla1.campo, campo2 from tablita1 as t1,(select distinct campo1 from campo2 where id=2) as jj
+where i=9
+union 
+select tabla1 from (select distinct campo1 from campo2 where id=2) as jj,(select distinct campo1 from campo2 where id=2) as jj,(select distinct campo1 from campo2 where id=2) as jj, tabla1
+where id=2
+limit 10;
 
-/*
-DELETE FROM products WHERE price = 10;
-
-INSERT INTO products,producto2 VALUES (9+9+9*6);*/
 
 
-select gee.ss as d, sd as s from tabla1 as t1 group by id;
 
-select * from tabla1 as t where 2*3;
-
-select gee.ss as d, sd as s from tabla1 as t1 where 4*3;
-
-
-select tabla1.ss as d, sd as s from tabla1 as t1 where 4=3;
