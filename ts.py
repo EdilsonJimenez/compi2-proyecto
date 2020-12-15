@@ -30,9 +30,10 @@ class Funcion():
 
 class TablaDeSimbolos():
     
-    def __init__(self, simbolos = {},funciones={}, BasesDatos={}):
-        self.simbolos = simbolos.copy()
-        self.funciones = funciones.copy()
+    def __init__(self, Campos = {}, Tablas={}, BasesDatos={}, Tipos={}):
+        self.Campos = Campos.copy()
+        self.Tablas = Tablas.copy()
+        self.Tipos = Tipos.copy()
         self.BasesDatos = BasesDatos.copy()
 
     def agregar(self, simbolo):

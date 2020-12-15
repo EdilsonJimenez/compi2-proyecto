@@ -1,5 +1,7 @@
 import ts as TS
 import jsonMode as Master
+from errores import *
+LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 
 class Instruccion():
@@ -294,6 +296,7 @@ class CreateDataBase(Instruccion):
 
     def Ejecutar(self):
         global ts_global
+        global LisErr
 
         r = ts_global.obtenerBasesDatos(self.idBase)
         if r is None:
@@ -304,8 +307,13 @@ class CreateDataBase(Instruccion):
                 print(" > Base de datos creada con exito!")
             elif rM == 1 or rM == 2:
                 print("> Base de datos ya existe.")
+                er = ErrorRep('Semantico', 'La Base de datos ya existe',0)
+                LisErr.agregar(er)
+
         else:
             print("Si encontre la BD. ")
+            er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
+            LisErr.agregar(er)
 
 
 
