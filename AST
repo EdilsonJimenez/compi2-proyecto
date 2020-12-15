@@ -2,118 +2,36 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=INSTRUCCION_SELECT]
+	Node1 [label="CREATE DATABASE"]
 	Node0 -> Node1
-	Node2 [label=SELECT]
+	Node2 [label="Id: MiBase1"]
 	Node1 -> Node2
-	Node3 [label=LISTA_CAMPOS]
+	Node3 [label="Owner: Oscar"]
 	Node1 -> Node3
-	Node4 [label=ACCESO_CAMPO]
-	Node3 -> Node4
-	Node5 [label="tabla1.campo"]
-	Node4 -> Node5
-	Node6 [label=ACCESO_CAMPO]
-	Node3 -> Node6
-	Node7 [label=campo2]
-	Node6 -> Node7
-	Node8 [label=Acceso_Case]
-	Node3 -> Node8
-	Node9 [label=CASE]
-	Node8 -> Node9
-	Node10 [label=TIPOS_WHEN]
-	Node8 -> Node10
-	Node11 [label="TIPOS WHEN ENTRADA"]
+	Node4 [label="Mode: 1"]
+	Node1 -> Node4
+	Node5 [label="CREATE DATABASE"]
+	Node0 -> Node5
+	Node6 [label="Id: MiBase2"]
+	Node5 -> Node6
+	Node7 [label="Owner: Oscar"]
+	Node5 -> Node7
+	Node8 [label="Mode: 1"]
+	Node5 -> Node8
+	Node9 [label="SHOW DATABASE"]
+	Node0 -> Node9
+	Node10 [label="ALTER DATABASE"]
+	Node0 -> Node10
+	Node11 [label="Id: MiBase2"]
 	Node10 -> Node11
-	Node12 [label=when]
-	Node11 -> Node12
-	Node13 [label=CONDICIONES_EXPRESIONES1]
-	Node11 -> Node13
-	Node14 [label=CONDICION]
-	Node13 -> Node14
-	15 [label=ExpresionRelacional]
-	16 [label=exp1]
-	15 -> 16
-	16 -> 17
-	17 [label=ExpresionValor]
-	17 -> 18
-	18 [label=nombre]
-	19 [label="=="]
-	15 -> 19
-	20 [label=exp2]
-	15 -> 20
-	20 -> 21
-	21 [label=ExpresionValor]
-	21 -> 22
-	22 [label=sujeto3]
-	Node14 -> 15
-	Node24 [label=then]
-	Node11 -> Node24
-	Node25 [label=CONDICIONES_EXPRESIONES3]
-	Node11 -> Node25
-	Node26 [label=CONDICION]
-	Node25 -> Node26
-	27 [label=ExpresionValor]
-	27 -> 28
-	28 [label="Juan Carlos"]
-	Node26 -> 27
-	Node30 [label="TIPOS WHEN ENTRADA"]
-	Node10 -> Node30
-	Node31 [label=when]
-	Node30 -> Node31
-	Node32 [label=CONDICIONES_EXPRESIONES1]
-	Node30 -> Node32
-	Node33 [label=CONDICION]
-	Node32 -> Node33
-	34 [label=ExpresionRelacional]
-	35 [label=exp1]
-	34 -> 35
-	35 -> 36
-	36 [label=ExpresionValor]
-	36 -> 37
-	37 [label=nombre]
-	38 [label="=="]
-	34 -> 38
-	39 [label=exp2]
-	34 -> 39
-	39 -> 40
-	40 [label=ExpresionValor]
-	40 -> 41
-	41 [label=sujeto4]
-	Node33 -> 34
-	Node43 [label=then]
-	Node30 -> Node43
-	Node44 [label=CONDICIONES_EXPRESIONES3]
-	Node30 -> Node44
-	Node45 [label=CONDICION]
-	Node44 -> Node45
-	46 [label=ExpresionValor]
-	46 -> 47
-	47 [label="Luis Espino"]
-	Node45 -> 46
-	Node49 [label=endNombrecambiado]
-	Node8 -> Node49
-	Node50 [label=FROM]
-	Node1 -> Node50
-	Node51 [label=LISTA_TABLAS]
-	Node1 -> Node51
-	Node52 [label=Nombre_Tabla]
-	Node51 -> Node52
-	Node53 [label=tablita1]
-	Node52 -> Node53
-	Node54 [label=Lista_Alias]
-	Node52 -> Node54
-	Node55 [label=Alias_Produccion]
-	Node54 -> Node55
-	Node56 [label=As]
-	Node55 -> Node56
-	Node57 [label=t1]
-	Node55 -> Node57
-	Node58 [label=CUERPO]
-	Node1 -> Node58
-	Node59 [label=Uniones]
-	Node1 -> Node59
-	Node60 [label=Final_Instruccion]
-	Node59 -> Node60
-	Node61 [label=";"]
-	Node60 -> Node61
+	Node12 [label=CESAR]
+	Node10 -> Node12
+	Node13 [label="SHOW DATABASE"]
+	Node0 -> Node13
+	Node14 [label="DROP DATABASE"]
+	Node0 -> Node14
+	Node15 [label="Id: MiBase1"]
+	Node14 -> Node15
+	Node16 [label="SHOW DATABASE"]
+	Node0 -> Node16
 }

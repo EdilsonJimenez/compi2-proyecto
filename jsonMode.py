@@ -33,12 +33,14 @@ def createDatabase(database: str) -> int:
 # READ and show databases by constructing a list
 def showDatabases() -> list:
     initCheck()
+
     databases = []
     with open('data/json/databases') as file:
         data = json.load(file)
         for d in data:
             databases.append(d);
     return databases
+
 
 
 # UPDATE and rename a database name by inserting new_key and deleting old_key
@@ -87,7 +89,6 @@ def dropDatabase(database: str) -> int:
 
 # Tables CRUD #
 ###############
-
 # CREATE a table checking their existence
 def createTable(database: str, table: str, numberColumns: int) -> int:
     initCheck()

@@ -27,6 +27,21 @@ class Select(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
 
+    def Ejecutar(self):
+        print("Ejecutando  Select ")
+
+        #Recorremos lista de Campos
+
+        #Recorremos lista de nombres de tablas
+
+        #Bamos a ir buscando de las tablas cada uno de los campos a la vez iterando cada tabla con los campos
+
+        #Si viene tabla.nombre  bamos a buscar en especifico cada una de la cuestiones
+
+
+
+
+
 #---------------------------------------------------------------------------------------------------
 class Select2(Instruccion) :
     def __init__(self,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
@@ -51,6 +66,7 @@ class Select4(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
         self.Cuerpo = Cuerpo
+
 
 #subSelect sin cuerpo
 #---------------------------------------------------------------------------------------------------
@@ -86,6 +102,8 @@ class SubSelect4(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.Cuerpo = Cuerpo
 
+
+
 # Campos Accedidos
 #---------------------------------------------------------------------------------------------------
 
@@ -96,6 +114,9 @@ class Campo_Accedido(Instruccion): #Nombre.columna  Lista_Posible
         self.NombreT       = NombreT
         self.Columna       = Columna
         self.Lista_Alias   = Lista_Alias
+
+    def Ejecutar(self):
+        print("")
 
 
 #Campos Accedidos por Lista
@@ -228,6 +249,8 @@ class GroupBy(Instruccion):
     def __init__(self,Lista_Campos=[],Condiciones=[]):
         self.Lista_Campos = Lista_Campos
         self.Condiciones  = Condiciones
+
+
 #TIPOS DE CASES
 #---------------------------------------------------------------------------------------------------
 class CaseCuerpo(Instruccion):
@@ -286,6 +309,7 @@ class constraintTabla(Instruccion):
         self.referencia = referencia
         self.idRef = idRef
 
+
 class CreateDataBase(Instruccion):
     def __init__(self, replace, exists, idBase, idOwner, Modo ):
         self.replace = replace
@@ -294,20 +318,24 @@ class CreateDataBase(Instruccion):
         self.idOwner = idOwner
         self.Modo = Modo
 
+
     def Ejecutar(self):
         global ts_global
         global LisErr
 
         r = ts_global.obtenerBasesDatos(self.idBase)
+
         if r is None:
             print(" No encontro la BD. ")
             rM = Master.createDatabase(str(self.idBase))
+
             if rM == 0:
                 ts_global.agregarBasesDatos(self)
                 print(" > Base de datos creada con exito!")
+
             elif rM == 1 or rM == 2:
                 print("> Base de datos ya existe.")
-                er = ErrorRep('Semantico', 'La Base de datos ya existe',0)
+                er =  ErrorRep('Semantico', 'La Base de datos ya existe',0)
                 LisErr.agregar(er)
 
         else:
@@ -317,26 +345,131 @@ class CreateDataBase(Instruccion):
 
 
 
+
+
+
+
 class ShowDatabases(Instruccion):
     def __init__(self, cadenaLike):
         self.cadenaLike = cadenaLike
-        print("Se creo")
-
 
     def Ejecutar(self):
-        lista = Master.showDatabases()
-        for i in lista:
-            print(str(i))
+        global ts_global
+        global LisErr
+        #idDB = self.cadenaLike.replace("\"","")
+
+        r  = Master.showDatabases()
+
+        if r  is not None:  #si lo encuentra
+
+            for element in r:
+                print(str(element))
+        else:
+            print("No encontre la BD.")
+            er = ErrorRep('Semantico', 'No Encontre la Base de Datos', 0)
+            LisErr.agregar(er)
+
+
+
+
 
 class AlterDataBase(Instruccion):
     def __init__(self, idDB, opcion):
         self.idDB = idDB
         self.opcion = opcion
 
+    def Ejecutar(self):
+        global ts_global
+        global LisErr
+
+        c1 = False
+        c2 = False
+        error=""
+
+        opcion  = self.opcion.replace("\"", "")
+        opcionf = self.opcion.replace("\'", "")
+
+        r =  ts_global.obtenerBasesDatos(self.idDB)
+        r2 = ts_global.obtenerBasesDatos(opcionf)
+
+        if r is not None:  #si lo encuentra
+            print("Se encontro la BD. ")
+            c1 = True
+        else:
+            error += "No se Encontro la Base De datos "
+        if r2 is  None:  #No Esta el Nombre para definirlo en la bd
+            print("No se encontro la opcion a setear excelente! ")
+            c2 = True
+        else:
+            error += "  Se encontro el Valor a Setear"
+
+        if (c1 and c2):
+            print("Excelente se puede editar")
+            #Editamos nuestro diccionario
+            ts_global.actualizarCreateDataBase(str(self.idDB),str(self.opcion))
+
+
+            #Editamos en base de datos fisica
+            rM = Master.alterDatabase(str(self.idDB),str(self.opcion))
+
+            if rM==2:
+                print("No se encuentra la BD")
+            elif rM==3:
+                print("Ya se encuentra la BD con el nombre a tratar")
+            elif rM==1:
+                print("Verificar Ocurrio Error Al editar")
+            elif rM==0:
+                print("Se Edito la Base de Datos con exito")
+            else:
+                print( "No llega nunca pero por si las moscas ")
+
+        else:
+            print("No encontre la BD.")
+            er = ErrorRep('Semantico', error, 0)
+            LisErr.agregar(er)
+
+
+
+
+
 class DropDataBase(Instruccion):
     def __init__(self, id, existe):
         self.id = id
         self.existe = existe
+
+    def Ejecutar(self):
+        global ts_global
+        global LisErr
+
+        r = ts_global.obtenerBasesDatos(self.id)
+
+        if r == None:  #si lo encuentra
+            print("No encontre la BD.")
+            er = ErrorRep('Semantico', 'No Encontre la Base de Datos', 0)
+            LisErr.agregar(er)
+        else:
+
+            print("Se encontro la BD. ")
+
+            ts_global.EliminarBD(str(self.id))
+
+            rM = Master.dropDatabase(str(self.id))
+            if rM==0:
+                print("Exito")
+            elif rM==1:
+                print("Fracaso al escribir en bd")
+            elif rM==2:
+                print("No existe el elemento en la BD")
+            else:
+                print("No llega nunca pero por si las moscas")
+
+
+
+
+
+
+
+
 
 class SelectExtract(Instruccion):
     def __init__(self, tipoTiempo, cadenaFecha):

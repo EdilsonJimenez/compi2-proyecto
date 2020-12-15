@@ -1779,13 +1779,17 @@ def p_alter_database(t):
 def p_alter_database_op(t):
     '''ALTER_DATABASE_OP : RENAME TO ID
                         |  OWNER TO ALTER_TABLE_OP_OW'''
-    t[0] = str(t[1] + ' To: ' + t[3])
+    t[0] = t[3]
+
+
 
 
 def p_alter_database_op_ow(t):
     '''ALTER_TABLE_OP_OW : ID
                         |  CURRENT_USER
-                        |  SESSION_USER'''
+                        |  SESSION_USER
+                        |  CADENADOBLE
+                        |  CADENASIMPLE '''
     t[0] = t[1]
 
 

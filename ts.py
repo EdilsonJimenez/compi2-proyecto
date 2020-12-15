@@ -48,12 +48,15 @@ class TablaDeSimbolos():
             return None
         return self.funciones[id]
 
+
     def actualizarFuncion(self,id,tipo) :
         if not id in self.funciones :
             #print('Error: variable ',id, ' no definida.')
             pass
         else :
             self.funciones[id].tipo = tipo
+
+
     
     def actualizarRefFuncion(self,id,index) :
         if not id in self.funciones :
@@ -109,9 +112,18 @@ class TablaDeSimbolos():
             return None
         return self.BasesDatos[id]
 
-    '''def actualizarCreateDataBase(self, id, tipo):
-        if not id in self:
-            #print('Error: variable ',id, ' no definida.')
+
+    def actualizarCreateDataBase(self, bd, nueva):
+        if not bd in self.BasesDatos:
+            print('Error: variable ',bd, ' no definida.')
             pass
         else :
-            self.funciones[id].tipo = tipo'''
+            self.BasesDatos[bd] = nueva
+
+
+    def EliminarBD(self, bd):
+        if not bd in self.BasesDatos:
+            print('Error: variable ',bd, ' no definida.')
+        else :
+            del self.BasesDatos[bd]
+

@@ -292,6 +292,10 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i, ShowDatabases):
                 i.Ejecutar()
+            elif isinstance(i,AlterDataBase):
+                i.Ejecutar()
+            elif isinstance(i,DropDataBase):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 
