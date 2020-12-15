@@ -7,8 +7,7 @@ class DropTable(Instruccion):
         self.id = id
 
 
-
-class Absoluto(Instruccion) :       
+class Absoluto(Instruccion) :
     def __init__(self, variable) :
         self.variable=variable
 
@@ -19,7 +18,6 @@ class Select(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
 
-
 #---------------------------------------------------------------------------------------------------
 class Select2(Instruccion) :
     def __init__(self,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
@@ -28,11 +26,59 @@ class Select2(Instruccion) :
         self.unionn         = unionn
         self.Cuerpo = Cuerpo
 
+#Con Distinct
+#---------------------------------------------------------------------------------------------------
+class Select3(Instruccion) :
+    def __init__(self, distinct, unionn, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.distinct=distinct
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+        self.unionn         = unionn
+#---------------------------------------------------------------------------------------------------
+class Select4(Instruccion) :
+    def __init__(self,distinct,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.distinct = distinct
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+        self.unionn         = unionn
+        self.Cuerpo = Cuerpo
 
+#subSelect sin cuerpo
+#---------------------------------------------------------------------------------------------------
+
+class SubSelect(Instruccion) :
+    def __init__(self, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+
+#subSelect con cuerpo
+#---------------------------------------------------------------------------------------------------
+class SubSelect2(Instruccion) :
+    def __init__(self,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+        self.Cuerpo = Cuerpo
+
+#subSelect sin cuerpo con distict
+#---------------------------------------------------------------------------------------------------
+
+class SubSelect3(Instruccion) :
+    def __init__(self,Distict, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.Distict       = Distict
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+
+#subSelect con cuerpo con distict
+#---------------------------------------------------------------------------------------------------
+class SubSelect4(Instruccion) :
+    def __init__(self,Distict,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
+        self.Distict       = Distict
+        self.Lista_Campos   = Lista_Campos
+        self.Nombres_Tablas = Nombres_Tablas
+        self.Cuerpo = Cuerpo
 
 # Campos Accedidos
 #---------------------------------------------------------------------------------------------------
-
 
 #Campos Accedidos por Lista
 class Campo_Accedido(Instruccion): #Nombre.columna  Lista_Posible
@@ -50,10 +96,7 @@ class Campo_AccedidoSinLista(Instruccion): #Nombre.columna  Lista_Posible
         self.NombreT       = NombreT
         self.Columna       = Columna
 
-
 #---------------------------------------------------------------------------------------------------
-
-
 #Nombre Tabla Accedidos
 #---------------------------------------------------------------------------------------------------
 
@@ -71,10 +114,6 @@ class AccesoTablaSinLista(Instruccion): #Tabla
 
 #---------------------------------------------------------------------------------------------------
 
-
-
-
-
 #Campos Accedidos desde Group By
 #---------------------------------------------------------------------------------------------------
 
@@ -86,57 +125,75 @@ class AccesoGroupBy(Instruccion): #Tabla Lista
         self.Lista_Alias  = Lista_Alias
         self.Estado = Estado
 
+#---------------------------------------------------------------------------------------------------
+
+
+
+# Campos Limit
+#---------------------------------------------------------------------------------------------------
+
+class AccesoLimit(Instruccion):
+
+    def __init__(self,Reservada,Expresion_Numerica):
+        self.Reservada = Reservada
+        self.Expresion_Numerica  =  Expresion_Numerica
+
+
+#Campos Accedidos desde Las Subconsultas
+#---------------------------------------------------------------------------------------------------
+
+class AccesoSubConsultas(Instruccion):
+
+    def __init__(self, AnteQuery=[],Query=[],Lista_Alias=[]):
+        self.AnteQuery      = AnteQuery
+        self.Query          = Query
+        self.Lista_Alias  = Lista_Alias
+
 
 #---------------------------------------------------------------------------------------------------
 
+#Campos de los unions
+#---------------------------------------------------------------------------------------------------
+
+class CamposUnions(Instruccion):
+    def __init__(self,Reservada,Comportamiento,Consulta=[]):
+        self.Reservada      = Reservada
+        self.Comportamiento = Comportamiento
+        self.Consulta       = Consulta
 
 
 
 
 # Alias
+#---------------------------------------------------------------------------------------------------
 #Alias Campos
 #---------------------------------------------------------------------------------------------------
-#Alias Campos con lista
-class Alias_Campos_ListaCampos(Instruccion):
-    def __init__(self, Alias,Lista_Sentencias=[]):
-        self.Alias = Alias
-        self.Lista_Sentencias = Lista_Sentencias
 
 #Alias Campos sin lista
 class Alias_Campos_ListaCamposSinLista(Instruccion):
     def __init__(self, Alias):
         self.Alias = Alias
-
-
 #Alias Tablas
 #---------------------------------------------------------------------------------------------------
-
-#Alias campos Con Lista
-class Alias_Table_ListaTablas(Instruccion):
-    def __init__(self, Alias,Lista_Sentencias=[]):
-        self.Alias = Alias
-        self.Lista_Sentencias = Lista_Sentencias
-
 #Alias campos Sin Lista
 class Alias_Table_ListaTablasSinLista(Instruccion):
     def __init__(self, Alias):
         self.Alias = Alias
-
-
-
 #Alias Group By
 #---------------------------------------------------------------------------------------------------
-
-#Alias campos Con Lista
-class Alias_Tablas_Group(Instruccion):
-    def __init__(self, Alias,Lista_Sentencias=[]):
-        self.Alias = Alias
-        self.Lista_Sentencias = Lista_Sentencias
-
 #Alias campos Sin Lista
 class Alias_Tablas_GroupSinLista(Instruccion):
     def __init__(self, Alias):
         self.Alias = Alias
+
+#Alias SUB QUERYS
+#---------------------------------------------------------------------------------------------------
+class Alias_SubQuerysSinLista(Instruccion):
+    def __init__(self, Alias):
+        self.Alias = Alias
+
+# FIN ALIAS
+#---------------------------------------------------------------------------------------------------
 
 
 
@@ -147,48 +204,40 @@ class Alias_Tablas_GroupSinLista(Instruccion):
 #where Condiciones
 
 class Cuerpo_Condiciones(Instruccion):
-
     def __init__(self,Cuerpo=[]):
         self.Cuerpo = Cuerpo
-
-
 
 #Cuerpo Tipo Where condiciones
 #---------------------------------------------------------------------------------------------------
 class Cuerpo_TipoWhere(Instruccion):
     def __init__(self,Cuerpo=[]):
         self.Cuerpo = Cuerpo
-
-
-
-#Cuerpo Tipo Group By
-#---------------------------------------------------------------------------------------------------
-class Cuerpo_TipoGroup(Instruccion):
-    def __init__(self,Cuerpo=[]):
-        self.Cuerpo = Cuerpo
-
-
 #TIPOS DE GROUP BY
 #---------------------------------------------------------------------------------------------------
 #Group By  Con Having y condiciones
-
-class GroupBy():
+class GroupBy(Instruccion):
     def __init__(self,Lista_Campos=[],Condiciones=[]):
         self.Lista_Campos = Lista_Campos
         self.Condiciones  = Condiciones
+#TIPOS DE CASES
+#---------------------------------------------------------------------------------------------------
+class CaseCuerpo(Instruccion):
+    def __init__(self,Cuerpo,Lista_When=[]):
+        self.Lista_When = Lista_When
+        self.Cuerpo     = Cuerpo
+class ExpresionesCase(Instruccion):
+    def __init__(self,Reservada,ListaExpresiones=[]):
+        self.Reservada            = Reservada
+        self.ListaExpresiones     = ListaExpresiones
 
-
-
-
-
-
-
-
-
-
-
-
-
+class TiposWhen(Instruccion):
+    def __init__(self,Reservada,Reservada2,Reservada3,ListaExpresiones1=[],ListaExpresiones2=[],ListaExpresiones3=[]):
+        self.Reservada    = Reservada
+        self.Reservada2   = Reservada2
+        self.Reservada3   = Reservada3
+        self.ListaExpresiones1 = ListaExpresiones1
+        self.ListaExpresiones2 = ListaExpresiones2
+        self.ListaExpresiones3 = ListaExpresiones3
 
 
 
@@ -235,7 +284,7 @@ class CreateDataBase(Instruccion):
         self.idBase = idBase
         self.idOwner = idOwner
         self.Modo = Modo
-        
+
 
 class ShowDatabases(Instruccion):
     def __init__(self, cadenaLike):
@@ -308,7 +357,7 @@ class Alter_COLUMN(Instruccion):
         self.id_columna = id_columna
         self.id_tipo = id_tipo
 
-        
+
 class Alter_Table_Drop_Column(Instruccion):
     def __init__(self, id_table, columnas):
         self.id_table = id_table
@@ -342,4 +391,3 @@ class Alter_Table_Add_Constraint(Instruccion):
         self.id_table = id_table
         self.id_constraint = id_constraint
         self.id_column = id_column
-

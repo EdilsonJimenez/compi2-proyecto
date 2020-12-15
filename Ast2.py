@@ -43,6 +43,14 @@ class Ast2:
                 print("Es Una Instruccion Select2")
                 self.GrafoSelect2(i.Lista_Campos,i.Nombres_Tablas,i.Cuerpo,i.unionn,padre)
 
+            elif isinstance(i, Select3):
+                print("Es Una Instruccion Select 3 ")
+                self.GrafoSelect3(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.unionn, padre)
+
+            elif isinstance(i, Select4):
+                print("Es Una Instruccion Select 4")
+                self.GrafoSelect4(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn, padre)
+
             elif isinstance(i, Insert_Datos):
                 print("Si es un drop Insert *")
                 self.grafoInsert_Data(i.id_table,i.valores, padre)
@@ -125,7 +133,29 @@ class Ast2:
 
 
 
-    
+
+
+    def RecorrerTipoSelect(self, sente, padre):
+        i=sente
+        if isinstance(i, Select):
+            print("Es Una Instruccion Select ")
+            self.GrafoSelect(i.Lista_Campos, i.Nombres_Tablas, i.unionn, padre)
+        elif isinstance(i, Select2):
+            print("Es Una Instruccion Select 2")
+            self.GrafoSelect2(i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn, padre)
+
+        elif isinstance(i, Select3):
+            print("Es Una Instruccion Select 3 ")
+            self.GrafoSelect3(i.distinct,i.Lista_Campos, i.Nombres_Tablas, i.unionn, padre)
+
+        elif isinstance(i, Select4):
+            print("Es Una Instruccion Select 4")
+            self.GrafoSelect4(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn, padre)
+        else:
+            print("No hay tipo aun");
+
+
+
 
 
     # ----------------------------------------------------------------------------------------------------------
@@ -414,6 +444,338 @@ class Ast2:
 
 
 
+    # Campos Accedidos desde Las Subconsultas
+    # ----------------------------------------------------------------------------------------------------------
+
+    #Objeto Que accede "AccesoSubConsultas"  AnteQuery=[], Query=[], Lista_Alias=[]
+    #Nombres Lista Accedidos  Con Las Subconsultas
+
+    def GrafoAccesoSubConsultas(self, AnteQuery,Query, Lista_Alias, padre):
+
+        #AnteQuery ( query )
+        if  (AnteQuery != False) and  (Query !=False) and  (Lista_Alias ==False):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Acceso_Subconsulta")
+            dot.edge(padre, 'Node' + str(self.i))
+
+
+            #Recorrido de las Expresiones Ante Query
+            self.inc();
+            dot.node('Node' + str(self.i), "AnteQuery")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.Recorrer_Condiciones(AnteQuery, 'Node' + str(self.i))
+
+
+
+            #Recorrido de las subconsultas
+            self.inc();
+            dot.node('Node' + str(self.i), "(  SubQuery  )")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerListaSubconsultas(Query,'Node' + str(self.i) )
+
+
+        # AnteQuery ( query ) Alias
+        elif (AnteQuery != False) and (Query != False) and (Lista_Alias != False):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Acceso_Subconsulta")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            # Recorrido de las Expresiones Ante Query
+            self.inc();
+            dot.node('Node' + str(self.i), "AnteQuery ")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.Recorrer_Condiciones(AnteQuery, 'Node' + str(self.i))
+
+            # Recorrido de las subconsultas
+            self.inc();
+            dot.node('Node' + str(self.i), "(  SubQuery  )")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerListaSubconsultas(Query, 'Node' + str(self.i))
+
+            # Recorrido De la Lista de Alias
+            self.inc();
+            dot.node('Node' + str(self.i), "Lista_Alias")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
+
+
+        # ( query )
+        elif (AnteQuery == False) and (Query != False) and (Lista_Alias == False):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Acceso_Subconsulta ")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            # Recorrido de las subconsultas
+            self.inc();
+            dot.node('Node' + str(self.i), "(  SubQuery  )")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerListaSubconsultas(Query, 'Node' + str(self.i))
+
+
+        # ( query ) Alias
+        elif (AnteQuery == False) and (Query != False) and (Lista_Alias != False):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Acceso_Subconsulta")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            # Recorrido de las subconsultas
+            self.inc();
+            dot.node('Node' + str(self.i), "(  SubQuery  )")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerListaSubconsultas(Query, 'Node' + str(self.i))
+
+            # Recorrido De la Lista de Alias
+            self.inc();
+            dot.node('Node' + str(self.i), "Lista_Alias")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
+
+
+
+    # Campos Accedidos desde La UNION DE CONSULTAS
+    # ----------------------------------------------------------------------------------------------------------
+
+    #Objeto Que accede "CamposUnions"  Reservada,Comportamiento,Consulta=[]
+
+    def GrafoAccesoUniones(self, Reservada, Comportamiento, Consulta, padre):
+
+
+        #Comportamiento Reservada Consulta
+        if((Comportamiento!="")and(Reservada!="")and(Consulta==False)):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Acceso_UNION")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la de consultas
+            self.inc();
+            dot.node('Node' + str(self.i), "CONSULTA")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+
+        #Comportamiento Consulta
+        elif (( Comportamiento!= "") and (Reservada == "") and (Consulta != False)):
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Acceso_UNION")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            # Recorrido De la de consultas
+            self.inc();
+            dot.node('Node' + str(self.i), "CONSULTA")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerTipoSelect(Consulta, 'Node' + str(self.i))
+
+        # puntocoma
+        elif (( Comportamiento == "") and (Reservada != "") and (Consulta == False)):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Final_Instruccion")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            # Punto coma final clausula
+            self.inc();
+            dot.node('Node' + str(self.i), ";")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        else:
+            print("Verificar Errores Sinstacticos")
+
+
+
+
+    # Campos Accedidos por los campos de tipo Cases
+    # ----------------------------------------------------------------------------------------------------------
+
+    # Campos Accedidos por  case   : Objeto Accedido "CaseCuerpo"  : Campos  Cuerpo, Lista_When=[]
+    def GrafoCampoCasePuro(self,Lista_When,Cuerpo,padre):
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "Acceso_Case")
+        dot.edge(padre, 'Node' + str(self.i))
+
+
+        self.inc();
+        dot.node('Node' + str(self.i), "CASE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        # Recorrido DE LOS TIPOS DE WHEN
+        self.inc();
+        dot.node('Node' + str(self.i), "TIPOS_WHEN")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        #Recorrer Lista Case
+        self.RecorrerListaWhens(Lista_When,'Node' + str(self.i))
+
+
+        #FIN CONDICION
+        self.inc();
+        dot.node('Node' + str(self.i),Cuerpo)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+
+
+    # Campos Accedidos por  Expresion :Objeto Accedido "ExpresionesCase"  : Reservada, ListaExpresiones=[]
+    def GrafoExpresionCase(self,Reservada,ListaExpresiones,padre):
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "Acceso_Case_Expresiones")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i),Reservada )
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        # Recorrido lista expresiones
+        self.inc();
+        dot.node('Node' + str(self.i), "EXPRESIONES")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        # Recorrer la lista de when
+        self.Recorrer_Condiciones(ListaExpresiones, 'Node' + str(self.i))
+
+
+
+
+    #Recorriendo tipos de when : Objeto al que Accesa "TiposWhen"  : Campos: Reservada,Reservada2,Reservada3,ListaExpresiones1=[],ListaExpresiones2=[],ListaExpresiones3=[])
+    def GrafoTiposWhen(self,Reservada,ListaExpresiones1,Reservada2,ListaExpresiones2,Reservada3,ListaExpresiones3,padre):
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "TIPOS WHEN ENTRADA")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        #When ListaExpresiones1 then listaExpresiones3
+        if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2=="")and(ListaExpresiones2==False )and(Reservada3!="")and(ListaExpresiones3!=False)):
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la ListaExpresiones 1
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
+
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada3)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+            # Recorrido De la ListaExpresiones 3
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES3")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones3, 'Node' + str(self.i))
+
+
+
+
+        # When ListaExpresiones1 Else listaExpresiones2 then ListaExpresiones3
+        if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2!="")and(ListaExpresiones2!=False )and(Reservada3 !="")and(ListaExpresiones3 !=False)):
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la ListaExpresiones 1
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
+
+
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada2)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la ListaExpresiones 2
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES2")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones2, 'Node' + str(self.i))
+
+
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada3)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+            # Recorrido De la ListaExpresiones 3
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES3")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones3, 'Node' + str(self.i))
+
+
+
+        # When ListaExpresiones1
+        if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2=="")and(ListaExpresiones2==False )and(Reservada3 =="")and(ListaExpresiones3 ==False)):
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la ListaExpresiones 1
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
+
+
+
+
+        # When ListaExpresiones1 Else listaExpresiones2
+        if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2!="")and(ListaExpresiones2 !=False )and(Reservada3 =="")and(ListaExpresiones3 ==False)):
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la ListaExpresiones 1
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones1,'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Reservada2)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # Recorrido De la ListaExpresiones 2
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES2")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
+            self.Recorrer_Condiciones(ListaExpresiones2, 'Node' + str(self.i))
+
+
+
+
 
 
 
@@ -422,53 +784,6 @@ class Ast2:
 
     # ALIAS CAMPOS
     # ----------------------------------------------------------------------------------------------------------
-
-    #Objeto que tiene Acceso "Alias_Campos_ListaCampos"
-    #Acceso a los Campos Con lista
-    def GrafoAlias_Campos_ListaCampos(self, Alias, Lista_Sentencias, padre):
-        global dot
-
-        # as Alias , Lista    and    alias, lista
-        if ((Alias != "") and (Lista_Sentencias != False)):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "As")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), Alias)
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "Lista_Sentencias")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-            self.RecorrerListadeCampos(Lista_Sentencias, 'Node' + str(self.i))
-
-        # Lista
-        elif ((Alias == "") and (Lista_Sentencias != False)):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), ",")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "Lista_Sentencias")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.RecorrerListadeCampos(Lista_Sentencias, 'Node' + str(self.i))
-        else:
-           print("Verificar Errores Sintacticos")
-
 
 
     #Objeto que tiene Acceso "Alias_Campos_ListaCamposSinLista"
@@ -499,51 +814,6 @@ class Ast2:
 
     # ALIAS Tablas
     # ----------------------------------------------------------------------------------------------------------
-
-    #Objeto que tiene acceso "Alias_Table_ListaTablas"
-    #Acceso a Alias de las Tablas Con Lista
-    def GrafoAlias_Table_ListaTablas(self, Alias, Lista_Sentencias, padre):
-        global dot
-
-        # as Alias , Lista    and    alias, lista
-        if ((Alias != "") and (Lista_Sentencias != False)):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "As")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), Alias)
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "Tabla")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-            self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
-
-        # Lista
-        elif ((Alias == "") and (Lista_Sentencias != False)):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), ",")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "Tabla")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-            self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
-
-
 
     #Objeto que tiene acceso "Alias_Table_ListaTablasSinLista"
     #Acceso a Alias de las Tablas Sin Lista
@@ -577,57 +847,6 @@ class Ast2:
     # ALIAS Group By
     # ----------------------------------------------------------------------------------------------------------
 
-    #Objeto que tiene acceso "Alias_Tablas_Group"
-    #Acceso a Alias de las  Group By
-    def GrafoAlias_Tablas_Group(self, Alias, Lista_Sentencias, padre):
-        global dot
-
-        # as Alias , Lista    and    alias, lista
-        if ((Alias != "") and (Lista_Sentencias != False)):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "As")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), Alias)
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "Campos")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-            #RecorrerListadeCampos de Group By que son dos posibles
-
-
-            self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
-
-        # Lista
-        elif ((Alias == "") and (Lista_Sentencias != False)):
-
-            self.inc();
-            nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "Alias_Produccion")
-            dot.edge(padre, 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), ",")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
-            self.inc();
-            dot.node('Node' + str(self.i), "Campos")
-            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-            # RecorrerListadeCampos de Group By que son dos posibles
-
-
-            self.RecorrerListadeNombres(Lista_Sentencias, 'Node' + str(self.i))
-
-
-
     #Objeto que tiene acceso "Alias_Tablas_GroupSinLista"
     #Acceso a Alias de los Group By
 
@@ -656,8 +875,33 @@ class Ast2:
 
 
 
+    # ALIAS  SUB QUERYS
+    # ----------------------------------------------------------------------------------------------------------
 
+    #Objeto que tiene acceso "Alias_SubQuerysSinLista"
+    #Acceso a Alias de las subconsultas
 
+    def GrafoAlias_SubQuerysSinLista(self, Alias, padre):
+        global dot
+
+        # as Alias
+        if (Alias != "" ):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "Alias_Produccion")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "As")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), Alias)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        else:
+            print("Verificar Errores Sintacticos")
 
 
 
@@ -697,21 +941,37 @@ class Ast2:
             dot.edge('Node' + str(padrenuevo), str(padrenuevo + 1))
 
 
+
+
+
     # Recorrido de la lista de Campos
     # ----------------------------------------------------------------------------------------------------------
 
     def RecorrerListadeCampos(self, Campos, padre):
             for j in Campos:
-                if isinstance(j, Campo_Accedido):
-                    print("Es un Campo Accedido Por la Tabla" + j.NombreT)
-                    self.GrafoCampo_Accedido(j.NombreT, j.Columna, j.Lista_Alias, padre)
 
-                elif isinstance(j, Campo_AccedidoSinLista):
+                if isinstance(j, Campo_AccedidoSinLista):
                     print("Es un Campo Accedido Por la Tabla Sin Lista" + j.NombreT)
                     self.GrafoCampo_AccedidoSinLista(j.NombreT, j.Columna, padre)
 
+                elif isinstance(j, AccesoSubConsultas):
+                    print("Es un Acceso a  una subconsulta")
+                    self.GrafoAccesoSubConsultas(j.AnteQuery, j.Query, j.Lista_Alias, padre)
+
+                elif isinstance(j,CaseCuerpo):
+                    print("Es un Acceso a un Campo CasePuro")
+                    self.GrafoCampoCasePuro(j.Lista_When, j.Cuerpo, padre)
+
+                elif isinstance(j,ExpresionesCase ):
+                    print("Es un Acceso a  una expresion Case")
+                    self.GrafoExpresionCase(j.Reservada, j.ListaExpresiones, padre)
+
                 else:
                     print("No Ningun Tipo  vos ")
+
+
+
+
 
 
     # Recorrido de la lista de Nombres de Tablas
@@ -727,35 +987,13 @@ class Ast2:
             elif isinstance(i, AccesoTablaSinLista):
                 #print("Es un Campo Accedido Por la Tabla" + i.NombreT)
                 self.GrafoAccesoTablaSinLista(i.NombreT, padre)
+
+            elif isinstance(i, AccesoSubConsultas):
+                print("Es un Acceso a  una subconsulta")
+                self.GrafoAccesoSubConsultas(i.AnteQuery, i.Query, i.Lista_Alias, padre)
+
             else:
                 print("No Ningun Tipo")
-
-
-
-
-    # Recorrido de la lista de de Los Posibles Group By
-    # ----------------------------------------------------------------------------------------------------------
-
-    def RecorrerListraGroups(self, Groups, padre):
-        for i in Groups:
-            if isinstance(i, GroupBy):
-               # print("Es un Acceso a Group By")
-                self.GrafoGroupBy(i.Lista_Campos, i.Condiciones, padre)
-            else:
-                print("No Ningun Tipo")
-
-
-    # Recorrido de la lista de de Los Posibles Where
-    # ----------------------------------------------------------------------------------------------------------
-
-    def RecorrerListaWhere(self, Groups, padre):
-        for i in Groups:
-            if isinstance(i, Cuerpo_TipoWhere):
-                #print("Es un Acceso a Where")
-                self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
-            else:
-                print("No Ningun Tipo")
-
 
 
 
@@ -775,8 +1013,46 @@ class Ast2:
 
 
 
+    # Recorrido a la lista de subconsultas
+    # ----------------------------------------------------------------------------------------------------------
+    # Solo es uno ya que solo viene una consulta dentro de parentesis
+    def RecorrerListaSubconsultas(self, Lista_Subs, padre):
+
+            i = Lista_Subs
+            if isinstance(i, SubSelect):
+                print("Es un Campo Accedido Por una Subconsulta ")
+
+                self.GrafoSubSelect(i.Lista_Campos,i.Nombres_Tablas, padre)
+
+            elif isinstance(i,SubSelect2):
+                print("Es un Campo Accedido Por una Subconsulta 2 ")
+                self.GrafoSubSelect2(i.Lista_Campos,i.Nombres_Tablas,i.Cuerpo, padre)
 
 
+            elif isinstance(i,SubSelect3):
+                print("Es un Campo Accedido Por una Subconsulta 3 ")
+                self.GrafoSubSelect3(i.Distict,i.Lista_Campos,i.Nombres_Tablas, padre)
+
+
+            elif isinstance(i,SubSelect4):
+                print("Es un Campo Accedido Por una Subconsulta 4 ")
+                self.GrafoSubSelect4(i.Distict, i.Lista_Campos,i.Nombres_Tablas,i.Cuerpo, padre)
+
+            else:
+                print("No hay Ningun Tipo")
+
+
+
+    # Recorrido a al lista de uniones
+    # ----------------------------------------------------------------------------------------------------------
+    def RecorrerListaUniones(self, Uniones, padre):
+
+        for i in Uniones:
+            if isinstance(i, CamposUnions):
+                print("Es un Campo Accedido Por una Subconsulta ")
+                self.GrafoAccesoUniones(i.Reservada,i.Comportamiento,i.Consulta, padre)
+            else:
+                print("No hay Ningun Tipo")
 
 
 
@@ -786,23 +1062,11 @@ class Ast2:
     def RecorrerTiposAlias(self, Lista_Alias, padre):
 
         i=Lista_Alias
-        # Alias de los Campos Con Lista
-        if isinstance(i, Alias_Campos_ListaCampos):
-            #print("Es un Campo Accedido Por la Tabla" + i.Alias)
-            self.GrafoAlias_Campos_ListaCampos(i.Alias, i.Lista_Sentencias, padre)
 
         # Alias de los Campos Sin Lista
-        elif isinstance(i, Alias_Campos_ListaCamposSinLista):
-          # print("Es un Campo Accedido Por la Tabla" + i.Alias)
+        if isinstance(i, Alias_Campos_ListaCamposSinLista):
+           print("Es un Campo Accedido Por la Tabla" + i.Alias)
            self.GrafoAlias_Campos_ListaCamposSinLista(i.Alias, padre)
-
-
-
-
-        # Alias de las Nombres de las Tablas
-        elif isinstance(i, Alias_Table_ListaTablas):
-          #  print("Es un Campo Accedido Por la Tabla" + i.Alias)
-            self.GrafoAlias_Table_ListaTablas(i.Alias, i.Lista_Sentencias, padre)
 
         #Alias de las Nombres de las Tablas Sin Lista
         elif isinstance(i, Alias_Table_ListaTablasSinLista):
@@ -810,36 +1074,57 @@ class Ast2:
             self.GrafoAlias_Table_ListaTablasSinLista(i.Alias, padre)
 
 
-
-
-        #Alias de los Group By Con Lista
-        elif isinstance(i, Alias_Tablas_Group):
-            #print("Es un Campo Accedido Por Group by con lista" + i.Alias)
-            self.GrafoAlias_Tablas_Group(i.Alias,i.Lista_Sentencias,padre)
-
         #Alias de los Group By Sin Lista
         elif isinstance(i, Alias_Tablas_GroupSinLista):
           #  print("Es un Campo Accedido Por la Tabla" + i.Alias)
             self.GrafoAlias_Tablas_GroupSinLista(i.Alias, padre)
 
 
+        #Alias de las Subconsulta sin lista
+        elif isinstance(i, Alias_SubQuerysSinLista):
+            print("Es un Campo Accedido Por subconsulta sin lista " + i.Alias)
+            self.GrafoAlias_SubQuerysSinLista(i.Alias, padre)
+
         else:
             print("No Ningun Tipo")
 
 
-    # Recorrido del Cuerpo
-    # ----------------------------------------------------------------------------------------------------------
-    def RecorrerCuerpo(self, Cuerpo, padre):
-        i=Cuerpo
-        if isinstance(Cuerpo,Cuerpo_Condiciones):
-           # print("Es un Campo Accedido Por la Cuerpo ")
-            self.RecorrerListaWhere(Cuerpo.Cuerpo, padre)
 
-        elif isinstance(Cuerpo,Cuerpo_TipoGroup):
-           # print("Es un Campo Accedido Por la Group By ")
-            self.RecorrerListraGroups(Cuerpo.Cuerpo, padre)
-        else:
-            print("No hay Ningun Tipo")
+
+    # Recorrido de la lista de de Los Posibles Cuerpos
+    # ----------------------------------------------------------------------------------------------------------
+    def RecorrerListaCuerpos(self, Groups, padre):
+        for i in Groups:
+            if isinstance(i, Cuerpo_TipoWhere):
+                print("Es un Acceso a Where")
+                self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
+
+            elif isinstance(i, GroupBy):
+                print("Es un Campo Accedido Por la Cuerpo ")
+                self.GrafoGroupBy(i.Lista_Campos, i.Condiciones, padre)
+
+            elif isinstance(i, AccesoLimit):
+                print("Es un Campo Accedido Limit ")
+                self.GrafoLimit(i.Reservada, i.Expresion_Numerica, padre)
+
+            elif isinstance(i, AccesoSubConsultas):
+                print("Es un Acceso a  una subconsulta")
+                self.GrafoAccesoSubConsultas(i.AnteQuery,i.Query,i.Lista_Alias,padre)
+            else:
+                print("No Ningun Tipo")
+
+
+    def RecorrerListaWhens(self, Lista, padre):
+        for i in Lista:
+            if isinstance(i,TiposWhen):
+                print("Es un Acceso A Tipo determinado de When")
+                self.GrafoTiposWhen(i.Reservada,i.ListaExpresiones1,i.Reservada2,i.ListaExpresiones2,i.Reservada3,i.ListaExpresiones3,padre)
+            else:
+                print("No Ningun Tipo")
+
+
+
+    # ------------------------------------ FIN DEL ACCESO A LOS CAMPOS DE CADA CUESTION
 
 
 
@@ -878,12 +1163,15 @@ class Ast2:
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
 
         self.inc();
-        dot.node('Node' + str(self.i), Uniones)
+        dot.node('Node' + str(self.i),"Uniones")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        #Recorrer lista de uniones
+        self.RecorrerListaUniones(Uniones, 'Node' + str(self.i))
 
 
     def GrafoSelect2(self,ListaCampos, NombresTablas,cuerpo, Uniones, padre ):
         global dot
+
         self.inc();
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
@@ -911,11 +1199,243 @@ class Ast2:
         dot.node('Node' + str(self.i), "CUERPO")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.RecorrerCuerpo(cuerpo, 'Node' + str(self.i))
+        self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
 
         self.inc();
-        dot.node('Node' + str(self.i), Uniones)
+        dot.node('Node' + str(self.i),"Uniones")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        #Recorrer lista de uniones
+        self.RecorrerListaUniones(Uniones, 'Node' + str(self.i))
+
+
+    def GrafoSelect3(self,Distict, ListaCampos, NombresTablas, Uniones, padre):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc();
+        dot.node('Node' + str(self.i), Distict)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i),"Uniones")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        #Recorrer lista de uniones
+        self.RecorrerListaUniones(Uniones, 'Node' + str(self.i))
+
+
+
+    def GrafoSelect4(self,Distict,ListaCampos, NombresTablas,cuerpo, Uniones, padre ):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc();
+        dot.node('Node' + str(self.i), Distict)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "CUERPO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i),"Uniones")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        #Recorrer lista de uniones
+        self.RecorrerListaUniones(Uniones, 'Node' + str(self.i))
+
+
+
+
+
+    # Instruccion SUB  SELECT
+    # ----------------------------------------------------------------------------------------------------------
+
+
+
+#GRAFO DEL SUB SELECT
+    def GrafoSubSelect(self, ListaCampos, NombresTablas, padre):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+
+
+
+#Grafo Sub Select Con Cuerpo
+    def GrafoSubSelect2(self, ListaCampos, NombresTablas, cuerpo, padre):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "CUERPO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
+
+
+
+
+    def GrafoSubSelect3(self,Distinct,ListaCampos, NombresTablas, padre):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc();
+        dot.node('Node' + str(self.i), Distinct)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+
+
+        # Grafo Sub Select Con Cuerpo
+    def GrafoSubSelect4(self,Distinct,ListaCampos, NombresTablas, cuerpo, padre):
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "SELECT")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), Distinct)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+
+        self.inc();
+        dot.node('Node' + str(self.i), "FROM")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "LISTA_TABLAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), "CUERPO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
+
+
+
 
 
 
@@ -928,6 +1448,7 @@ class Ast2:
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "INSTRUCCION GROUP BY ")
             dot.edge(padre, 'Node' + str(self.i))
+
 
             self.inc();
             dot.node('Node' + str(self.i), "GROUP BY")
@@ -949,6 +1470,7 @@ class Ast2:
 
        #Group by ListaCampos
         elif ((Lista_Campos != False) and (Condiciones == False)):
+
            self.inc();
            nuevoPadre = self.i
            dot.node('Node' + str(self.i), "INSTRUCCION GROUP BY ")
@@ -961,6 +1483,33 @@ class Ast2:
            dot.node('Node' + str(self.i), "LISTA_CAMPOS")
            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
            self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
+
+
+
+
+
+
+
+
+#Grafo de los Limit
+    def GrafoLimit(self,Reservada, Expresion_Numerica,padre):
+
+        global dot
+
+        self.inc();
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "INSTRUCCION LIMIT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), Reservada)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc();
+        dot.node('Node' + str(self.i), Expresion_Numerica)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
 
 
 
@@ -999,7 +1548,7 @@ class Ast2:
             dot.node('Node'+  str(self.i), i.val)
             dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
 
-        
+
 
 #----------------------------------------------------------------------------------------------------------
 #-----------------------GRAFICAR INSERTAR-------------------------------------------------------------------
@@ -1062,7 +1611,7 @@ class Ast2:
         elif isinstance(expresiones,UnitariaNotBB) :
             self.graficarUnaria(expresiones,"NotBB")
         #NUEVAS UNITARIAS
-        
+
         #----------------------------------------
         elif isinstance(expresiones,ExpresionValor) :
             self.inc()
@@ -1106,7 +1655,7 @@ class Ast2:
             dot.node(str(padreID),self.getVar(expresion.operador))
             dot.edge(str(padre),str(padreID))
             self.inc()
-            padreID=self.i        
+            padreID=self.i
             dot.node(str(padreID),'exp2')
             dot.edge(str(padre),str(padreID))
             dot.edge(str(padreID),str(padreID+1))
@@ -1126,7 +1675,7 @@ class Ast2:
             padreID=self.i
             dot.node(str(padreID),self.getVar(expresion.operador))
             dot.edge(str(padre),str(padreID))
-        
+
 
     def graficarUnaria(self,expresion,tipo_exp=""):
         self.inc()
@@ -1662,7 +2211,7 @@ class Ast2:
         self.graficar_expresion(i)
         self.inc()
         dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
-       
+
 
 #----------------------------------------------------------------------------------------------------------
 #-----------------------GRAFICAR UPDATE-------------------------------------------------------------------
@@ -1683,8 +2232,8 @@ class Ast2:
             self.inc();
             dot.node('Node'+  str(self.i), i.val)
             dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
-        
-        
+
+
         #GRAFICAR============VALORES DEL SET======================
         self.inc();
         nuevoPadre3 = self.i
@@ -1743,7 +2292,7 @@ class Ast2:
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"COLUMNAS")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
-       
+
         for i in id_columnas:
             self.inc();
             dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
@@ -1774,10 +2323,10 @@ class Ast2:
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"TIPO")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
-       
-    
+
+
         if isinstance(tipo, valorTipo):
-           
+
             if tipo.expresion == None:
                 self.inc();
                 dot.node('Node'+  str(self.i), str(tipo.valor))
@@ -1798,7 +2347,7 @@ class Ast2:
             dot.node('Node'+  str(self.i), str(tipo))
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
 
-     
+
     def grafoAlter_DropColumn(self, id_tabla , columnas, padre):
         global dot, tag, i
 

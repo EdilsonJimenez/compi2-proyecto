@@ -406,7 +406,7 @@ from interprete import *
 
 precedence = (
     ('left', 'OR'),
-    ('left', 'AND'),    
+    ('left', 'AND'),
     ('nonassoc', 'MENOR', 'MAYOR', 'MENORIGUAL', 'MAYORIGUAL', 'IGUAL', 'DIFERENTE'),
     ('right', 'NOT'),
     ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
@@ -424,7 +424,7 @@ def p_init(t):
     'INICIO     : INSTRUCCIONES'
     t[0] = t[1]
 
-    #PRIMERA PASADA 
+    #PRIMERA PASADA
     arbolito = Ast2(t[0])
     arbolito.crearReporte()
     #SEGUNDA PASADA
@@ -437,18 +437,14 @@ def p_instrucciones_lista(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-    # endregion
 
 
-def p_instrucciones_instruccion(t):
+def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
     t[0] = [t[1]]
 
     # ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
     # ast.edge(t[1]['nombre'],'INICIO')
-
-    # ast.render('grafo', format='png', view=True)
-
 
 def p_instruccion(t):
     '''INSTRUCCION  : DQL_COMANDOS
@@ -459,37 +455,30 @@ def p_instruccion(t):
     # ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
     # ast.edge(t[1]['nombre'],n1)
 
-    # t[0] = { 'valor' : t[1]['valor'], 'nombre' : n1 }
-    # t[0] = t[1]
-
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
 
 def p_instruccion_dql_comandos(t):
-    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    t[0] = Select2(t[6], t[5], t[2], t[4])
+    'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPOS UNIONS'
+    t[0]= Select2(t[6],t[5],t[2],t[4])
 
 
 def p_instruccion_dql_comandosS1(t):
-    'DQL_COMANDOS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO UNIONS'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+    'DQL_COMANDOS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPOS UNIONS'
 
-    print('\n' + str(t[0]) + '\n')
+    t[0] = Select4(t[2], t[7],t[6], t[3], t[5])
 
 
 def p_instruccion_dql_comandosS2(t):
     'DQL_COMANDOS       : SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    t[0] = Select3(t[2],t[6],t[3],t[5])
 
-    print('\n' + str(t[0]) + '\n')
+
 
 
 def p_instruccion_dql_comandos3(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  UNIONS'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
-    t[0] = Select(t[5], t[2], t[4])
-
+    t[0]= Select(t[5],t[2],t[4])
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -509,40 +498,48 @@ def p_ListaCampos_Lista(t):
 def p_Lista_NombreS(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS S'
 
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    t[0] = Campo_Accedido(t[1], t[3], t[4])
+
+    t[0] = Campo_Accedido(t[1],t[3],t[4])
 
 
 def p_Lista_Nombre(t):
     'LISTAA          : NOMBRE_T PUNTO CAMPOS'
     t[0] = Campo_AccedidoSinLista(t[1], t[3])
 
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_Lista_CampoS(t):
     'LISTAA          : CAMPOS S'
     t[0] = Campo_Accedido("", t[1], t[2])
 
-    # t[0] = str(t[1]) + str(t[2])
+
 
 
 def p_Lista_Campo(t):
     'LISTAA          : CAMPOS'
-    t[0] = Campo_AccedidoSinLista("", t[1])
-    # t[0] = str(t[1])
+    t[0] = Campo_AccedidoSinLista("",t[1])
+
+
 
 
 def p_Lista_ExprecionesCase(t):
     'LISTAA          :  EXPRESIONES_C'
-
-    # t[0] = str(t[1])
+    t[0] = t[1]
 
 
 def p_Lista_SubsQuery(t):
-    'LISTAA    :   SUBQUERYS'
+    'LISTAA    :   QUERY'
+    t[0] = t[1]
 
-    # t[0] = str(t[1])
+
+
+def p_Lista_COMA(t):
+    'LISTAA    :   COMA'
+    t[0] = str(t[1])
+
+
+
+
 
 
 def p_Campos_id(t):
@@ -565,37 +562,10 @@ def p_Alias_id(t):
     'ALIAS          : ID'
     t[0] = t[1]
 
-    # t[0] = str(t[1])
-
-
-def p_S_ComaLista(t):
-    'S          : COMA LISTA_CAMPOS'
-    t[0] = Alias_Campos_ListaCampos("", t[2])
-#    S          : COMA LISTAA
-#    t[0] = Alias_Campos_ListaCampos("",t[2])
-
-    # t[0] = str(t[1]) + str(t[2])
-
 
 def p_S_AsAlias(t):
     'S          : AS ALIAS'
     t[0] = Alias_Campos_ListaCamposSinLista(t[2])
-
-    # t[0] = str(t[1]) + str(t[2])
-
-
-def p_Ss_AsAliasMos(t):
-    'S          : AS ALIAS COMA LISTA_CAMPOS'
-    t[0] = Alias_Campos_ListaCampos(t[2], t[4])
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-def p_Ss_AliasMos(t):
-    'S          :  ALIAS COMA LISTA_CAMPOS'
-    t[0] = Alias_Campos_ListaCampos(t[1], t[3])
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_Aliass(t):
@@ -611,7 +581,7 @@ def p_S_Aliass(t):
 
 def p_Disctint_Rw(t):
     'DISTINCTNT          : DISTINCT'
-    # t[0] = str(t[1])
+    t[0] = t[1]
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -631,9 +601,9 @@ def p_NombresTablas_Tabla(t):
     t[0] = [t[1]]
 
 
+
 def p_Tabla_NombreT(t):
     'TABLA   : NOMBRE_T'
-
     t[0] = AccesoTablaSinLista(t[1])
 
 
@@ -642,44 +612,34 @@ def p_Tabla_NombreTS(t):
     t[0] = AccesoTabla(t[1], t[2])
 
 
-def p_Tabla_SubQuerys(t):
-    'TABLA   : SUBQUERYS'
-    # t[0] = str(t[1])
+def p_Tabla_Querysss(t):
+    'TABLA   : QUERY'
+    print("Entro")
+    t[0] =  t[1]
 
 
-def p_Ss_ComaLista(t):
-    'S1          : COMA NOMBRES_TABLAS'
-    t[0] = Alias_Table_ListaTablas("", t[2])
 
-    # t[0] = str(t[1]) + str(t[2])
+def p_Tabla_Comaa(t):
+    'TABLA   : COMA'
+    t[0]  =  str(t[1])
+
+
 
 
 def p_Ss_AsAlias(t):
     'S1          : AS ALIAS'
     t[0] = Alias_Table_ListaTablasSinLista(t[2])
 
-    # t[0] = str(t[1]) + str(t[2])
-
-
-def p_Ss_AsAliasComa(t):
-    'S1          : AS ALIAS COMA TABLA'
-    t[0] = Alias_Table_ListaTablas(t[2], t[4])
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-def p_Ss_AliasCo(t):
-    'S1          :  ALIAS COMA TABLA'
-    t[0] = Alias_Table_ListaTablas(t[1], t[3])
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_S_AliasSolo(t):
     'S1          :  ALIAS'
     t[0] = Alias_Table_ListaTablasSinLista(t[1])
 
-    # t[0] = str(t[1])
+
+
+
+
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -699,12 +659,14 @@ def p_Cuerpos_Cuerpo(t):
 
 
 
-
-def p_Cuerpo_Mores(t):
-    'CUERPO   : MOREE'
+def p_Condi_Wheree(t):
+    'CUERPO : WHERER'
     t[0] = t[1]
 
 
+def p_Condi_Wheree_Limit(t):
+    'CUERPO : GROUPP'
+    t[0] = t[1]
 
     # t[1].append(t[2])
     # t[0] = t[1]
@@ -715,50 +677,22 @@ def p_Cuerpo_Mores(t):
 #    # t[0] = [t[1]]
 
 
-
-
-def p_Mores_Inners(t):
-    'MOREE   : INNERS'
-
-    # t[0] = str(t[1])
-
-
-def p_Mores_Groups(t):
-    'MOREE   : GROUPS'
-    t[0] = Cuerpo_TipoGroup(t[1])
-
-
-def p_Mores_Limits(t):
-    'MOREE   : LIMITS'
-
-    # t[0] = str(t[1])
-
-
-
-def p_Mores_Condicion(t):
-    'MOREE   : CONDICIONS'
-    t[0] = Cuerpo_Condiciones(t[1])
-
-
-
-def p_CondicionCc(t):
-    'CONDICIONS  : CONDICIONS CONDI'
-    t[1].append(t[2])
+def p_Condi_Wheree_Group(t):
+    'CUERPO : LIMITT'
     t[0] = t[1]
 
 
-def p_CondicionSen(t):
-    'CONDICIONS : CONDI'
-    t[0] = [t[1]]
+
+def p_Condi_SubQuery(t):
+    'CUERPO : QUERY'
+    t[0] = t[1]
 
 
 
-def p_Condi_Wheree(t):
-    'CONDI : WHERE expresion'
+
+def p_Condi_Where(t):
+    'WHERER : WHERE expresion'
     t[0] = Cuerpo_TipoWhere(t[2])
-
-
-
 
 
 
@@ -834,7 +768,7 @@ def p_Expresion_CampoC(t):
 
 
 def p_Expresion_SubQuery(t):
-    'EXPRESIONNE : SUBQUERYS'
+    'EXPRESIONNE : QUERY'
 
     # t[0] = str(t[1])
 
@@ -996,29 +930,13 @@ def p_TablaRef_IdSinAs(t):
 # -----------------------------------------------------------------------------------------------------------------
 # Groups
 
-def p_Groups_ListaG(t):
-    'GROUPS : GROUPS GROUPP'
-
-    t[1].append(t[2])
-    t[0] = t[1]
-
-
-def p_Groups_ListaG2(t):
-    'GROUPS    : GROUPP'
-
-    t[0] = [t[1]]
-
-
 def p_Group_GroupBy(t):
     'GROUPP    : GROUP BY EXPRE_LIST HAVING expresion'
     t[0] =GroupBy(t[3],t[5])
 
-
 def p_Group_GroupBySin(t):
     'GROUPP    : GROUP BY EXPRE_LIST'
     t[0] = GroupBy(t[3],False)
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 def p_ExpreList_Lista(t):
@@ -1026,95 +944,71 @@ def p_ExpreList_Lista(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-
 def p_ExpreList_Expresion(t):
     'EXPRE_LIST    : EXPRES'
     t[0] = [t[1]]
 
-
 def p_Expre_Campo1(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     t[0] =AccesoGroupBy(t[1],t[3],"",t[4])
 
 def p_Expre_Campo2(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS '
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3])
     t[0] = AccesoGroupBy(t[1], t[3], "",False)
 
 
 def p_Expre_Campo3(t):
     'EXPRES    :  CAMPOS S2 '
-   # t[0] = str(t[1]) + str(t[2])
     t[0] = AccesoGroupBy("", t[1], "", t[2])
 
 
 def p_Expre_Campo4(t):
     'EXPRES    :  CAMPOS '
     t[0] = AccesoGroupBy("", t[1], "",False)
-   # t[0] = str(t[1])
+
 
 
 def p_Expre_Campo5(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS S2 STATE '
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
     t[0] = AccesoGroupBy(t[1], t[3], t[5], t[4])
 
 
 def p_Expre_Campo6(t):
     'EXPRES    :  NOMBRE_T PUNTO CAMPOS STATE'
-   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     t[0] = AccesoGroupBy(t[1], t[3], t[4], False)
 
 
 def p_Expre_Campo7(t):
     'EXPRES    :  CAMPOS S2 STATE'
-  #  t[0] = str(t[1]) + str(t[2]) + str(t[3])
     t[0] = AccesoGroupBy("", t[1], t[3], t[2])
 
 
 def p_Expre_Campo8(t):
     'EXPRES    :  CAMPOS STATE '
-   # t[0] = str(t[1]) + str(t[2])
     t[0] = AccesoGroupBy("", t[1], t[2], False)
 
 
-def p_S2_Coma(t):
-    'S2 : COMA EXPRES'
-    t[0]=Alias_Campos_ListaCampos("",t[2])
-  #  t[0] = str(t[1]) + str(t[2])
+def p_Expre_Campo9(t):
+    'EXPRES    :  COMA'
+    t[0] = str(t[1])
+
 
 
 def p_S2_2(t):
     'S2 : AS ALIAS'
-  #  t[0] = str(t[1]) + str(t[2])
     t[0] = Alias_Campos_ListaCamposSinLista(t[2])
 
-
-def p_Ss_AsAliasComa_(t):
-    'S2 :  AS ALIAS COMA EXPRES'
-    t[0] = Alias_Campos_ListaCampos(t[2], t[4])
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_S2_3(t):
     'S2 :  ALIAS'
-   # t[0] = str(t[1])
     t[0] = Alias_Campos_ListaCamposSinLista(t[1])
 
-
-def p_Ss_AsAlias3(t):
-    'S2 :   ALIAS COMA EXPRES'
-    t[0] = Alias_Campos_ListaCampos(t[1], t[3])
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
 
 
 #def p_MoreOrder_Having(t):
 #    MORE_ORDER  :  HAVING CONDICIONES
-    # t[0] = str(t[1]) + str(t[2])   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< por si acaso 
+    # t[0] = str(t[1]) + str(t[2])   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< por si acaso
 
 
 def p_State_orden1(t):
@@ -1148,207 +1042,97 @@ def p_State_orden6(t):
 #-----------------------------------------------------------------------------------------------------------------
 #Limits
 
-def p_Limits_ListaLimits(t):
-    'LIMITS  :  LIMITS LIMITT'
-
-
-# t[1].append(t[2])
-# t[0] = t[1]
-
-
-def p_Limits_Limit(t):
-    'LIMITS  :  LIMITT'
-
-
-#  t[0] = [t[1]]
-
-
 def p_Limit_Reservada(t):
     'LIMITT  :  LIMIT EXPRE_NUM'
-
-
-# t[0] = str(t[1]) + str(t[2])
-
+    t[0] = AccesoLimit(t[1], t[2])
 
 def p_Limit_Offset(t):
     'LIMITT  : OFFSET EXPRE_NUM '
-    # t[0] = str(t[1]) + str(t[2])
+    t[0] = AccesoLimit(t[1],t[2])
 
 
 def p_Expresion_Atributos(t):
     '''EXPRE_NUM : ENTERO
                  | ALL '''
-
-
-# t[0] = str(t[1])
+    t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
 # SUBCONSULTAS
 
-def p_SubQuerys_Lista(t):
-    'SUBQUERYS :  SUBQUERYS QUERY'
-
-
-# t[0] = str(t[1]) + str(t[2])
-
-
-def p_SubQuerys_Query(t):
-    'SUBQUERYS :  QUERY'
-    # t[0] = str(t[1])
-
-
 def p_Query_Ate(t):
-    'QUERY : ATE_QUE  PARIZQ QUE PARDER'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    'QUERY : expresion  PARIZQ QUE_SUBS PARDER'
+    t[0]= AccesoSubConsultas(t[1],t[3],False)
+
 
 
 def p_Query_AteAs(t):
-    'QUERY : ATE_QUE PARIZQ QUE  PARDER AS_NO'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    'QUERY : expresion PARIZQ QUE_SUBS  PARDER AS_NO'
+    t[0] = AccesoSubConsultas(t[1], t[3], t[5])
+
 
 
 def p_Query_Query(t):
-    'QUERY :   PARIZQ QUE PARDER'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    'QUERY :   PARIZQ QUE_SUBS PARDER'
+
+    t[0] = AccesoSubConsultas(False, t[2], False)
+    print("Estoy accediendo a una subconsulta")
 
 
 def p_Query_QueryAs(t):
-    'QUERY :  PARIZQ QUE PARDER AS_NO'
+    'QUERY :  PARIZQ QUE_SUBS PARDER AS_NO'
+    t[0] = AccesoSubConsultas(False, t[2], t[4])
 
 
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-def p_AsNo_Coma(t):
-    'AS_NO : COMA QUERY'
-
-
-# t[0] = str(t[1]) + str(t[2])
+def p_Query_Coma(t):
+    'QUERY :  COMA'
+    t[0] = str(t[1])
 
 
 def p_AsNo_As(t):
     'AS_NO : AS NO_N'
+    t[0] = Alias_SubQuerysSinLista(t[2])
 
-
-#  t[0] = str(t[1]) + str(t[2])
-
-
-def p_AsNo_AsComa(t):
-    'AS_NO : AS NO_N COMA QUERY'
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
 
 def p_AsNo_SinAs(t):
     'AS_NO :  NO_N'
-
-
-# t[0] = str(t[1])
-
-
-def p_AsNo_SinAsComa(t):
-    'AS_NO :  NO_N COMA QUERY'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = Alias_SubQuerysSinLista(t[1])
 
 
 def p_NoN_Id(t):
     'NO_N  :  ID'
-
-
-#  t[0] = str(t[1])
-
-
-def p_AteQue_Exist(t):
-    'ATE_QUE  :  EXISTS'
-
-
-#  t[0] = str(t[1])
-
-
-def p_AteQue_Expre(t):
-    'ATE_QUE  :  EXPRESIONNE OPCIONALESS'
-
-
-# t[0] = str(t[1]) + str(t[2])
-
-
-def p_AteQue_ExpreOps(t):
-    'ATE_QUE  :  EXPRESIONNE OPERADOR OPCIONALESS2'
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-def p_AteQue_ID(t):
-    'ATE_QUE  :  ID'
-
-
-# t[0] = str(t[1])
-
-
-def p_Opcionales_In(t):
-    'OPCIONALESS : IN'
-
-
-#  t[0] = str(t[1])
-
-
-def p_Opcionales_NotIn(t):
-    'OPCIONALESS : NOT IN'
-
-
-#  t[0] = str(t[1]) + str(t[2])
-
-
-def p_Opcionales2_Any(t):
-    'OPCIONALESS2 : ANY'
-
-
-# t[0] = str(t[1])
-
-
-def p_Opcionales2_All(t):
-    'OPCIONALESS2 : ALL'
-    # t[0] = str(t[1])
-
-
-def p_Opcionales2_Some(t):
-    'OPCIONALESS2 : SOME'
-    # t[0] = str(t[1])
-
-
-def p_Que_InstruccionQuery(t):
-    'QUE : QUE_SUBS'
-    # t[0] = str(t[1])
+    t[0] = str(t[1])
 
 
 # -----------------------------------------------------------------------------------------------------------------
 # SUBCONSULTAS Llamadas sin Punto Coma
 
 def p_SubConsultas_comandos(t):
-    'QUE_SUBS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO '
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    'QUE_SUBS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPOS '
+
+    t[0] = SubSelect2(t[5],t[2],t[4])
 
 
 def p_SubConsultas_comandosS(t):
     'QUE_SUBS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS  '
 
+    t[0] = SubSelect(t[2],t[4])
 
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+
 
 
 def p_SubConsultas_comandosS1(t):
-    'QUE_SUBS       : SELECT  DISTINCTNT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPO '
+    'QUE_SUBS       : SELECT  DISTINCT  LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPOS '
 
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
+    t[0] = SubSelect4(t[2],t[6],t[3],t[5])
 
 
 def p_SubConsultas_comandosS2(t):
-    'QUE_SUBS       : SELECT DISTINCTNT LISTA_CAMPOS FROM NOMBRES_TABLAS  '
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
+    'QUE_SUBS       : SELECT DISTINCT LISTA_CAMPOS FROM NOMBRES_TABLAS  '
+    t[0] = SubSelect3(t[2],t[3],t[5])
+
+
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1356,37 +1140,38 @@ def p_SubConsultas_comandosS2(t):
 
 def p_Unions_Lista(t):
     'UNIONS  : UNIONS UNIONN'
-    # t[1].append(t[2])
-    # t[0] = t[1]
+    t[1].append(t[2])
+    t[0] = t[1]
 
 
 def p_Unions_Comando(t):
     'UNIONS  : UNIONN'
-    # t[0] = [t[1]]
+    t[0] = [t[1]]
 
 
 def p_Unions_DQLComandos(t):
     'UNIONN  :    COMPORTAMIENTO  ALL DQL_COMANDOS '
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = CamposUnions(t[2],t[1],t[3])
 
 
 def p_Unions_DQLComandos2(t):
     'UNIONN  :    COMPORTAMIENTO  DQL_COMANDOS '
-    # t[0] = str(t[1]) + str(t[2])
+    t[0] = CamposUnions("", t[1], t[2])
 
 
 def p_Unions_DQLComandos3(t):
     'UNIONN  :    PUNTOCOMA '
+    t[0] = CamposUnions(t[1],"",False)
 
-
-# t[0] = str(t[1])
 
 
 def p_Comportamiento_Comandos(t):
     '''COMPORTAMIENTO : UNION
                       | INTERSECT
                       | EXCEPT'''
-    # t[0] = str(t[1])
+    t[0] = t[1]
+
+
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -1396,78 +1181,86 @@ def p_Comportamiento_Comandos(t):
 def p_ExpresionesC_Case(t):
     'EXPRESIONES_C  :  CASE WHEN_LIST  CUERPOO'
 
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = CaseCuerpo(t[3],t[2])
 
 
 def p_ExpresionesC_Greatest(t):
-    'EXPRESIONES_C  :  GREATEST PARIZQ EXPRESIONNE PARDER '
-
-
-#  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
+    'EXPRESIONES_C  :  GREATEST PARIZQ expresion PARDER '
+  #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] = ExpresionesCase(t[1],t[3])
 
 def p_ExpresionesC_Least(t):
-    'EXPRESIONES_C  :  LEAST PARIZQ EXPRESIONNE PARDER '
+    'EXPRESIONES_C  :  LEAST PARIZQ expresion PARDER '
+    t[0] = ExpresionesCase(t[1],t[3])
 
 
-#  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-def p_Cuerpos_When(t):
-    'CUERPOO  :  WHEN CONDICIONES EXPRESIONNE END'
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-def p_Cuerpo_WhenElse(t):
-    'CUERPOO  :  WHEN CONDICIONES  EXPRESIONNE ELSE EXPRESIONNE END'
-
-
-#  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6])
 
 
 def p_Cuerpo_End(t):
     'CUERPOO  :  END'
-
-
-#  t[0] = str(t[1])
+    t[0] = str(t[1])
 
 
 def p_Cuerpo_EndID(t):
     'CUERPOO  :  END ID'
-    # t[0] = str(t[1]) + str(t[2])
+    t[0] = str(t[1]) + str(t[2])
 
 
+
+
+
+#Lista de los tipos de When que pueden venir
 def p_whenList_Lista(t):
     'WHEN_LIST  :  WHEN_LIST WHEN_UNI'
+    t[1].append(t[2])
+    t[0] = t[1]
 
-
-# t[0] = str(t[1]) + str(t[2])
 
 
 def p_whenList_Uni(t):
     'WHEN_LIST  :  WHEN_UNI'
+    t[0] = [t[1]]
 
 
-# t[0] = str(t[1])
+
+
 
 
 def p_WhenUni_Then(t):
-    'WHEN_UNI  :   WHEN CONDICIONES THEN EXPRESIONNE'
+    'WHEN_UNI  :   WHEN expresion THEN expresion'
+   # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] = TiposWhen(t[1],"", t[3], t[2], False, t[4])
 
 
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
-
-def p_WhenUni_ExpreThen(t):
-    'WHEN_UNI  :   WHEN CONDICIONES EXPRESIONNE THEN EXPRESIONNE'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_WhenUni_ExpreElseThen(t):
-    'WHEN_UNI  :   WHEN CONDICIONES EXPRESIONNE ELSE EXPRESIONNE THEN EXPRESIONNE'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7])
+    'WHEN_UNI  :   WHEN expresion  ELSE expresion THEN expresion'
+    t[0] = TiposWhen(t[1],t[3], t[5], t[2], t[4], t[6])
+
+
+
+def p_Cuerpos_When(t):
+    'WHEN_UNI  :  WHEN expresion  '
+    t[0] = TiposWhen(t[1],"", "", t[2], False, False)
+
+
+
+
+def p_Cuerpo_WhenElse(t):
+    'WHEN_UNI  :  WHEN expresion  ELSE expresion '
+    t[0] =TiposWhen(t[1],t[3],"",t[2],t[4],False)
+
+
+
+
+
+
+
+
+
+
 
 
 # MI GRANATICA CESAR SAZO------------------------
@@ -1614,7 +1407,7 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | TEXT
                     | BOOLEAN '''
     t[0] = t[1]
-    
+
 
 
 def p_Create_TABLE_TIPO_CAMPO2(t):
@@ -2146,6 +1939,24 @@ def p_expresion_relacional(t):
         t[0] = [1]
 
 
+def p_Produccion_OperadoresSub(t):
+    '''expresion_relacional : expresion_aritmetica IGUAL reservadas
+                            | expresion_aritmetica DIFERENTE reservadas
+                            | expresion_aritmetica MAYORIGUAL reservadas
+                            | expresion_aritmetica MENORIGUAL reservadas
+                            | expresion_aritmetica MAYOR reservadas
+                            | expresion_aritmetica MENOR reservadas'''
+
+
+
+def p_Reservadas(t):
+    ''' reservadas     :  ANY
+                      |  ALL
+                      |  SOME '''
+
+
+
+
 def p_expresion_logica(t):
     '''expresion_logica :   expresion_logica AND expresion_logica
                         |   expresion_logica OR expresion_logica
@@ -2211,12 +2022,16 @@ def p_expresion_logica_predicados_4(t):
         t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IS_NOT_UNKNOWN)
 
 def p_expresion_logica_exists_sub(t):
-    '''expresion_logica : EXISTS QUE'''
+    '''expresion_logica : EXISTS '''
     t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.EXISTS)
 
+
+
+
+
 def p_expresion_logica_in(t):
-    '''expresion_logica : expresion_aritmetica IN QUE
-                        | expresion_aritmetica NOT IN QUE'''
+    '''expresion_logica : expresion_aritmetica IN
+                        | expresion_aritmetica NOT IN '''
     if t[2] == 'IN':
         t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IN)
     elif t[2] == 'NOT':
@@ -2482,7 +2297,7 @@ parser = yacc.yacc()
 
 def parse(Entrada,Errores):
     # Variables Utilizadas
-    
+
     global Input2, Grafica, HayRecursion, ListadoArbol, contador, ContadorSentencias, ContadorNode, ListaSentencias, ListaSentencias_, SenteciaProducida, res, Grafica
     # Errores
     lisErr=Errores

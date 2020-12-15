@@ -4,10 +4,6 @@ class node():
         self.hijo = hijo
         self.valor = valor
 
-
-
-
-
 class nodeGramatical():
     def __init__(self, produccion, reglas):
         self.produccion = produccion
