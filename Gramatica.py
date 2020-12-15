@@ -391,6 +391,7 @@ Input2 = ''  # Input2
 from Ast2 import *
 from Instruccion import *
 from expresiones import *
+from interprete import *
 
 # precedence = (
 #  ('left', 'OR'),
@@ -427,8 +428,8 @@ def p_init(t):
     arbolito = Ast2(t[0])
     arbolito.crearReporte()
     #SEGUNDA PASADA
-    #arbolito2 = Ast2(t[0])
-    #arbolito2.crearReporte()
+    arbolito2 = interprete2(t[0])
+    arbolito2.ejecucion()
 
 
 def p_instrucciones_lista(t):

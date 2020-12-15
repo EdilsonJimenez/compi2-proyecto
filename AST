@@ -6,100 +6,24 @@ digraph AST {
 	Node0 -> Node1
 	Node2 [label="Id: MiBase1"]
 	Node1 -> Node2
-	Node3 [label="Or Replace"]
+	Node3 [label="Owner: Oscar"]
 	Node1 -> Node3
-	Node4 [label="Owner: Oscar"]
+	Node4 [label="Mode: 1"]
 	Node1 -> Node4
-	Node5 [label="Mode: 1"]
-	Node1 -> Node5
-	Node6 [label="CREATE TABLE"]
-	Node0 -> Node6
-	Node7 [label="Id: Estudiante"]
-	Node6 -> Node7
-	Node8 [label=CAMPO]
-	Node6 -> Node8
-	Node9 [label="Id: carne"]
-	Node8 -> Node9
-	Node10 [label="Tipo: INT"]
-	Node8 -> Node10
-	Node11 [label=VALIDACION]
-	Node8 -> Node11
-	Node12 [label="NOT NULL"]
-	Node11 -> Node12
-	Node13 [label=CAMPO]
-	Node6 -> Node13
-	Node14 [label="Id: nombre"]
-	Node13 -> Node14
-	Node15 [label="Tipo: varchar"]
-	Node13 -> Node15
-	Node16 [label=EXPRESION]
-	Node15 -> Node16
-	17 [label=ExpresionAritmetica]
-	18 [label=exp1]
-	17 -> 18
-	18 -> 19
-	19 [label=ExpresionValor]
-	19 -> 20
-	20 [label=20]
-	21 [label="+"]
-	17 -> 21
-	22 [label=exp2]
-	17 -> 22
-	22 -> 23
-	23 [label=ExpresionValor]
-	23 -> 24
-	24 [label=6]
-	Node16 -> 17
-	Node25 [label=CAMPO]
-	Node6 -> Node25
-	Node26 [label="Id: apellido"]
-	Node25 -> Node26
-	Node27 [label="Tipo: TEXT"]
-	Node25 -> Node27
-	Node28 [label=VALIDACION]
-	Node25 -> Node28
-	Node29 [label="NOT NULL"]
-	Node28 -> Node29
-	Node30 [label="SELECT EXTRACT"]
-	Node0 -> Node30
-	Node31 [label="FROM TIMESTAMP"]
-	Node30 -> Node31
-	Node32 [label="Tipo: YEAR"]
-	Node30 -> Node32
-	Node33 [label="Valor: 25-6-12 algo"]
-	Node30 -> Node33
-	Node34 [label="SELECT DATE_PART"]
-	Node0 -> Node34
-	Node35 [label="Valor: seconds"]
-	Node34 -> Node35
-	Node36 [label="INTERVAL: 4 hours 23 minutes 56 seconds"]
-	Node34 -> Node36
-	Node37 [label="SELECT CURRENT"]
-	Node0 -> Node37
-	Node38 [label="Tipo: CURRENT_DATE"]
-	Node37 -> Node38
-	Node39 [label="SELECT CURRENT"]
-	Node0 -> Node39
-	Node40 [label="Tipo: CURRENT_TIME"]
-	Node39 -> Node40
-	Node41 [label="SELECT TIMESTAMP"]
-	Node0 -> Node41
-	Node42 [label="Valor: Hora"]
-	Node41 -> Node42
-	Node43 [label="SELECT NOW"]
-	Node0 -> Node43
-	Node44 [label="CREATE TYPE"]
-	Node0 -> Node44
-	Node45 [label=ENUM]
-	Node44 -> Node45
-	Node46 [label=abc]
-	Node45 -> Node46
-	Node47 [label=cda]
-	Node45 -> Node47
-	Node48 [label="CREATE TYPE"]
-	Node0 -> Node48
-	Node49 [label=ENUM]
-	Node48 -> Node49
-	Node50 [label=integer]
-	Node49 -> Node50
+	Node5 [label="CREATE DATABASE"]
+	Node0 -> Node5
+	Node6 [label="Id: MiBase2"]
+	Node5 -> Node6
+	Node7 [label="Owner: Oscar"]
+	Node5 -> Node7
+	Node8 [label="Mode: 1"]
+	Node5 -> Node8
+	Node9 [label="CREATE DATABASE"]
+	Node0 -> Node9
+	Node10 [label="Id: MiBase1"]
+	Node9 -> Node10
+	Node11 [label="Owner: Oscar"]
+	Node9 -> Node11
+	Node12 [label="Mode: 1"]
+	Node9 -> Node12
 }

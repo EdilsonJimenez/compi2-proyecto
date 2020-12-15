@@ -1,4 +1,5 @@
 from enum import Enum
+from Instruccion import *
 
 class TIPO_DATO(Enum) :
     ENTERO = 1
@@ -29,9 +30,10 @@ class Funcion():
 
 class TablaDeSimbolos() :
     
-    def __init__(self, simbolos = {},funciones={}) :
+    def __init__(self, simbolos = {},funciones={}, createDataBase={}) :
         self.simbolos = simbolos.copy()
         self.funciones = funciones.copy()
+        self.createDataBase = createDataBase.copy()
 
     def agregar(self, simbolo) :
 
@@ -94,3 +96,19 @@ class TablaDeSimbolos() :
             print("Error-Unset: Variable no definida")
         else:
             del self.simbolos[id]
+
+    def agregarCreateDataBase(self, BD:CreateDataBase):
+        self.createDataBase[BD.idBase] = BD
+
+    def obtenerCreateDateBase(self, id):
+        if not id in self.createDataBase:
+            return None
+        return self.createDataBase[id]
+
+
+    '''def actualizarCreateDataBase(self, id, tipo):
+        if not id in self:
+            #print('Error: variable ',id, ' no definida.')
+            pass
+        else :
+            self.funciones[id].tipo = tipo'''
