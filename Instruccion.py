@@ -1,5 +1,14 @@
-class Instruccion:
-    'Es una clase abstracta'
+import ts as TS
+import jsonMode as Master
+from errores import *
+LisErr = TablaError([])
+ts_global = TS.TablaDeSimbolos()
+
+class Instruccion():
+    'Abstracta'
+
+    def Ejecutar(self):
+        pass
 
 # Un drop table esta compuesto por el ID de la tabla que eliminara.
 class DropTable(Instruccion):
@@ -285,11 +294,39 @@ class CreateDataBase(Instruccion):
         self.idOwner = idOwner
         self.Modo = Modo
 
+    def Ejecutar(self):
+        global ts_global
+        global LisErr
+
+        r = ts_global.obtenerBasesDatos(self.idBase)
+        if r is None:
+            print(" No encontro la BD. ")
+            rM = Master.createDatabase(str(self.idBase))
+            if rM == 0:
+                ts_global.agregarBasesDatos(self)
+                print(" > Base de datos creada con exito!")
+            elif rM == 1 or rM == 2:
+                print("> Base de datos ya existe.")
+                er = ErrorRep('Semantico', 'La Base de datos ya existe',0)
+                LisErr.agregar(er)
+
+        else:
+            print("Si encontre la BD. ")
+            er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
+            LisErr.agregar(er)
+
+
 
 class ShowDatabases(Instruccion):
     def __init__(self, cadenaLike):
         self.cadenaLike = cadenaLike
         print("Se creo")
+
+
+    def Ejecutar(self):
+        lista = Master.showDatabases()
+        for i in lista:
+            print(str(i))
 
 class AlterDataBase(Instruccion):
     def __init__(self, idDB, opcion):

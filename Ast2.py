@@ -451,7 +451,7 @@ class Ast2:
     #Nombres Lista Accedidos  Con Las Subconsultas
 
     def GrafoAccesoSubConsultas(self, AnteQuery,Query, Lista_Alias, padre):
-
+        print(AnteQuery, Query, Lista_Alias)
         #AnteQuery ( query )
         if  (AnteQuery != False) and  (Query !=False) and  (Lista_Alias ==False):
 
@@ -1110,6 +1110,9 @@ class Ast2:
             elif isinstance(i, AccesoSubConsultas):
                 print("Es un Acceso a  una subconsulta")
                 self.GrafoAccesoSubConsultas(i.AnteQuery,i.Query,i.Lista_Alias,padre)
+            elif isinstance(i, Cuerpo_Condiciones):
+                print("Es un acceso a where con condicion de subconsulta")
+                self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
             else:
                 print("No Ningun Tipo")
 
@@ -1635,6 +1638,12 @@ class Ast2:
             dot.node(str(padreID),' ( Expresion )')
             dot.edge(str(padreID),str(padreID+1))
             self.graficar_expresion(expresiones.variable)
+        elif isinstance(expresiones, ExpresionCondicionalSubquery):
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), self.getVar(expresiones.val))
+            # dot.edge(str(padreID), str(padreID + 1))
+            # self.graficar_expresion(expresiones.variable)
 
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
@@ -1660,6 +1669,11 @@ class Ast2:
             dot.edge(str(padre),str(padreID))
             dot.edge(str(padreID),str(padreID+1))
             self.graficar_expresion(expresion.exp2)
+        elif expresion.exp1 == None and expresion.exp2 == None:
+            self.inc()
+            padreID=self.i
+            padre=padreID
+            dot.node(str(padreID), self.getVar(expresion.operador))
         elif  expresion.exp2 == None:
             self.inc()
             padreID=self.i
@@ -1712,7 +1726,7 @@ class Ast2:
             return '!='
         elif padreID==OPERACION_RELACIONAL.MAYORQUE:
             return '>'
-        elif padreID==OPERACION_RELACIONAL.MAYORQUE:
+        elif padreID==OPERACION_RELACIONAL.MENORQUE:
             return '<'
         #NUEVAS COSAS
         elif padreID==OPERACION_LOGICA.IS_NOT_NULL:
@@ -1841,6 +1855,12 @@ class Ast2:
             return 'ENCODE'
         elif padreID==FUNCION_NATIVA.DECODE:
             return 'DECODE'
+        elif padreID==CONDICIONAL_SUBQUERY.ANY:
+            return 'ANY'
+        elif padreID==CONDICIONAL_SUBQUERY.ALL:
+            return 'ALL'
+        elif padreID==CONDICIONAL_SUBQUERY.SOME:
+            return 'SOME'
 
         else:
             return 'op'

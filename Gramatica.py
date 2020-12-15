@@ -354,9 +354,11 @@ def t_COMENTARIONORMAL(t):
 
 def t_error(t):
     print("Caracter no es valido:" + str(t.value[0]))
-    Er = ErrorSintactico(str(t.value[0]), "Lexico", t.lexer.lineno)
-    LErroresSintacticos.append(Er)
+     #Er = ErrorSintactico(str(t.value[0]), "Lexico", t.lexer.lineno)
+     #LErroresSintacticos.append(Er)
     t.lexer.skip(1)
+    nErr=ErrorRep('Lexico','Caracter NO Valido %s' % t.value[0],t.lexer.lineno)
+    lisErr.agregar(nErr)
 
 
 # Construyendo el analizador léxico
@@ -651,10 +653,7 @@ def p_CuerpoS_CuerpoS(t):
 
 def p_Cuerpo_Where(t):
     'CUERPO   : WHERE expresion'
-
     t[0] = Cuerpo_Condiciones(t[2])
-
-
 
 def p_Cuerpos_Cuerpo(t):
     'CUERPOS   :  CUERPO'
@@ -1947,13 +1946,32 @@ def p_Produccion_OperadoresSub(t):
                             | expresion_aritmetica MAYOR reservadas
                             | expresion_aritmetica MENOR reservadas'''
 
-
+    if t[2] == '==':
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
+    elif t[2] == '!=':
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.DISTINTO)
+    elif t[2] == '>=':
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORIGUAL)
+    elif t[2] == '<=':
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORIGUAL)
+    elif t[2] == '>':
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MAYORQUE)
+    elif t[2] == '<':
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.MENORQUE)
+    elif t[2] == '=':
+        t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
 
 def p_Reservadas(t):
-    ''' reservadas     :  ANY
+    ''' reservadas    :  ANY
                       |  ALL
                       |  SOME '''
 
+    if t[1] == 'ANY':
+        t[0] = ExpresionCondicionalSubquery(CONDICIONAL_SUBQUERY.ANY)
+    elif t[1] == 'ALL':
+        t[0] = ExpresionCondicionalSubquery(CONDICIONAL_SUBQUERY.ALL)
+    elif t[1] == 'SOME':
+        t[0] = ExpresionCondicionalSubquery(CONDICIONAL_SUBQUERY.SOME)
 
 
 
@@ -2023,7 +2041,7 @@ def p_expresion_logica_predicados_4(t):
 
 def p_expresion_logica_exists_sub(t):
     '''expresion_logica : EXISTS '''
-    t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.EXISTS)
+    t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.EXISTS)
 
 
 
@@ -2281,16 +2299,19 @@ def p_expresion_binario(t):
 def p_expresion_binario_n(t):
     'expresion_aritmetica : VIRGULILLA expresion_aritmetica'
 
+# def p_expresion_subquery(t):
+#     expresion_aritmetica : QUE_SUBS
+
 # ===================== MANEJO DE ERRORES SINTACTICOS ================================
 # ====================================================================================
 def p_error(t):
-
-    ErrorS = ErrorSintactico(str(t.value), "Sintactico", str(t.lineno))
-    LErroresSintacticos.append(ErrorS)
+    #ErrorS = ErrorSintactico(str(t.value), "Sintactico", str(t.lineno))
+    #LErroresSintacticos.append(ErrorS)
     if not t:
         print("End of File!")
         return
-
+    nErr=ErrorRep('Sintactico','Error de sintaxis en '+str(t.value),t.lineno)
+    lisErr.agregar(nErr)
     # Read ahead looking for a closing ';'
     while True:
         tok = parser.token()  # Get the next token
@@ -2304,12 +2325,13 @@ parser = yacc.yacc()
 
 def parse(Entrada,Errores):
     # Variables Utilizadas
-
+    global LErroresSintacticos, LErroresLexicos, lexer, parser
     global Input2, Grafica, HayRecursion, ListadoArbol, contador, ContadorSentencias, ContadorNode, ListaSentencias, ListaSentencias_, SenteciaProducida, res, Grafica
+    global lisErr
     # Errores
     lisErr=Errores
 
-    global LErroresSintacticos, LErroresLexicos, lexer, parser
+
 
 
   #  f = open("./entrada.txt", "r")
