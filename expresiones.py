@@ -116,6 +116,11 @@ class FUNCION_NATIVA(Enum):
     DECODE = 55
 
 
+class CONDICIONAL_SUBQUERY(Enum):
+    ALL = 1
+    ANY = 2
+    SOME = 3
+
 #------------------------------------------------------------------------
 
 class Casteo() :
@@ -271,3 +276,8 @@ class ExpresionValor2(Expresion) :
     def __init__(self, val ,tipo ):
         self.val = val
         self.tipo = tipo
+
+
+class ExpresionCondicionalSubquery(Expresion):
+    def __init__(self, val):
+        self.val = val

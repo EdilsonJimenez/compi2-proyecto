@@ -1,17 +1,4 @@
-CREATE DATABASE MiBase1 OWNER = Oscar MODE = 1;
-CREATE DATABASE MiBase2 OWNER = Oscar MODE = 1;
-CREATE DATABASE MiBase1 OWNER = Oscar MODE = 1;
-
-select tabla1.campo, campo2,case
- when nombre = 'sujeto3' then 'Juan Carlos'
- when nombre = 'sujeto4' then 'Luis Espino'
- end Nombrecambiado
-from tablita1 as t1
-where i=2
-union
-select tabla1.campo, campo2 from tablita1 as t1,(select distinct campo1 from campo2 where id=2) as jj
-where i=9
-union
-select tabla1 from (select distinct campo1 from campo2 where id=2) as jj,(select distinct campo1 from campo2 where id=2) as jj,(select distinct campo1 from campo2 where id=2) as jj, tabla1
-where id=2
+select tabla1 from jj, jj, tabla1
+where id = ANY (select distinct campo1 from campo2 where id=2)
 limit 10;
+
