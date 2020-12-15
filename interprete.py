@@ -35,6 +35,7 @@ def inicializarEjecucionAscendente(contenido):
     global LisErr, instrucciones, ts_global
     ts_global = TS.TablaDeSimbolos()
     instrucciones = g.parse(contenido, LisErr)
+    reporte_errores()
 
 
 def inicializarTS():
@@ -285,14 +286,16 @@ class interprete2:
         self.recorrerInstrucciones(self.sentencias)
 
     def recorrerInstrucciones(self, sente):
+        global ts_global
         for i in sente:
             if isinstance(i, CreateDataBase):
-                print("Crear base de datos")
-                self.i_CreateDataBase(i)
-                print()
+                i.Ejecutar()
+            elif isinstance(i, ShowDatabases):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 
+'''
     def i_CreateDataBase(self, DataBase: CreateDataBase):
         global ts_global
         r = ts_global.obtenerCreateDateBase(DataBase.idBase)
@@ -303,10 +306,31 @@ class interprete2:
                 print("> Base de datos creada con exito!")
             elif rM == 1 or rM == 2:
                 print("> Base de datos con conflicto.")
-            ts_global.agregarCreateDataBase(DataBase)
         else:
             print("Si encontre la base de datos.")
             for i in ts_global.createDataBase:
                 x:CreateDataBase = ts_global.obtenerCreateDateBase(i)
-                print(x.Modo)
+                print(x.Modo)'''
 
+
+#REPORTE DE ERRORES..................
+def reporte_errores():
+    print("ejecutando errores...........")
+    ErrReporte = Digraph('structs', format='png', filename='c:/source/structs.gv')
+    ErrReporte.attr(shape='record', height='.1')
+    ErrReporte.edge_attr.update(arrowhead='none')
+    #self.recorrerInstrucciones(self.sentencias, 'Node' + str(self.i))
+    cadena=''
+    i=1
+    for item in LisErr.errores:
+        cadena+='<TR><TD>'+str(i)+'</TD><TD>'+str(item.tipo)+'</TD>'+'<TD>'+str(item.descripcion)+'</TD>'+'<TD>'+str(item.linea)+'</TD></TR>'
+        i+=1
+
+    ErrReporte.node('structs','''<<TABLE>   <TR>         <TD>Numero</TD>       <TD>Tipo-Clase Error</TD>       <TD>Descripcion Error</TD>   <TD>Linea</TD>   </TR>'''
+                            +cadena+
+                        '''</TABLE>>''')
+    #.................................
+    ErrReporte.render('g', format='png', view=True)
+    print('Hecho')
+
+    
