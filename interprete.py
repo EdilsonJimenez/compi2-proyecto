@@ -35,6 +35,7 @@ def inicializarEjecucionAscendente(contenido):
     global LisErr, instrucciones, ts_global
     ts_global = TS.TablaDeSimbolos()
     instrucciones = g.parse(contenido, LisErr)
+    reporte_errores()
 
 
 def inicializarTS():
@@ -310,3 +311,25 @@ class interprete2:
                 x:CreateDataBase = ts_global.obtenerCreateDateBase(i)
                 print(x.Modo)
 
+
+#REPORTE DE ERRORES..................
+def reporte_errores():
+    print("ejecutando errores...........")
+    ErrReporte = Digraph('structs', format='png', filename='c:/source/structs.gv')
+    ErrReporte.attr(shape='record', height='.1')
+    ErrReporte.edge_attr.update(arrowhead='none')
+    #self.recorrerInstrucciones(self.sentencias, 'Node' + str(self.i))
+    cadena=''
+    i=1
+    for item in LisErr.errores:
+        cadena+='<TR><TD>'+str(i)+'</TD><TD>'+str(item.tipo)+'</TD>'+'<TD>'+str(item.descripcion)+'</TD>'+'<TD>'+str(item.linea)+'</TD></TR>'
+        i+=1
+
+    ErrReporte.node('structs','''<<TABLE>   <TR>         <TD>Numero</TD>       <TD>Tipo-Clase Error</TD>       <TD>Descripcion Error</TD>   <TD>Linea</TD>   </TR>'''
+                            +cadena+
+                        '''</TABLE>>''')
+    #.................................
+    ErrReporte.render('g', format='png', view=True)
+    print('Hecho')
+
+    

@@ -354,9 +354,11 @@ def t_COMENTARIONORMAL(t):
 
 def t_error(t):
     print("Caracter no es valido:" + str(t.value[0]))
-    Er = ErrorSintactico(str(t.value[0]), "Lexico", t.lexer.lineno)
-    LErroresSintacticos.append(Er)
+     #Er = ErrorSintactico(str(t.value[0]), "Lexico", t.lexer.lineno)
+     #LErroresSintacticos.append(Er)
     t.lexer.skip(1)
+    nErr=ErrorRep('Lexico','Caracter NO Valido %s' % t.value[0],t.lexer.lineno)
+    lisErr.agregar(nErr)
 
 
 # Construyendo el analizador léxico
@@ -2277,13 +2279,13 @@ def p_expresion_binario_n(t):
 # ===================== MANEJO DE ERRORES SINTACTICOS ================================
 # ====================================================================================
 def p_error(t):
-
-    ErrorS = ErrorSintactico(str(t.value), "Sintactico", str(t.lineno))
-    LErroresSintacticos.append(ErrorS)
+    #ErrorS = ErrorSintactico(str(t.value), "Sintactico", str(t.lineno))
+    #LErroresSintacticos.append(ErrorS)
     if not t:
         print("End of File!")
         return
-
+    nErr=ErrorRep('Sintactico','Error de sintaxis en '+str(t.value),t.lineno)
+    lisErr.agregar(nErr)
     # Read ahead looking for a closing ';'
     while True:
         tok = parser.token()  # Get the next token
@@ -2297,12 +2299,13 @@ parser = yacc.yacc()
 
 def parse(Entrada,Errores):
     # Variables Utilizadas
-
+    global LErroresSintacticos, LErroresLexicos, lexer, parser
     global Input2, Grafica, HayRecursion, ListadoArbol, contador, ContadorSentencias, ContadorNode, ListaSentencias, ListaSentencias_, SenteciaProducida, res, Grafica
+    global lisErr
     # Errores
     lisErr=Errores
 
-    global LErroresSintacticos, LErroresLexicos, lexer, parser
+   
 
 
     f = open("./entrada.txt", "r")

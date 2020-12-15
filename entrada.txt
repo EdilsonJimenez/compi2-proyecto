@@ -1,7 +1,7 @@
 CREATE DATABASE MiBase1 OWNER = Oscar MODE = 1;
 CREATE DATABASE MiBase2 OWNER = Oscar MODE = 1;
 CREATE DATABASE MiBase1 OWNER = Oscar MODE = 1;
-
+@
 select tabla1.campo, campo2,case
  when nombre = 'sujeto3' then 'Juan Carlos'
  when nombre = 'sujeto4' then 'Luis Espino'
