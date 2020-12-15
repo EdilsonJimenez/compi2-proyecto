@@ -6,7 +6,7 @@
 import Gramatica as g
 import interprete as Inter
 import ts as TS
-
+import jsonMode as JSON_INGE
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
@@ -15,5 +15,11 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    g.parse()
+    Inter.limpiarValores()
+    #Inter.inicializarTS()
+    Inter.inicializarEjecucionAscendente("cont")
+    
+
+    #g.parse()
+   
 

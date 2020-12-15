@@ -5,15 +5,44 @@ from expresiones import *
 from Ast2 import *
 from six import string_types
 import ts as TS
-
+from errores import *
+import Gramatica as g
 ##------------------------------------------
+#TABLA DE SIMBOLOS GLOBAL
 ts_global = TS.TablaDeSimbolos()
+#TABLA DE ERRORES GLOBAL
+LisErr=TablaError([])
+#===========================
 instrucciones = []
 editor=None
 consola=None
 content=''
+
+
 #INICIALIZACION DE MAIN==============================================
 #========================================================================
+def limpiarValores():
+    global ts_global, instrucciones,indice,tag,LisErr
+    ts_global=TS.TablaDeSimbolos
+    instrucciones= []
+    indice = 0
+    tag=''
+    LisErr=TablaError([])
+
+def inicializarEjecucionAscendente(contenido) :
+    global LisErr, instrucciones, ts_global
+    ts_global = TS.TablaDeSimbolos()
+    instrucciones = g.parse(contenido,LisErr)
+
+def inicializarTS():
+    global instrucciones,ts_global,tag
+    #save_main('main',ts_global,1)
+    #fill_tags(instrucciones,ts_global)
+    #consola.insert('end',"\n>> ********  Start  ******** \n>>")
+    #tag='main'
+    #if not comprobarMain(instrucciones):
+        #consola.insert('end',">>Error: Verifique errores lexicos y sintacticos\n>>")
+    
 
 
 #========================================================================

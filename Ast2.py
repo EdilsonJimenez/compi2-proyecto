@@ -1477,6 +1477,7 @@ class Ast2:
             self.inc()
             dot.node('Node' + str(self.i), 'Mode: ' + str(Modo))
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        #crearBASEDEDATOS(OBJETO)
 
     def grafoShowDatabases(self, cadenaLike, padre):
         global dot, i
@@ -2005,3 +2006,12 @@ class Ast2:
 
 
 
+#crearBASEDATOS(objeto)
+
+# retun = llamarfunicion(Objeto.nombre)
+#if return = 0
+#  agreagarts()
+#elif return = 1
+    #"ERRPR"
+# elif retunr = 2
+    #"ERRPR"

@@ -3,6 +3,11 @@
 # -----------------------------------------------------------------------------
 from unittest import case
 import ply.lex as lex
+from errores import *
+
+#TABLA DE ERRORES===============
+lisErr=TablaError([])
+
 
 reservadas = {
 
@@ -418,8 +423,12 @@ def p_init(t):
     'INICIO     : INSTRUCCIONES'
     t[0] = t[1]
 
+    #PRIMERA PASADA 
     arbolito = Ast2(t[0])
     arbolito.crearReporte()
+    #SEGUNDA PASADA
+    #arbolito2 = Ast2(t[0])
+    #arbolito2.crearReporte()
 
 
 def p_instrucciones_lista(t):
@@ -2470,11 +2479,15 @@ def p_error(t):
 import ply.yacc as yacc
 parser = yacc.yacc()
 
-def parse():
+def parse(Entrada,Errores):
     # Variables Utilizadas
+    
     global Input2, Grafica, HayRecursion, ListadoArbol, contador, ContadorSentencias, ContadorNode, ListaSentencias, ListaSentencias_, SenteciaProducida, res, Grafica
     # Errores
+    lisErr=Errores
+
     global LErroresSintacticos, LErroresLexicos, lexer, parser
+
 
     f = open("./entrada.txt", "r")
     input = f.read()
