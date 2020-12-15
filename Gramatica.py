@@ -653,9 +653,14 @@ def p_Cuerpo_Where(t):
     'CUERPO   : WHERE expresion'
 
     t[0] = Cuerpo_Condiciones(t[2])
+
+
+
 def p_Cuerpos_Cuerpo(t):
     'CUERPOS   :  CUERPO'
     t[0] = [t[1]]
+
+
 
 
 
@@ -668,13 +673,6 @@ def p_Condi_Wheree_Limit(t):
     'CUERPO : GROUPP'
     t[0] = t[1]
 
-    # t[1].append(t[2])
-    # t[0] = t[1]
-
-
-#def p_MORES_Lista(t):
-#    MORES    : MOREE <<<<<<<<<<<<<<<<<<<<<<< conflicto
-#    # t[0] = [t[1]]
 
 
 def p_Condi_Wheree_Group(t):
@@ -812,6 +810,8 @@ def p_SimboloRela_Simbolos(t):
     # t[0] = str(t[1])
 
 
+
+#No viene
 # -----------------------------------------------------------------------------------------------------------------
 # inners
 
@@ -1919,7 +1919,7 @@ def p_expresion_relacional(t):
                             | expresion_aritmetica MENORIGUAL expresion_aritmetica
                             | expresion_aritmetica MAYOR expresion_aritmetica
                             | expresion_aritmetica MENOR expresion_aritmetica
-                            | PARIZQ expresion_relacional PARDER'''
+                            | PARIZQ expresion_relacional PARDER '''
 
     if t[2] == '==':
         t[0] = ExpresionRelacional(t[1], t[3], OPERACION_RELACIONAL.IGUALQUE)
@@ -2096,6 +2096,13 @@ def p_valor_abs(t):
     'expresion_aritmetica :  PARIZQ expresion_aritmetica PARDER'
     #t[0] = ExpresionValor(t[2])
     t[0] = Absoluto(t[2])
+
+def p_valor_Subquery(t):
+    'expresion_aritmetica :  QUERY '
+    t[0] = t[1]
+
+
+
 
 
 def p_funciones_math(t):
@@ -2305,10 +2312,10 @@ def parse(Entrada,Errores):
     global LErroresSintacticos, LErroresLexicos, lexer, parser
 
 
-    f = open("./entrada.txt", "r")
-    input = f.read()
+  #  f = open("./entrada.txt", "r")
+  #  input = f.read()
 
-    instructions = parser.parse(input, lexer=lexer)
+    instructions = parser.parse(Entrada, lexer=lexer)
     for i in LErroresSintacticos:
         print(i.imprimirError())
 

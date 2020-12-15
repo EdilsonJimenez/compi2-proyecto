@@ -8,6 +8,7 @@ import interprete as Inter
 import ts as TS
 import jsonMode as JSON_INGE
 
+import Interfaz.Interfaz  as Gui
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -15,10 +16,12 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    Inter.limpiarValores()
+    #Inter.limpiarValores()
     #Inter.inicializarTS()
-    Inter.inicializarEjecucionAscendente("cont")
-    
+
+   # Inter.inicializarEjecucionAscendente("cont")
+
+    Gui.principal
 
     #g.parse()
    

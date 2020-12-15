@@ -4,6 +4,10 @@ from tkinter import filedialog as FiledDialog
 from tkinter import ttk
 from io import open
 
+#Parte de Importaciones para el analisis etc
+import interprete as Inter
+import Ast2 as ast
+
 # ------------------------------------------- VENTANA PRINCIPAL ------------------------------------------------------ #
 class Aplicacion:
 
@@ -52,9 +56,43 @@ class Aplicacion:
         else:
             ruta = ""
 
+
+
     def enviarDatos(self):
         contenido = self.entrada.get(1.0, "end-1c")
         self.consola.insert('insert', contenido)
+        Inter.inicializarEjecucionAscendente(contenido)
+
+
+
+    def Seleccionar(self):
+        cadena=""
+        cadena2=""
+
+        try:
+            cadena = self.entrada.get(SEL_FIRST, SEL_LAST)
+            Inter.inicializarEjecucionAscendente(cadena)
+            self.consola.insert('insert', cadena)
+            print("Estoy Ejecutando valor Selecccionado")
+
+        except:
+            cadena2 = self.entrada.get(1.0, "end-1c")
+            Inter.inicializarEjecucionAscendente(cadena2)
+            self.consola.insert('insert', cadena2)
+            print("Estoy Ejecutando  los datos encontrados")
+
+
+
+
+
+    def GraficarArbol(self):
+        ast.Graficar()
+        self.consola.insert('insert', "Exito Al Graficar")
+
+
+
+
+
 
     def __init__(self):
         self.miVentana = Tk()
@@ -74,8 +112,9 @@ class Aplicacion:
         self.menuArchivo.add_command(label="Salir de TytusDB", command=self.miVentana.quit())
 
         self.menuAnalizar = Menu(self.barraMenu, tearoff=0)
-        self.menuAnalizar.add_command(label="Run", command=self.enviarDatos)
-        self.menuAnalizar.add_command(label="Graficar Arbol")
+        #self.menuAnalizar.add_command(label="Run", command=self.enviarDatos)
+        self.menuAnalizar.add_command(label="Ejecucion", command=self.Seleccionar)
+        self.menuAnalizar.add_command(label="Graficar Arbol" ,command=self.GraficarArbol)
 
         self.barraMenu.add_cascade(menu=self.menuArchivo, label="Archivo")
         self.barraMenu.add_cascade(menu=self.menuAnalizar, label="Run")
