@@ -7,6 +7,7 @@ from expresiones import *
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 Lista = []
+ListaTablasG = []
 Ejecucion = ">"
 
 Lista.append(Ejecucion)
@@ -384,9 +385,9 @@ class Insert_Datos(Instruccion):
                         sr = Master.insert(baseActual, str(self.id_table[0].val), listaTemp)
                         print(baseActual + str(self.id_table[0].val) + str(len(listaTemp)))
                         if sr is 0:
-                            print(" >>>> Inserts realizado con exito.")
+                            imprir("INSERT BD:  Insert realizado con exito.")
                         else:
-                            print(" No se realizo la insercion." + str(sr))
+                            imprir("INSERT BD:  No se realizo el insert.")
                 else:
                     imprir("INSERT BD:  Parametros insuficientes.")
 
@@ -463,9 +464,30 @@ class CampoValidacion(Instruccion):
 
 #---------------------------------------------------------------------------------------------------
 class Delete_Datos(Instruccion):
-    def __init__(self, id_table,valore_where):
+    def __init__(self, id_table, valore_where):
         self.id_table = id_table
         self.valore_where = valore_where
+
+    def Ejecutar(self):
+        global ts_global, baseActual, ListaTablasG
+        global LisErr
+
+        ListaTablasG.append(self.id_table[0].val)
+        print("->->->->"+str(self.id_table[0].val))
+
+        rb = ts_global.obtenerBasesDatos(baseActual)
+        print("->->->->"+str(self.id_table[0].val))
+        if rb is None:
+            print("DELETE: No existe la base de datos.")
+        else:
+            rt = ts_global.obtenerTabla(self.id_table[0].val)
+            if rt is None:
+                print("DELETE No existe la tabla")
+            else:
+                print("Entre aqui ")
+                resultado = Inter.procesar_expresion(self.valore_where, ts_global)
+
+
 
 # --------------------------------------------------------------------------------------------------
 class constraintTabla(Instruccion):

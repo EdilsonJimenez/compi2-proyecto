@@ -266,3 +266,9 @@ class ExpresionValor2(Expresion) :
 class ExpresionCondicionalSubquery(Expresion):
     def __init__(self, val):
         self.val = val
+
+# ================================================================0000000
+class Variable(Expresion) :
+    def __init__(self,id ,tipo_var):
+        self.id = id
+        self.tipo_var = tipo_var

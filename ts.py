@@ -37,6 +37,9 @@ class TablaDeSimbolos():
         self.Tipos = Tipos.copy()
         self.BasesDatos = BasesDatos.copy()
 
+    def getDatos(self):
+        return self.Datos
+
 # ---------------------- BASES DE DATOS -----------------------------------
     def agregarBasesDatos(self, miBase):
         self.BasesDatos[miBase.idBase] = miBase
@@ -112,3 +115,9 @@ class TablaDeSimbolos():
     def agregarDato(self, miDato):
         rand = randint(1,500)
         self.Datos[str(miDato.valor)+str(rand)] = miDato
+
+    def obtenerDato(self, idDato):
+        if not idDato in self.Datos:
+            # print('Error: funcion ',id,' no definida.')
+            return None
+        return self.Datos[idDato]

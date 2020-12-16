@@ -1932,7 +1932,7 @@ def p_unitaria_negativo(t):
 # VALORES--------------------------------------------------
 def p_valor_id(t):
     '''expresion_aritmetica : ID'''
-    t[0] = ExpresionValor(t[1])
+    t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL)
 
 
 def p_valor_number(t):

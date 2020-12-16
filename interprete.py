@@ -249,20 +249,12 @@ def procesar_NotBB(instr, ts):
 
 
 def procesar_variable(tipoVar, ts):
-    val = ts.obtener(tipoVar.id)
-    if val is None:
-        print('Error: Variable no declarada')
-        # consola.insert('end','>>Error: Variable no declarada '+str(tipoVar.id)+'\n>>')
-        # newErr=ErrorRep('Semantico','Variable no declarada: '+str(tipoVar.id),indice)
-        # LisErr.agregar(newErr)
-        return None
-    if val.tipo == TS.TIPO_DATO.ARREGLO:
-        # consola.insert('end','>>Error: No se pueden imprimir arreglos '+str(tipoVar.id)+'\n>>')
-        # newErr=ErrorRep('Semantico','No se pueden imprimir arreglos: '+str(tipoVar.id),indice)
-        # LisErr.agregar(newErr)
-        print('Error: No se pueden imprimir arreglos')
-        return None
-    return val.valor
+    #global ts_global, ListaTablasG, baseActual
+
+    for item in ts.Datos:
+        print(item)
+        v:DatoInsert = ts.obtenerDato(item)
+        print(str(v.columna))
 
 
 # -------------------------------------------------------------------------------------------------
@@ -299,6 +291,8 @@ class interprete2:
             elif isinstance(i, CreateTable):
                 i.Ejecutar()
             elif isinstance(i, Insert_Datos):
+                i.Ejecutar()
+            elif isinstance(i, Delete_Datos):
                 i.Ejecutar()
             else:
                 print("NO ejecuta")
