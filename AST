@@ -20,10 +20,54 @@ digraph AST {
 	Node7 -> Node8
 	Node9 [label=tabla1]
 	Node8 -> Node9
-	Node10 [label=Uniones]
+	Node10 [label=CUERPO]
 	Node1 -> Node10
-	Node11 [label=Final_Instruccion]
+	Node11 [label=Cuerpo]
 	Node10 -> Node11
-	Node12 [label=";"]
+	Node12 [label=Where]
 	Node11 -> Node12
+	Node13 [label=CONDICION]
+	Node11 -> Node13
+	14 [label=ExpresionRelacional]
+	15 [label=exp1]
+	14 -> 15
+	15 -> 16
+	16 [label=Subconsulta]
+	Node17 [label="Acceso_Subconsulta "]
+	16 -> Node17
+	Node18 [label="(  SubQuery  )"]
+	Node17 -> Node18
+	Node19 [label=INSTRUCCION_SELECT]
+	Node18 -> Node19
+	Node20 [label=SELECT]
+	Node19 -> Node20
+	Node21 [label=LISTA_CAMPOS]
+	Node19 -> Node21
+	Node22 [label=ACCESO_CAMPO]
+	Node21 -> Node22
+	Node23 [label="*"]
+	Node22 -> Node23
+	Node24 [label=FROM]
+	Node19 -> Node24
+	Node25 [label=LISTA_TABLAS]
+	Node19 -> Node25
+	Node26 [label=Nombre_Tabla]
+	Node25 -> Node26
+	Node27 [label=tabla2]
+	Node26 -> Node27
+	28 [label="=="]
+	14 -> 28
+	29 [label=exp2]
+	14 -> 29
+	29 -> 30
+	30 [label=ExpresionValor]
+	30 -> 31
+	31 [label=12]
+	Node13 -> 14
+	Node33 [label=Uniones]
+	Node1 -> Node33
+	Node34 [label=Final_Instruccion]
+	Node33 -> Node34
+	Node35 [label=";"]
+	Node34 -> Node35
 }
