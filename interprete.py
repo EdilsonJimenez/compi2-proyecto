@@ -267,6 +267,7 @@ def procesar_variable(tipoVar, ts):
         print(item)
         v:DatoInsert = ts.obtenerDato(item)
         print(str(v.columna))
+        print("Para hacer push")
 
 def procesar_unitaria_aritmetica(expresion, ts):
     val = procesar_expresion(expresion.exp1, ts)
