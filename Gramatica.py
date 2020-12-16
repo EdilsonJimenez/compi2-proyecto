@@ -4,6 +4,7 @@
 from unittest import case
 import ply.lex as lex
 from errores import *
+from interprete import baseActual
 
 #TABLA DE ERRORES===============
 lisErr=TablaError([])

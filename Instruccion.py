@@ -308,7 +308,8 @@ class Insert_Datos(Instruccion):
         self.valores = valores
 
     def Ejecutar(self):
-        global ts_global,baseActual
+        print("Ejecucion")
+        global ts_global, baseActual
         global LisErr
         r = ts_global.obtenerBasesDatos(baseActual)
         if r is None:
@@ -364,19 +365,22 @@ class Insert_Datos(Instruccion):
 
                         index += 1
 
-                        # INSERTANDO DATOS
-                        ix = 0
-                        if banderaInsert is True:
-                            for ccc in self.valores:
-                                d = DatoInsert(baseActual, self.id_table, str(temporal[ix].id), ccc.val)
-                                ts_global.agregarDato(d)
+                    # INSERTANDO DATOS
+                    ix = 0
+                    if banderaInsert is True:
+                        listaTemp = []
+                        for ccc in self.valores:
+                            d = DatoInsert(baseActual, r2, str(temporal[ix].id), ccc.val)
+                            ts_global.agregarDato(d)
+                            listaTemp.append(ccc.val)
                             ix += 1
 
-                            sr = Master.insert(baseActual, str(self.id_table), self.valores)
-                            if sr is 0:
-                                imprir("INSERT BD: Insert realizado con exito.")
-                            else:
-                                imprir("INSERT BD: No se realizo la insercion." + str(sr))
+                        sr = Master.insert(baseActual, str(self.id_table[0].val), listaTemp)
+                        print(baseActual + str(self.id_table[0].val) + str(len(listaTemp)))
+                        if sr is 0:
+                            print(" >>>> Insert realizado con exito.")
+                        else:
+                            print(" No se realizo la insercion." + str(sr))
                 else:
                     imprir("INSERT BD:  Parametros insuficientes.")
 
@@ -393,7 +397,7 @@ class CreateTable(Instruccion):
         self.inhe = inhe
 
     def Ejecutar(self):
-        global ts_global
+        global ts_global, baseActual
         global LisErr
 
         # SI la tabla ya existe en el diccionario.
@@ -478,8 +482,9 @@ class CreateDataBase(Instruccion):
 
 
     def Ejecutar(self):
-        global ts_global
-        global LisErr
+        global ts_global, baseActual
+        global LisErr,Ejecucion
+
         if self.replace == "":
             r = ts_global.obtenerBasesDatos(self.idBase)
             if r is None:
@@ -503,6 +508,7 @@ class CreateDataBase(Instruccion):
 
                 rM = Master.createDatabase(str(self.idBase))
                 imprir("CREATE DB:    Base de datos creada con exito!")
+                baseActual = str(self.idBase)
                 if rM == 0:
                     ts_global.agregarBasesDatos(self)
                     print(" > Base de datos creada con exito!")
