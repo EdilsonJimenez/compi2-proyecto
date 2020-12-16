@@ -383,7 +383,7 @@ class Insert_Datos(Instruccion):
 
                         sr = Master.insert(baseActual, str(self.id_table[0].val), listaTemp)
                         print(baseActual + str(self.id_table[0].val) + str(len(listaTemp)))
-                        if sr is 0:
+                        if sr == 0:
                             print(" >>>> Inserts realizado con exito.")
                         else:
                             print(" No se realizo la insercion." + str(sr))

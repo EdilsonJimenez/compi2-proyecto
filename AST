@@ -18,62 +18,86 @@ digraph AST {
 	Node5 -> Node7
 	Node8 [label="Id: carne"]
 	Node7 -> Node8
-	Node9 [label="Tipo: VARCHAR"]
+	Node9 [label="Tipo: INT"]
 	Node7 -> Node9
-	Node10 [label=EXPRESION]
-	Node9 -> Node10
-	11 [label=ExpresionValor]
-	11 -> 12
-	12 [label=20]
-	Node10 -> 11
+	Node10 [label=CAMPO]
+	Node5 -> Node10
+	Node11 [label="Id: nombre"]
+	Node10 -> Node11
+	Node12 [label="Tipo: INT"]
+	Node10 -> Node12
 	Node13 [label=CAMPO]
 	Node5 -> Node13
-	Node14 [label="Id: nombre"]
+	Node14 [label="Id: apellido"]
 	Node13 -> Node14
-	Node15 [label="Tipo: INT"]
+	Node15 [label="Tipo: SMALLINT"]
 	Node13 -> Node15
 	Node16 [label=CAMPO]
 	Node5 -> Node16
-	Node17 [label="Id: apellido"]
+	Node17 [label="Id: bandera"]
 	Node16 -> Node17
-	Node18 [label="Tipo: SMALLINT"]
+	Node18 [label="Tipo: BOOLEAN"]
 	Node16 -> Node18
-	Node19 [label=CAMPO]
-	Node5 -> Node19
-	Node20 [label="Id: bandera"]
+	Node19 [label=INSERT]
+	Node0 -> Node19
+	Node20 [label="ID TABLA"]
 	Node19 -> Node20
-	Node21 [label="Tipo: BOOLEAN"]
-	Node19 -> Node21
-	Node22 [label=INSERT]
-	Node0 -> Node22
-	Node23 [label="ID TABLA"]
+	Node21 [label=profesional]
+	Node20 -> Node21
+	Node22 [label="VALORES TABLA"]
+	Node19 -> Node22
+	Node23 [label="VALOR NUEVO"]
 	Node22 -> Node23
-	Node24 [label=profesional]
-	Node23 -> Node24
-	Node25 [label="VALORES TABLA"]
-	Node22 -> Node25
-	Node26 [label="VALOR NUEVO"]
-	Node25 -> Node26
-	27 [label=ExpresionValor]
-	27 -> 28
-	28 [label=2020]
-	Node26 -> 27
-	Node30 [label="VALOR NUEVO"]
-	Node25 -> Node30
-	31 [label=ExpresionValor]
-	31 -> 32
-	32 [label=22]
-	Node30 -> 31
-	Node34 [label="VALOR NUEVO"]
-	Node25 -> Node34
-	35 [label=ExpresionValor]
+	24 [label=ExpresionAritmetica]
+	25 [label=exp1]
+	24 -> 25
+	25 -> 26
+	26 [label=ExpresionValor]
+	26 -> 27
+	27 [label=20]
+	28 [label="+"]
+	24 -> 28
+	29 [label=exp2]
+	24 -> 29
+	29 -> 30
+	30 [label=ExpresionValor]
+	30 -> 31
+	31 [label=20]
+	Node23 -> 24
+	Node33 [label="VALOR NUEVO"]
+	Node22 -> Node33
+	34 [label=ExpresionAritmetica]
+	35 [label=exp1]
+	34 -> 35
 	35 -> 36
-	36 [label=32]
-	Node34 -> 35
-	Node38 [label="VALOR NUEVO"]
-	Node25 -> Node38
-	39 [label=ExpresionValor]
+	36 [label=ExpresionValor]
+	36 -> 37
+	37 [label=2]
+	38 [label="+"]
+	34 -> 38
+	39 [label=exp2]
+	34 -> 39
 	39 -> 40
-	40 [label=TRUE]
-	Node38 -> 39
+	40 [label=ExpresionValor]
+	40 -> 41
+	41 [label=2]
+	Node33 -> 34
+	Node43 [label="VALOR NUEVO"]
+	Node22 -> Node43
+	44 [label=ExpresionUnitariaAritmetica]
+	45 [label="|"]
+	44 -> 45
+	46 [label=exp1]
+	44 -> 46
+	46 -> 47
+	47 [label=ExpresionValor]
+	47 -> 48
+	48 [label=32]
+	Node43 -> 44
+	Node50 [label="VALOR NUEVO"]
+	Node22 -> Node50
+	51 [label=ExpresionValor]
+	51 -> 52
+	52 [label=TRUE]
+	Node50 -> 51
 }
