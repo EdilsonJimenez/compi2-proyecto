@@ -1,5 +1,5 @@
 from Instruccion import *
-from graphviz import Digraph
+from graphviz import Graph
 from graphviz import escape
 from expresiones import *
 from Ast2 import *
@@ -35,7 +35,7 @@ def inicializarEjecucionAscendente(contenido):
     global LisErr, instrucciones, ts_global
     ts_global = TS.TablaDeSimbolos()
     instrucciones = g.parse(contenido, LisErr)
-    reporte_errores()
+   # reporte_errores()
 
 
 def inicializarTS():
@@ -338,9 +338,13 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i, ShowDatabases):
                 i.Ejecutar()
-            elif isinstance(i,AlterDataBase):
+            elif isinstance(i, AlterDataBase):
                 i.Ejecutar()
-            elif isinstance(i,DropDataBase):
+            elif isinstance(i, DropDataBase):
+                i.Ejecutar()
+            elif isinstance(i, CreateTable):
+                i.Ejecutar()
+            elif isinstance(i, Insert_Datos):
                 i.Ejecutar()
             else:
                 print("NO ejecuta")
@@ -366,20 +370,16 @@ class interprete2:
 #REPORTE DE ERRORES..................
 def reporte_errores():
     print("ejecutando errores...........")
-    ErrReporte = Digraph('structs', format='png', filename='c:/source/structs.gv')
-    ErrReporte.attr(shape='record', height='.1')
-    ErrReporte.edge_attr.update(arrowhead='none')
-    #self.recorrerInstrucciones(self.sentencias, 'Node' + str(self.i))
+    Rep = Graph('g', filename='berrores.gv', format='png',node_attr={'shape': 'plaintext', 'height': '.1'})
     cadena=''
     i=1
     for item in LisErr.errores:
         cadena+='<TR><TD>'+str(i)+'</TD><TD>'+str(item.tipo)+'</TD>'+'<TD>'+str(item.descripcion)+'</TD>'+'<TD>'+str(item.linea)+'</TD></TR>'
         i+=1
-
-    ErrReporte.node('structs','''<<TABLE>   <TR>         <TD>Numero</TD>       <TD>Tipo-Clase Error</TD>       <TD>Descripcion Error</TD>   <TD>Linea</TD>   </TR>'''
-                            +cadena+
-                        '''</TABLE>>''')
-    #.................................
-    ErrReporte.render('g', format='png', view=True)
+    Rep.node('structs','''<<TABLE> <TR> <TD>Numero</TD><TD>Tipo-Clase Error</TD><TD>Descripcion Error</TD><TD>Linea</TD></TR>'''+cadena+'</TABLE>>')
+    Rep.render('g', format='png', view=True)
     print('Hecho')
+
+
+
 

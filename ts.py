@@ -1,5 +1,6 @@
 from enum import Enum
 from Instruccion import *
+from random import *
 
 class TIPO_DATO(Enum) :
     ENTERO = 1
@@ -30,79 +31,13 @@ class Funcion():
 
 class TablaDeSimbolos():
     
-    def __init__(self, Campos = {}, Tablas={}, BasesDatos={}, Tipos={}):
-        self.Campos = Campos.copy()
+    def __init__(self, Datos = {}, Tablas={}, BasesDatos={}, Tipos={}):
+        self.Datos = Datos.copy()
         self.Tablas = Tablas.copy()
         self.Tipos = Tipos.copy()
         self.BasesDatos = BasesDatos.copy()
 
-    def agregar(self, simbolo):
-        self.simbolos[simbolo.id] = simbolo
-    
-    def agregarFuncion(self,funcion):
-        self.funciones[funcion.id]=funcion
-
-    def obtenerFuncion(self,id) :
-        if not id in self.funciones :
-            #print('Error: funcion ',id,' no definida.')
-            return None
-        return self.funciones[id]
-
-
-    def actualizarFuncion(self,id,tipo) :
-        if not id in self.funciones :
-            #print('Error: variable ',id, ' no definida.')
-            pass
-        else :
-            self.funciones[id].tipo = tipo
-
-
-    
-    def actualizarRefFuncion(self,id,index) :
-        if not id in self.funciones :
-            #print('Error: variable ',id, ' no definida.')
-            pass
-        else :
-            if index not in self.funciones[id].referencia:
-                self.funciones[id].referencia.append(index)
-
-    def actualizarFuncionPar(self,id,params) :
-        if not id in self.funciones :
-            #print('Error: variable ',id, ' no definida.')
-            pass
-        else :
-            self.funciones[id].parametros = params 
-
-    def obtener(self, id,rep=0):
-        if not id in self.simbolos :
-            #print('Error: variable ', id, ' no definida.')
-            return None
-        if self.simbolos[id].tipo == TIPO_DATO.REFERENCIA:
-            if rep==0 :
-                return self.simbolos[id].valor
-            else:
-                self.simbolos[id].valor=self.simbolos[id].valor.valor
-                return self.simbolos[id]
-        return self.simbolos[id]
-
-    def actualizar(self, id,tipo, valor, dimension=[]):
-        if not id in self.simbolos :
-            print('Error: variable ',id, ' no definida.')
-        else :
-            #self.simbolos[simbolo.id] = simbolo
-            self.simbolos[id].tipo = tipo
-            self.simbolos[id].valor = valor
-            self.simbolos[id].dimension= dimension
-    
-    def unset(self,id):
-        if not id in self.simbolos:
-            print("Error-Unset: Variable no definida")
-        else:
-            del self.simbolos[id]
-
-    '''def agregarCreateDataBase(self, BD:CreateDataBase):
-        self.createDataBase[BD.idBase] = BD'''
-
+# ---------------------- BASES DE DATOS -----------------------------------
     def agregarBasesDatos(self, miBase):
         self.BasesDatos[miBase.idBase] = miBase
 
@@ -127,3 +62,53 @@ class TablaDeSimbolos():
         else :
             del self.BasesDatos[bd]
 
+# ------------------ TABLAS ---------------------------------------
+    def agregarTabla(self, tablaNueva):
+        self.Tablas[tablaNueva.id] = tablaNueva
+
+    def obtenerTabla(self, idTabla):
+        if not idTabla in self.Tablas:
+            # print('Error: funcion ',id,' no definida.')
+            return None
+        return self.Tablas[idTabla]
+
+    def actualizarTabla(self, tabla, nuevaTabla):
+        if not tabla in self.Tablas:
+            print('Error: variable ',tabla, ' no definida.')
+            pass
+        else :
+            self.BasesDatos[tabla] = nuevaTabla
+
+    def EliminarTabla(self, tabla):
+        if not tabla in self.Tablas:
+            print('Error: variable ', tabla, ' no definida.')
+        else :
+            del self.BasesDatos[tabla]
+
+# ------------------ CAMPOS ---------------------------------------
+    def agregarCampo(self, campoN):
+        self.Campos[campoN.id] = campoN
+
+    def obtenerCampo(self, idCampo):
+        if not idCampo in self.Campos:
+            # print('Error: funcion ',id,' no definida.')
+            return None
+        return self.Campos[idCampo]
+
+    def actualizarCampo(self, campo, nuevoCampo):
+        if not campo in self.Campos:
+            print('Error: variable ', ' no definida.')
+            pass
+        else :
+            self.Campos[campo] = nuevoCampo
+
+    def EliminarCampo(self, idCampo):
+        if not idCampo in self.Campos:
+            print('Error: variable ', ' no definida.')
+        else :
+            del self.Campos[idCampo]
+
+# ------------------ Dato ---------------------------------------
+    def agregarDato(self, miDato):
+        rand = randint(1,500)
+        self.Datos[str(miDato.valor)+str(rand)] = miDato
