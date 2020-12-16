@@ -7,6 +7,9 @@ from io import open
 #Parte de Importaciones para el analisis etc
 import interprete as Inter
 import Ast2 as ast
+from Instruccion import  *
+
+
 
 # ------------------------------------------- VENTANA PRINCIPAL ------------------------------------------------------ #
 class Aplicacion:
@@ -19,6 +22,8 @@ class Aplicacion:
         ruta = ""
         # Borra desde el primer caracter hasta el final del texto.
         self.entrada.delete(1.0, "end")
+        self.consola.delete(1.0, "end")
+        Lista.clear()
         self.miVentana.title("TytusDB G16")
 
     def abrir(self):
@@ -68,26 +73,37 @@ class Aplicacion:
     def Seleccionar(self):
         cadena=""
         cadena2=""
+        self.consola.delete(1.0, "end")
+        self.miVentana.title("TytusDB G16")
+        Lista.clear()
+
 
         try:
             cadena = self.entrada.get(SEL_FIRST, SEL_LAST)
             Inter.inicializarEjecucionAscendente(cadena)
-            self.consola.insert('insert', cadena)
-            print("Estoy Ejecutando valor Selecccionado")
-
+            if len(Lista) >0:
+                self.consola.insert('insert', Lista[0])
+            else:
+                return
         except:
             cadena2 = self.entrada.get(1.0, "end-1c")
             Inter.inicializarEjecucionAscendente(cadena2)
-            self.consola.insert('insert', cadena2)
-            print("Estoy Ejecutando  los datos encontrados")
+            if len(Lista) >0:
+                self.consola.insert('insert', Lista[0])
+            else:
+                return
 
 
 
 
 
-    def GraficarArbol(self):
-        ast.Graficar()
-        self.consola.insert('insert', "Exito Al Graficar")
+
+    def Errores(self):
+        Inter.reporte_errores()
+
+    def Graficar(self):
+
+        print("graficando arbol")
 
 
 
@@ -114,7 +130,9 @@ class Aplicacion:
         self.menuAnalizar = Menu(self.barraMenu, tearoff=0)
         #self.menuAnalizar.add_command(label="Run", command=self.enviarDatos)
         self.menuAnalizar.add_command(label="Ejecucion", command=self.Seleccionar)
-        self.menuAnalizar.add_command(label="Graficar Arbol" ,command=self.GraficarArbol)
+        self.menuAnalizar.add_command(label="Graficar Arbol" ,command=self.Graficar)
+        self.menuAnalizar.add_command(label="Errores", command=self.Errores)
+
 
         self.barraMenu.add_cascade(menu=self.menuArchivo, label="Archivo")
         self.barraMenu.add_cascade(menu=self.menuAnalizar, label="Run")

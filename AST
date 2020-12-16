@@ -2,78 +2,28 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label="CREATE DATABASE"]
+	Node1 [label=INSTRUCCION_SELECT]
 	Node0 -> Node1
-	Node2 [label="Id: MiBase1"]
+	Node2 [label=SELECT]
 	Node1 -> Node2
-	Node3 [label="Owner: Oscar"]
+	Node3 [label=LISTA_CAMPOS]
 	Node1 -> Node3
-	Node4 [label="Mode: 1"]
-	Node1 -> Node4
-	Node5 [label="CREATE TABLE"]
-	Node0 -> Node5
-	Node6 [label="Id: profesional"]
-	Node5 -> Node6
-	Node7 [label=CAMPO]
-	Node5 -> Node7
-	Node8 [label="Id: carne"]
+	Node4 [label=ACCESO_CAMPO]
+	Node3 -> Node4
+	Node5 [label="*"]
+	Node4 -> Node5
+	Node6 [label=FROM]
+	Node1 -> Node6
+	Node7 [label=LISTA_TABLAS]
+	Node1 -> Node7
+	Node8 [label=Nombre_Tabla]
 	Node7 -> Node8
-	Node9 [label="Tipo: VARCHAR"]
-	Node7 -> Node9
-	Node10 [label=EXPRESION]
-	Node9 -> Node10
-	11 [label=ExpresionValor]
-	11 -> 12
-	12 [label=20]
-	Node10 -> 11
-	Node13 [label=CAMPO]
-	Node5 -> Node13
-	Node14 [label="Id: nombre"]
-	Node13 -> Node14
-	Node15 [label="Tipo: INT"]
-	Node13 -> Node15
-	Node16 [label=CAMPO]
-	Node5 -> Node16
-	Node17 [label="Id: apellido"]
-	Node16 -> Node17
-	Node18 [label="Tipo: SMALLINT"]
-	Node16 -> Node18
-	Node19 [label=CAMPO]
-	Node5 -> Node19
-	Node20 [label="Id: bandera"]
-	Node19 -> Node20
-	Node21 [label="Tipo: BOOLEAN"]
-	Node19 -> Node21
-	Node22 [label=INSERT]
-	Node0 -> Node22
-	Node23 [label="ID TABLA"]
-	Node22 -> Node23
-	Node24 [label=profesional]
-	Node23 -> Node24
-	Node25 [label="VALORES TABLA"]
-	Node22 -> Node25
-	Node26 [label="VALOR NUEVO"]
-	Node25 -> Node26
-	27 [label=ExpresionValor]
-	27 -> 28
-	28 [label=2020]
-	Node26 -> 27
-	Node30 [label="VALOR NUEVO"]
-	Node25 -> Node30
-	31 [label=ExpresionValor]
-	31 -> 32
-	32 [label=22]
-	Node30 -> 31
-	Node34 [label="VALOR NUEVO"]
-	Node25 -> Node34
-	35 [label=ExpresionValor]
-	35 -> 36
-	36 [label=32]
-	Node34 -> 35
-	Node38 [label="VALOR NUEVO"]
-	Node25 -> Node38
-	39 [label=ExpresionValor]
-	39 -> 40
-	40 [label=TRUE]
-	Node38 -> 39
+	Node9 [label=tabla1]
+	Node8 -> Node9
+	Node10 [label=Uniones]
+	Node1 -> Node10
+	Node11 [label=Final_Instruccion]
+	Node10 -> Node11
+	Node12 [label=";"]
+	Node11 -> Node12
 }
