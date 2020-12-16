@@ -6,6 +6,9 @@ class OPERACION_ARITMETICA(Enum) :
     MULTI = 3
     DIVIDIDO = 4
     RESIDUO = 5
+    POTENCIA = 6
+    CUADRATICA = 7
+    CUBICA = 8
 
 class OPERACION_LOGICA(Enum) :
     AND = 1
@@ -272,3 +275,27 @@ class Variable(Expresion) :
     def __init__(self,id ,tipo_var):
         self.id = id
         self.tipo_var = tipo_var
+
+
+class ExpresionFuncion(Expresion):
+    def __init__(self, exp1, exp2, exp3, exp4, id_funcion):
+        self.id_funcion = id_funcion
+        self.exp1 = exp1
+        self.exp2 = exp2
+        self.exp3 = exp3
+        self.exp4 = exp4
+
+class ExpresionBinaria(Expresion):
+    def __init__(self, exp1, exp2, exp3, exp4, id_funcion):
+        self.id_funcion = id_funcion
+        self.exp1 = exp1
+        self.exp2 = exp2
+        self.exp3 = exp3
+        self.exp4 = exp4
+
+class UnitariaAritmetica(Expresion):
+    def __init__(self, exp1, operador):
+        self.exp1 = exp1
+        self.operador = operador
+
+

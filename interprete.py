@@ -70,6 +70,8 @@ def procesar_expresion(expresiones, ts):
         return expresiones.val
     elif isinstance(expresiones, Variable):
         return procesar_variable(expresiones, ts)
+    elif isinstance(expresiones, UnitariaAritmetica):
+        return procesar_unitaria_aritmetica(expresiones, ts)
     elif isinstance(expresiones, Absoluto):
         try:
             return procesar_expresion(expresiones.variable, ts)
@@ -136,6 +138,16 @@ def procesar_aritmetica(expresion, ts):
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val % val2
+        else:
+            print('Error: Tipos no pueden operarse %')
+            # consola.insert('end','>>Error: tipos no pueden operarse por residuo \n>>')
+            # newErr=ErrorRep('Semantico','Tipos no puden operarse por residuo ',indice)
+            # LisErr.agregar(newErr)
+            return None
+    elif expresion.operador == OPERACION_ARITMETICA.POTENCIA:
+        if ((isinstance(val, int) or isinstance(val, float))
+                and ((isinstance(val2, int) or isinstance(val2, float)))):
+            return pow(val, val2)
         else:
             print('Error: Tipos no pueden operarse %')
             # consola.insert('end','>>Error: tipos no pueden operarse por residuo \n>>')
@@ -256,6 +268,40 @@ def procesar_variable(tipoVar, ts):
         v:DatoInsert = ts.obtenerDato(item)
         print(str(v.columna))
 
+def procesar_unitaria_aritmetica(expresion, ts):
+    val = procesar_expresion(expresion.exp1, ts)
+    if expresion.operador == OPERACION_ARITMETICA.CUADRATICA:
+        if isinstance(val, string_types):
+            if(val.isdecimal()):
+                return float(val) * float(val)
+            elif(val.isnumeric()):
+                return int(val) * int(val)
+            else:
+                return None
+
+        elif isinstance(val, int) or isinstance(val, float):
+            return val * val
+        else:
+            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
+            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
+            # LisErr.agregar(newErr)
+            return None
+    elif expresion.operador == OPERACION_ARITMETICA.CUBICA:
+        if isinstance(val, string_types):
+            if (val.isdecimal()):
+                return pow(float(val), 3)
+            elif (val.isnumeric()):
+                return pow(int(val), 3)
+            else:
+                return None
+
+        elif isinstance(val, int) or isinstance(val, float):
+            return val * val
+        else:
+            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
+            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
+            # LisErr.agregar(newErr)
+            return None
 
 # -------------------------------------------------------------------------------------------------
 # --------------------------------- EJECUCION -----------------------------------------------------

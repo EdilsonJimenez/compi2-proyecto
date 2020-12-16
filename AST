@@ -78,6 +78,7 @@ digraph AST {
 	38 -> 39
 	39 [label=ExpresionValor]
 	39 -> 40
+<<<<<<< HEAD
 	40 [label=2]
 	41 [label="+"]
 	37 -> 41
@@ -96,10 +97,31 @@ digraph AST {
 	Node46 -> 47
 	Node50 [label="VALOR NUEVO"]
 	Node25 -> Node50
+=======
+	40 [label=ExpresionValor]
+	40 -> 41
+	41 [label=2]
+	Node33 -> 34
+	Node43 [label="VALOR NUEVO"]
+	Node22 -> Node43
+	44 [label=ExpresionUnitariaAritmetica]
+	45 [label="|"]
+	44 -> 45
+	46 [label=exp1]
+	44 -> 46
+	46 -> 47
+	47 [label=ExpresionValor]
+	47 -> 48
+	48 [label=32]
+	Node43 -> 44
+	Node50 [label="VALOR NUEVO"]
+	Node22 -> Node50
+>>>>>>> master
 	51 [label=ExpresionValor]
 	51 -> 52
 	52 [label=TRUE]
 	Node50 -> 51
+<<<<<<< HEAD
 	Node54 [label=DELETE]
 	Node0 -> Node54
 	Node55 [label="ID TABLA"]
@@ -123,4 +145,6 @@ digraph AST {
 	63 -> 64
 	64 [label=40]
 	Node58 -> 59
+=======
+>>>>>>> master
 }
