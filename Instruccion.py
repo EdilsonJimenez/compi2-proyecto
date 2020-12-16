@@ -297,7 +297,7 @@ class Insert_Datos(Instruccion):
         self.valores = valores
 
     def Ejecutar(self):
-        global ts_global,baseActual
+        global ts_global, baseActual
         global LisErr
         r = ts_global.obtenerBasesDatos(baseActual)
         if r is None:
@@ -384,7 +384,7 @@ class CreateTable(Instruccion):
         self.inhe = inhe
 
     def Ejecutar(self):
-        global ts_global
+        global ts_global, baseActual
         global LisErr
 
         # SI la tabla ya existe en el diccionario.
@@ -469,7 +469,7 @@ class CreateDataBase(Instruccion):
 
 
     def Ejecutar(self):
-        global ts_global
+        global ts_global, baseActual
         global LisErr,Ejecucion
 
         if self.replace == "":
@@ -499,6 +499,7 @@ class CreateDataBase(Instruccion):
 
                 rM = Master.createDatabase(str(self.idBase))
                 Ejecucion += "CREATE DB:    Base de datos creada con exito!"+"\n"
+                baseActual = str(self.idBase)
                 Lista.clear();
                 Lista.append(Ejecucion)
 
