@@ -1613,6 +1613,10 @@ class Ast2:
             self.graficarUnaria(expresiones,"LogicaNOT")
         elif isinstance(expresiones,UnitariaNotBB) :
             self.graficarUnaria(expresiones,"NotBB")
+        elif isinstance(expresiones, ExpresionFuncion):
+            self.graficarExpresionFuncion(expresiones, "FUNCION NATIVA")
+        elif isinstance(expresiones, UnitariaAritmetica):
+            self.graficarUnitariaAritmetica(expresiones, "UnitariaAritmetica")
         #NUEVAS UNITARIAS
 
         #----------------------------------------
@@ -1861,7 +1865,20 @@ class Ast2:
             return 'ALL'
         elif padreID==CONDICIONAL_SUBQUERY.SOME:
             return 'SOME'
-
+        elif padreID==FUNCION_NATIVA.SUBSTRING:
+            return 'SUBSTRING'
+        elif padreID==FUNCION_NATIVA.SUBSTR:
+            return 'SUBSTR'
+        elif padreID==FUNCION_NATIVA.SET_BYTE:
+            return 'SET_BYTE'
+        elif padreID==FUNCION_NATIVA.WIDTH_BUCKET:
+            return 'WIDTH_BUCKET'
+        elif padreID == OPERACION_ARITMETICA.CUBICA:
+            return '||'
+        elif padreID==OPERACION_ARITMETICA.CUADRATICA:
+            return '|'
+        elif padreID==OPERACION_ARITMETICA.POTENCIA:
+            return '^'
         else:
             return 'op'
 #----------------------------------------------------------------------------------------------------------
@@ -2572,6 +2589,69 @@ class Ast2:
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), id_column.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def graficarExpresionFuncion(self, expresion, tipo_exp="") :
+        global  dot,tag,i
+        if expresion.exp1:
+            self.inc()
+            padreID = self.i
+            padre = padreID
+            dot.node(str(padreID), 'Expresion' + tipo_exp)
+
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), self.getVar(expresion.id_funcion))
+            dot.edge(str(padre), str(padreID))
+
+
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'exp1')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+
+            self.graficar_expresion(expresion.exp1)
+
+        if expresion.exp2:
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'exp2')
+            dot.edge(str(padre),str(padreID))
+            dot.edge(str(padreID),str(padreID+1))
+            self.graficar_expresion(expresion.exp2)
+        if expresion.exp3:
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), 'exp3')
+            dot.edge(str(padre), str(padreID))
+            dot.edge(str(padreID), str(padreID + 1))
+            self.graficar_expresion(expresion.exp3)
+        if expresion.exp3:
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), 'exp4')
+            dot.edge(str(padre), str(padreID))
+            dot.edge(str(padreID), str(padreID + 1))
+            self.graficar_expresion(expresion.exp4)
+
+    def graficarUnitariaAritmetica(self,expresion,tipo_exp=""):
+        self.inc()
+        padreID = self.i
+        padre = padreID
+        dot.node(str(padreID), 'Expresion' + tipo_exp)
+
+        self.inc()
+        padreID = self.i
+        dot.node(str(padreID), self.getVar(expresion.operador))
+        dot.edge(str(padre), str(padreID))
+
+        self.inc()
+        padreID = self.i
+        dot.node(str(padreID), 'exp1')
+        dot.edge(str(padre), str(padreID))
+        dot.edge(str(padreID), str(padreID + 1))
+
+        self.graficar_expresion(expresion.exp1)
 
 
 

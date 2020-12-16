@@ -195,7 +195,6 @@ reservadas = {
     'trunc': 'TRUNC',
     'random': 'RANDOM',
     'power': 'POWER'
-
 }
 
 tokens = [
@@ -241,7 +240,8 @@ tokens = [
              'CADENABINARIA',
 
              'COMENTARIOMULTI',
-             'COMENTARIONORMAL'
+             'COMENTARIONORMAL',
+             'POTENCIA',
 
          ] + list(reservadas.values())
 
@@ -272,6 +272,8 @@ t_NUMERAL = r'\#'
 t_VIRGULILLA = r'~'
 t_LEFTSHIFT = r'<<'
 t_RIGHTSHIFT = r'>>'
+t_POTENCIA = r'\^'
+
 
 # Importacion de Objetos Del Analisis
 
@@ -411,11 +413,13 @@ precedence = (
     ('left', 'AND'),
     ('nonassoc', 'MENOR', 'MAYOR', 'MENORIGUAL', 'MAYORIGUAL', 'IGUAL', 'DIFERENTE'),
     ('right', 'NOT'),
-    ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
+    ('left', 'AMPERSAND', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
     ('right', 'VIRGULILLA'),
     ('left', 'PUNTO'),
     ('left', 'MAS', 'MENOS'),
     ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
+    ('left', 'POTENCIA'),
+    ('right', 'PLECA', 'DOBLEPLECA')
     # ('PARIZQ', 'PARDER')
 )
 
@@ -1892,8 +1896,7 @@ def p_lista_cs(t):
 
 def p_expresion_global(t):
     '''expresion : expresion_aritmetica
-                 | expresion_logica
-                 | expresion_unaria'''
+                 | expresion_logica'''
     t[0] = t[1]
 
 
@@ -1902,7 +1905,8 @@ def p_expresion_aritmetica(t):
                             | expresion_aritmetica MENOS expresion_aritmetica
                             | expresion_aritmetica ASTERISCO expresion_aritmetica
                             | expresion_aritmetica DIVISION expresion_aritmetica
-                            | expresion_aritmetica PORCENTAJE expresion_aritmetica'''
+                            | expresion_aritmetica PORCENTAJE expresion_aritmetica
+                            | expresion_aritmetica POTENCIA expresion_aritmetica'''
     if t[2] == '+':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
     elif t[2] == '-':
@@ -1913,6 +1917,8 @@ def p_expresion_aritmetica(t):
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.DIVIDIDO)
     elif t[2] == '%':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.RESIDUO)
+    elif t[2] == '^':
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.POTENCIA)
 
 
 def p_expresion_relacional(t):
@@ -2072,8 +2078,16 @@ def p_expresion_logica_in(t):
 
 # LO TENGO EN NUMERICA ARISMETICA
 def p_unitaria_negativo(t):
-    'expresion_unaria : MENOS expresion_aritmetica'
-    t[0] = UnitariaNegAritmetica(t[2])
+    '''expresion_aritmetica : MENOS expresion_aritmetica
+                        | PLECA expresion_aritmetica
+                        | DOBLEPLECA expresion_aritmetica'''
+    if t[1] == '-':
+        t[0] = UnitariaNegAritmetica(t[2])
+    elif t[1] == '|':
+        t[0] = UnitariaAritmetica(t[2], OPERACION_ARITMETICA.CUADRATICA)
+    elif t[1] == '||':
+        t[0] = UnitariaAritmetica(t[2], OPERACION_ARITMETICA.CUBICA)
+
 
 
 # VALORES--------------------------------------------------
@@ -2184,104 +2198,109 @@ def p_funciones_math(t):
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER'''
     if t[1] == 'ABS':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ABS)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ABS)
     elif t[1] == 'CBRT':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CBRT)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.CBRT)
     elif t[1] == 'CEIL':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CEIL)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.CEIL)
     elif t[1] == 'CEILING':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.CEILING)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.CEILING)
     elif t[1] == 'DEGREES':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.DEGREES)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.DEGREES)
     elif t[1] == 'EXP':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.EXP)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.EXP)
     elif t[1] == 'FACTORIAL':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.FACTORIAL)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.FACTORIAL)
     elif t[1] == 'FLOOR':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.FLOOR)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.FLOOR)
     elif t[1] == 'LN':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LN)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.LN)
     elif t[1] == 'LOG':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LOG)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.LOG)
     elif t[1] == 'RADIANS':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.RADIANS)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.RADIANS)
     elif t[1] == 'ROUND':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ROUND)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ROUND)
     elif t[1] == 'SIGN':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIGN)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.SIGN)
     elif t[1] == 'SQRT':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SQRT)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.SQRT)
     elif t[1] == 'TRUNC':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TRUNC)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TRUNC)
     elif t[1] == 'ACOS':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOS)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ACOS)
     elif t[1] == 'ACOSD':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOSD)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ACOSD)
     elif t[1] == 'ASIN':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASIN)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ASIN)
     elif t[1] == 'ASIND':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASIND)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ASIND)
     elif t[1] == 'ATAN':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATAN)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ATAN)
     elif t[1] == 'ATAND':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATAND)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ATAND)
     elif t[1] == 'COS':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COS)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.COS)
     elif t[1] == 'COSD':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COSD)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.COSD)
     elif t[1] == 'COT':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COT)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.COT)
     elif t[1] == 'COTD':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COTD)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.COTD)
     elif t[1] == 'SIN':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIN)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.SIN)
     elif t[1] == 'SIND':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SIND)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.SIND)
     elif t[1] == 'TAN':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TAN)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TAN)
     elif t[1] == 'TAND':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TAND)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TAND)
     elif t[1] == 'SINH':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SINH)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.SINH)
     elif t[1] == 'COSH':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.COSH)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.COSH)
     elif t[1] == 'TANH':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TANH)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TANH)
     elif t[1] == 'ASINH':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ASINH)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ASINH)
     elif t[1] == 'ACOSH':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ACOSH)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ACOSH)
     elif t[1] == 'ATANH':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.ATANH)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ATANH)
     elif t[1] == 'LENGTH':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.LENGTH)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.LENGTH)
     elif t[1] == 'TRIM':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.TRIM)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TRIM)
     elif t[1] == 'MD5':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.MD5)
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.MD5)
     elif t[1] == 'SHA256':
-        t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SHA256)
-
+        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.SHA256)
     elif t[1] == 'DIV':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.DIV)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.DIV)
     elif t[1] == 'GCD':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.GCD)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.GCD)
     elif t[1] == 'MOD':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.MOD)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.MOD)
     elif t[1] == 'POWER':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.POWER)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.POWER)
     elif t[1] == 'ATAN2':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ATAN2)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.ATAN2)
     elif t[1] == 'ATAN2D':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ATAN2D)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.ATAN2D)
     elif t[1] == 'GET_BYTE':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.GET_BYTE)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.GET_BYTE)
     elif t[1] == 'ENCODE':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.ENCODE)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.ENCODE)
     elif t[1] == 'DECODE':
-        t[0] = ExpresionLogica(t[3], t[5], FUNCION_NATIVA.DECODE)
-    # elif t[1] == 'SUBSTR':
-    #     t[0] = ExpresionLogica(t[3], None, FUNCION_NATIVA.SUBSTR)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.DECODE)
+    elif t[1] == 'SUBSTRING':
+        t[0] = ExpresionFuncion(t[3], t[5], t[7], None, FUNCION_NATIVA.SUBSTRING)
+    elif t[1] == 'SUBSTR':
+        t[0] = ExpresionFuncion(t[3], t[5], t[7], None, FUNCION_NATIVA.SUBSTR)
+    elif t[1] == 'SET_BYTE':
+        t[0] = ExpresionFuncion(t[3], t[5], t[7], None, FUNCION_NATIVA.SET_BYTE)
+    elif t[1] == 'WIDTH_BUCKET':
+        t[0] = ExpresionFuncion(t[3], t[5], t[7], t[9], FUNCION_NATIVA.WIDTH_BUCKET)
 
 
 # def p_expnumerica(t):
@@ -2292,12 +2311,18 @@ def p_funciones_math(t):
 #                    | EXPNUMERICA MAS EXPNUMERICA'''
 
 def p_expresion_binario(t):
-    '''expresion_aritmetica : expresion_aritmetica DOBLEPLECA expresion_aritmetica
-                |   expresion_aritmetica AMPERSAND expresion_aritmetica
-                |   expresion_aritmetica PLECA expresion_aritmetica
+    '''expresion_aritmetica : expresion_aritmetica AMPERSAND expresion_aritmetica
                 |   expresion_aritmetica NUMERAL expresion_aritmetica
                 |   expresion_aritmetica LEFTSHIFT expresion_aritmetica
                 |   expresion_aritmetica RIGHTSHIFT expresion_aritmetica'''
+    if t[2] == "&":
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_BIT_A_BIT.AND)
+    if t[2] == "#":
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_BIT_A_BIT.OR)
+    if t[2] == "<<":
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_BIT_A_BIT.SHIFT_IZQ)
+    if t[2] == ">>":
+        t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_BIT_A_BIT.SHIFT_DER)
 
 
 def p_expresion_binario_n(t):
