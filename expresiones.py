@@ -242,21 +242,6 @@ class valorTipo(Expresion):
         self.expresion = expresion
 
 
-# --------------------------------------------------------
-class CampoTabla(Expresion):
-    def __init__(self, id, tipo, validaciones):
-        self.id = id
-        self.tipo = tipo
-
-        self.validaciones = validaciones
-
-#---------------------------------------------------------
-class CampoValidacion(Expresion):
-    def __init__(self, id, valor):
-        self.id = id
-        self.valor = valor
-
-
 #-----------------------------------------------------------
 class ExpresionFuncion(Expresion):
     def __init__(self, funcion, exp1, exp2, exp3, exp4):

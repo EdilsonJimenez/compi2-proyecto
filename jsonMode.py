@@ -219,9 +219,8 @@ def alterDropPK(database: str, table: str) -> int:
     else:
         return 1
 
+
     # Rename a table name by inserting new_key and deleting old_key
-
-
 def alterTable(database: str, tableOld: str, tableNew: str) -> int:
     initCheck()
     dump = False
@@ -246,8 +245,6 @@ def alterTable(database: str, tableOld: str, tableNew: str) -> int:
         return 1
 
     # add a column at the end of register with default value
-
-
 def alterAddColumn(database: str, table: str, default: any) -> int:
     initCheck()
     dump = False

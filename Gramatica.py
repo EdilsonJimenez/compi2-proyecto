@@ -133,7 +133,7 @@ reservadas = {
     'like': 'LIKE',
     'current_user': 'CURRENT_USER',
     'session_user': 'SESSION_USER',
-
+    'use': 'USE',
     'substring': 'SUBSTRING',
     'between': 'BETWEEN',
     'is': 'IS',
@@ -239,7 +239,6 @@ tokens = [
              'CADENADOBLE',
              'FECHA',
              'CADENABINARIA',
-
              'COMENTARIOMULTI',
              'COMENTARIONORMAL'
 
@@ -444,6 +443,11 @@ def p_instruccion(t):
 
 
 
+# ==================== USE DATABASE =====================================
+def p_instruccion_Use_database(t):
+    'DQL_COMANDOS       : USE ID PUNTOCOMA'
+    global baseActual
+    baseActual = str(t[2])
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
 

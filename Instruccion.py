@@ -1,12 +1,15 @@
 import ts as TS
 import jsonMode as Master
+from six import string_types
 from errores import *
+from expresiones import *
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 Lista = []
 Ejecucion = ">"
 
 Lista.append(Ejecucion)
+baseActual = ""
 
 class Instruccion():
     'Abstracta'
@@ -281,11 +284,89 @@ class TiposWhen(Instruccion):
 
 #---------------------------------------------------------------------------------------------------
 #INSERTAR DATOS CESAR
+class DatoInsert(Instruccion):
+    def __init__(self, bd, tabla, columna, valor):
+        self.bd = bd
+        self.tabla = tabla
+        self.columna = columna
+        self.valor = valor
+
 class Insert_Datos(Instruccion):
     def __init__(self, id_table, valores):
         self.id_table = id_table
         self.valores = valores
 
+    def Ejecutar(self):
+        global ts_global,baseActual
+        global LisErr
+        r = ts_global.obtenerBasesDatos(baseActual)
+        if r is None:
+            print(" > No existe la BD para insertar.")
+        else:
+            print("> Si existe la BD para insertar. " + str(self.id_table[0].val))
+            r2 = ts_global.obtenerTabla(self.id_table[0].val)
+            if r2 is None:
+                print(" > No existe la Tabla para insertar.")
+            else:
+                print("> Si existe la Tabla para insertar. ")
+                # Obtener tabla actual
+                rT:CreateTable = ts_global.obtenerTabla(self.id_table[0].val)
+                print(">>>>>>>"+str(rT.id))
+                temporal:CampoTabla = rT.cuerpo
+                cC = 0
+                for c in rT.cuerpo:
+                    cC += 1
+
+                cV = 0
+                for v in self.valores:
+                    cV += 1
+
+                if cC == cV:
+                    print(" >> Parametros exactos.")
+                    index = 0
+                    banderaInsert = False
+                    for cc in self.valores:
+
+                        if isinstance(temporal[index].tipo, valorTipo):
+
+                            if isinstance(str(cc.val), string_types) and (str(temporal[index].tipo.valor) == 'VARCHAR' or str(temporal[index].tipo.valor) == 'CHARACTER' or str(temporal[index].tipo.valor) == 'CHAR'):
+                                print(" >>> Parametros correctos, insertar, Validar la exprecion.")
+                                banderaInsert = True
+                            else:
+                                print(" >>> Parametros incorrectos. ")
+                                banderaInsert = False
+                        else:
+                            print(" Valor: >>>" + str(cc.val))
+                            if isinstance(str(cc.val), string_types) and ( str(temporal[index].tipo) == 'TEXT' or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'):
+                                print(" >>> Parametros correctos, insertar")
+                                banderaInsert = True
+                            elif str(temporal[index].tipo) == 'BOOLEAN'and (str(cc.val) == "TRUE" or str(cc.val) == "FALSE"):
+                                print(" >>> Parametros correctos, insertar")
+                                banderaInsert = True
+                            elif int(cc.val) > 0 and str(temporal[index].tipo) == 'SMALLINT':
+                                print(" >>> Parametros correctos, insertar")
+                                banderaInsert = True
+                            else:
+                                print(" >>> Parametros incorrectos. ")
+                                banderaInsert = False
+
+                        index += 1
+
+                        # INSERTANDO DATOS
+                        ix = 0
+                        if banderaInsert is True:
+                            for ccc in self.valores:
+                                d = DatoInsert(baseActual, self.id_table, str(temporal[ix].id), ccc.val)
+                                ts_global.agregarDato(d)
+                            ix += 1
+
+                            sr = Master.insert(baseActual, str(self.id_table), self.valores)
+                            if sr is 0:
+                                print(" >>>> Insert realizado con exito.")
+                            else:
+                                print(" No se realizo la insercion." + str(sr))
+                else:
+                    print(" >> Parametros insuficientes.")
 
 # ***************************** CREATE TABLE Y INHERITS ****************************************
 class Inherits(Instruccion):
@@ -298,6 +379,65 @@ class CreateTable(Instruccion):
         self.id = id
         self.cuerpo = cuerpo
         self.inhe = inhe
+
+    def Ejecutar(self):
+        global ts_global
+        global LisErr
+
+        # SI la tabla ya existe en el diccionario.
+        r = ts_global.obtenerTabla(self.id)
+        if r is None:
+            print(" > No existe la tabla. ")
+            # se cuenta el numero de columnas
+            columnas = 0
+            for campos in self.cuerpo:
+                columnas += 1
+            print("---------------")
+            print(baseActual)
+            print(columnas)
+            rM = Master.createTable(baseActual, self.id, columnas)
+
+            if rM == 0:
+                ts_global.agregarTabla(self)
+                print(" > Se creo la tabla en la base de datos.")
+
+            elif rM == 1:
+                print("> 1")
+                er =  ErrorRep('Semantico', 'No se encontro el archivo data.',0)
+                LisErr.agregar(er)
+
+            elif rM == 2:
+                print("> 2")
+                er =  ErrorRep('Semantico', 'No existe la base de datos actual.',0)
+                LisErr.agregar(er)
+
+            elif rM == 3:
+                print( "> 3")
+                er =  ErrorRep('Semantico', 'La tabla ya existe en la base de datos.',0)
+                LisErr.agregar(er)
+        else:
+            print("> La tabla ya esta en la TS. ")
+            er = ErrorRep('Semantico', 'La tabla ya existe en la base de datos.', 0)
+            LisErr.agregar(er)
+
+
+
+# --------------------------------------------------------
+class CampoTabla(Instruccion):
+    def __init__(self, id, tipo, validaciones):
+        self.id = id
+        self.tipo = tipo
+        self.validaciones = validaciones
+
+
+
+#---------------------------------------------------------
+class CampoValidacion(Instruccion):
+    def __init__(self, id, valor):
+        self.id = id
+        self.valor = valor
+
+
 
 #---------------------------------------------------------------------------------------------------
 class Delete_Datos(Instruccion):
