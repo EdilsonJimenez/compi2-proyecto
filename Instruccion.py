@@ -18,6 +18,16 @@ class Instruccion():
     def Ejecutar(self):
         pass
 
+
+def imprir(string):
+    global Ejecucion
+
+    Ejecucion += string + "\n"
+    Lista.clear();
+    Lista.append(Ejecucion)
+
+
+
 # Un drop table esta compuesto por el ID de la tabla que eliminara.
 class DropTable(Instruccion):
     def __init__(self, id):
@@ -292,6 +302,7 @@ class DatoInsert(Instruccion):
         self.columna = columna
         self.valor = valor
 
+
 class Insert_Datos(Instruccion):
     def __init__(self, id_table, valores):
         self.id_table = id_table
@@ -303,17 +314,18 @@ class Insert_Datos(Instruccion):
         global LisErr
         r = ts_global.obtenerBasesDatos(baseActual)
         if r is None:
-            print(" > No existe la BD para insertar.")
+            imprir("INSERT BD:  No existe la BD para insertar.")
         else:
-            print("> Si existe la BD para insertar. " + str(self.id_table[0].val))
+            imprir("INSERT BD:  Si existe la BD para insertar. " + str(self.id_table[0].val))
+
             r2 = ts_global.obtenerTabla(self.id_table[0].val)
             if r2 is None:
-                print(" > No existe la Tabla para insertar.")
+                imprir("INSERT BD:  No existe la Tabla para insertar.")
             else:
-                print("> Si existe la Tabla para insertar. ")
+                imprir("INSERT BD:  Si existe la Tabla para insertar. ")
                 # Obtener tabla actual
                 rT:CreateTable = ts_global.obtenerTabla(self.id_table[0].val)
-                print(">>>>>>>"+str(rT.id))
+                #print(">>>>>>>"+str(rT.id))
                 temporal:CampoTabla = rT.cuerpo
                 cC = 0
                 for c in rT.cuerpo:
@@ -324,7 +336,7 @@ class Insert_Datos(Instruccion):
                     cV += 1
 
                 if cC == cV:
-                    print(" >> Parametros exactos.")
+                    #print(" >> Parametros exactos.")
                     index = 0
                     banderaInsert = False
                     for cc in self.valores:
@@ -337,7 +349,7 @@ class Insert_Datos(Instruccion):
                                 print(" >>> Parametros correctos, insertar, Validar la exprecion.")
                                 banderaInsert = True
                             else:
-                                print(" >>> Parametros incorrectos. ")
+                                imprir("INSERT BD: Parametros incorrectos. ")
                                 banderaInsert = False
                         else:
                             resultado = Inter.procesar_expresion(cc, None)
@@ -347,13 +359,13 @@ class Insert_Datos(Instruccion):
                                 print(" >>> Parametros correctos, insertar")
                                 banderaInsert = True
                             elif str(temporal[index].tipo) == 'BOOLEAN'and (str(cc.val) == "TRUE" or str(cc.val) == "FALSE"):
-                                print(" >>> Parametros correctos, insertar")
+                                imprir("INSERT BD: Parametros correctos, insertar")
                                 banderaInsert = True
                             elif int(resultado) > 0 and (str(temporal[index].tipo) == 'SMALLINT' or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'):
                                 print(" >>> Parametros correctos, insertar")
                                 banderaInsert = True
                             else:
-                                print(" >>> Parametros incorrectos. ")
+                                imprir("INSERT BD: Parametros incorrectos. ")
                                 banderaInsert = False
 
                         index += 1
@@ -376,7 +388,7 @@ class Insert_Datos(Instruccion):
                         else:
                             print(" No se realizo la insercion." + str(sr))
                 else:
-                    print(" >> Parametros insuficientes.")
+                    imprir("INSERT BD:  Parametros insuficientes.")
 
 # ***************************** CREATE TABLE Y INHERITS ****************************************
 class Inherits(Instruccion):
@@ -397,7 +409,7 @@ class CreateTable(Instruccion):
         # SI la tabla ya existe en el diccionario.
         r = ts_global.obtenerTabla(self.id)
         if r is None:
-            print(" > No existe la tabla. ")
+            imprir("INSERT BD: Creando tabla. ")
             # se cuenta el numero de columnas
             columnas = 0
             for campos in self.cuerpo:
@@ -426,7 +438,7 @@ class CreateTable(Instruccion):
                 er =  ErrorRep('Semantico', 'La tabla ya existe en la base de datos.',0)
                 LisErr.agregar(er)
         else:
-            print("> La tabla ya esta en la TS. ")
+            imprir("INSERT BD: La tabla ya esta en la TS. ")
             er = ErrorRep('Semantico', 'La tabla ya existe en la base de datos.', 0)
             LisErr.agregar(er)
 
@@ -483,9 +495,7 @@ class CreateDataBase(Instruccion):
             r = ts_global.obtenerBasesDatos(self.idBase)
             if r is None:
                 rM = Master.createDatabase(str(self.idBase))
-                Ejecucion += " CREATE DB:  Base de datos creada con exito!"+"\n"
-                Lista.clear();
-                Lista.append(Ejecucion)
+                imprir("CREATE DB:  Base de datos creada con exito!")
                 if rM == 0:
                     ts_global.agregarBasesDatos(self)
                     print(" > Base de datos creada con exito!")
@@ -495,9 +505,7 @@ class CreateDataBase(Instruccion):
                     LisErr.agregar(er)
             else:
                 print("Si encontre la BD. ")
-                Ejecucion +="CREATE DB:  La Base de Datos No se Creo ya que existe! "
-                Lista.clear();
-                Lista.append(Ejecucion)
+                imprir("CREATE DB:  La Base de Datos No se Creo ya que existe!")
                 er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
                 LisErr.agregar(er)
         else:
@@ -505,18 +513,15 @@ class CreateDataBase(Instruccion):
             if r is None:
 
                 rM = Master.createDatabase(str(self.idBase))
-                Ejecucion += "CREATE DB:    Base de datos creada con exito!"+"\n"
+                imprir("CREATE DB:    Base de datos creada con exito!")
                 baseActual = str(self.idBase)
-                Lista.clear();
-                Lista.append(Ejecucion)
-
                 if rM == 0:
                     ts_global.agregarBasesDatos(self)
                     print(" > Base de datos creada con exito!")
                 elif rM == 1 or rM == 2:
                     print("> Base de datos ya existe Se va a Reemplazar ")
             else:
-                Ejecucion += "CREATE DB:  Se encontro la BD Bamos a Reemplazar!"+"\n"
+                imprir("CREATE DB:  Se encontro la BD Bamos a Reemplazar!")
                 Lista.clear();
                 Lista.append(Ejecucion)
                 print("Si encontre la BD. Bamos a Reemplazar la Misma! ")
@@ -536,15 +541,9 @@ class ShowDatabases(Instruccion):
         if r  is not None:  #si lo encuentra
             for element in r:
                 print(str(element))
-                Ejecucion +="SHOW DB:>"+ str(element) +"\n"
-                Lista.clear();
-                Lista.append(Ejecucion)
+                imprir("SHOW DB:>"+ str(element))
         else:
-            print("No encontre la BD.")
-            Ejecucion += "SHOW DB: No se encontro la BD" + "\n"
-            Lista.clear();
-            Lista.append(Ejecucion)
-
+            imprir("SHOW DB: No se encontro la BD")
             er = ErrorRep('Semantico', 'No Encontre la Base de Datos', 0)
             LisErr.agregar(er)
 
@@ -585,9 +584,7 @@ class AlterDataBase(Instruccion):
             print("Excelente se puede editar")
             #Editamos nuestro diccionario
             ts_global.actualizarCreateDataBase(str(self.idDB),str(self.opcion))
-            Ejecucion += "ALTER DB: Edicion base de Datos Exitosa!" + "\n"
-            Lista.clear();
-            Lista.append(Ejecucion)
+            imprir("ALTER DB: Edicion base de Datos Exitosa!")
             #Editamos en base de datos fisica
             rM = Master.alterDatabase(str(self.idDB),str(self.opcion))
             if rM==2:
@@ -602,9 +599,7 @@ class AlterDataBase(Instruccion):
                 print( "No llega nunca pero por si las moscas ")
         else:
             print("No encontre la BD.")
-            Ejecucion += "ALTER DB:  No se encontro la base de datos! :( " + "\n"
-            Lista.clear();
-            Lista.append(Ejecucion)
+            imprir("ALTER DB:  No se encontro la base de datos! :( ")
             er = ErrorRep('Semantico', error, 0)
             LisErr.agregar(er)
 
@@ -624,18 +619,12 @@ class DropDataBase(Instruccion):
         r = ts_global.obtenerBasesDatos(self.id)
 
         if r == None:  #si lo encuentra
-            Ejecucion += "DROP DB:  No se encontro la base de datos! :( " + "\n"
-            Lista.clear();
-            Lista.append(Ejecucion)
-
+            imprir("DROP DB:  No se encontro la base de datos! :( ")
             er = ErrorRep('Semantico', 'No Encontre la Base de Datos', 0)
             LisErr.agregar(er)
         else:
             ts_global.EliminarBD(str(self.id))
-            Ejecucion += "DROP DB:  Se elimino correctamente la base de Datos! :) " + "\n"
-            Lista.clear();
-            Lista.append(Ejecucion)
-
+            imprir("DROP DB:  Se elimino correctamente la base de Datos! :) ")
             rM = Master.dropDatabase(str(self.id))
             if rM==0:
                 print("Exito")
