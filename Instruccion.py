@@ -403,7 +403,7 @@ class CreateTable(Instruccion):
         # SI la tabla ya existe en el diccionario.
         r = ts_global.obtenerTabla(self.id)
         if r is None:
-            imprir("INSERT BD: No existe la tabla. ")
+            imprir("INSERT BD: Creando tabla. ")
             # se cuenta el numero de columnas
             columnas = 0
             for campos in self.cuerpo:
