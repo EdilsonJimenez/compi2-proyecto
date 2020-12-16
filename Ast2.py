@@ -1601,6 +1601,7 @@ class Ast2:
 
     def graficar_expresion(self, expresiones):
         global  dot,tag,i
+
         if isinstance(expresiones,ExpresionAritmetica):
             self.graficar_arit_log_rel_bb(expresiones,"Aritmetica")
         elif isinstance(expresiones,ExpresionRelacional) :
@@ -1644,6 +1645,12 @@ class Ast2:
             dot.node(str(padreID), self.getVar(expresiones.val))
             # dot.edge(str(padreID), str(padreID + 1))
             # self.graficar_expresion(expresiones.variable)
+
+        elif isinstance(expresiones, AccesoSubConsultas):
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'Subconsulta')
+            self.GrafoAccesoSubConsultas(expresiones.AnteQuery, expresiones.Query, expresiones.Lista_Alias, str(padreID))
 
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :

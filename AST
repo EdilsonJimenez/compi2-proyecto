@@ -2,36 +2,28 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label="CREATE DATABASE"]
+	Node1 [label=INSTRUCCION_SELECT]
 	Node0 -> Node1
-	Node2 [label="Id: MiBase1"]
+	Node2 [label=SELECT]
 	Node1 -> Node2
-	Node3 [label="Owner: Oscar"]
+	Node3 [label=LISTA_CAMPOS]
 	Node1 -> Node3
-	Node4 [label="Mode: 1"]
-	Node1 -> Node4
-	Node5 [label="CREATE DATABASE"]
-	Node0 -> Node5
-	Node6 [label="Id: MiBase2"]
-	Node5 -> Node6
-	Node7 [label="Owner: Oscar"]
-	Node5 -> Node7
-	Node8 [label="Mode: 1"]
-	Node5 -> Node8
-	Node9 [label="SHOW DATABASE"]
-	Node0 -> Node9
-	Node10 [label="ALTER DATABASE"]
-	Node0 -> Node10
-	Node11 [label="Id: MiBase2"]
+	Node4 [label=ACCESO_CAMPO]
+	Node3 -> Node4
+	Node5 [label="*"]
+	Node4 -> Node5
+	Node6 [label=FROM]
+	Node1 -> Node6
+	Node7 [label=LISTA_TABLAS]
+	Node1 -> Node7
+	Node8 [label=Nombre_Tabla]
+	Node7 -> Node8
+	Node9 [label=tabla1]
+	Node8 -> Node9
+	Node10 [label=Uniones]
+	Node1 -> Node10
+	Node11 [label=Final_Instruccion]
 	Node10 -> Node11
-	Node12 [label=CESAR]
-	Node10 -> Node12
-	Node13 [label="SHOW DATABASE"]
-	Node0 -> Node13
-	Node14 [label="DROP DATABASE"]
-	Node0 -> Node14
-	Node15 [label="Id: MiBase1"]
-	Node14 -> Node15
-	Node16 [label="SHOW DATABASE"]
-	Node0 -> Node16
+	Node12 [label=";"]
+	Node11 -> Node12
 }

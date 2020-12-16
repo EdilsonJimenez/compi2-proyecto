@@ -3,6 +3,10 @@ import jsonMode as Master
 from errores import *
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
+Lista = []
+Ejecucion = ">"
+
+Lista.append(Ejecucion)
 
 class Instruccion():
     'Abstracta'
@@ -282,10 +286,12 @@ class Insert_Datos(Instruccion):
         self.id_table = id_table
         self.valores = valores
 
+
 # ***************************** CREATE TABLE Y INHERITS ****************************************
 class Inherits(Instruccion):
     def __init__(self, id):
         self.id = id
+
 
 class CreateTable(Instruccion):
     def __init__(self, id, cuerpo, inhe):
@@ -321,31 +327,48 @@ class CreateDataBase(Instruccion):
 
     def Ejecutar(self):
         global ts_global
-        global LisErr
+        global LisErr,Ejecucion
 
-        r = ts_global.obtenerBasesDatos(self.idBase)
-
-        if r is None:
-            print(" No encontro la BD. ")
-            rM = Master.createDatabase(str(self.idBase))
-
-            if rM == 0:
-                ts_global.agregarBasesDatos(self)
-                print(" > Base de datos creada con exito!")
-
-            elif rM == 1 or rM == 2:
-                print("> Base de datos ya existe.")
-                er =  ErrorRep('Semantico', 'La Base de datos ya existe',0)
+        if self.replace == "":
+            r = ts_global.obtenerBasesDatos(self.idBase)
+            if r is None:
+                rM = Master.createDatabase(str(self.idBase))
+                Ejecucion += " CREATE DB:  Base de datos creada con exito!"+"\n"
+                Lista.clear();
+                Lista.append(Ejecucion)
+                if rM == 0:
+                    ts_global.agregarBasesDatos(self)
+                    print(" > Base de datos creada con exito!")
+                elif rM == 1 or rM == 2:
+                    print("> Base de datos ya existe.")
+                    er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
+                    LisErr.agregar(er)
+            else:
+                print("Si encontre la BD. ")
+                Ejecucion +="CREATE DB:  La Base de Datos No se Creo ya que existe! "
+                Lista.clear();
+                Lista.append(Ejecucion)
+                er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
                 LisErr.agregar(er)
-
         else:
-            print("Si encontre la BD. ")
-            er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
-            LisErr.agregar(er)
+            r = ts_global.obtenerBasesDatos(self.idBase)
+            if r is None:
 
+                rM = Master.createDatabase(str(self.idBase))
+                Ejecucion += "CREATE DB:    Base de datos creada con exito!"+"\n"
+                Lista.clear();
+                Lista.append(Ejecucion)
 
-
-
+                if rM == 0:
+                    ts_global.agregarBasesDatos(self)
+                    print(" > Base de datos creada con exito!")
+                elif rM == 1 or rM == 2:
+                    print("> Base de datos ya existe Se va a Reemplazar ")
+            else:
+                Ejecucion += "CREATE DB:  Se encontro la BD Bamos a Reemplazar!"+"\n"
+                Lista.clear();
+                Lista.append(Ejecucion)
+                print("Si encontre la BD. Bamos a Reemplazar la Misma! ")
 
 
 
@@ -355,17 +378,22 @@ class ShowDatabases(Instruccion):
 
     def Ejecutar(self):
         global ts_global
-        global LisErr
+        global LisErr,Ejecucion
         #idDB = self.cadenaLike.replace("\"","")
 
         r  = Master.showDatabases()
-
         if r  is not None:  #si lo encuentra
-
             for element in r:
                 print(str(element))
+                Ejecucion +="SHOW DB:>"+ str(element) +"\n"
+                Lista.clear();
+                Lista.append(Ejecucion)
         else:
             print("No encontre la BD.")
+            Ejecucion += "SHOW DB: No se encontro la BD" + "\n"
+            Lista.clear();
+            Lista.append(Ejecucion)
+
             er = ErrorRep('Semantico', 'No Encontre la Base de Datos', 0)
             LisErr.agregar(er)
 
@@ -380,7 +408,8 @@ class AlterDataBase(Instruccion):
 
     def Ejecutar(self):
         global ts_global
-        global LisErr
+        global LisErr,Ejecucion
+
 
         c1 = False
         c2 = False
@@ -393,12 +422,10 @@ class AlterDataBase(Instruccion):
         r2 = ts_global.obtenerBasesDatos(opcionf)
 
         if r is not None:  #si lo encuentra
-            print("Se encontro la BD. ")
             c1 = True
         else:
             error += "No se Encontro la Base De datos "
         if r2 is  None:  #No Esta el Nombre para definirlo en la bd
-            print("No se encontro la opcion a setear excelente! ")
             c2 = True
         else:
             error += "  Se encontro el Valor a Setear"
@@ -407,11 +434,11 @@ class AlterDataBase(Instruccion):
             print("Excelente se puede editar")
             #Editamos nuestro diccionario
             ts_global.actualizarCreateDataBase(str(self.idDB),str(self.opcion))
-
-
+            Ejecucion += "ALTER DB: Edicion base de Datos Exitosa!" + "\n"
+            Lista.clear();
+            Lista.append(Ejecucion)
             #Editamos en base de datos fisica
             rM = Master.alterDatabase(str(self.idDB),str(self.opcion))
-
             if rM==2:
                 print("No se encuentra la BD")
             elif rM==3:
@@ -422,9 +449,11 @@ class AlterDataBase(Instruccion):
                 print("Se Edito la Base de Datos con exito")
             else:
                 print( "No llega nunca pero por si las moscas ")
-
         else:
             print("No encontre la BD.")
+            Ejecucion += "ALTER DB:  No se encontro la base de datos! :( " + "\n"
+            Lista.clear();
+            Lista.append(Ejecucion)
             er = ErrorRep('Semantico', error, 0)
             LisErr.agregar(er)
 
@@ -439,19 +468,22 @@ class DropDataBase(Instruccion):
 
     def Ejecutar(self):
         global ts_global
-        global LisErr
+        global LisErr,Ejecucion
 
         r = ts_global.obtenerBasesDatos(self.id)
 
         if r == None:  #si lo encuentra
-            print("No encontre la BD.")
+            Ejecucion += "DROP DB:  No se encontro la base de datos! :( " + "\n"
+            Lista.clear();
+            Lista.append(Ejecucion)
+
             er = ErrorRep('Semantico', 'No Encontre la Base de Datos', 0)
             LisErr.agregar(er)
         else:
-
-            print("Se encontro la BD. ")
-
             ts_global.EliminarBD(str(self.id))
+            Ejecucion += "DROP DB:  Se elimino correctamente la base de Datos! :) " + "\n"
+            Lista.clear();
+            Lista.append(Ejecucion)
 
             rM = Master.dropDatabase(str(self.id))
             if rM==0:

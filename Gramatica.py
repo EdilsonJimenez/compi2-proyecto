@@ -395,16 +395,6 @@ from Instruccion import *
 from expresiones import *
 from interprete import *
 
-# precedence = (
-#  ('left', 'OR'),
-# ('left', 'AND'),
-# ('right', 'NOT'),
-# ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
-#  ('right', 'VIRGULILLA'),
-#  ('left', 'MAS', 'MENOS'),
-# ('left', 'ASTERISCO', 'DIVISION', 'PORCENTAJE'),
-# )
-
 
 precedence = (
     ('left', 'OR'),
@@ -445,8 +435,6 @@ def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
     t[0] = [t[1]]
 
-    # ast.node('INICIO', 'INSTRUCCIONES.val = ' + str(t[1]['valor']) )
-    # ast.edge(t[1]['nombre'],'INICIO')
 
 def p_instruccion(t):
     '''INSTRUCCION  : DQL_COMANDOS
@@ -454,8 +442,7 @@ def p_instruccion(t):
                     | DML_COMANDOS'''
     t[0] = t[1]
 
-    # ast.node(n1, 'INSTRUCCION.val = ' + str(t[1]['valor']) )
-    # ast.edge(t[1]['nombre'],n1)
+
 
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
@@ -538,9 +525,6 @@ def p_Lista_SubsQuery(t):
 def p_Lista_COMA(t):
     'LISTAA    :   COMA'
     t[0] = str(t[1])
-
-
-
 
 
 
@@ -698,116 +682,8 @@ def p_Condi_Where(t):
 
 # Condiciones
 
-def p_Condiciones_Lista(t):
-    'CONDICIONES : CONDICIONES CONDICION'
-
-    # t[1].append(t[2])
-    # t[0] = t[1]
-
-
-def p_Condiciones_Condicion(t):
-    'CONDICIONES : CONDICION'
-
-    # t[0] = [t[1]]
-
-
-def p_Condicion_CondicionRel(t):
-    'CONDICION : CONDICION_REL SIMBOLO_LOGICO  CONDICION_REL  OTRO_LOGICO'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-def p_Condicion_CondicionRel_Sin(t):
-    'CONDICION : CONDICION_REL SIMBOLO_LOGICO CONDICION_REL'
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-def p_Condicion_CondiRel(t):
-    'CONDICION : CONDICION_REL'
-
-    # t[0] = str(t[1])
-
-
-def p_CondicionRel_Expresionn(t):
-    'CONDICION_REL : EXPRESIONNE OPERADOR EXPRESIONNE'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-def p_CondicionRel_Negacion(t):
-    'CONDICION_REL : SIMBOLO_NEG  EXPRESIONNE'
-    # t[0] = str(t[1]) + str(t[2])
-
-
-def p_CondicionRel_Expre(t):
-    'CONDICION_REL : EXPRESIONNE'
-    # t[0] = str(t[1])
-
-
-def p_OtroLogico_SimboloLogic(t):
-    'OTRO_LOGICO : SIMBOLO_LOGICO CONDICIONES'
-    # t[0] = str(t[1]) + str(t[2])
-
-
 # ------------------------------------------------------------------------------------------------------------------
 # Expresiones
-
-
-def p_Expresion_Nombre(t):
-    'EXPRESIONNE : NOMBRE_C PUNTO CAMPOSC'
-
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
-def p_Expresion_CampoC(t):
-    'EXPRESIONNE : expresion'
-
-    # t[0] = str(t[1])
-
-
-def p_Expresion_SubQuery(t):
-    'EXPRESIONNE : QUERY'
-
-    # t[0] = str(t[1])
-
-
-def p_SimboloLogico_Logicos(t):
-    ''' SIMBOLO_LOGICO : AND
-                      | OR '''
-
-    # t[0] = str(t[1])
-
-
-def p_SimboloNegacion_sim(t):
-    'SIMBOLO_NEG  :  NOT'
-
-    # t[0] = str(t[1])
-
-
-def p_NombreC_id(t):
-    'NOMBRE_C : ID'
-
-    # t[0] = str(t[1])
-
-
-def p_CamposC_id(t):
-    '''CAMPOSC     :  ID
-                    | ENTERO
-                    | FLOTANTE
-                    | CADENASIMPLE
-                    | CADENADOBLE '''
-    #t[0] = str(t[1])
-    t[0] = ExpresionValor(t[1])
-
-def p_SimboloRela_Simbolos(t):
-    '''OPERADOR     : IGUAL
-                    | DIFERENTE
-                    | MAYOR
-                    | MENOR
-                    | MENORIGUAL
-                    | MAYORIGUAL '''
-
-    # t[0] = str(t[1])
-
 
 
 #No viene
@@ -827,13 +703,13 @@ def p_Inners_Inner(t):
 
 
 def p_Inner_InnerJoin(t):
-    'INNERR : TIPOS_INNER JOIN TABLA_REF ON CONDICIONES'
+    'INNERR : TIPOS_INNER JOIN TABLA_REF ON expresion'
 
     # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5])
 
 
 def p_Inner_Join(t):
-    'INNERR :  JOIN TABLA_REF ON CONDICIONES'
+    'INNERR :  JOIN TABLA_REF ON expresion'
 
     # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
@@ -857,13 +733,13 @@ def p_Inner_Where(t):
 
 
 def p_SubColumn_join(t):
-    'SUB_COLUMN  :  JOIN EXPRESIONNE'
+    'SUB_COLUMN  :  JOIN expresion'
 
     # t[0] = str(t[1]) + str(t[2])
 
 
 def p_SubColumn_Expresione(t):
-    'SUB_COLUMN  :  EXPRESIONNE'
+    'SUB_COLUMN  :  expresion'
 
     # t[0] = str(t[1])
 
@@ -1003,11 +879,6 @@ def p_S2_3(t):
     'S2 :  ALIAS'
     t[0] = Alias_Campos_ListaCamposSinLista(t[1])
 
-
-
-#def p_MoreOrder_Having(t):
-#    MORE_ORDER  :  HAVING CONDICIONES
-    # t[0] = str(t[1]) + str(t[2])   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< por si acaso
 
 
 def p_State_orden1(t):
@@ -1480,7 +1351,7 @@ def p_Create_TABLE_TIPO_CAMPO5(t):
 
 
 def p_Create_TABLE_TIPO_CAMPO6(t):
-    'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ CONDICIONES PARDER'
+    'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ expresion PARDER'
 
 
 # FIN CREATE TABLE
@@ -1605,7 +1476,6 @@ def p_instruccion_dml_comandos_DELETE(t):
 
 def p_instruccion_dml_comandos_DELETE2(t):
     'DML_COMANDOS       : DELETE FROM LISTA_DE_IDS PUNTOCOMA'
-    #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
 
     print('\n' + str(t[0]) + '\n')
 
@@ -1615,14 +1485,6 @@ def p_instruccion_dml_comandos_DELETE2(t):
 def p_instruccion_dml_comandos_DROP_TABLE(t):
     'DML_COMANDOS       : DROP TABLE LISTA_DE_IDS PUNTOCOMA'
     t[0] = DropTable(t[3])
-
-
-# t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-
-
-# t[0] = { 'valor' : 'DROP_TABLE', 'nombre' : n1, 'valor2': alias.metodo_prueba("sda") }
-
-# print('\n' + str(t[0]) + '\n')
 
 
 # LISTADO DE IDS--------------------------------------------------------
@@ -1657,37 +1519,31 @@ def p_instruccion_dml_comandos_ALTER_TABLE(t):
 
 def p_instruccion_dml_comandos_ALTER_TABLE2(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN LISTA_DE_IDS PUNTOCOMA'
- #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Drop_Column(t[3], t[6])
 
 def p_instruccion_dml_comandos_ALTER_TABLE3(t):
     'DML_COMANDOS       : ALTER TABLE ID  RENAME COLUMN ID TO ID PUNTOCOMA'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])+ str(t[8]) + str(t[9])
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Rename_Column(t[3], ExpresionValor(t[6]), ExpresionValor(t[8]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE4(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP CONSTRAINT ID  PUNTOCOMA'
-    #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7])
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Drop_Constraint(t[3], ExpresionValor(t[6]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE5(t):
     'DML_COMANDOS       : ALTER TABLE ID  ALTER COLUMN ID SET NOT NULL  PUNTOCOMA'
-    #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10])
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_table_Alter_Column_Set(t[3], ExpresionValor(t[6]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
-    #  t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]))
 
 def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
-    #   t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])  + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Add_Constraint(t[3], ExpresionValor(t[6]), ExpresionValor(t[9]))
 
@@ -2059,15 +1915,7 @@ def p_expresion_logica_in(t):
     elif t[2] == 'NOT':
         t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.NOT_IN)
 
-# def p_expresion_logica_paren(t) :
-#     'expresion_logica : PARIZQ expresion_logica PARDER'
-#     t[0] = t[1]
 
-
-# #LO TENGO EN LOGICA
-# def p_unaria_notlogica(t) :
-#     'expresion_unaria : NOT expresion_logica '
-#     t[0] = UnitariaLogicaNOT(t[2])
 
 
 # LO TENGO EN NUMERICA ARISMETICA
@@ -2121,6 +1969,7 @@ def p_valor_abs(t):
 
 def p_valor_Subquery(t):
     'expresion_aritmetica :  QUERY '
+    print("Estoy entrando <<<<<<<<<<<<<<<<<<<<<<<<<")
     t[0] = t[1]
 
 
