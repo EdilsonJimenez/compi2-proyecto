@@ -3,13 +3,13 @@ CREATE DATABASE MiBase1 OWNER = Oscar MODE = 1;
 USE MiBase1;
 
 CREATE TABLE profesional(
-	carne VARCHAR(20),
+	carne INT,
 	nombre INT,
 	apellido SMALLINT,
 	bandera BOOLEAN
 );
 
-INSERT INTO profesional VALUES("2020","22",32, TRUE);
+INSERT INTO profesional VALUES(20+20,2+2,32, TRUE);
 
 or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'
 or str(cc.val) == "FALSE"

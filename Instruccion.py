@@ -1,5 +1,6 @@
 import ts as TS
 import jsonMode as Master
+import interprete as Inter
 from six import string_types
 from errores import *
 from expresiones import *
@@ -330,21 +331,25 @@ class Insert_Datos(Instruccion):
 
                         if isinstance(temporal[index].tipo, valorTipo):
 
-                            if isinstance(str(cc.val), string_types) and (str(temporal[index].tipo.valor) == 'VARCHAR' or str(temporal[index].tipo.valor) == 'CHARACTER' or str(temporal[index].tipo.valor) == 'CHAR'):
+                            resultado = Inter.procesar_expresion(cc, None)
+                            print(" Mi proceso: "+str(resultado))
+                            if isinstance(resultado, string_types) and (str(temporal[index].tipo.valor) == 'VARCHAR' or str(temporal[index].tipo.valor) == 'CHARACTER' or str(temporal[index].tipo.valor) == 'CHAR'):
                                 print(" >>> Parametros correctos, insertar, Validar la exprecion.")
                                 banderaInsert = True
                             else:
                                 print(" >>> Parametros incorrectos. ")
                                 banderaInsert = False
                         else:
-                            print(" Valor: >>>" + str(cc.val))
-                            if isinstance(str(cc.val), string_types) and ( str(temporal[index].tipo) == 'TEXT' or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'):
+                            resultado = Inter.procesar_expresion(cc, None)
+                            print(" Mi proceso: "+str(resultado))
+                            #print(" Valor: >>>" + str(cc.val))
+                            if isinstance(resultado, string_types) and  str(temporal[index].tipo) == 'TEXT':
                                 print(" >>> Parametros correctos, insertar")
                                 banderaInsert = True
                             elif str(temporal[index].tipo) == 'BOOLEAN'and (str(cc.val) == "TRUE" or str(cc.val) == "FALSE"):
                                 print(" >>> Parametros correctos, insertar")
                                 banderaInsert = True
-                            elif int(cc.val) > 0 and str(temporal[index].tipo) == 'SMALLINT':
+                            elif int(resultado) > 0 and (str(temporal[index].tipo) == 'SMALLINT' or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'):
                                 print(" >>> Parametros correctos, insertar")
                                 banderaInsert = True
                             else:
@@ -358,15 +363,16 @@ class Insert_Datos(Instruccion):
                     if banderaInsert is True:
                         listaTemp = []
                         for ccc in self.valores:
-                            d = DatoInsert(baseActual, r2, str(temporal[ix].id), ccc.val)
+                            resultado = Inter.procesar_expresion(ccc, None)
+                            d = DatoInsert(baseActual, r2, str(temporal[ix].id), resultado)
                             ts_global.agregarDato(d)
-                            listaTemp.append(ccc.val)
+                            listaTemp.append(resultado)
                             ix += 1
 
                         sr = Master.insert(baseActual, str(self.id_table[0].val), listaTemp)
                         print(baseActual + str(self.id_table[0].val) + str(len(listaTemp)))
                         if sr is 0:
-                            print(" >>>> Insert realizado con exito.")
+                            print(" >>>> Inserts realizado con exito.")
                         else:
                             print(" No se realizo la insercion." + str(sr))
                 else:
