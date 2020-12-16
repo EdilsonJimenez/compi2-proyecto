@@ -297,6 +297,7 @@ class Insert_Datos(Instruccion):
         self.valores = valores
 
     def Ejecutar(self):
+        print("Ejecucion")
         global ts_global, baseActual
         global LisErr
         r = ts_global.obtenerBasesDatos(baseActual)
