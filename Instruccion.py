@@ -349,20 +349,22 @@ class Insert_Datos(Instruccion):
 
                         index += 1
 
-                        # INSERTANDO DATOS
-                        ix = 0
-                        if banderaInsert is True:
-                            for ccc in self.valores:
-                                d = DatoInsert(baseActual, self.id_table, str(temporal[ix].id), ccc.val)
-                                ts_global.agregarDato(d)
+                    # INSERTANDO DATOS
+                    ix = 0
+                    if banderaInsert is True:
+                        listaTemp = []
+                        for ccc in self.valores:
+                            d = DatoInsert(baseActual, r2, str(temporal[ix].id), ccc.val)
+                            ts_global.agregarDato(d)
+                            listaTemp.append(ccc.val)
                             ix += 1
 
-                            sr = Master.insert(baseActual, str(self.id_table), self.valores)
-                            if sr is 0:
-                                print(" >>>> Insert realizado con exito.")
-                            else:
-                                print(" No se realizo la insercion." + str(sr))
-
+                        sr = Master.insert(baseActual, str(self.id_table[0].val), listaTemp)
+                        print(baseActual + str(self.id_table[0].val) + str(len(listaTemp)))
+                        if sr is 0:
+                            print(" >>>> Insert realizado con exito.")
+                        else:
+                            print(" No se realizo la insercion." + str(sr))
                 else:
                     print(" >> Parametros insuficientes.")
 
