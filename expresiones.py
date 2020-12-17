@@ -298,4 +298,8 @@ class UnitariaAritmetica(Expresion):
         self.exp1 = exp1
         self.operador = operador
 
-
+class CAMPO_TABLA_ID_PUNTO_ID(Expresion):
+    def __init__(self, tablaid, campoid,tipovariable):
+        self.tablaid = tablaid
+        self.campoid = campoid
+        self.tipovariable = tipovariable

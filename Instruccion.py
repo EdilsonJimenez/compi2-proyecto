@@ -879,9 +879,9 @@ class Alter_Table_AddColumn(Instruccion):
 
 
 class Alter_COLUMN(Instruccion):
-    def __init__(self, id_columna,id_tipo):
-        self.id_columna = id_columna
-        self.id_tipo = id_tipo
+    def __init__(self, idtabla,columnas):
+        self.idtabla = idtabla
+        self.columnas = columnas
 
 
 class Alter_Table_Drop_Column(Instruccion):

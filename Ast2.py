@@ -71,7 +71,7 @@ class Ast2:
 
             elif isinstance(i, Alter_COLUMN):
                 print("Es Una Instruccion Alter  Column")
-                self.grafoAlter_Column(i.id_columna,i.id_tipo,padre)
+                self.grafoAlter_Column(i.idtabla,i.columnas,padre)
 
             elif isinstance(i, Alter_Table_AddColumn):
                 print("Es Una Instruccion Alter Add Column")
@@ -128,6 +128,7 @@ class Ast2:
                 self.grafoAlter_AddForeignKey(i.id_table, i.id_column, i.id_column_references, padre)
             elif isinstance(i, Alter_Table_Add_Constraint):
                 self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column, padre)
+            
             else:
                 print("No es droptable")
 
@@ -1648,14 +1649,20 @@ class Ast2:
             padreID = self.i
             dot.node(str(padreID), self.getVar(expresiones.val))
             # dot.edge(str(padreID), str(padreID + 1))
-            # self.graficar_expresion(expresiones.variable)
-
+            # self.graficar_expresion(expresiones.variable) CAMPO_TABLA_ID_PUNTO_ID
         elif isinstance(expresiones, AccesoSubConsultas):
             self.inc()
             padreID=self.i
             dot.node(str(padreID),'Subconsulta')
             self.GrafoAccesoSubConsultas(expresiones.AnteQuery, expresiones.Query, expresiones.Lista_Alias, str(padreID))
-
+        elif isinstance(expresiones,CAMPO_TABLA_ID_PUNTO_ID) :
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),'ExpresionValor ID punto ID')
+            dot.edge(str(padreID),str(padreID+1))
+            self.inc()
+            padreID=self.i
+            dot.node(str(padreID),str(expresiones.tablaid)+"."+str(expresiones.campoid))
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
         global  dot,tag,i
@@ -2344,9 +2351,9 @@ class Ast2:
 
 
 #----------------------------------------------------------------------------------------------------------
-#-----------------------GRAFICAR ALTER TABLE ADD COLUM-------------------------------------------------------------------
-    def grafoAlter_Column(self, id_columna,tipo, padre):
-        global  dot,tag,i
+#-----------------------GRAFICAR ALTER TABLE ALTER COLUM-------------------------------------------------------------------
+    def grafoAlter_Column(self, id_tabla,columnas, padre):
+        global  dot,tag,i # id_columna  tipo
 
         self.inc()
         nuevoPadre=self.i
@@ -2355,41 +2362,36 @@ class Ast2:
 
         self.inc();
         nuevoPadre2 = self.i
-        dot.node('Node'+str(self.i),"ID COLUMNA")
+        dot.node('Node'+str(self.i),"ID TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
         self.inc();
-        dot.node('Node'+  str(self.i), str(id_columna))
+        dot.node('Node'+  str(self.i), str(id_tabla))
         dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
+
 
 
         self.inc();
         nuevoPadre3 = self.i
-        dot.node('Node'+str(self.i),"TIPO")
+        dot.node('Node'+str(self.i),"COLUMNAS")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
-
-        if isinstance(tipo, valorTipo):
-
-            if tipo.expresion == None:
+        for i in columnas:
+            if isinstance(i.tipo, valorTipo):
                 self.inc();
-                dot.node('Node'+  str(self.i), str(tipo.valor))
+                dot.node('Node'+  str(self.i), ' Tipo: '+ i.tipo.valor)
                 dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
             else:
                 self.inc();
-                dot.node('Node'+  str(self.i), str(tipo.valor))
+                dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
                 dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
-                self.inc();
-                nuevoPadre4 = self.i
-                dot.node('Node'+  str(self.i), 'EXPRESION')
-                dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
-                self.graficar_expresion(tipo.expresion)
-                dot.edge('Node'+str(nuevoPadre4),str(nuevoPadre4+1))
+           
 
-        else:
-            self.inc();
-            dot.node('Node'+  str(self.i), str(tipo))
-            dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
+
+       
+
+
+        
 
 
     def grafoAlter_DropColumn(self, id_tabla , columnas, padre):

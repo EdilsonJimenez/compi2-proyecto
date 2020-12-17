@@ -396,7 +396,7 @@ from Ast2 import *
 from Instruccion import *
 from expresiones import *
 from interprete import *
-
+cadena=''
 
 precedence = (
     ('left', 'OR'),
@@ -424,20 +424,22 @@ def p_init(t):
     arbolito = Ast2(t[0])
     arbolito.crearReporte()
     #SEGUNDA PASADA
-    arbolito2 = interprete2(t[0])
-    arbolito2.ejecucion()
+    #arbolito2 = interprete2(t[0])
+    #arbolito2.ejecucion()
 
 
 def p_instrucciones_lista(t):
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
     t[1].append(t[2])
     t[0] = t[1]
+    rep_gramatica('<TR><TD> INSTRUCCIONES → INSTRUCCIONES INSTRUCCION </TD><TD> INSTRUCCIONES=t[1].append(t[2]) <BR/> INSTRUCCIONES=t[1] </TD></TR>')
 
 
 
 def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
     t[0] = [t[1]]
+    rep_gramatica('\n <TR><TD> INSTRUCCIONES → INSTRUCCION </TD><TD> INSTRUCCIONES=t[1] </TD></TR>')
 
 
 def p_instruccion(t):
@@ -453,6 +455,7 @@ def p_instruccion_Use_database(t):
     'DQL_COMANDOS       : USE ID PUNTOCOMA'
     global baseActual
     baseActual = str(t[2])
+    rep_gramatica('\n <TR><TD> DQL_COMANDOS → USE ID PUNTOCOMA </TD><TD> DQL_COMANDOS=t[2] </TD></TR>')
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
 
@@ -1556,15 +1559,33 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Add_Constraint(t[3], ExpresionValor(t[6]), ExpresionValor(t[9]))
 
+
+
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
-    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
-    t[0] = Alter_COLUMN(t[3],t[5])
+    'DML_COMANDOS       :  ALTER TABLE ID  LISTA_ALTER_COLUMN PUNTOCOMA ' #ID  TYPE TIPO_CAMPO  COMA'    
+    t[0] = Alter_COLUMN(t[3],t[4])
 
 
-def p_instruccion_dml_comandos_ALTER_TABLE9(t):
-    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  PUNTOCOMA'
-    t[0] = Alter_COLUMN(t[3],t[5])
+# LISTADO DE IDS TIPE COMA--------------------------------------------------------
+def p_CREATE_TABLE_LISTA_IDS_2(t):
+    'LISTA_ALTER_COLUMN      : LISTA_ALTER_COLUMN LISTA_ALTER_COLUMN_'
+    t[1].append(t[2])
+    t[0] = t[1]
 
+
+def p_CREATE_TABLE_LISTA_IDS2_2(t):
+    'LISTA_ALTER_COLUMN    : LISTA_ALTER_COLUMN_'
+    t[0] = [t[1]]
+
+
+def p_CREATE_TABLE_LISTA_IDS3_2(t):
+    'LISTA_ALTER_COLUMN_  :  ALTER COLUMN ID TYPE TIPO_CAMPO COMA'
+    t[0] = ExpresionValor2(t[3], t[5])
+
+
+def p_CREATE_TABLE_LISTA_IDS4_2(t):
+    'LISTA_ALTER_COLUMN_  :   ALTER COLUMN ID TYPE TIPO_CAMPO'
+    t[0] = ExpresionValor2(t[3], t[5])
 
 # DDL
 # -----------------------------------------------------------------------------------------------------------------
@@ -1948,6 +1969,9 @@ def p_valor_id(t):
     '''expresion_aritmetica : ID'''
     t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL)
 
+def p_valor_id_2(t):
+    '''expresion_aritmetica : ID PUNTO ID'''
+    t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[1], TIPO_VARIABLE.TEMPORAL)
 
 def p_valor_number(t):
     '''expresion_aritmetica : ENTERO'''
@@ -2201,6 +2225,15 @@ def p_error(t):
         print(str(tok.type))
         if not tok or tok.type == 'PUNTOCOMA':
             break
+
+
+
+def rep_gramatica(cad):
+    global cadena
+    cadena+=cad
+
+dot = Digraph('g', filename='gram_asc.gv', format='png',
+            node_attr={'shape': 'plaintext', 'height': '.1'})
 
 
 import ply.yacc as yacc
