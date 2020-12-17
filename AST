@@ -120,7 +120,7 @@ digraph AST {
 	Node65 -> Node66
 	67 [label=ExpresionValor]
 	67 -> 68
-	68 [label=100]
+	68 [label=250]
 	Node66 -> 67
 	Node70 [label="VALOR NUEVO"]
 	Node65 -> Node70
@@ -158,7 +158,7 @@ digraph AST {
 	Node85 -> Node90
 	91 [label=ExpresionValor]
 	91 -> 92
-	92 [label=789]
+	92 [label=899]
 	Node90 -> 91
 	Node94 [label="VALOR NUEVO"]
 	Node85 -> Node94
@@ -172,70 +172,65 @@ digraph AST {
 	99 -> 100
 	100 [label=FALSE]
 	Node98 -> 99
-	Node102 [label=DELETE]
+	Node102 [label=UPDATE]
 	Node0 -> Node102
 	Node103 [label="ID TABLA"]
 	Node102 -> Node103
 	Node104 [label=profesional]
 	Node103 -> Node104
-	Node105 [label=WHERE]
+	Node105 [label=SET]
 	Node102 -> Node105
-	Node106 [label="VALOR CONDICION"]
+	Node106 [label="VALOR CONDICION SET"]
 	Node105 -> Node106
 	107 [label=ExpresionRelacional]
 	108 [label=exp1]
 	107 -> 108
 	108 -> 109
-	109 [label=">="]
+	109 [label="=="]
 	107 -> 109
 	110 [label=exp2]
 	107 -> 110
 	110 -> 111
 	111 [label=ExpresionValor]
 	111 -> 112
-	112 [label=150]
+	112 [label=999]
 	Node106 -> 107
-<<<<<<< HEAD
-=======
-	Node114 [label=UPDATE]
-	Node0 -> Node114
-	Node115 [label="ID TABLA"]
+	Node114 [label=WHERE]
+	Node102 -> Node114
+	Node115 [label="VALOR CONDICION WHERE"]
 	Node114 -> Node115
-	Node116 [label=profesional]
-	Node115 -> Node116
-	Node117 [label=SET]
-	Node114 -> Node117
-	Node118 [label="VALOR CONDICION SET"]
-	Node117 -> Node118
-	119 [label=ExpresionRelacional]
-	120 [label=exp1]
+	116 [label=ExpresionLogica]
+	117 [label=exp1]
+	116 -> 117
+	117 -> 118
+	118 [label=ExpresionRelacional]
+	119 [label=exp1]
+	118 -> 119
 	119 -> 120
-	120 -> 121
-	121 [label="=="]
-	119 -> 121
-	122 [label=exp2]
-	119 -> 122
+	120 [label="=="]
+	118 -> 120
+	121 [label=exp2]
+	118 -> 121
+	121 -> 122
+	122 [label=ExpresionValor]
 	122 -> 123
-	123 [label=ExpresionValor]
-	123 -> 124
-	124 [label=999]
-	Node118 -> 119
-	Node126 [label=WHERE]
-	Node114 -> Node126
-	Node127 [label="VALOR CONDICION WHERE"]
-	Node126 -> Node127
-	128 [label=ExpresionRelacional]
-	129 [label=exp1]
-	128 -> 129
+	123 [label=500]
+	124 [label=AND]
+	116 -> 124
+	125 [label=exp2]
+	116 -> 125
+	125 -> 126
+	126 [label=ExpresionRelacional]
+	127 [label=exp1]
+	126 -> 127
+	127 -> 128
+	128 [label="=="]
+	126 -> 128
+	129 [label=exp2]
+	126 -> 129
 	129 -> 130
-	130 [label="!="]
-	128 -> 130
-	131 [label=exp2]
-	128 -> 131
-	131 -> 132
-	132 [label=ExpresionValor]
-	132 -> 133
-	133 [label=200]
-	Node127 -> 128
->>>>>>> master
+	130 [label=ExpresionValor]
+	130 -> 131
+	131 [label=789]
+	Node115 -> 116
 }

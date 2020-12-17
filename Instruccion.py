@@ -825,56 +825,56 @@ class Update_Datos(Instruccion):
         ListaTablasG.append(self.id_table[0].val)
         rb = ts_global.obtenerBasesDatos(baseActual)
         if rb is None:
-            print("UPDATE: No existe la base de datos.")
+            imprir("UPDATE: No existe la base de datos.")
+            er = ErrorRep('Semantico', 'No existe la base de datos.', 0)
+            LisErr.agregar(er)
         else:
             rt = ts_global.obtenerTabla(self.id_table[0].val)
             if rt is None:
-                print("UPDATE: No existe la tabla")
+                imprir("UPDATE: No existe la tabla indicada.")
+                er = ErrorRep('Semantico', 'No existe la tabla indicada.', 0)
+                LisErr.agregar(er)
             else:
                 resultado = Inter.procesar_expresion(self.valor_where, ts_global)
                 listaUpdate = []
+                if len(resultado) is 0:
+                    imprir("UPDATE: No existen registros.")
+                    er = ErrorRep('Semantico', 'No existen registros que cumplan la condicion para actualizar.', 0)
+                    LisErr.agregar(er)
+                else:
+                    listaSet = []
+                    # Valores SET
+                    for i in self.valores_set:
+                        p: ExpresionAritmetica = i
+                        listaSet.append(p)
 
-                listaSet = []
-                # Valores SET
-                for i in self.valores_set:
-                    p:ExpresionAritmetica = i
-                    print(str(p.exp1.id) + "=" + str(p.exp2.val))
-                    listaSet.append(p)
+                    # recorrer lista de valores a actualizar.
+                    for i in resultado:
+                        ii:DatoInsert = i
 
-                # recorrer lista de valores a actualizar.
-                for i in resultado:
-                    ii:DatoInsert = i
-                    print(" > Valores: " + str(ii.valor)+ " "+str(ii.columna))
+                        #recorrer tabla de simbolos.
+                        for item in ts_global.Datos:
+                            v: DatoInsert = ts_global.obtenerDato(item)
+                            bandera = False
+                            if str(ii.fila) == str(v.fila):
+                                for p in listaUpdate:
+                                    if item == p:
+                                        bandera = True
+                                    else:
+                                        bandera = False
 
-                    #recorrer tabla de simbolos.
-                    for item in ts_global.Datos:
-                        v: DatoInsert = ts_global.obtenerDato(item)
-                        bandera = False
-                        if str(ii.fila) == str(v.fila):
-                            for p in listaUpdate:
-                                if item == p:
-                                    bandera = True
-                                else:
-                                    bandera = False
+                                if bandera is False:
+                                    listaUpdate.append(v)
 
-                            if bandera is False:
-                                listaUpdate.append(v)
-                                print("Ubicado")
-
-                for i in listaUpdate:
-                    ii: DatoInsert = i
-                    for s in listaSet:
-                        ss: ExpresionAritmetica = s
-                        if str(ss.exp1.id) == str(ii.columna):
-                            print(" Modificar")
-                            ii.valor = str(ss.exp2.val)
-                        else:
-                            print(" No modificara")
-
-                print(" >>> MI TABLA DE SIMBOLOS ( DATOS ).")
-                for it in ts_global.Datos:
-                    t: DatoInsert = ts_global.obtenerDato(it)
-                    print(str(t.columna) + " " + str(t.bd) + " " + str(t.tabla) + " " + str(t.valor)+ " " + str(t.fila))
+                    for i in listaUpdate:
+                        ii: DatoInsert = i
+                        for s in listaSet:
+                            ss: ExpresionAritmetica = s
+                            if str(ss.exp1.id) == str(ii.columna):
+                                ii.valor = str(ss.exp2.val)
+                            else:
+                                pass
+                imprir("UPDATE: Se actualizaron los registros.")
 
 #Clase para el Alter Table----------------------------
 class Alter_Table_AddColumn(Instruccion):
