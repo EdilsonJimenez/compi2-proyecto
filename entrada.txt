@@ -9,9 +9,12 @@ CREATE TABLE profesional(
 	bandera BOOLEAN
 );
 
-INSERT INTO profesional VALUES(20+20,2+2,'MiId', TRUE);
-DELETE FROM profesional WHERE carne = 40;
-
+INSERT INTO profesional VALUES(300,123,'Mazariegos', TRUE);
+INSERT INTO profesional VALUES(400,456, 'Lopez', TRUE);
+INSERT INTO profesional VALUES(200,789,'Mazariegos', FALSE);
+INSERT INTO profesional VALUES(50,789,'Mazariegos', FALSE);
+DELETE FROM profesional WHERE carne >= 150;
+UPDATE profesional SET carne = 999 , WHERE carne != 200;
 
 or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'
 or str(cc.val) == "FALSE"

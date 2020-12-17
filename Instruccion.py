@@ -4,14 +4,17 @@ import interprete as Inter
 from six import string_types
 from errores import *
 from expresiones import *
+from random import *
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 Lista = []
 ListaTablasG = []
+baseN = []
+baseActual = ""
 Ejecucion = ">"
 
 Lista.append(Ejecucion)
-baseActual = ""
+
 
 class Instruccion():
     'Abstracta'
@@ -297,12 +300,12 @@ class TiposWhen(Instruccion):
 #---------------------------------------------------------------------------------------------------
 #INSERTAR DATOS CESAR
 class DatoInsert(Instruccion):
-    def __init__(self, bd, tabla, columna, valor):
+    def __init__(self, bd, tabla, columna, valor, fila):
         self.bd = bd
         self.tabla = tabla
         self.columna = columna
         self.valor = valor
-
+        self.fila = fila
 
 class Insert_Datos(Instruccion):
     def __init__(self, id_table, valores):
@@ -310,6 +313,7 @@ class Insert_Datos(Instruccion):
         self.valores = valores
 
     def Ejecutar(self):
+        FilaG = randint(1,500)
         print("Ejecucion")
         global ts_global, baseActual
         global LisErr
@@ -319,7 +323,7 @@ class Insert_Datos(Instruccion):
         else:
             imprir("INSERT BD:  Si existe la BD para insertar. " + str(self.id_table[0].val))
 
-            r2 = ts_global.obtenerTabla(self.id_table[0].val)
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table[0].val)
             if r2 is None:
                 imprir("INSERT BD:  No existe la Tabla para insertar.")
             else:
@@ -375,9 +379,10 @@ class Insert_Datos(Instruccion):
                     ix = 0
                     if banderaInsert is True:
                         listaTemp = []
+
                         for ccc in self.valores:
                             resultado = Inter.procesar_expresion(ccc, None)
-                            d = DatoInsert(baseActual, r2, str(temporal[ix].id), resultado)
+                            d = DatoInsert(baseActual, r2.id, str(temporal[ix].id), resultado, FilaG)
                             ts_global.agregarDato(d)
                             listaTemp.append(resultado)
                             ix += 1
@@ -443,8 +448,6 @@ class CreateTable(Instruccion):
             er = ErrorRep('Semantico', 'La tabla ya existe en la base de datos.', 0)
             LisErr.agregar(er)
 
-
-
 # --------------------------------------------------------
 class CampoTabla(Instruccion):
     def __init__(self, id, tipo, validaciones):
@@ -452,15 +455,11 @@ class CampoTabla(Instruccion):
         self.tipo = tipo
         self.validaciones = validaciones
 
-
-
 #---------------------------------------------------------
 class CampoValidacion(Instruccion):
     def __init__(self, id, valor):
         self.id = id
         self.valor = valor
-
-
 
 #---------------------------------------------------------------------------------------------------
 class Delete_Datos(Instruccion):
@@ -473,10 +472,7 @@ class Delete_Datos(Instruccion):
         global LisErr
 
         ListaTablasG.append(self.id_table[0].val)
-        print("->->->->"+str(self.id_table[0].val))
-
         rb = ts_global.obtenerBasesDatos(baseActual)
-        print("->->->->"+str(self.id_table[0].val))
         if rb is None:
             print("DELETE: No existe la base de datos.")
         else:
@@ -486,8 +482,35 @@ class Delete_Datos(Instruccion):
             else:
                 print("Entre aqui ")
                 resultado = Inter.procesar_expresion(self.valore_where, ts_global)
+                listaEliminar = []
 
+                # recorrer lista de valores a eliminar.
+                for i in resultado:
+                    ii:DatoInsert = i
+                    print(" > Valores: " + str(ii.valor)+ " "+str(ii.columna))
+                    #recorrer tabla de simbolos.
+                    for item in ts_global.Datos:
+                        v: DatoInsert = ts_global.obtenerDato(item)
+                        bandera = False
+                        if str(ii.fila) == str(v.fila):
 
+                            for p in listaEliminar:
+                                if item == p:
+                                    bandera = True
+                                else:
+                                    bandera = False
+
+                            if bandera is False:
+                                listaEliminar.append(item)
+                                print("Ubicado")
+
+                print(">>> Cantidad" + str(len(listaEliminar)))
+                for d in listaEliminar:
+                    r = ts_global.EliminarDato(d)
+                    if r is None:
+                        print(" >>> DELETE: No se elimino el item.")
+                    else:
+                        print(" >>> DELETE: Se elimino el item.")
 
 # --------------------------------------------------------------------------------------------------
 class constraintTabla(Instruccion):
@@ -537,6 +560,7 @@ class CreateDataBase(Instruccion):
                 rM = Master.createDatabase(str(self.idBase))
                 imprir("CREATE DB:    Base de datos creada con exito!")
                 baseActual = str(self.idBase)
+                baseN.append(self.idBase)
                 if rM == 0:
                     ts_global.agregarBasesDatos(self)
                     print(" > Base de datos creada con exito!")
@@ -708,6 +732,63 @@ class Update_Datos(Instruccion):
         self.valores_set = valores_set
         self.valor_where = valor_where
 
+    def Ejecutar(self):
+        global ts_global, baseActual, ListaTablasG
+        global LisErr
+
+        ListaTablasG.append(self.id_table[0].val)
+        rb = ts_global.obtenerBasesDatos(baseActual)
+        if rb is None:
+            print("UPDATE: No existe la base de datos.")
+        else:
+            rt = ts_global.obtenerTabla(self.id_table[0].val)
+            if rt is None:
+                print("UPDATE: No existe la tabla")
+            else:
+                resultado = Inter.procesar_expresion(self.valor_where, ts_global)
+                listaUpdate = []
+
+                listaSet = []
+                # Valores SET
+                for i in self.valores_set:
+                    p:ExpresionAritmetica = i
+                    print(str(p.exp1.id) + "=" + str(p.exp2.val))
+                    listaSet.append(p)
+
+                # recorrer lista de valores a actualizar.
+                for i in resultado:
+                    ii:DatoInsert = i
+                    print(" > Valores: " + str(ii.valor)+ " "+str(ii.columna))
+
+                    #recorrer tabla de simbolos.
+                    for item in ts_global.Datos:
+                        v: DatoInsert = ts_global.obtenerDato(item)
+                        bandera = False
+                        if str(ii.fila) == str(v.fila):
+                            for p in listaUpdate:
+                                if item == p:
+                                    bandera = True
+                                else:
+                                    bandera = False
+
+                            if bandera is False:
+                                listaUpdate.append(v)
+                                print("Ubicado")
+
+                for i in listaUpdate:
+                    ii: DatoInsert = i
+                    for s in listaSet:
+                        ss: ExpresionAritmetica = s
+                        if str(ss.exp1.id) == str(ii.columna):
+                            print(" Modificar")
+                            ii.valor = str(ss.exp2.val)
+                        else:
+                            print(" No modificara")
+
+                print(" >>> MI TABLA DE SIMBOLOS ( DATOS ).")
+                for it in ts_global.Datos:
+                    t: DatoInsert = ts_global.obtenerDato(it)
+                    print(str(t.columna) + " " + str(t.bd) + " " + str(t.tabla) + " " + str(t.valor)+ " " + str(t.fila))
 
 #Clase para el Alter Table----------------------------
 class Alter_Table_AddColumn(Instruccion):

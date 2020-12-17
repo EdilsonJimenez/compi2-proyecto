@@ -54,97 +54,162 @@ digraph AST {
 	Node22 -> Node25
 	Node26 [label="VALOR NUEVO"]
 	Node25 -> Node26
-	27 [label=ExpresionAritmetica]
-	28 [label=exp1]
+	27 [label=ExpresionValor]
 	27 -> 28
-	28 -> 29
-	29 [label=ExpresionValor]
-	29 -> 30
-	30 [label=20]
-	31 [label="+"]
-	27 -> 31
-	32 [label=exp2]
-	27 -> 32
-	32 -> 33
-	33 [label=ExpresionValor]
-	33 -> 34
-	34 [label=20]
+	28 [label=300]
 	Node26 -> 27
-	Node36 [label="VALOR NUEVO"]
-	Node25 -> Node36
-	37 [label=ExpresionAritmetica]
-	38 [label=exp1]
-	37 -> 38
-	38 -> 39
+	Node30 [label="VALOR NUEVO"]
+	Node25 -> Node30
+	31 [label=ExpresionValor]
+	31 -> 32
+	32 [label=123]
+	Node30 -> 31
+	Node34 [label="VALOR NUEVO"]
+	Node25 -> Node34
+	35 [label=ExpresionValor]
+	35 -> 36
+	36 [label=Mazariegos]
+	Node34 -> 35
+	Node38 [label="VALOR NUEVO"]
+	Node25 -> Node38
 	39 [label=ExpresionValor]
 	39 -> 40
-<<<<<<< HEAD
-	40 [label=2]
-	41 [label="+"]
-	37 -> 41
-	42 [label=exp2]
-	37 -> 42
-	42 -> 43
-	43 [label=ExpresionValor]
-	43 -> 44
-	44 [label=2]
-	Node36 -> 37
+	40 [label=TRUE]
+	Node38 -> 39
+	Node42 [label=INSERT]
+	Node0 -> Node42
+	Node43 [label="ID TABLA"]
+	Node42 -> Node43
+	Node44 [label=profesional]
+	Node43 -> Node44
+	Node45 [label="VALORES TABLA"]
+	Node42 -> Node45
 	Node46 [label="VALOR NUEVO"]
-	Node25 -> Node46
+	Node45 -> Node46
 	47 [label=ExpresionValor]
 	47 -> 48
-	48 [label=MiId]
+	48 [label=400]
 	Node46 -> 47
 	Node50 [label="VALOR NUEVO"]
-	Node25 -> Node50
-=======
-	40 [label=ExpresionValor]
-	40 -> 41
-	41 [label=2]
-	Node33 -> 34
-	Node43 [label="VALOR NUEVO"]
-	Node22 -> Node43
-	44 [label=ExpresionUnitariaAritmetica]
-	45 [label="|"]
-	44 -> 45
-	46 [label=exp1]
-	44 -> 46
-	46 -> 47
-	47 [label=ExpresionValor]
-	47 -> 48
-	48 [label=32]
-	Node43 -> 44
-	Node50 [label="VALOR NUEVO"]
-	Node22 -> Node50
->>>>>>> master
+	Node45 -> Node50
 	51 [label=ExpresionValor]
 	51 -> 52
-	52 [label=TRUE]
+	52 [label=456]
 	Node50 -> 51
-<<<<<<< HEAD
-	Node54 [label=DELETE]
-	Node0 -> Node54
-	Node55 [label="ID TABLA"]
-	Node54 -> Node55
-	Node56 [label=profesional]
-	Node55 -> Node56
-	Node57 [label=WHERE]
-	Node54 -> Node57
-	Node58 [label="VALOR CONDICION"]
-	Node57 -> Node58
-	59 [label=ExpresionRelacional]
-	60 [label=exp1]
+	Node54 [label="VALOR NUEVO"]
+	Node45 -> Node54
+	55 [label=ExpresionValor]
+	55 -> 56
+	56 [label=Lopez]
+	Node54 -> 55
+	Node58 [label="VALOR NUEVO"]
+	Node45 -> Node58
+	59 [label=ExpresionValor]
 	59 -> 60
-	60 -> 61
-	61 [label="=="]
-	59 -> 61
-	62 [label=exp2]
-	59 -> 62
-	62 -> 63
-	63 [label=ExpresionValor]
-	63 -> 64
-	64 [label=40]
+	60 [label=TRUE]
 	Node58 -> 59
-=======
->>>>>>> master
+	Node62 [label=INSERT]
+	Node0 -> Node62
+	Node63 [label="ID TABLA"]
+	Node62 -> Node63
+	Node64 [label=profesional]
+	Node63 -> Node64
+	Node65 [label="VALORES TABLA"]
+	Node62 -> Node65
+	Node66 [label="VALOR NUEVO"]
+	Node65 -> Node66
+	67 [label=ExpresionValor]
+	67 -> 68
+	68 [label=200]
+	Node66 -> 67
+	Node70 [label="VALOR NUEVO"]
+	Node65 -> Node70
+	71 [label=ExpresionValor]
+	71 -> 72
+	72 [label=789]
+	Node70 -> 71
+	Node74 [label="VALOR NUEVO"]
+	Node65 -> Node74
+	75 [label=ExpresionValor]
+	75 -> 76
+	76 [label=Mazariegos]
+	Node74 -> 75
+	Node78 [label="VALOR NUEVO"]
+	Node65 -> Node78
+	79 [label=ExpresionValor]
+	79 -> 80
+	80 [label=FALSE]
+	Node78 -> 79
+	Node82 [label=INSERT]
+	Node0 -> Node82
+	Node83 [label="ID TABLA"]
+	Node82 -> Node83
+	Node84 [label=profesional]
+	Node83 -> Node84
+	Node85 [label="VALORES TABLA"]
+	Node82 -> Node85
+	Node86 [label="VALOR NUEVO"]
+	Node85 -> Node86
+	87 [label=ExpresionValor]
+	87 -> 88
+	88 [label=50]
+	Node86 -> 87
+	Node90 [label="VALOR NUEVO"]
+	Node85 -> Node90
+	91 [label=ExpresionValor]
+	91 -> 92
+	92 [label=789]
+	Node90 -> 91
+	Node94 [label="VALOR NUEVO"]
+	Node85 -> Node94
+	95 [label=ExpresionValor]
+	95 -> 96
+	96 [label=Mazariegos]
+	Node94 -> 95
+	Node98 [label="VALOR NUEVO"]
+	Node85 -> Node98
+	99 [label=ExpresionValor]
+	99 -> 100
+	100 [label=FALSE]
+	Node98 -> 99
+	Node102 [label=UPDATE]
+	Node0 -> Node102
+	Node103 [label="ID TABLA"]
+	Node102 -> Node103
+	Node104 [label=profesional]
+	Node103 -> Node104
+	Node105 [label=SET]
+	Node102 -> Node105
+	Node106 [label="VALOR CONDICION SET"]
+	Node105 -> Node106
+	107 [label=ExpresionRelacional]
+	108 [label=exp1]
+	107 -> 108
+	108 -> 109
+	109 [label="=="]
+	107 -> 109
+	110 [label=exp2]
+	107 -> 110
+	110 -> 111
+	111 [label=ExpresionValor]
+	111 -> 112
+	112 [label=999]
+	Node106 -> 107
+	Node114 [label=WHERE]
+	Node102 -> Node114
+	Node115 [label="VALOR CONDICION WHERE"]
+	Node114 -> Node115
+	116 [label=ExpresionRelacional]
+	117 [label=exp1]
+	116 -> 117
+	117 -> 118
+	118 [label="!="]
+	116 -> 118
+	119 [label=exp2]
+	116 -> 119
+	119 -> 120
+	120 [label=ExpresionValor]
+	120 -> 121
+	121 [label=200]
+	Node115 -> 116
 }

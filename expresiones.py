@@ -190,11 +190,11 @@ class Parametro(Expresion) :
     def __init__(self, expresion) :
         self.expresion=expresion
 
+'''
 class Variable(Expresion) :
-    
-    def __init__(self, id, tipoVar) :
+    def __init__(self, id, tipoVar):
         self.id=id
-        self.tipoVar=tipoVar
+        self.tipoVar=tipoVar'''
 
 class ExpresionValor(Expresion):
     def __init__(self, val=0):

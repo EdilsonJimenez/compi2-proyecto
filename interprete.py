@@ -19,6 +19,8 @@ editor = None
 consola = None
 content = ''
 
+baseInterprete = baseActual
+
 
 # INICIALIZACION DE MAIN==============================================
 # ========================================================================
@@ -189,6 +191,49 @@ def procesar_relacional(expresion, ts):
             return 1 if (val > val2) else 0
         elif expresion.operador == OPERACION_RELACIONAL.MENORQUE:
             return 1 if (val < val2) else 0
+    elif isinstance(val[0], DatoInsert) and isinstance(val2, int):
+        if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) == val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.DISTINTO:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) != val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MAYORIGUAL:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) >= val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MENORIGUAL:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) <= val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MAYORQUE:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) > val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MENORQUE:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) < val2:
+                    listaV.append(Vd)
+            return listaV
     else:
         print('Error: Expresion relacional con tipos incompatibls')
         # consola.insert('end','>>Error: Expresion relacional con tipos incompatibles'+str(expresion.operador)+'\n>>')
@@ -260,14 +305,25 @@ def procesar_NotBB(instr, ts):
         return None
 
 
-def procesar_variable(tipoVar, ts):
-    #global ts_global, ListaTablasG, baseActual
-
+def procesar_variable(tV, ts):
+    global  ListaTablasG
+    listaRes = []
     for item in ts.Datos:
-        print(item)
         v:DatoInsert = ts.obtenerDato(item)
-        print(str(v.columna))
-        print("Para hacer push")
+        #print(str(v.valor))
+        #print(" ************************* " + str(v.valor))
+        #print(str(v.columna)+" "+str(tV.id)+" "+str(v.bd)+" "+str(baseN[0])+" "+str(v.tabla)+" "+ str(ListaTablasG[0]))
+
+        if str(v.columna) == str(tV.id) and str(v.bd) == str(baseN[0]) and str(v.tabla) == str(ListaTablasG[0]):
+            print(" <> En listar: " + str(v.valor))
+            listaRes.append(v)
+    if listaRes is None:
+        print(" >>> No hay datos para esta validación.")
+        return None
+    else:
+        return listaRes
+
+
 
 def procesar_unitaria_aritmetica(expresion, ts):
     val = procesar_expresion(expresion.exp1, ts)
@@ -340,6 +396,8 @@ class interprete2:
             elif isinstance(i, Insert_Datos):
                 i.Ejecutar()
             elif isinstance(i, Delete_Datos):
+                i.Ejecutar()
+            elif isinstance(i, Update_Datos):
                 i.Ejecutar()
             else:
                 print("NO ejecuta")
