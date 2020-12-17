@@ -474,44 +474,49 @@ class Delete_Datos(Instruccion):
         ListaTablasG.append(self.id_table[0].val)
         rb = ts_global.obtenerBasesDatos(baseActual)
         if rb is None:
-            print("DELETE: No existe la base de datos.")
+            imprir("DELETE: No existe la base de datos. ")
+            er = ErrorRep('Semantico', 'No existe la base de datos indicada.', 0)
+            LisErr.agregar(er)
         else:
             rt = ts_global.obtenerTabla(self.id_table[0].val)
             if rt is None:
-                print("DELETE No existe la tabla")
+                imprir("DELETE: No existe la tabla de datos. ")
+                er = ErrorRep('Semantico', 'No existe la tabla indicada.', 0)
+                LisErr.agregar(er)
             else:
-                print("Entre aqui ")
                 resultado = Inter.procesar_expresion(self.valore_where, ts_global)
                 listaEliminar = []
-
                 # recorrer lista de valores a eliminar.
-                for i in resultado:
-                    ii:DatoInsert = i
-                    print(" > Valores: " + str(ii.valor)+ " "+str(ii.columna))
-                    #recorrer tabla de simbolos.
-                    for item in ts_global.Datos:
-                        v: DatoInsert = ts_global.obtenerDato(item)
-                        bandera = False
-                        if str(ii.fila) == str(v.fila):
+                if len(resultado) is 0:
+                    imprir("DELETE: No existen registros.")
+                    er = ErrorRep('Semantico', 'No existen registros que cumplan la condicion para eliminar.', 0)
+                    LisErr.agregar(er)
+                else:
+                    for i in resultado:
+                        ii:DatoInsert = i
 
-                            for p in listaEliminar:
-                                if item == p:
-                                    bandera = True
-                                else:
-                                    bandera = False
+                        #recorrer tabla de simbolos.
+                        for item in ts_global.Datos:
+                            v: DatoInsert = ts_global.obtenerDato(item)
+                            bandera = False
+                            if str(ii.fila) == str(v.fila):
 
-                            if bandera is False:
-                                listaEliminar.append(item)
-                                print("Ubicado")
+                                for p in listaEliminar:
+                                    if item == p:
+                                        bandera = True
+                                    else:
+                                        bandera = False
 
-                print(">>> Cantidad" + str(len(listaEliminar)))
-                for d in listaEliminar:
-                    r = ts_global.EliminarDato(d)
-                    if r is None:
-                        print(" >>> DELETE: No se elimino el item.")
-                    else:
-                        print(" >>> DELETE: Se elimino el item.")
+                                if bandera is False:
+                                    listaEliminar.append(item)
 
+                    for d in listaEliminar:
+                        r = ts_global.EliminarDato(d)
+                        if r is None:
+                            pass
+                        else:
+                            pass
+                    imprir(" DELETE: Se eliminaron los registros.")
 # --------------------------------------------------------------------------------------------------
 class constraintTabla(Instruccion):
     def __init__(self, valor, id, condiciones, listas_id, referencia, idRef):

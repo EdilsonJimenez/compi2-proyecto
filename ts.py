@@ -124,10 +124,10 @@ class TablaDeSimbolos():
 
     def EliminarDato(self, idDato):
         if not idDato in self.Datos:
-            print('> No existe el item a eliminar.')
+            print(" No se elimino")
         else :
             del self.Datos[idDato]
-            print(" >> SE ELIMINO EL ITEM")
+            print(" Se elimino")
 
     def actualizarDato(self, dato, DatoN):
         if not dato in self.Datos:

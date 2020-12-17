@@ -310,10 +310,6 @@ def procesar_variable(tV, ts):
     listaRes = []
     for item in ts.Datos:
         v:DatoInsert = ts.obtenerDato(item)
-        #print(str(v.valor))
-        #print(" ************************* " + str(v.valor))
-        #print(str(v.columna)+" "+str(tV.id)+" "+str(v.bd)+" "+str(baseN[0])+" "+str(v.tabla)+" "+ str(ListaTablasG[0]))
-
         if str(v.columna) == str(tV.id) and str(v.bd) == str(baseN[0]) and str(v.tabla) == str(ListaTablasG[0]):
             print(" <> En listar: " + str(v.valor))
             listaRes.append(v)
