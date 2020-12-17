@@ -19,6 +19,8 @@ editor = None
 consola = None
 content = ''
 
+baseInterprete = baseActual
+
 
 # INICIALIZACION DE MAIN==============================================
 # ========================================================================
@@ -70,6 +72,8 @@ def procesar_expresion(expresiones, ts):
         return expresiones.val
     elif isinstance(expresiones, Variable):
         return procesar_variable(expresiones, ts)
+    elif isinstance(expresiones, UnitariaAritmetica):
+        return procesar_unitaria_aritmetica(expresiones, ts)
     elif isinstance(expresiones, Absoluto):
         try:
             return procesar_expresion(expresiones.variable, ts)
@@ -142,6 +146,16 @@ def procesar_aritmetica(expresion, ts):
             # newErr=ErrorRep('Semantico','Tipos no puden operarse por residuo ',indice)
             # LisErr.agregar(newErr)
             return None
+    elif expresion.operador == OPERACION_ARITMETICA.POTENCIA:
+        if ((isinstance(val, int) or isinstance(val, float))
+                and ((isinstance(val2, int) or isinstance(val2, float)))):
+            return pow(val, val2)
+        else:
+            print('Error: Tipos no pueden operarse %')
+            # consola.insert('end','>>Error: tipos no pueden operarse por residuo \n>>')
+            # newErr=ErrorRep('Semantico','Tipos no puden operarse por residuo ',indice)
+            # LisErr.agregar(newErr)
+            return None
 
 
 def procesar_relacional(expresion, ts):
@@ -177,6 +191,49 @@ def procesar_relacional(expresion, ts):
             return 1 if (val > val2) else 0
         elif expresion.operador == OPERACION_RELACIONAL.MENORQUE:
             return 1 if (val < val2) else 0
+    elif isinstance(val[0], DatoInsert) and isinstance(val2, int):
+        if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) == val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.DISTINTO:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) != val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MAYORIGUAL:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) >= val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MENORIGUAL:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) <= val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MAYORQUE:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) > val2:
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MENORQUE:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if int(Vd.valor) < val2:
+                    listaV.append(Vd)
+            return listaV
     else:
         print('Error: Expresion relacional con tipos incompatibls')
         # consola.insert('end','>>Error: Expresion relacional con tipos incompatibles'+str(expresion.operador)+'\n>>')
@@ -248,22 +305,60 @@ def procesar_NotBB(instr, ts):
         return None
 
 
-def procesar_variable(tipoVar, ts):
-    val = ts.obtener(tipoVar.id)
-    if val is None:
-        print('Error: Variable no declarada')
-        # consola.insert('end','>>Error: Variable no declarada '+str(tipoVar.id)+'\n>>')
-        # newErr=ErrorRep('Semantico','Variable no declarada: '+str(tipoVar.id),indice)
-        # LisErr.agregar(newErr)
-        return None
-    if val.tipo == TS.TIPO_DATO.ARREGLO:
-        # consola.insert('end','>>Error: No se pueden imprimir arreglos '+str(tipoVar.id)+'\n>>')
-        # newErr=ErrorRep('Semantico','No se pueden imprimir arreglos: '+str(tipoVar.id),indice)
-        # LisErr.agregar(newErr)
-        print('Error: No se pueden imprimir arreglos')
-        return None
-    return val.valor
+def procesar_variable(tV, ts):
+    global  ListaTablasG
+    listaRes = []
+    for item in ts.Datos:
+        v:DatoInsert = ts.obtenerDato(item)
+        #print(str(v.valor))
+        #print(" ************************* " + str(v.valor))
+        #print(str(v.columna)+" "+str(tV.id)+" "+str(v.bd)+" "+str(baseN[0])+" "+str(v.tabla)+" "+ str(ListaTablasG[0]))
 
+        if str(v.columna) == str(tV.id) and str(v.bd) == str(baseN[0]) and str(v.tabla) == str(ListaTablasG[0]):
+            print(" <> En listar: " + str(v.valor))
+            listaRes.append(v)
+    if listaRes is None:
+        print(" >>> No hay datos para esta validación.")
+        return None
+    else:
+        return listaRes
+
+
+
+def procesar_unitaria_aritmetica(expresion, ts):
+    val = procesar_expresion(expresion.exp1, ts)
+    if expresion.operador == OPERACION_ARITMETICA.CUADRATICA:
+        if isinstance(val, string_types):
+            if(val.isdecimal()):
+                return float(val) * float(val)
+            elif(val.isnumeric()):
+                return int(val) * int(val)
+            else:
+                return None
+
+        elif isinstance(val, int) or isinstance(val, float):
+            return val * val
+        else:
+            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
+            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
+            # LisErr.agregar(newErr)
+            return None
+    elif expresion.operador == OPERACION_ARITMETICA.CUBICA:
+        if isinstance(val, string_types):
+            if (val.isdecimal()):
+                return pow(float(val), 3)
+            elif (val.isnumeric()):
+                return pow(int(val), 3)
+            else:
+                return None
+
+        elif isinstance(val, int) or isinstance(val, float):
+            return val * val
+        else:
+            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
+            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
+            # LisErr.agregar(newErr)
+            return None
 
 # -------------------------------------------------------------------------------------------------
 # --------------------------------- EJECUCION -----------------------------------------------------
@@ -314,6 +409,10 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i,Alter_Table_Add_Constraint):
                 i.Ejecutar()
+            elif isinstance(i, Delete_Datos):
+                i.Ejecutar()
+            elif isinstance(i, Update_Datos):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 
@@ -347,7 +446,3 @@ def reporte_errores():
     Rep.node('structs','''<<TABLE> <TR> <TD>Numero</TD><TD>Tipo-Clase Error</TD><TD>Descripcion Error</TD><TD>Linea</TD></TR>'''+cadena+'</TABLE>>')
     Rep.render('g', format='png', view=True)
     print('Hecho')
-
-
-
-

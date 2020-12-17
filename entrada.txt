@@ -3,13 +3,18 @@ CREATE DATABASE MiBase1 OWNER = Oscar MODE = 1;
 USE MiBase1;
 
 CREATE TABLE profesional(
-	carne VARCHAR(20),
+	carne INT,
 	nombre INT,
-	apellido SMALLINT,
+	apellido VARCHAR(20),
 	bandera BOOLEAN
 );
 
-INSERT INTO profesional VALUES("2020","22",32, TRUE);
+INSERT INTO profesional VALUES(300,123,'Mazariegos', TRUE);
+INSERT INTO profesional VALUES(400,456, 'Lopez', TRUE);
+INSERT INTO profesional VALUES(200,789,'Mazariegos', FALSE);
+INSERT INTO profesional VALUES(50,789,'Mazariegos', FALSE);
+DELETE FROM profesional WHERE carne >= 150;
+UPDATE profesional SET carne = 999 , WHERE carne != 200;
 
 ALTER TABLE profesional  ADD  COLUMN  columna1 int, columna2 int; 
 

@@ -1,15 +1,20 @@
 import ts as TS
 import jsonMode as Master
+import interprete as Inter
 from six import string_types
 from errores import *
 from expresiones import *
+from random import *
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 Lista = []
+ListaTablasG = []
+baseN = []
+baseActual = ""
 Ejecucion = ">"
 
 Lista.append(Ejecucion)
-baseActual = ""
+
 
 class Instruccion():
     'Abstracta'
@@ -25,7 +30,88 @@ def imprir(string):
     Lista.clear();
     Lista.append(Ejecucion)
 
+#----------------------------------------------------------
+#           TABLA DE SIMBOLOS
+#----------------------------------------------------------
+#----------------------------------------------------------
+from graphviz import Digraph, nohtml
+from graphviz import Graph
+from graphviz import escape
 
+def tabla_simbolos():
+    print("------------SIMBOLOS---------------")
+    ts=ts_global
+    SymbolT =  Graph('g', filename='bsimbolos.gv', format='png',node_attr={'shape': 'plaintext', 'height': '.1'})
+
+    #DICIONARIO DATOS
+    cadena=''
+    for fn in ts.Datos:
+        fun=ts.obtenerDato(fn)
+        cadena+='<TR><TD>'+str(fun.bd)+'</TD>'+'<TD>'+str(fun.tabla)+'</TD>'+'<TD>'+str(fun.columna)+'</TD>'+'<TD>'+str(fun.valor)+'</TD>'+'<TD>'+str(fun.fila)+'</TD></TR>'
+
+
+    #DICIONARIO Tablas
+    cadena2=''
+    for fn in ts.Tablas:
+        fun=ts.obtenerTabla(fn)
+        for cuerpos in fun.cuerpo:
+            if isinstance(cuerpos.tipo,valorTipo):
+                cadena2+='<TR><TD>'+str(fun.id)+'</TD>'+'<TD>'+str(cuerpos.id)+'</TD>'+'<TD>'+str(cuerpos.tipo.valor)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
+            else:
+                cadena2+='<TR><TD>'+str(fun.id)+'</TD>'+'<TD>'+str(cuerpos.id)+'</TD>'+'<TD>'+str(cuerpos.tipo)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
+
+    cadena3=''
+    for fn in ts.BasesDatos:
+        fun=ts.obtenerBasesDatos(fn)
+        cadena3 +='<TR><TD>'+str(fun.idBase)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
+
+
+
+    SymbolT.node('table','''<<TABLE>
+                            <TR>
+                                <TD>BASE DATOS</TD>
+                                <TD>TABLA</TD>
+                                <TD>COLUMNA</TD>
+                                <TD>VALOR </TD>
+                                <TD>FILA</TD>
+                            </TR>'''
+                            +cadena+
+                            ''' <TR>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD>ID TABLA</TD>
+                                <TD>ID COLUMNA</TD>
+                                <TD>TIPO COLUMNA</TD>
+                                <TD>  </TD>
+                                <TD>  </TD>
+                            </TR>'''
+                             + cadena2 +
+                             ''' <TR>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD>ID BASE DE DATOS</TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>'''
+                            +cadena3+
+                        '''</TABLE>>''')
+
+
+    #DICCIONARIO BASE DE DATOS
+
+    SymbolT.render('g', format='png', view=True)
 
 # Un drop table esta compuesto por el ID de la tabla que eliminara.
 class DropTable(Instruccion):
@@ -337,12 +423,12 @@ class TiposWhen(Instruccion):
 #---------------------------------------------------------------------------------------------------
 #INSERTAR DATOS CESAR
 class DatoInsert(Instruccion):
-    def __init__(self, bd, tabla, columna, valor):
+    def __init__(self, bd, tabla, columna, valor, fila):
         self.bd = bd
         self.tabla = tabla
         self.columna = columna
         self.valor = valor
-
+        self.fila = fila
 
 class Insert_Datos(Instruccion):
     def __init__(self, id_table, valores):
@@ -350,6 +436,7 @@ class Insert_Datos(Instruccion):
         self.valores = valores
 
     def Ejecutar(self):
+        FilaG = randint(1,500)
         print("Ejecucion")
         global ts_global, baseActual
         global LisErr
@@ -360,9 +447,7 @@ class Insert_Datos(Instruccion):
         else:
             imprir("INSERT BD:  Si existe la BD para insertar. " + str(self.id_table[0].val))
 
-
-            r2 = ts_global.obtenerTabla(self.id_table[0].val)
-
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table[0].val)
             if r2 is None:
                 imprir("INSERT BD:  No existe la Tabla para insertar.")
             else:
@@ -392,22 +477,26 @@ class Insert_Datos(Instruccion):
 
                         if isinstance(temporal[index].tipo, valorTipo):
 
-                            if isinstance(str(cc.val), string_types) and (str(temporal[index].tipo.valor) == 'VARCHAR' or str(temporal[index].tipo.valor) == 'CHARACTER' or str(temporal[index].tipo.valor) == 'CHAR'):
-                                imprir("INSERT BD: Parametros correctos, insertar, Validar la exprecion.")
+                            resultado = Inter.procesar_expresion(cc, None)
+                            print(" Mi proceso: "+str(resultado))
+                            if isinstance(resultado, string_types) and (str(temporal[index].tipo.valor) == 'VARCHAR' or str(temporal[index].tipo.valor) == 'CHARACTER' or str(temporal[index].tipo.valor) == 'CHAR'):
+                                print(" >>> Parametros correctos, insertar, Validar la exprecion.")
                                 banderaInsert = True
                             else:
                                 imprir("INSERT BD: Parametros incorrectos. ")
                                 banderaInsert = False
                         else:
-                            print(" Valor: >>>" + str(cc.val))
-                            if isinstance(str(cc.val), string_types) and ( str(temporal[index].tipo) == 'TEXT' or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'):
-                                imprir("INSERT BD:  Parametros correctos, insertar")
+                            resultado = Inter.procesar_expresion(cc, None)
+                            print(" Mi proceso: "+str(resultado))
+                            #print(" Valor: >>>" + str(cc.val))
+                            if isinstance(resultado, string_types) and  str(temporal[index].tipo) == 'TEXT':
+                                print(" >>> Parametros correctos, insertar")
                                 banderaInsert = True
                             elif str(temporal[index].tipo) == 'BOOLEAN'and (str(cc.val) == "TRUE" or str(cc.val) == "FALSE"):
                                 imprir("INSERT BD: Parametros correctos, insertar")
                                 banderaInsert = True
-                            elif int(cc.val) > 0 and str(temporal[index].tipo) == 'SMALLINT':
-                                imprir("INSERT BD: Parametros correctos, insertar")
+                            elif int(resultado) > 0 and (str(temporal[index].tipo) == 'SMALLINT' or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'):
+                                print(" >>> Parametros correctos, insertar")
                                 banderaInsert = True
                             else:
                                 imprir("INSERT BD: Parametros incorrectos. ")
@@ -419,18 +508,20 @@ class Insert_Datos(Instruccion):
                     ix = 0
                     if banderaInsert is True:
                         listaTemp = []
+
                         for ccc in self.valores:
-                            d = DatoInsert(baseActual, r2, str(temporal[ix].id), ccc.val)
+                            resultado = Inter.procesar_expresion(ccc, None)
+                            d = DatoInsert(baseActual, r2.id, str(temporal[ix].id), resultado, FilaG)
                             ts_global.agregarDato(d)
-                            listaTemp.append(ccc.val)
+                            listaTemp.append(resultado)
                             ix += 1
 
                         sr = Master.insert(baseActual, str(self.id_table[0].val), listaTemp)
                         print(baseActual + str(self.id_table[0].val) + str(len(listaTemp)))
                         if sr is 0:
-                            print(" >>>> Insert realizado con exito.")
+                            imprir("INSERT BD:  Insert realizado con exito.")
                         else:
-                            print(" No se realizo la insercion." + str(sr))
+                            imprir("INSERT BD:  No se realizo el insert.")
                 else:
                     imprir("INSERT BD:  Parametros insuficientes.")
 
@@ -490,8 +581,6 @@ class CreateTable(Instruccion):
             er = ErrorRep('Semantico', 'La tabla ya existe en la base de datos.', 0)
             LisErr.agregar(er)
 
-
-
 # --------------------------------------------------------
 class CampoTabla(Instruccion):
     def __init__(self, id, tipo, validaciones):
@@ -499,21 +588,62 @@ class CampoTabla(Instruccion):
         self.tipo = tipo
         self.validaciones = validaciones
 
-
-
 #---------------------------------------------------------
 class CampoValidacion(Instruccion):
     def __init__(self, id, valor):
         self.id = id
         self.valor = valor
 
-
-
 #---------------------------------------------------------------------------------------------------
 class Delete_Datos(Instruccion):
-    def __init__(self, id_table,valore_where):
+    def __init__(self, id_table, valore_where):
         self.id_table = id_table
         self.valore_where = valore_where
+
+    def Ejecutar(self):
+        global ts_global, baseActual, ListaTablasG
+        global LisErr
+
+        ListaTablasG.append(self.id_table[0].val)
+        rb = ts_global.obtenerBasesDatos(baseActual)
+        if rb is None:
+            print("DELETE: No existe la base de datos.")
+        else:
+            rt = ts_global.obtenerTabla(self.id_table[0].val)
+            if rt is None:
+                print("DELETE No existe la tabla")
+            else:
+                print("Entre aqui ")
+                resultado = Inter.procesar_expresion(self.valore_where, ts_global)
+                listaEliminar = []
+
+                # recorrer lista de valores a eliminar.
+                for i in resultado:
+                    ii:DatoInsert = i
+                    print(" > Valores: " + str(ii.valor)+ " "+str(ii.columna))
+                    #recorrer tabla de simbolos.
+                    for item in ts_global.Datos:
+                        v: DatoInsert = ts_global.obtenerDato(item)
+                        bandera = False
+                        if str(ii.fila) == str(v.fila):
+
+                            for p in listaEliminar:
+                                if item == p:
+                                    bandera = True
+                                else:
+                                    bandera = False
+
+                            if bandera is False:
+                                listaEliminar.append(item)
+                                print("Ubicado")
+
+                print(">>> Cantidad" + str(len(listaEliminar)))
+                for d in listaEliminar:
+                    r = ts_global.EliminarDato(d)
+                    if r is None:
+                        print(" >>> DELETE: No se elimino el item.")
+                    else:
+                        print(" >>> DELETE: Se elimino el item.")
 
 # --------------------------------------------------------------------------------------------------
 class constraintTabla(Instruccion):
@@ -566,6 +696,7 @@ class CreateDataBase(Instruccion):
                 rM = Master.createDatabase(str(self.idBase))
                 imprir("CREATE DB:    Base de datos creada con exito!")
                 baseActual = str(self.idBase)
+                baseN.append(self.idBase)
                 if rM == 0:
                     ts_global.agregarBasesDatos(self)
                     print(" > Base de datos creada con exito!")
@@ -737,6 +868,63 @@ class Update_Datos(Instruccion):
         self.valores_set = valores_set
         self.valor_where = valor_where
 
+    def Ejecutar(self):
+        global ts_global, baseActual, ListaTablasG
+        global LisErr
+
+        ListaTablasG.append(self.id_table[0].val)
+        rb = ts_global.obtenerBasesDatos(baseActual)
+        if rb is None:
+            print("UPDATE: No existe la base de datos.")
+        else:
+            rt = ts_global.obtenerTabla(self.id_table[0].val)
+            if rt is None:
+                print("UPDATE: No existe la tabla")
+            else:
+                resultado = Inter.procesar_expresion(self.valor_where, ts_global)
+                listaUpdate = []
+
+                listaSet = []
+                # Valores SET
+                for i in self.valores_set:
+                    p:ExpresionAritmetica = i
+                    print(str(p.exp1.id) + "=" + str(p.exp2.val))
+                    listaSet.append(p)
+
+                # recorrer lista de valores a actualizar.
+                for i in resultado:
+                    ii:DatoInsert = i
+                    print(" > Valores: " + str(ii.valor)+ " "+str(ii.columna))
+
+                    #recorrer tabla de simbolos.
+                    for item in ts_global.Datos:
+                        v: DatoInsert = ts_global.obtenerDato(item)
+                        bandera = False
+                        if str(ii.fila) == str(v.fila):
+                            for p in listaUpdate:
+                                if item == p:
+                                    bandera = True
+                                else:
+                                    bandera = False
+
+                            if bandera is False:
+                                listaUpdate.append(v)
+                                print("Ubicado")
+
+                for i in listaUpdate:
+                    ii: DatoInsert = i
+                    for s in listaSet:
+                        ss: ExpresionAritmetica = s
+                        if str(ss.exp1.id) == str(ii.columna):
+                            print(" Modificar")
+                            ii.valor = str(ss.exp2.val)
+                        else:
+                            print(" No modificara")
+
+                print(" >>> MI TABLA DE SIMBOLOS ( DATOS ).")
+                for it in ts_global.Datos:
+                    t: DatoInsert = ts_global.obtenerDato(it)
+                    print(str(t.columna) + " " + str(t.bd) + " " + str(t.tabla) + " " + str(t.valor)+ " " + str(t.fila))
 
 #Clase para el Alter Table----------------------------
 class Alter_Table_AddColumn(Instruccion):
@@ -881,9 +1069,9 @@ class Alter_Table_AddColumn(Instruccion):
 
 #pendiente
 class Alter_COLUMN(Instruccion):
-    def __init__(self, id_columna,id_tipo):
-        self.id_columna = id_columna
-        self.id_tipo = id_tipo
+    def __init__(self, idtabla,columnas):
+        self.idtabla = idtabla
+        self.columnas = columnas
 
 
 class Alter_Table_Drop_Column(Instruccion):
