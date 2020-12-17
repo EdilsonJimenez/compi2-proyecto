@@ -1379,7 +1379,6 @@ def p_instruccion_dml_comandos_INSERT(t):
 
 def p_instruccion_dml_comandos_INSERT2(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DEFAULT VALUES PUNTOCOMA'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
     print('\n' + str(t[0]) + '\n')
 
 
@@ -1565,17 +1564,11 @@ def p_instruccion_dml_comandos_ALTER_TABLE5(t):
 
 
 
-
-
-
-
-
 # ->idtabla  (->columna) references  ->columnaAfectada  (validacion agregar la columna)
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]))
-
 
 
 
@@ -1587,9 +1580,16 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t):
 
 
 
+
+
+
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
     'DML_COMANDOS       :  ALTER TABLE ID  LISTA_ALTER_COLUMN PUNTOCOMA ' #ID  TYPE TIPO_CAMPO  COMA'
     t[0] = Alter_COLUMN(t[3],t[4])
+
+
+
+
 
 
 # LISTADO DE IDS TIPE COMA--------------------------------------------------------
@@ -1612,6 +1612,8 @@ def p_CREATE_TABLE_LISTA_IDS3_2(t):
 def p_CREATE_TABLE_LISTA_IDS4_2(t):
     'LISTA_ALTER_COLUMN_  :   ALTER COLUMN ID TYPE TIPO_CAMPO'
     t[0] = ExpresionValor2(t[3], t[5])
+
+
 
 
 

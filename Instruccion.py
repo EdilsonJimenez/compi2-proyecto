@@ -187,6 +187,9 @@ class Select(Instruccion) :
 
 
 
+
+
+
 #---------------------------------------------------------------------------------------------------
 class Select2(Instruccion) :
     def __init__(self,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
@@ -194,6 +197,12 @@ class Select2(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
         self.Cuerpo = Cuerpo
+
+    def Ejecutar(self):
+        print("Ejecutando  Select ")
+
+
+
 
 #Con Distinct
 #---------------------------------------------------------------------------------------------------
@@ -203,6 +212,12 @@ class Select3(Instruccion) :
         self.Lista_Campos   = Lista_Campos
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
+
+
+    def Ejecutar(self):
+        print("Ejecutando  Select ")
+
+
 #---------------------------------------------------------------------------------------------------
 class Select4(Instruccion) :
     def __init__(self,distinct,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
@@ -211,6 +226,12 @@ class Select4(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
         self.Cuerpo = Cuerpo
+
+    def Ejecutar(self):
+        print("Ejecutando  Select ")
+
+
+
 
 
 #subSelect sin cuerpo
@@ -795,9 +816,12 @@ class AlterDataBase(Instruccion):
 
 
 class DropDataBase(Instruccion):
+
     def __init__(self, id, existe):
         self.id = id
         self.existe = existe
+
+
 
     def Ejecutar(self):
         global ts_global
@@ -873,6 +897,7 @@ class Update_Datos(Instruccion):
         self.valores_set = valores_set
         self.valor_where = valor_where
 
+
     def Ejecutar(self):
         global ts_global, baseActual, ListaTablasG
         global LisErr
@@ -930,6 +955,9 @@ class Update_Datos(Instruccion):
                             else:
                                 pass
                 imprir("UPDATE: Se actualizaron los registros.")
+
+
+
 
 #Clase para el Alter Table----------------------------
 class Alter_Table_AddColumn(Instruccion):
@@ -1068,15 +1096,62 @@ class Alter_Table_AddColumn(Instruccion):
             imprir("ALTER TABLE:   La Base de datos no existe")
 
 
-
-
-
-
-#pendiente
 class Alter_COLUMN(Instruccion):
     def __init__(self, idtabla,columnas):
         self.idtabla = idtabla
         self.columnas = columnas
+
+    def Ejecutar(self):
+
+        global ts_global, baseActual
+        global LisErr
+
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2: CreateTable = ts_global.obtenerTabla(self.idtabla)
+
+            if r2 is not None:
+
+
+                for tt in self.columnas:
+
+                    if isinstance(tt, ExpresionValor2):
+
+
+                        #recorremos lista General de Tablas
+                        for elemento2 in ts_global.Tablas:
+
+                            x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                            if (x.id == self.idtabla):
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+
+                                    print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+                                    if (y.id == tt.val):
+
+                                        y.tipo = tt.tipo
+                                        imprir("ALTER TABLE: Se Actualizo correctamente El Tipo de Dato")
+                                    else:
+                                        print("")
+                            else:
+                                print("")
+
+                        # imprimir valores actualizados
+                        # for elemento2 in ts_global.Tablas:
+                        #    x: CreateTable = ts_global.obtenerTabla(elemento2)
+                        #    for ele in x.cuerpo:
+                        #        y: CampoTabla = ele
+                        #       print(y.id + "<<<<<<<<<<<<<<<<<<<<<< EEEEEEEEEEEE")
+
+                    else:
+                        imprir("ALTER TABLE: ERROR DE TIPO")
+                else:
+                    imprir("ALTER TABLE:   La tabla no existe!   ")
+            else:
+                imprir("ALTER TABLE:   La Base de datos no existe")
+                # colocar error semantico
 
 
 class Alter_Table_Drop_Column(Instruccion):
@@ -1090,6 +1165,7 @@ class Alter_Table_Drop_Column(Instruccion):
         #Verificar que existe la base de datos
         #Verificar que existe la tabla
         #Verificar que existe la columna en la tabla
+
         global ts_global, baseActual
         global LisErr
         r  = ts_global.obtenerBasesDatos(baseActual)  #buscamos en el diccionario de la base de datos
@@ -1160,9 +1236,6 @@ class Alter_Table_Drop_Column(Instruccion):
             #colocar error semantico
 
 
-
-
-
 class Alter_Table_Rename_Column(Instruccion):
     def __init__(self, id_table, old_column, new_column):
         self.id_table = id_table
@@ -1170,6 +1243,7 @@ class Alter_Table_Rename_Column(Instruccion):
         self.new_column = new_column
 
     def Ejecutar(self):
+
         global ts_global, baseActual
         global LisErr
 
@@ -1213,11 +1287,6 @@ class Alter_Table_Rename_Column(Instruccion):
         else:
             imprir("ALTER TABLE:   La Base de datos no existe")
             # colocar error semantico
-
-
-
-
-
 
 
 class Alter_Table_Drop_Constraint(Instruccion):
@@ -1336,9 +1405,6 @@ class Alter_Table_Drop_Constraint(Instruccion):
             # colocar error semantico
 
 
-
-
-
 class Alter_table_Alter_Column_Set(Instruccion):
     def __init__(self, id_table, id_column):
         self.id_tabla = id_table
@@ -1412,11 +1478,6 @@ class Alter_table_Alter_Column_Set(Instruccion):
             # colocar error semantico
 
 
-
-
-
-
-
 class Alter_table_Add_Foreign_Key(Instruccion):
     def __init__(self, id_table, id_column, id_column_references):
         self.id_table = id_table
@@ -1486,13 +1547,6 @@ class Alter_table_Add_Foreign_Key(Instruccion):
         else:
             imprir("ALTER TABLE:   La Base de datos no existe")
             #colocar error semantico
-
-
-
-
-
-
-
 
 
 class Alter_Table_Add_Constraint(Instruccion):

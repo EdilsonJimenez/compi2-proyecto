@@ -514,6 +514,9 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i, Update_Datos):
                 i.Ejecutar()
+            elif isinstance(i,Alter_COLUMN):
+                i.Ejecutar()
+                
             else:
                 print("NO ejecuta")
 

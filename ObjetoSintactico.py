@@ -1,3 +1,4 @@
+
 class ObjetoSintactico:
     ''' Representacion del nodo en el que se encuentran los lexemas con sus caracteristicas '''
 
