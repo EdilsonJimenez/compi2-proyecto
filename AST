@@ -172,44 +172,67 @@ digraph AST {
 	99 -> 100
 	100 [label=FALSE]
 	Node98 -> 99
-	Node102 [label=UPDATE]
+	Node102 [label=DELETE]
 	Node0 -> Node102
 	Node103 [label="ID TABLA"]
 	Node102 -> Node103
 	Node104 [label=profesional]
 	Node103 -> Node104
-	Node105 [label=SET]
+	Node105 [label=WHERE]
 	Node102 -> Node105
-	Node106 [label="VALOR CONDICION SET"]
+	Node106 [label="VALOR CONDICION"]
 	Node105 -> Node106
 	107 [label=ExpresionRelacional]
 	108 [label=exp1]
 	107 -> 108
 	108 -> 109
-	109 [label="=="]
+	109 [label=">="]
 	107 -> 109
 	110 [label=exp2]
 	107 -> 110
 	110 -> 111
 	111 [label=ExpresionValor]
 	111 -> 112
-	112 [label=999]
+	112 [label=150]
 	Node106 -> 107
-	Node114 [label=WHERE]
-	Node102 -> Node114
-	Node115 [label="VALOR CONDICION WHERE"]
+	Node114 [label=UPDATE]
+	Node0 -> Node114
+	Node115 [label="ID TABLA"]
 	Node114 -> Node115
-	116 [label=ExpresionRelacional]
-	117 [label=exp1]
-	116 -> 117
-	117 -> 118
-	118 [label="!="]
-	116 -> 118
-	119 [label=exp2]
-	116 -> 119
+	Node116 [label=profesional]
+	Node115 -> Node116
+	Node117 [label=SET]
+	Node114 -> Node117
+	Node118 [label="VALOR CONDICION SET"]
+	Node117 -> Node118
+	119 [label=ExpresionRelacional]
+	120 [label=exp1]
 	119 -> 120
-	120 [label=ExpresionValor]
 	120 -> 121
-	121 [label=200]
-	Node115 -> 116
+	121 [label="=="]
+	119 -> 121
+	122 [label=exp2]
+	119 -> 122
+	122 -> 123
+	123 [label=ExpresionValor]
+	123 -> 124
+	124 [label=999]
+	Node118 -> 119
+	Node126 [label=WHERE]
+	Node114 -> Node126
+	Node127 [label="VALOR CONDICION WHERE"]
+	Node126 -> Node127
+	128 [label=ExpresionRelacional]
+	129 [label=exp1]
+	128 -> 129
+	129 -> 130
+	130 [label="!="]
+	128 -> 130
+	131 [label=exp2]
+	128 -> 131
+	131 -> 132
+	132 [label=ExpresionValor]
+	132 -> 133
+	133 [label=200]
+	Node127 -> 128
 }

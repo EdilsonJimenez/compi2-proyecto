@@ -30,7 +30,88 @@ def imprir(string):
     Lista.clear();
     Lista.append(Ejecucion)
 
+#----------------------------------------------------------
+#           TABLA DE SIMBOLOS
+#----------------------------------------------------------
+#----------------------------------------------------------
+from graphviz import Digraph, nohtml
+from graphviz import Graph
+from graphviz import escape
 
+def tabla_simbolos():
+    print("------------SIMBOLOS---------------")
+    ts=ts_global
+    SymbolT =  Graph('g', filename='bsimbolos.gv', format='png',node_attr={'shape': 'plaintext', 'height': '.1'})
+
+    #DICIONARIO DATOS
+    cadena=''
+    for fn in ts.Datos:
+        fun=ts.obtenerDato(fn)
+        cadena+='<TR><TD>'+str(fun.bd)+'</TD>'+'<TD>'+str(fun.tabla)+'</TD>'+'<TD>'+str(fun.columna)+'</TD>'+'<TD>'+str(fun.valor)+'</TD>'+'<TD>'+str(fun.fila)+'</TD></TR>'
+
+   
+    #DICIONARIO Tablas
+    cadena2=''
+    for fn in ts.Tablas:
+        fun=ts.obtenerTabla(fn)
+        for cuerpos in fun.cuerpo:   
+            if isinstance(cuerpos.tipo,valorTipo):
+                cadena2+='<TR><TD>'+str(fun.id)+'</TD>'+'<TD>'+str(cuerpos.id)+'</TD>'+'<TD>'+str(cuerpos.tipo.valor)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
+            else:
+                cadena2+='<TR><TD>'+str(fun.id)+'</TD>'+'<TD>'+str(cuerpos.id)+'</TD>'+'<TD>'+str(cuerpos.tipo)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
+
+    cadena3=''
+    for fn in ts.BasesDatos:
+        fun=ts.obtenerBasesDatos(fn)
+        cadena3 +='<TR><TD>'+str(fun.idBase)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
+
+   
+
+    SymbolT.node('table','''<<TABLE>
+                            <TR>
+                                <TD>BASE DATOS</TD>
+                                <TD>TABLA</TD>
+                                <TD>COLUMNA</TD>
+                                <TD>VALOR </TD>
+                                <TD>FILA</TD>
+                            </TR>'''
+                            +cadena+
+                            ''' <TR>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD>ID TABLA</TD>
+                                <TD>ID COLUMNA</TD>
+                                <TD>TIPO COLUMNA</TD>
+                                <TD>  </TD>
+                                <TD>  </TD>
+                            </TR>'''
+                             + cadena2 +
+                             ''' <TR>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD>ID BASE DE DATOS</TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>'''
+                            +cadena3+
+                        '''</TABLE>>''')
+
+ 
+    #DICCIONARIO BASE DE DATOS
+
+    SymbolT.render('g', format='png', view=True)
 
 # Un drop table esta compuesto por el ID de la tabla que eliminara.
 class DropTable(Instruccion):
