@@ -496,6 +496,20 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i, Insert_Datos):
                 i.Ejecutar()
+            elif isinstance(i, DropTable):
+                i.Ejecutar()
+            elif isinstance(i,Alter_Table_AddColumn):
+                i.Ejecutar()
+            elif isinstance(i,Alter_Table_Drop_Column):
+                i.Ejecutar()
+            elif isinstance(i,Alter_Table_Rename_Column):
+                i.Ejecutar()
+            elif isinstance(i,Alter_Table_Drop_Constraint):
+                i.Ejecutar()
+            elif isinstance(i,Alter_table_Add_Foreign_Key):
+                i.Ejecutar()
+            elif isinstance(i,Alter_Table_Add_Constraint):
+                i.Ejecutar()
             elif isinstance(i, Delete_Datos):
                 i.Ejecutar()
             elif isinstance(i, Update_Datos):
@@ -533,7 +547,3 @@ def reporte_errores():
     Rep.node('structs','''<<TABLE> <TR> <TD>Numero</TD><TD>Tipo-Clase Error</TD><TD>Descripcion Error</TD><TD>Linea</TD></TR>'''+cadena+'</TABLE>>')
     Rep.render('g', format='png', view=True)
     print('Hecho')
-
-
-
-

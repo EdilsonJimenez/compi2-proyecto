@@ -7,6 +7,7 @@ import Gramatica as g
 import interprete as Inter
 import ts as TS
 import jsonMode as JSON_INGE
+import jsonMode as json
 import Instruccion as INST
 import Interfaz.Interfaz as Gui
 
@@ -22,7 +23,6 @@ if __name__ == '__main__':
 
    # Inter.inicializarEjecucionAscendente("cont")
 
+    #json.alterDropColumn("MiBase1","profesional",4)
     Gui.principal
     #g.parse()
-   
-

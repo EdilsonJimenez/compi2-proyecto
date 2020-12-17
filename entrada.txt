@@ -16,5 +16,7 @@ INSERT INTO profesional VALUES(50,899,'Mazariegos', FALSE);
 DELETE FROM profesional WHERE carne > 50 AND nombre = 789;
 UPDATE profesional SET carne = 999 , WHERE carne = 50 AND nombre = 789;
 
-or str(temporal[index].tipo) == 'INTEGER' or str(temporal[index].tipo) == 'INT' or str(temporal[index].tipo) == 'BIGINT' or str(temporal[index].tipo) == 'DECIMAL' or str(temporal[index].tipo) == 'REAL' or str(temporal[index].tipo) == 'FLOAT' or str(temporal[index].tipo) == 'MONEY'
-or str(cc.val) == "FALSE"
+ALTER TABLE profesional  ADD  COLUMN  columna1 int, columna2 int; 
+
+
+ALTER TABLE profesional  DROP COLUMN  columna1;

@@ -49,12 +49,12 @@ def tabla_simbolos():
         fun=ts.obtenerDato(fn)
         cadena+='<TR><TD>'+str(fun.bd)+'</TD>'+'<TD>'+str(fun.tabla)+'</TD>'+'<TD>'+str(fun.columna)+'</TD>'+'<TD>'+str(fun.valor)+'</TD>'+'<TD>'+str(fun.fila)+'</TD></TR>'
 
-   
+
     #DICIONARIO Tablas
     cadena2=''
     for fn in ts.Tablas:
         fun=ts.obtenerTabla(fn)
-        for cuerpos in fun.cuerpo:   
+        for cuerpos in fun.cuerpo:
             if isinstance(cuerpos.tipo,valorTipo):
                 cadena2+='<TR><TD>'+str(fun.id)+'</TD>'+'<TD>'+str(cuerpos.id)+'</TD>'+'<TD>'+str(cuerpos.tipo.valor)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
             else:
@@ -65,7 +65,7 @@ def tabla_simbolos():
         fun=ts.obtenerBasesDatos(fn)
         cadena3 +='<TR><TD>'+str(fun.idBase)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
 
-   
+
 
     SymbolT.node('table','''<<TABLE>
                             <TR>
@@ -108,7 +108,7 @@ def tabla_simbolos():
                             +cadena3+
                         '''</TABLE>>''')
 
- 
+
     #DICCIONARIO BASE DE DATOS
 
     SymbolT.render('g', format='png', view=True)
@@ -117,6 +117,48 @@ def tabla_simbolos():
 class DropTable(Instruccion):
     def __init__(self, id):
         self.id = id
+
+    def Ejecutar(self):
+        #validar que exista la base de datos global
+        #validar que exista la tabla en la base de datos
+        #eliminar
+
+        global ts_global, baseActual
+        global LisErr
+
+        r  = ts_global.obtenerBasesDatos(baseActual)  #buscamos en el diccionario de la base de datos
+        if r is not None:
+            r2 = ts_global.obtenerTabla(self.id[0].val)
+            if r2 is not None:
+                #Eliminar Tabla
+                res = Master.dropTable(baseActual,self.id[0].val)
+                if res ==0:
+                    #se Elimino exitosamente
+                    ts_global.EliminarTabla(self.id[0].val)
+                    imprir("DROP TABLE:   Exito al Eliminar ")
+                elif res ==1:
+                    #Error all eliminar
+                    imprir("DROP TABLE:   Error Logico al eliminar")
+                elif res==2:
+                    #No esta la base de datos en la data
+                    imprir("DROP TABLE:   Error no se encuentra la BD ")
+                elif res==3:
+                    #No esta la tabla en la base de datos
+                    imprir("DROP TABLE:   Error no se encuentra la Tabla en la DB")
+                else:
+                    imprir("DROP TABLE:   Error al eliminar la Tabla!")
+
+            else:
+                imprir("DROP TABLE:   La tabla no existe!")
+        else:
+            imprir("DROP TABLE:   La Base de datos a eliminar no existe!")
+            #colocar error semantico
+
+
+
+
+
+
 
 
 class Absoluto(Instruccion) :
@@ -399,6 +441,7 @@ class Insert_Datos(Instruccion):
         global ts_global, baseActual
         global LisErr
         r = ts_global.obtenerBasesDatos(baseActual)
+
         if r is None:
             imprir("INSERT BD:  No existe la BD para insertar.")
         else:
@@ -408,11 +451,15 @@ class Insert_Datos(Instruccion):
             if r2 is None:
                 imprir("INSERT BD:  No existe la Tabla para insertar.")
             else:
+
                 imprir("INSERT BD:  Si existe la Tabla para insertar. ")
+
                 # Obtener tabla actual
                 rT:CreateTable = ts_global.obtenerTabla(self.id_table[0].val)
                 #print(">>>>>>>"+str(rT.id))
+
                 temporal:CampoTabla = rT.cuerpo
+
                 cC = 0
                 for c in rT.cuerpo:
                     cC += 1
@@ -425,6 +472,7 @@ class Insert_Datos(Instruccion):
                     #print(" >> Parametros exactos.")
                     index = 0
                     banderaInsert = False
+
                     for cc in self.valores:
 
                         if isinstance(temporal[index].tipo, valorTipo):
@@ -495,15 +543,19 @@ class CreateTable(Instruccion):
 
         # SI la tabla ya existe en el diccionario.
         r = ts_global.obtenerTabla(self.id)
+
         if r is None:
             imprir("INSERT BD: Creando tabla. ")
+
             # se cuenta el numero de columnas
             columnas = 0
+
             for campos in self.cuerpo:
                 columnas += 1
             print("---------------")
             print(baseActual)
             print(columnas)
+
             rM = Master.createTable(baseActual, self.id, columnas)
 
             if rM == 0:
@@ -607,6 +659,9 @@ class constraintTabla(Instruccion):
         self.listas_id = listas_id
         self.referencia = referencia
         self.idRef = idRef
+
+
+
 
 
 class CreateDataBase(Instruccion):
@@ -882,11 +937,146 @@ class Alter_Table_AddColumn(Instruccion):
         self.id_table = id_table
         self.id_columnas = id_columnas
 
+        """ def Ejecutar(self):
+        #Verificar que existe la base de datos
+        #Verificar que existe la tabla
+        #Verificar que existe la columna en la tabla
+        global ts_global, baseActual
+        global LisErr
+        r  = ts_global.obtenerBasesDatos(baseActual)  #buscamos en el diccionario de la base de datos
+        if r is not None:
 
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table)
+            print(self.id_table)
+
+
+
+            if r2 is not None:
+
+                for elemento in self.id_columnas:
+
+
+                    if isinstance(elemento,ExpresionValor2):
+
+                        rc =  Master.alterAddColumn(baseActual,self.id_table,elemento.val)
+
+                        if rc == 0:
+
+                            #Se ingreso correctamente el valor
+                            temporal2 = CampoValidacion(None, None)
+                            temporal  = CampoTabla(elemento.val, elemento.tipo, temporal2)
+                            r2.cuerpo.append(temporal)
+
+
+                            for elemento in ts_global.Tablas:
+                                x:CreateTable = ts_global.obtenerTabla(elemento)
+                                for ele in x.cuerpo:
+                                    y:CampoTabla  = ele
+                                    print(y.id+"<<<<<<<<<<<<<<<<<<<<<<")
+                            imprir("ALTER TABLE: Se Agrego correctamente la Columna")
+                        elif rc==1:
+                            #Error al escribir en la base de datos
+                            imprir("ALTER TABLE: Error al Escribir en la Base de Datos")
+                        elif rc==2:
+                            #No esta la base de datos  en las listas
+                            imprir("ALTER TABLE: No existe la BD")
+                        elif rc==3:
+                            #no esta la tabla en la base de datos
+                            imprir("ALTER TABLE: La tabla no existe en la BD")
+                        else:
+                            #Error logico
+                            imprir("ALTER TABLE: Error logico en la operacion")
+                    else:
+                        imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+            #colocar error semantico
+            """
+
+    def Ejecutar(self):
+        # Verificar que existe la base de datos
+        # Verificar que existe la tabla
+        # Verificar que existe la columna en la tabla
+        global ts_global, baseActual
+        global LisErr
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2: CreateTable = ts_global.obtenerTabla(self.id_table)
+            print(self.id_table)
+
+            if r2 is not None:
+
+                for elemento in self.id_columnas:
+
+                    if isinstance(elemento, ExpresionValor2):
+
+                        bandera = False
+                        for elemento2 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                            if(x.id == self.id_table):
+
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+                                    if (y.id != elemento.val):
+                                        bandera = True
+                            else:
+                                print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+
+                        if bandera == True:
+
+                            rc = Master.alterAddColumn(baseActual, self.id_table, elemento.val)
+
+                            if rc == 0:
+                                # Se ingreso correctamente el valor
+                                temporal2 = CampoValidacion(None, None)
+                                temporal = CampoTabla(elemento.val, elemento.tipo, temporal2)
+                                r2.cuerpo.append(temporal)
+
+                                # Recorrido de elementos
+                                for elemento in ts_global.Tablas:
+                                    x: CreateTable = ts_global.obtenerTabla(elemento)
+                                    for ele in x.cuerpo:
+                                        y: CampoTabla = ele
+                                        print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+
+                                imprir("ALTER TABLE: Se Agrego correctamente la Columna")
+                            elif rc == 1:
+                                # Error al escribir en la base de datos
+                                imprir("ALTER TABLE: Error al Escribir en la Base de Datos")
+                            elif rc == 2:
+                                # No esta la base de datos  en las listas
+                                imprir("ALTER TABLE: No existe la BD")
+                            elif rc == 3:
+                                # no esta la tabla en la base de datos
+                                imprir("ALTER TABLE: La tabla no existe en la BD")
+                            else:
+                                # Error logico
+                                imprir("ALTER TABLE: Error logico en la operacion")
+
+                        else:
+                            imprir("ALTER TABLE: La columna a insertar ya existe ")
+
+                    else:
+                        imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+
+
+
+
+
+
+#pendiente
 class Alter_COLUMN(Instruccion):
-    def __init__(self, id_columna,id_tipo):
-        self.id_columna = id_columna
-        self.id_tipo = id_tipo
+    def __init__(self, idtabla,columnas):
+        self.idtabla = idtabla
+        self.columnas = columnas
 
 
 class Alter_Table_Drop_Column(Instruccion):
@@ -895,21 +1085,337 @@ class Alter_Table_Drop_Column(Instruccion):
         self.columnas = columnas
 
 
+    def Ejecutar(self):
+
+        #Verificar que existe la base de datos
+        #Verificar que existe la tabla
+        #Verificar que existe la columna en la tabla
+        global ts_global, baseActual
+        global LisErr
+        r  = ts_global.obtenerBasesDatos(baseActual)  #buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table)
+
+            if r2 is not None:
+
+                for elemento in self.columnas:
+
+                    if isinstance(elemento,ExpresionValor):
+                        #Agarramos el valor de la lista de elementos
+                        #Recorremos para buscar la columna en la lista
+                          contador=0
+                          for elemento2 in ts_global.Tablas:
+                             x:CreateTable = ts_global.obtenerTabla(elemento2)
+
+                             if(x.id == self.id_table):
+
+                                 for ele in x.cuerpo:
+                                   y:CampoTabla  = ele
+                                   print(y.id+"<<<<<<<<<<<<<<<<<<<<<<")
+
+                                   if (y.id==elemento.val):
+                                       contador += 1
+
+                                       #mandamos a eliminar y verificamos la respuesta
+                                       print(str(baseActual)+str(self.id_table)+str(contador))
+                                       rc = Master.alterDropColumn(str(baseActual), str(self.id_table), int(contador))
+                                       if rc == 0:
+                                           # Se elimino correctamente el elemento
+                                           #Eliminamos de nuestro diccionario
+                                           r2.cuerpo.remove(y.id)
+                                           imprir("ALTER TABLE: Se Elimino correctamente la Columna")
+                                       elif rc == 1:
+                                           # Error al escribir en la base de datos
+                                           imprir("ALTER TABLE: Error al Eliminar en la Base de Datos")
+                                       elif rc == 2:
+                                           # No esta la base de datos  en las listas
+                                           imprir("ALTER TABLE: No existe la BD")
+                                       elif rc == 3:
+                                           # no esta la tabla en la base de datos
+                                           imprir("ALTER TABLE: La tabla no existe en la BD")
+                                       elif rc == 4:
+                                           # no esta la tabla en la base de datos
+                                           imprir("ALTER TABLE: La Columna no esta ")
+
+                                       elif rc == 5:
+                                           # no esta la tabla en la base de datos
+                                           imprir("ALTER TABLE: Excedio los Limites ")
+
+                                       else:
+                                           # Error logico
+                                           imprir("ALTER TABLE: Error logico en la operacion")
+                                   else:
+                                       contador+=1
+
+                             else:
+                                 print("Next!")
+
+                    else:
+                        imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+            #colocar error semantico
+
+
+
+
+
 class Alter_Table_Rename_Column(Instruccion):
     def __init__(self, id_table, old_column, new_column):
         self.id_table = id_table
         self.old_column = old_column
         self.new_column = new_column
 
+    def Ejecutar(self):
+        global ts_global, baseActual
+        global LisErr
+
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table)
+
+            if r2 is not None:
+
+                elementoo  = self.old_column
+                elementoo2 = self.new_column
+
+                if isinstance(elementoo, ExpresionValor) and isinstance(elementoo2, ExpresionValor):
+
+                        for elemento2 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                            if(x.id == self.id_table):
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+                                    print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+                                    if (y.id == elementoo.val):
+                                        y.id = elementoo2.val
+                                        imprir("ALTER TABLE: Se Actualizo correctamente la Columna")
+                                    else:
+                                        print("")
+                            else:
+                                print("")
+                        #imprimir valores actualizados
+                        #for elemento2 in ts_global.Tablas:
+                        #    x: CreateTable = ts_global.obtenerTabla(elemento2)
+                        #    for ele in x.cuerpo:
+                        #        y: CampoTabla = ele
+                        #       print(y.id + "<<<<<<<<<<<<<<<<<<<<<< EEEEEEEEEEEE")
+
+                else:
+                    imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+            # colocar error semantico
+
+
+
+
+
+
+
 class Alter_Table_Drop_Constraint(Instruccion):
     def __init__(self, id_table, id_constraint):
         self.id_tabla = id_table
         self.id_constraint = id_constraint
 
+
+    def Ejecutar(self):
+        global ts_global, baseActual
+        global LisErr
+
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table)
+
+            if r2 is not None:
+
+                elementoo  = self.id_constraint
+
+                if isinstance(elementoo, ExpresionValor):
+
+                        for elemento2 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                            if(x.id == self.id_tabla):
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+                                    print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+                                    if (y.id == elementoo.val):
+
+                                        for validacion in y.validaciones:
+                                            validacion:CampoValidacion
+                                            if validacion.valor=="CONSTRAINT_UNIQUE":
+                                                validacion.valor = " "
+                                                imprir("ALTER TABLE: CONSTRAINT ELIMINADO CORRECTAMENTE")
+                                    else:
+                                        print("")
+                            else:
+                                print("")
+
+
+                        for elemento2 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                            if(x.id == self.id_tabla):
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+                                    if (y.id == elementoo.val):
+
+                                        for validacion in y.validaciones:
+                                            validacion: CampoValidacion
+                                            print("VALIDACIONES CAMPO >>>>"+str(validacion.id)+"<->"+str(validacion.valor))
+                                    else:
+                                        print("")
+                            else:
+                                print("")
+
+                elif isinstance(elementoo,constraintTabla):
+
+
+
+
+                    for elemento2 in ts_global.Tablas:
+
+                        x: CreateTable = ts_global.obtenerTabla(elemento2)
+                        if (x.id == self.id_tabla):
+
+                            for ele in x.cuerpo:
+
+                                y: CampoTabla = ele
+
+                                if (y.id == elementoo.val):
+
+                                    for validacion in y.validaciones:
+                                        validacion:constraintTabla
+
+                                        validacion.valor      = None
+                                        validacion.id         = None
+                                        validacion.condiciones= None
+                                        validacion.listas_id  = None
+                                        validacion.referencia = None
+                                        validacion.idRef      = None
+
+
+                                        imprir("ALTER TABLE: CONSTRAINT ELIMINADO CORRECTAMENTE")
+                                else:
+                                    print("")
+                        else:
+                            print("")
+
+
+                    for elemento2 in ts_global.Tablas:
+                        x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                        if (x.id == self.id_tabla):
+                            for ele in x.cuerpo:
+                                y: CampoTabla = ele
+
+                                if (y.id == elementoo.val):
+                                    for validacion in y.validaciones:
+                                        validacion:constraintTabla
+                                        var="VALIDACIONES CAMPO >>>>"+str(validacion.valor)+str(validacion.id)+str(validacion.condiciones )+str(validacion.listas_id  )+str(validacion.referencia  )+str(validacion.idRef)
+                                        print(var)
+                                else:
+                                    print("")
+                        else:
+                            print("")
+                else:
+                    imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+            # colocar error semantico
+
+
+
+
+
 class Alter_table_Alter_Column_Set(Instruccion):
     def __init__(self, id_table, id_column):
         self.id_tabla = id_table
         self.id_column = id_column
+    def Ejecutar(self):
+        global ts_global, baseActual
+        global LisErr
+
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table)
+
+            if r2 is not None:
+
+                elementoo  = self.id_constraint
+
+                if isinstance(elementoo, ExpresionValor):
+
+                        for elemento2 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                            if x.id == self.id_tabla:
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+                                    print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+                                    if (y.id == elementoo.val):
+
+                                        bandera = False
+                                        for validacion in y.validaciones:
+                                            validacion:CampoValidacion
+
+                                            if validacion.id == "NOT" and validacion.valor=="NULL":
+                                                imprir("ALTER TABLE: YA TIENE LA VALIDACION NOT NULL")
+                                                bandera= True
+
+                                        if(bandera==False):
+                                            # Se ingreso correctamente el valor
+                                            temporal2 = CampoValidacion("NOT", "NULL")
+                                            y.validaciones.append(temporal2)
+                                            imprir("ALTER TABLE: SE SETEO NOT NULL CORRECTAMENTE")
+                                    else:
+                                        print("")
+
+                            else:
+                                print("")
+
+
+                        for elemento2 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                            if x.id == self.id_tabla:
+
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+                                    if (y.id == elementoo.val):
+
+                                        for validacion in y.validaciones:
+                                            validacion: CampoValidacion
+                                            print("VALIDACIONES CAMPO >>>>"+str(validacion.id)+"<->"+str(validacion.valor))
+                                    else:
+                                        print("")
+                            else:
+                                print("")
+                else:
+                    imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+            # colocar error semantico
+
+
+
+
+
+
 
 class Alter_table_Add_Foreign_Key(Instruccion):
     def __init__(self, id_table, id_column, id_column_references):
@@ -917,8 +1423,141 @@ class Alter_table_Add_Foreign_Key(Instruccion):
         self.id_column = id_column
         self.id_column_references = id_column_references
 
+
+    def Ejecutar(self):
+        #Verificar que existe la base de datos
+        #Verificar que existe la tabla
+        #Verificar que existe la columna en la tabla
+        global ts_global, baseActual
+        global LisErr
+        r  = ts_global.obtenerBasesDatos(baseActual)  #buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table)
+            print(self.id_table)
+
+
+
+            if r2 is not None:
+
+                    elemento       = self.id_column
+                    elemento2      = self.id_column_references
+                    tipoReferencia = "";
+
+
+                    if isinstance(elemento,ExpresionValor) and isinstance(elemento,ExpresionValor):
+
+
+                        bandera = False
+                        bandera2 = False
+
+                        for elemento22 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento22)
+
+                            if x.id == self.id_table:
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+
+                                    if y.id != elemento2.val:
+                                        bandera=True
+                                    if y.id == elemento.val:
+                                        bandera2=True
+                                        tipoReferencia=y.tipo
+
+
+                                if (bandera==True) and (bandera2 ==True):
+                                        # Se ingreso correctamente el valor
+                                        #validar que exista ese esa columna en alguna tabla
+                                        temporal2 = constraintTabla("FOREIGN KEY",elemento.val,None,None, None,elemento2.val)
+                                        temporal = CampoTabla(elemento2.val,tipoReferencia, temporal2)
+                                        r2.cuerpo.append(temporal)
+                                        imprir("ALTER TABLE: En Hora Buena Se Ingreso la Llave Foranea Correctamente")
+                                else:
+                                    imprir("ALTER TABLE: No se Ejecuto la Accion ")
+                            else:
+                                print("")
+                        else:
+                            imprir("ALTER TABLE: La columna a insertar ya existe ")
+
+                    else:
+                        imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+            #colocar error semantico
+
+
+
+
+
+
+
+
+
 class Alter_Table_Add_Constraint(Instruccion):
     def __init__(self, id_table, id_constraint, id_column):
         self.id_table = id_table
         self.id_constraint = id_constraint
         self.id_column = id_column
+
+    def Ejecutar(self):
+        global ts_global, baseActual
+        global LisErr
+        r  = ts_global.obtenerBasesDatos(baseActual)  #buscamos en el diccionario de la base de datos
+        if r is not None:
+
+            r2:CreateTable = ts_global.obtenerTabla(self.id_table)
+            print(self.id_table)
+
+
+
+            if r2 is not None:
+
+                    elemento       = self.id_constraint
+                    elemento2      = self.id_column
+
+                    tipoReferencia = "";
+
+
+                    if isinstance(elemento,ExpresionValor) and isinstance(elemento,ExpresionValor):
+
+
+                        bandera = False
+                        bandera2 = False
+
+                        for elemento22 in ts_global.Tablas:
+                            x: CreateTable = ts_global.obtenerTabla(elemento22)
+
+                            if x.id == self.id_table:
+
+                                for ele in x.cuerpo:
+                                    y: CampoTabla = ele
+
+                                    if y.id == elemento2.val:
+                                        bandera=True
+                                        tipoReferencia = y.tipo
+
+                                    if y.id != elemento.val:
+                                        bandera2=True
+
+                                if (bandera==True) and (bandera2 ==True):
+                                        # Se ingreso correctamente el valor
+                                        #validar que exista ese esa columna en alguna tabla
+                                        temporal2 = constraintTabla("UNIQUE",elemento2.val,None,None, None,elemento.val)
+                                        temporal = CampoTabla(elemento.val,tipoReferencia, temporal2)
+                                        r2.cuerpo.append(temporal)
+                                        imprir("ALTER TABLE: En Hora Buena Se Ingreso El Constraint UNIQUE")
+
+
+                                else:
+                                    imprir("ALTER TABLE: No se Ejecuto la Accion ")
+                            else:
+                                print("")
+                    else:
+                        imprir("ALTER TABLE: ERROR DE TIPO")
+            else:
+                imprir("ALTER TABLE:   La tabla no existe!   ")
+        else:
+            imprir("ALTER TABLE:   La Base de datos no existe")
+            #colocar error semantico
