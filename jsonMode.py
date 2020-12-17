@@ -128,6 +128,8 @@ def showTables(database: str) -> list:
     return tables
 
 
+
+
 # extract all register of a table
 def extractTable(database: str, table: str) -> list:
     initCheck()
@@ -244,6 +246,7 @@ def alterTable(database: str, tableOld: str, tableNew: str) -> int:
     else:
         return 1
 
+
     # add a column at the end of register with default value
 def alterAddColumn(database: str, table: str, default: any) -> int:
     initCheck()
@@ -309,6 +312,8 @@ def alterDropColumn(database: str, table: str, columnNumber: int) -> int:
         return 1
 
     # Delete a table name by inserting new_key and deleting old_key
+
+
 
 
 def dropTable(database: str, table: str) -> int:

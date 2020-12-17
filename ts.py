@@ -37,6 +37,9 @@ class TablaDeSimbolos():
         self.Tipos = Tipos.copy()
         self.BasesDatos = BasesDatos.copy()
 
+    def getDatos(self):
+        return self.Datos
+
 # ---------------------- BASES DE DATOS -----------------------------------
     def agregarBasesDatos(self, miBase):
         self.BasesDatos[miBase.idBase] = miBase
@@ -79,15 +82,20 @@ class TablaDeSimbolos():
         else :
             self.BasesDatos[tabla] = nuevaTabla
 
+
     def EliminarTabla(self, tabla):
         if not tabla in self.Tablas:
             print('Error: variable ', tabla, ' no definida.')
         else :
-            del self.BasesDatos[tabla]
+            del self.Tablas[tabla]
+
+
 
 # ------------------ CAMPOS ---------------------------------------
     def agregarCampo(self, campoN):
         self.Campos[campoN.id] = campoN
+
+
 
     def obtenerCampo(self, idCampo):
         if not idCampo in self.Campos:
@@ -110,5 +118,25 @@ class TablaDeSimbolos():
 
 # ------------------ Dato ---------------------------------------
     def agregarDato(self, miDato):
-        rand = randint(1,500)
+        rand = randint(1,50000)
         self.Datos[str(miDato.valor)+str(rand)] = miDato
+
+    def obtenerDato(self, idDato):
+        if not idDato in self.Datos:
+            # print('Error: funcion ',id,' no definida.')
+            return None
+        return self.Datos[idDato]
+
+    def EliminarDato(self, idDato):
+        if not idDato in self.Datos:
+            print(" No se elimino")
+        else :
+            del self.Datos[idDato]
+            print(" Se elimino")
+
+    def actualizarDato(self, dato, DatoN):
+        if not dato in self.Datos:
+            print(' >> SE ACTUALIZO EL ITEM.')
+            pass
+        else :
+            self.Datos[dato] = DatoN

@@ -396,7 +396,7 @@ from Ast2 import *
 from Instruccion import *
 from expresiones import *
 from interprete import *
-
+cadena=''
 
 precedence = (
     ('left', 'OR'),
@@ -432,12 +432,14 @@ def p_instrucciones_lista(t):
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
     t[1].append(t[2])
     t[0] = t[1]
+    rep_gramatica('<TR><TD> INSTRUCCIONES → INSTRUCCIONES INSTRUCCION </TD><TD> INSTRUCCIONES=t[1].append(t[2]) <BR/> INSTRUCCIONES=t[1] </TD></TR>')
 
 
 
 def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
     t[0] = [t[1]]
+    rep_gramatica('\n <TR><TD> INSTRUCCIONES → INSTRUCCION </TD><TD> INSTRUCCIONES=t[1] </TD></TR>')
 
 
 def p_instruccion(t):
@@ -453,6 +455,7 @@ def p_instruccion_Use_database(t):
     'DQL_COMANDOS       : USE ID PUNTOCOMA'
     global baseActual
     baseActual = str(t[2])
+    rep_gramatica('\n <TR><TD> DQL_COMANDOS → USE ID PUNTOCOMA </TD><TD> DQL_COMANDOS=t[2] </TD></TR>')
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
 
@@ -544,7 +547,6 @@ def p_Campos_id(t):
 
 def p_Campos_Asterisco(t):
     'CAMPOS          : ASTERISCO'
-
     t[0] = t[1]
 
 
@@ -1357,10 +1359,12 @@ def p_Create_TABLE_TIPO_CAMPO3_2(t):
 # CONDICIONES CON EL CONSTRAIN------------------------------------------------------------------------------------------------------------
 def p_Create_TABLE_TIPO_CAMPO5(t):
     'VALIDACION_CAMPO_CREATE  : CONSTRAINT ID  UNIQUE'
+    t[0] = CampoValidacion(t[2],str(t[1])+str("_")+str(t[3]))
 
 
 def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ expresion PARDER'
+    t[0] = CampoValidacion(t[2], str("No viene check"))
 
 
 # FIN CREATE TABLE
@@ -1377,6 +1381,9 @@ def p_instruccion_dml_comandos_INSERT2(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DEFAULT VALUES PUNTOCOMA'
     # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
     print('\n' + str(t[0]) + '\n')
+
+
+
 
 
 def p_instruccion_dml_comandos_INSERT_DATOS(t):
@@ -1524,46 +1531,91 @@ def p_instruccion_dml_comandos_ALTER_TABLE(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD COLUMN LISTA_ALTER_EM PUNTOCOMA'
     t[0] = Alter_Table_AddColumn(t[3], t[6])
 
-#LISTA_DE_IDS TIPO_CAMPO
 
+#LISTA_DE_IDS TIPO_CAMPO
 def p_instruccion_dml_comandos_ALTER_TABLE2(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP COLUMN LISTA_DE_IDS PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Drop_Column(t[3], t[6])
 
+
+
+#renombrar la columna (nombretabla   idviejo  idnuevo )
 def p_instruccion_dml_comandos_ALTER_TABLE3(t):
     'DML_COMANDOS       : ALTER TABLE ID  RENAME COLUMN ID TO ID PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Rename_Column(t[3], ExpresionValor(t[6]), ExpresionValor(t[8]))
 
+
+
+#Eliminar la columna nada mas
 def p_instruccion_dml_comandos_ALTER_TABLE4(t):
     'DML_COMANDOS       : ALTER TABLE ID  DROP CONSTRAINT ID  PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Drop_Constraint(t[3], ExpresionValor(t[6]))
 
+
+
+
+#tabla   nombrecolumnaafectada    agregarvalidacion
 def p_instruccion_dml_comandos_ALTER_TABLE5(t):
     'DML_COMANDOS       : ALTER TABLE ID  ALTER COLUMN ID SET NOT NULL  PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_table_Alter_Column_Set(t[3], ExpresionValor(t[6]))
 
+
+
+
+
+
+
+
+# ->idtabla  (->columna) references  ->columnaAfectada  (validacion agregar la columna)
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]))
 
+
+
+
+#nombratabla  nombrecolumnaafectadaAgregarConstraint   buscacolumnaafectada
 def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Add_Constraint(t[3], ExpresionValor(t[6]), ExpresionValor(t[9]))
 
+
+
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
-    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  COMA'
-    t[0] = Alter_COLUMN(t[3],t[5])
+    'DML_COMANDOS       :  ALTER TABLE ID  LISTA_ALTER_COLUMN PUNTOCOMA ' #ID  TYPE TIPO_CAMPO  COMA'
+    t[0] = Alter_COLUMN(t[3],t[4])
 
 
-def p_instruccion_dml_comandos_ALTER_TABLE9(t):
-    'DML_COMANDOS       : ALTER COLUMN ID  TYPE TIPO_CAMPO  PUNTOCOMA'
-    t[0] = Alter_COLUMN(t[3],t[5])
+# LISTADO DE IDS TIPE COMA--------------------------------------------------------
+def p_CREATE_TABLE_LISTA_IDS_2(t):
+    'LISTA_ALTER_COLUMN      : LISTA_ALTER_COLUMN LISTA_ALTER_COLUMN_'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_CREATE_TABLE_LISTA_IDS2_2(t):
+    'LISTA_ALTER_COLUMN    : LISTA_ALTER_COLUMN_'
+    t[0] = [t[1]]
+
+
+def p_CREATE_TABLE_LISTA_IDS3_2(t):
+    'LISTA_ALTER_COLUMN_  :  ALTER COLUMN ID TYPE TIPO_CAMPO COMA'
+    t[0] = ExpresionValor2(t[3], t[5])
+
+
+def p_CREATE_TABLE_LISTA_IDS4_2(t):
+    'LISTA_ALTER_COLUMN_  :   ALTER COLUMN ID TYPE TIPO_CAMPO'
+    t[0] = ExpresionValor2(t[3], t[5])
+
+
+
+
 
 
 # DDL
@@ -1914,7 +1966,9 @@ def p_expresion_logica_exists_sub(t):
     '''expresion_logica : EXISTS '''
     t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.EXISTS)
 
-
+def p_expresion_logica_not_exists_sub(t):
+    '''expresion_logica : NOT EXISTS '''
+    t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.NOT_EXIST)
 
 
 
@@ -1946,8 +2000,11 @@ def p_unitaria_negativo(t):
 # VALORES--------------------------------------------------
 def p_valor_id(t):
     '''expresion_aritmetica : ID'''
-    t[0] = ExpresionValor(t[1])
+    t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL)
 
+def p_valor_id_2(t):
+    '''expresion_aritmetica : ID PUNTO ID'''
+    t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[1], TIPO_VARIABLE.TEMPORAL)
 
 def p_valor_number(t):
     '''expresion_aritmetica : ENTERO'''
@@ -2207,6 +2264,15 @@ def p_error(t):
         print(str(tok.type))
         if not tok or tok.type == 'PUNTOCOMA':
             break
+
+
+
+def rep_gramatica(cad):
+    global cadena
+    cadena+=cad
+
+dot = Digraph('g', filename='gram_asc.gv', format='png',
+            node_attr={'shape': 'plaintext', 'height': '.1'})
 
 
 import ply.yacc as yacc

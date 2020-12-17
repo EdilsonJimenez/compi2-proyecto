@@ -30,6 +30,7 @@ class OPERACION_LOGICA(Enum) :
     IN = 16
     NOT_IN = 17
     EXISTS = 18
+    NOT_EXIST=19
 
 class OPERACION_RELACIONAL(Enum) :
     IGUALQUE = 1
@@ -191,14 +192,14 @@ class Parametro(Expresion) :
     def __init__(self, expresion) :
         self.expresion=expresion
 
+'''
 class Variable(Expresion) :
-    
-    def __init__(self, id, tipoVar) :
+    def __init__(self, id, tipoVar):
         self.id=id
-        self.tipoVar=tipoVar
+        self.tipoVar=tipoVar'''
 
 class ExpresionValor(Expresion):
-    def __init__(self, val=0):
+    def __init__(self, val):
         self.val = val
 
 class AccesoArray(Expresion) :
@@ -264,6 +265,11 @@ class ExpresionCondicionalSubquery(Expresion):
     def __init__(self, val):
         self.val = val
 
+# ================================================================0000000
+class Variable(Expresion) :
+    def __init__(self,id ,tipo_var):
+        self.id = id
+        self.tipo_var = tipo_var
 
 
 class ExpresionFuncion(Expresion):
@@ -287,4 +293,8 @@ class UnitariaAritmetica(Expresion):
         self.exp1 = exp1
         self.operador = operador
 
-
+class CAMPO_TABLA_ID_PUNTO_ID(Expresion):
+    def __init__(self, tablaid, campoid,tipovariable):
+        self.tablaid = tablaid
+        self.campoid = campoid
+        self.tipovariable = tipovariable

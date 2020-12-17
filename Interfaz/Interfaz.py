@@ -2,12 +2,13 @@ from tkinter import *
 from tkinter import scrolledtext
 from tkinter import filedialog as FiledDialog
 from tkinter import ttk
+import Instruccion as INST
 from io import open
 
 #Parte de Importaciones para el analisis etc
 import interprete as Inter
 import Ast2 as ast
-from Instruccion import  *
+from Instruccion import *
 
 
 
@@ -93,22 +94,14 @@ class Aplicacion:
             else:
                 return
 
-
-
-
-
+    def graficaTabla(self):
+        INST.tabla_simbolos()
 
     def Errores(self):
         Inter.reporte_errores()
 
     def Graficar(self):
-
         print("graficando arbol")
-
-
-
-
-
 
     def __init__(self):
         self.miVentana = Tk()
@@ -130,12 +123,17 @@ class Aplicacion:
         self.menuAnalizar = Menu(self.barraMenu, tearoff=0)
         #self.menuAnalizar.add_command(label="Run", command=self.enviarDatos)
         self.menuAnalizar.add_command(label="Ejecucion", command=self.Seleccionar)
-        self.menuAnalizar.add_command(label="Graficar Arbol" ,command=self.Graficar)
-        self.menuAnalizar.add_command(label="Errores", command=self.Errores)
+        self.menuAnalizar.add_command(label="Graficar Arbol", command=self.Graficar)
+
+        self.menuReportes = Menu(self.barraMenu, tearoff=0)
+        self.menuReportes.add_command(label="Reporte Errores", command=self.Errores)
+        self.menuReportes.add_command(label="Tabla de simbolos", command=self.graficaTabla)
+        self.menuReportes.add_command(label="Reporte gramatical", command=self.guardarComo)
 
 
         self.barraMenu.add_cascade(menu=self.menuArchivo, label="Archivo")
         self.barraMenu.add_cascade(menu=self.menuAnalizar, label="Run")
+        self.barraMenu.add_cascade(menu=self.menuReportes, label="Reportes")
 
         # Area de texto
         self.entrada = scrolledtext.ScrolledText(self.miVentana)
