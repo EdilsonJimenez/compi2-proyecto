@@ -186,7 +186,7 @@ digraph AST {
 	108 [label=exp1]
 	107 -> 108
 	108 -> 109
-	109 [label="=="]
+	109 [label=">="]
 	107 -> 109
 	110 [label=exp2]
 	107 -> 110
@@ -195,4 +195,47 @@ digraph AST {
 	111 -> 112
 	112 [label=150]
 	Node106 -> 107
+<<<<<<< HEAD
+=======
+	Node114 [label=UPDATE]
+	Node0 -> Node114
+	Node115 [label="ID TABLA"]
+	Node114 -> Node115
+	Node116 [label=profesional]
+	Node115 -> Node116
+	Node117 [label=SET]
+	Node114 -> Node117
+	Node118 [label="VALOR CONDICION SET"]
+	Node117 -> Node118
+	119 [label=ExpresionRelacional]
+	120 [label=exp1]
+	119 -> 120
+	120 -> 121
+	121 [label="=="]
+	119 -> 121
+	122 [label=exp2]
+	119 -> 122
+	122 -> 123
+	123 [label=ExpresionValor]
+	123 -> 124
+	124 [label=999]
+	Node118 -> 119
+	Node126 [label=WHERE]
+	Node114 -> Node126
+	Node127 [label="VALOR CONDICION WHERE"]
+	Node126 -> Node127
+	128 [label=ExpresionRelacional]
+	129 [label=exp1]
+	128 -> 129
+	129 -> 130
+	130 [label="!="]
+	128 -> 130
+	131 [label=exp2]
+	128 -> 131
+	131 -> 132
+	132 [label=ExpresionValor]
+	132 -> 133
+	133 [label=200]
+	Node127 -> 128
+>>>>>>> master
 }

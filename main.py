@@ -7,6 +7,7 @@ import Gramatica as g
 import interprete as Inter
 import ts as TS
 import jsonMode as JSON_INGE
+import Instruccion as INST
 
 import Interfaz.Interfaz  as Gui
 def print_hi(name):
@@ -22,6 +23,7 @@ if __name__ == '__main__':
    # Inter.inicializarEjecucionAscendente("cont")
 
     Gui.principal
+    INST.tabla_simbolos();
 
     #g.parse()
    
