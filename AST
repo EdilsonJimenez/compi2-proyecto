@@ -2,12 +2,17 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
+<<<<<<< HEAD
 	Node1 [label=DELETE]
+=======
+	Node1 [label=INSERT]
+>>>>>>> master
 	Node0 -> Node1
 	Node2 [label="ID TABLA"]
 	Node1 -> Node2
 	Node3 [label=profesional]
 	Node2 -> Node3
+<<<<<<< HEAD
 	Node4 [label=WHERE]
 	Node1 -> Node4
 	Node5 [label="VALOR CONDICION"]
@@ -25,4 +30,47 @@ digraph AST {
 	10 -> 11
 	11 [label=250]
 	Node5 -> 6
+=======
+	Node4 [label="VALORES TABLA"]
+	Node1 -> Node4
+	Node5 [label="VALOR NUEVO"]
+	Node4 -> Node5
+	Node5 -> 6
+	Node7 [label="VALOR NUEVO"]
+	Node4 -> Node7
+	8 [label="ExpresionFUNCION NATIVA"]
+	9 [label=POWER]
+	8 -> 9
+	10 [label=exp1]
+	8 -> 10
+	10 -> 11
+	11 [label=ExpresionValor]
+	11 -> 12
+	12 [label=2]
+	13 [label=exp2]
+	8 -> 13
+	13 -> 14
+	14 [label=ExpresionValor]
+	14 -> 15
+	15 [label=2]
+	Node7 -> 8
+	Node17 [label="VALOR NUEVO"]
+	Node4 -> Node17
+	18 [label="ExpresionFUNCION NATIVA"]
+	19 [label=FACTORIAL]
+	18 -> 19
+	20 [label=exp1]
+	18 -> 20
+	20 -> 21
+	21 [label=ExpresionValor]
+	21 -> 22
+	22 [label=5]
+	Node17 -> 18
+	Node24 [label="VALOR NUEVO"]
+	Node4 -> Node24
+	25 [label=ExpresionValor]
+	25 -> 26
+	26 [label=TRUE]
+	Node24 -> 25
+>>>>>>> master
 }

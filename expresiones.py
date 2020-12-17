@@ -118,6 +118,7 @@ class FUNCION_NATIVA(Enum):
     CONVERT = 53
     ENCODE = 54
     DECODE = 55
+    NOW = 56
 
 
 class CONDICIONAL_SUBQUERY(Enum):
@@ -247,13 +248,6 @@ class valorTipo(Expresion):
 
 
 #-----------------------------------------------------------
-class ExpresionFuncion(Expresion):
-    def __init__(self, funcion, exp1, exp2, exp3, exp4):
-        self.funcion = funcion
-        self.exp1 = exp1
-        self.exp2 = exp2
-        self.exp3 = exp3
-        self.exp4 = exp4
 
 #CLASES EDILSON
 class UnitariaArismeticaABS() :
