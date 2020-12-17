@@ -76,4 +76,28 @@ digraph AST {
 	39 -> 40
 	40 [label=TRUE]
 	Node38 -> 39
+	Node42 [label="ALTER TABLE ADD COLUMN"]
+	Node0 -> Node42
+	Node43 [label="ID TABLA"]
+	Node42 -> Node43
+	Node44 [label=profesional]
+	Node43 -> Node44
+	Node45 [label=COLUMNAS]
+	Node42 -> Node45
+	Node46 [label="columna1 Tipo: int"]
+	Node45 -> Node46
+	Node47 [label="columna2 Tipo: int"]
+	Node45 -> Node47
+	Node48 [label=DML_COMANDOS]
+	Node0 -> Node48
+	Node49 [label="ALTER TABLE"]
+	Node48 -> Node49
+	Node50 [label=profesional]
+	Node48 -> Node50
+	Node51 [label="DROP COLUMN"]
+	Node48 -> Node51
+	Node52 [label=COLUMNAS]
+	Node48 -> Node52
+	Node53 [label=columna1]
+	Node52 -> Node53
 }

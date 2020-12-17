@@ -79,15 +79,20 @@ class TablaDeSimbolos():
         else :
             self.BasesDatos[tabla] = nuevaTabla
 
+
     def EliminarTabla(self, tabla):
         if not tabla in self.Tablas:
             print('Error: variable ', tabla, ' no definida.')
         else :
-            del self.BasesDatos[tabla]
+            del self.Tablas[tabla]
+
+
 
 # ------------------ CAMPOS ---------------------------------------
     def agregarCampo(self, campoN):
         self.Campos[campoN.id] = campoN
+
+
 
     def obtenerCampo(self, idCampo):
         if not idCampo in self.Campos:
