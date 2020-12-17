@@ -1717,7 +1717,7 @@ def p_instruccion_tiempo4(t):
 
 def p_instruccion_tiempo5(t):
     'DQL_COMANDOS       : SELECT NOW PARIZQ PARDER PUNTOCOMA'
-    t[0] = Selectnow(t[1])
+    t[0] = Selectnow(ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW))
 
 
 def p_instrucion_ctypes(t):
@@ -2016,7 +2016,7 @@ def p_funciones_math(t):
                             | SIGN PARIZQ expresion_aritmetica PARDER
                             | SQRT PARIZQ expresion_aritmetica PARDER
                             | WIDTH_BUCKET PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
-                            | TRUNC PARIZQ expresion_aritmetica PARDER
+                            | TRUNC PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | RANDOM PARIZQ PARDER
                             | ACOS PARIZQ expresion_aritmetica PARDER
                             | ACOSD PARIZQ expresion_aritmetica PARDER
@@ -2050,7 +2050,8 @@ def p_funciones_math(t):
                             | SET_BYTE PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
                             | CONVERT PARIZQ expresion_aritmetica AS TIPO_CAMPO PARDER
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
-                            | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER'''
+                            | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
+                            | NOW PARIZQ PARDER'''
     if t[1] == 'ABS':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ABS)
     elif t[1] == 'CBRT':
@@ -2080,7 +2081,7 @@ def p_funciones_math(t):
     elif t[1] == 'SQRT':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.SQRT)
     elif t[1] == 'TRUNC':
-        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TRUNC)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.TRUNC)
     elif t[1] == 'ACOS':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ACOS)
     elif t[1] == 'ACOSD':
@@ -2155,7 +2156,12 @@ def p_funciones_math(t):
         t[0] = ExpresionFuncion(t[3], t[5], t[7], None, FUNCION_NATIVA.SET_BYTE)
     elif t[1] == 'WIDTH_BUCKET':
         t[0] = ExpresionFuncion(t[3], t[5], t[7], t[9], FUNCION_NATIVA.WIDTH_BUCKET)
-
+    elif t[1] == 'PI':
+        t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.PI)
+    elif t[1] == 'RANDOM':
+        t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.RANDOM)
+    elif t[1] == 'NOW':
+        t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW)
 
 # def p_expnumerica(t):
 #     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
