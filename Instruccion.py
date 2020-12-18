@@ -321,6 +321,8 @@ class AccesoGroupBy(Instruccion): #Tabla Lista
         self.Lista_Alias  = Lista_Alias
         self.Estado = Estado
 
+
+
 #---------------------------------------------------------------------------------------------------
 
 
@@ -412,6 +414,13 @@ class Cuerpo_TipoWhere(Instruccion):
 #---------------------------------------------------------------------------------------------------
 #Group By  Con Having y condiciones
 class GroupBy(Instruccion):
+    def __init__(self,Lista_Campos=[],Condiciones=[]):
+        self.Lista_Campos = Lista_Campos
+        self.Condiciones  = Condiciones
+
+
+#Group By  Con Having y condiciones
+class OrderBy(Instruccion):
     def __init__(self,Lista_Campos=[],Condiciones=[]):
         self.Lista_Campos = Lista_Campos
         self.Condiciones  = Condiciones
@@ -1053,6 +1062,7 @@ class Alter_Table_AddColumn(Instruccion):
                                         bandera = True
                             else:
                                 print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+
 
                         if bandera == True:
 

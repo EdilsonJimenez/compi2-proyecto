@@ -159,6 +159,8 @@ def extractRangeTable(database: str, table: str, lower: any, upper: any) -> list
     return rows
 
 
+
+
 # Add a PK list to specific table and database
 def alterAddPK(database: str, table: str, columns: list) -> int:
     try:
@@ -185,9 +187,9 @@ def alterAddPK(database: str, table: str, columns: list) -> int:
     except:
         return 1
 
+
+
     # Add a PK list to specific table and database
-
-
 def alterDropPK(database: str, table: str) -> int:
     initCheck()
     dump = False
@@ -235,8 +237,6 @@ def alterTable(database: str, tableOld: str, tableNew: str) -> int:
         return 1
 
     # add a column at the end of register with default value
-
-
 def alterAddColumn(database: str, table: str, default: any) -> int:
     initCheck()
     dump = False
@@ -263,10 +263,11 @@ def alterAddColumn(database: str, table: str, default: any) -> int:
     else:
         return 1
 
+
+
     # drop a column and its content (except primary key columns)
-
-
 def alterDropColumn(database: str, table: str, columnNumber: int) -> int:
+
     initCheck()
     dump = False
     with open('data/json/databases') as file:

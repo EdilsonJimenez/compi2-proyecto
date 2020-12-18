@@ -29,6 +29,7 @@ reservadas = {
     'outer': 'OUTER',
     'group': 'GROUP',
     'by': 'BY',
+    'order':'ORDER',
     'asc': 'ASC',
     'desc': 'DESC',
     'nulls': 'NULLS',
@@ -496,20 +497,20 @@ def p_ListaCampos_Lista(t):
     t[0] = [t[1]]
 
 
-def p_Lista_NombreS(t):
-    'LISTAA          : NOMBRE_T PUNTO CAMPOS S'
-
-
+def p_Lista_NombreSss(t):
+    'LISTAA          : ID PUNTO CAMPOS S'
     t[0] = Campo_Accedido(t[1],t[3],t[4])
 
 
-def p_Lista_Nombre(t):
-    'LISTAA          : NOMBRE_T PUNTO CAMPOS'
+
+
+def p_Lista_Nombres(t):
+    'LISTAA          : ID PUNTO CAMPOS'
     t[0] = Campo_AccedidoSinLista(t[1], t[3])
 
 
 
-def p_Lista_CampoS(t):
+def p_Lista_CampoSs(t):
     'LISTAA          : CAMPOS S'
     t[0] = Campo_Accedido("", t[1], t[2])
 
@@ -523,36 +524,49 @@ def p_Lista_Campo(t):
 
 
 
-def p_Lista_ExprecionesCase(t):
+def p_Lista_ExprecionesCases(t):
     'LISTAA          :  EXPRESIONES_C'
     t[0] = t[1]
 
 
-def p_Lista_SubsQuery(t):
+def p_Lista_SubsQuerys(t):
     'LISTAA    :   QUERY'
     t[0] = t[1]
 
 
 
-def p_Lista_COMA(t):
+def p_Lista_COMAs(t):
     'LISTAA    :   COMA'
+    print("estoy entrando")
     t[0] = str(t[1])
 
 
 
-def p_Campos_id(t):
+
+def p_Campos_ids(t):
     'CAMPOS          : ID'
     t[0] = t[1]
 
+def p_Campos_expresion(t):
+    'CAMPOS          : expresion'
+    t[0] = str(t[1])
 
-def p_Campos_Asterisco(t):
-    'CAMPOS          : ASTERISCO'
+def p_Campos_expresion(t):
+    'CAMPOS          : ENTERO'
+    t[0] = str(t[1])
+
+
+def p_Campos_Asteriscos(t):
+    'CAMPOS          :  ASTERISCO'
     t[0] = t[1]
 
 
-def p_NombreT_id(t):
+
+
+def p_NombreT_idj(t):
     'NOMBRE_T        : ID'
     t[0] = t[1]
+
 
 
 def p_Alias_id(t):
@@ -823,6 +837,20 @@ def p_Group_GroupBy(t):
 def p_Group_GroupBySin(t):
     'GROUPP    : GROUP BY EXPRE_LIST'
     t[0] = GroupBy(t[3],False)
+
+
+def p_Group_orderby(t):
+    'GROUPP    : ORDER BY EXPRE_LIST HAVING expresion'
+    t[0] = OrderBy(t[3],t[5])
+
+
+def p_Group_OrderBySin(t):
+    'GROUPP    : ORDER BY EXPRE_LIST'
+    t[0] = OrderBy(t[3],False)
+
+
+
+
 
 
 def p_ExpreList_Lista(t):
