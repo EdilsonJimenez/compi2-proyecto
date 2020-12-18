@@ -30,7 +30,7 @@ class OPERACION_LOGICA(Enum) :
     IN = 16
     NOT_IN = 17
     EXISTS = 18
-    NOT_EXIST=19
+    NOT_EXISTS=19
 
 class OPERACION_RELACIONAL(Enum) :
     IGUALQUE = 1

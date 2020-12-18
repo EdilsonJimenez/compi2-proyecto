@@ -183,10 +183,6 @@ class Select(Instruccion) :
 
         #Si viene tabla.nombre  bamos a buscar en especifico cada una de la cuestiones
 
-
-
-
-
 #---------------------------------------------------------------------------------------------------
 class Select2(Instruccion) :
     def __init__(self,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
@@ -203,6 +199,7 @@ class Select3(Instruccion) :
         self.Lista_Campos   = Lista_Campos
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
+#Con cuerpo
 #---------------------------------------------------------------------------------------------------
 class Select4(Instruccion) :
     def __init__(self,distinct,  unionn,Cuerpo, Lista_Campos=[], Nombres_Tablas=[] ) :
@@ -247,8 +244,6 @@ class SubSelect4(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.Cuerpo = Cuerpo
 
-
-
 # Campos Accedidos
 #---------------------------------------------------------------------------------------------------
 
@@ -262,7 +257,6 @@ class Campo_Accedido(Instruccion): #Nombre.columna  Lista_Posible
 
     def Ejecutar(self):
         print("")
-
 
 #Campos Accedidos por Lista
 class Campo_AccedidoSinLista(Instruccion): #Nombre.columna  Lista_Posible
@@ -337,8 +331,6 @@ class CamposUnions(Instruccion):
         self.Consulta       = Consulta
 
 
-
-
 # Alias
 #---------------------------------------------------------------------------------------------------
 #Alias Campos
@@ -371,9 +363,6 @@ class Alias_SubQuerysSinLista(Instruccion):
 #---------------------------------------------------------------------------------------------------
 
 
-
-
-
 #Cuerpo Consulta
 #---------------------------------------------------------------------------------------------------
 #where Condiciones
@@ -395,7 +384,6 @@ class GroupBy(Instruccion):
         self.Lista_Campos = Lista_Campos
         self.Condiciones  = Condiciones
 
-
 #TIPOS DE CASES
 #---------------------------------------------------------------------------------------------------
 class CaseCuerpo(Instruccion):
@@ -415,9 +403,6 @@ class TiposWhen(Instruccion):
         self.ListaExpresiones1 = ListaExpresiones1
         self.ListaExpresiones2 = ListaExpresiones2
         self.ListaExpresiones3 = ListaExpresiones3
-
-
-
 
 
 #---------------------------------------------------------------------------------------------------
@@ -822,18 +807,15 @@ class DropDataBase(Instruccion):
             else:
                 print("No llega nunca pero por si las moscas")
 
-
-
-
-
-
-
-
-
+# Crear funciones de ejecucion ----------------------------------
 class SelectExtract(Instruccion):
     def __init__(self, tipoTiempo, cadenaFecha):
         self.tipoTiempo = tipoTiempo
         self.cadenaFecha = cadenaFecha
+
+    def Ejecutar(self):
+        pass
+
 
 class SelectDatePart(Instruccion):
     def __init__(self, cadena, cadenaIntervalo):
@@ -855,6 +837,7 @@ class Selectnow(Instruccion):
 class CreacionEnum(Instruccion):
     def __init__(self, listaCadenas):
         self.listaCadenas = listaCadenas
+# Crear funciones de ejecucion ----------------------------------
 
 #Prueba clase errores
 class ErrorSintactico():
@@ -1486,14 +1469,6 @@ class Alter_table_Add_Foreign_Key(Instruccion):
         else:
             imprir("ALTER TABLE:   La Base de datos no existe")
             #colocar error semantico
-
-
-
-
-
-
-
-
 
 class Alter_Table_Add_Constraint(Instruccion):
     def __init__(self, id_table, id_constraint, id_column):

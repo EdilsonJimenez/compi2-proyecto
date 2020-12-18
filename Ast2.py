@@ -1769,7 +1769,7 @@ class Ast2:
             return 'IS_DISTINCT'
         elif padreID==OPERACION_LOGICA.EXISTS:
             return 'EXISTS'
-        elif padreID==OPERACION_LOGICA.NOT_EXIST:
+        elif padreID==OPERACION_LOGICA.NOT_EXISTS:
             return 'NOT_EXISTS'
         elif padreID==OPERACION_LOGICA.IN:
             return 'IN'

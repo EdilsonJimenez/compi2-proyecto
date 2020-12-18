@@ -424,8 +424,8 @@ def p_init(t):
     arbolito = Ast2(t[0])
     arbolito.crearReporte()
     #SEGUNDA PASADA
-    arbolito2 = interprete2(t[0])
-    arbolito2.ejecucion()
+    #arbolito2 = interprete2(t[0])
+    #arbolito2.ejecucion()
 
 
 def p_instrucciones_lista(t):
@@ -497,14 +497,14 @@ def p_ListaCampos_Lista(t):
 
 
 def p_Lista_NombreS(t):
-    'LISTAA          : NOMBRE_T PUNTO CAMPOS S'
+    'LISTAA          : ID PUNTO CAMPOS S'
 
 
     t[0] = Campo_Accedido(t[1],t[3],t[4])
 
 
 def p_Lista_Nombre(t):
-    'LISTAA          : NOMBRE_T PUNTO CAMPOS'
+    'LISTAA          : ID PUNTO CAMPOS'
     t[0] = Campo_AccedidoSinLista(t[1], t[3])
 
 
@@ -566,8 +566,9 @@ def p_S_AsAlias(t):
 
 
 def p_S_Aliass(t):
-    'S          :  ALIAS'
+    'S          :  ALIAS '
     t[0] = Alias_Campos_ListaCamposSinLista(t[1])
+
 
     # t[0] = str(t[1])
 
@@ -1206,6 +1207,13 @@ def p_Create_TABLE_CAMPOS4(t):
     'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ VALORES PARDER'
     t[0] = constraintTabla(t[3], t[2], t[5], None, None, None)
 
+def p_Create_TABLE_CAMPOS444(t):
+    'LISTA2  :  CHECK PARIZQ VALORES PARDER'
+    t[0] = constraintTabla(t[1], None, t[3], None, None, None)
+
+def p_Create_TABLE_CAMPOS4445(t):
+    'LISTA2  :  CHECK PARIZQ VALORES PARDER COMA'
+    t[0] = constraintTabla(t[1], None, t[3], None, None, None)
 
 def p_Create_TABLE_CAMPOS42(t):
     'LISTA2  :  CONSTRAINT  ID CHECK PARIZQ VALORES PARDER COMA'
@@ -1286,6 +1294,7 @@ def p_Create_TABLE_TIPO_CAMPO(t):
                     | MONEY
                     | FLOAT
                     | TEXT
+                    | DATE
                     | BOOLEAN '''
     t[0] = t[1]
 
@@ -1344,7 +1353,8 @@ def p_Create_TABLE_TIPO_CAMPO2_2(t):
 
 
 def p_Create_TABLE_TIPO_CAMPO4_2(t):
-    '''VALIDACION_CAMPO_CREATE  : NULL'''
+    '''VALIDACION_CAMPO_CREATE  : NULL
+                                | UNIQUE'''
     t[0] = CampoValidacion(t[1], None)
 
 
@@ -1572,10 +1582,15 @@ def p_instruccion_dml_comandos_ALTER_TABLE5(t):
 
 # ->idtabla  (->columna) references  ->columnaAfectada  (validacion agregar la columna)
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
-    'DML_COMANDOS       : ALTER TABLE ID  ADD FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
+    'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID FOREIGN KEY PARIZQ ID PARDER REFERENCES ID PARIZQ ID PARDER PUNTOCOMA'
+    print('\n' + str(t[0]) + '\n')
+    t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[10]), ExpresionValor(t[13]))
+
+
+def p_instruccion_dml_comandos_ALTER_TABLEF6(t):
+    'DML_COMANDOS       : ALTER TABLE ID  ADD  FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]))
-
 
 
 
@@ -1584,7 +1599,6 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
     t[0] = Alter_Table_Add_Constraint(t[3], ExpresionValor(t[6]), ExpresionValor(t[9]))
-
 
 
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
@@ -1742,6 +1756,8 @@ def p_instruccion_tiempo(t):
 def p_Tipo_Tiempo(t):
     '''TIPO_TIEMPO      : YEAR
                         | HOUR
+                        | DAY
+                        | MONTH
                         | MINUTE
                         | SECOND '''
     t[0] = t[1]
@@ -1773,7 +1789,7 @@ def p_instruccion_tiempo5(t):
 
 
 def p_instrucion_ctypes(t):
-    'DQL_COMANDOS       : CREATE TYPE MOOD AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA'
+    'DQL_COMANDOS       : CREATE TYPE ID AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA'
     t[0] = CreacionEnum(t[7])
 
 def p_listas_cs(t):
@@ -1968,7 +1984,7 @@ def p_expresion_logica_exists_sub(t):
 
 def p_expresion_logica_not_exists_sub(t):
     '''expresion_logica : NOT EXISTS '''
-    t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.NOT_EXIST)
+    t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.NOT_EXISTS)
 
 
 

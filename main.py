@@ -18,11 +18,20 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    Lista = ["1", "2", "3"]
+    Lista2 = ["1","4","5"]
+    d = {2:"abc", 1:"miNuevo"}
+    #JSON_INGE.createDatabase('base1')
+    #JSON_INGE.createTable("base1", "tabla1", 3)
+    #r = JSON_INGE.insert("base1", "tabla1", Lista)
+    #r = JSON_INGE.insert("base1", "tabla1", Lista2)
+    r2 = JSON_INGE.update("base1", "tabla1", d, ["1"])
+
     #Inter.limpiarValores()
     #Inter.inicializarTS()
 
    # Inter.inicializarEjecucionAscendente("cont")
 
     #json.alterDropColumn("MiBase1","profesional",4)
-    Gui.principal
+    #Gui.principal
     #g.parse()
