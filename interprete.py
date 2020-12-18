@@ -306,6 +306,10 @@ def procesar_logica(expresion, ts):
             return 1 if (val and val2) else 0
         elif expresion.operador == OPERACION_LOGICA.OR:
             return 1 if (val or val2) else 0
+        elif expresion.operador ==OPERACION_LOGICA.IS_DISTINCT:
+            return 1 if (val != val2) else 0
+        elif expresion.operador == OPERACION_LOGICA.IS_NOT_DISTINCT:
+            return 1 if (val == val2) else 0
     elif (isinstance(val[0], DatoInsert) and isinstance(val2[0], DatoInsert)):
         if expresion.operador == OPERACION_LOGICA.OR:
             print( "Logica en OR")
@@ -329,6 +333,28 @@ def procesar_logica(expresion, ts):
                         listaP.append(vv2)
 
             return listaP
+        elif expresion.operador ==OPERACION_LOGICA.IS_DISTINCT:
+            listaP = []
+            for v in val:
+                vv: DatoInsert = v
+                for v2 in val2:
+                    vv2: DatoInsert = v2
+                    if vv2.fila != vv.fila:
+                        listaP.append(vv2)
+
+            return listaP
+
+        elif expresion.operador ==OPERACION_LOGICA.IS_NOT_DISTINCT:
+            listaP = []
+            for v in val:
+                vv: DatoInsert = v
+                for v2 in val2:
+                    vv2: DatoInsert = v2
+                    if vv2.fila == vv.fila:
+                        listaP.append(vv2)
+
+            return listaP
+
     elif ((val == None) and isinstance(val2[0], DatoInsert)):
         if expresion.operador == OPERACION_LOGICA.OR:
             print( "Logica en OR")
