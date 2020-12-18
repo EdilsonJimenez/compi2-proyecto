@@ -2,8 +2,31 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
+<<<<<<< HEAD
 	Node1 [label="USE DATABASE"]
+=======
+	Node1 [label=INSTRUCCION_SELECT]
+>>>>>>> master
 	Node0 -> Node1
 	Node2 [label="Id: miBase2"]
 	Node1 -> Node2
+<<<<<<< HEAD
+=======
+	Node3 [label=LISTA_CAMPOS]
+	Node1 -> Node3
+	Node4 [label=FROM]
+	Node1 -> Node4
+	Node5 [label=LISTA_TABLAS]
+	Node1 -> Node5
+	Node6 [label=Nombre_Tabla]
+	Node5 -> Node6
+	Node7 [label=profesional]
+	Node6 -> Node7
+	Node8 [label=Uniones]
+	Node1 -> Node8
+	Node9 [label=Final_Instruccion]
+	Node8 -> Node9
+	Node10 [label=";"]
+	Node9 -> Node10
+>>>>>>> master
 }
