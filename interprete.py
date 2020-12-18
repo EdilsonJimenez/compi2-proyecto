@@ -11,6 +11,7 @@ import jsonMode as Master
 import math
 from random import random
 from datetime import datetime
+import re
 ##------------------------------------------
 # TABLA DE SIMBOLOS GLOBAL
 ts_global = TS.TablaDeSimbolos()
@@ -79,6 +80,8 @@ def procesar_expresion(expresiones, ts):
         return procesar_unitaria_aritmetica(expresiones, ts)
     elif isinstance(expresiones, ExpresionFuncion):
         return procesar_funcion(expresiones, ts)
+    elif isinstance(expresiones, ExpresionTiempo):
+        return procesar_unidad_tiempo(expresiones, ts)
     elif isinstance(expresiones, Absoluto):
         try:
             return procesar_expresion(expresiones.variable, ts)
@@ -1092,6 +1095,25 @@ def procesar_funcion(expresion, ts):
                 # LisErr.agregar(newErr)
                 return None
 
+        elif expresion.id_funcion == FUNCION_NATIVA.ROUND:
+            if isinstance(val1, string_types):
+                if val1.isdecimal():
+                    return round(float(val1)**(1/3))
+                elif val1.isnumeric():
+                    return round(int(val1)**(1/3))
+                else:
+                    return None
+
+            elif isinstance(val1, int) or isinstance(val1, float):
+                return round(val1)
+            else:
+                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
+                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
+                # LisErr.agregar(newErr)
+                return None
+
+
+
     if expresion.exp2 is not None:
         val1 = procesar_expresion(expresion.exp1, ts)
         val2 = procesar_expresion(expresion.exp2, ts)
@@ -1216,9 +1238,143 @@ def procesar_funcion(expresion, ts):
 
             return None
 
+        elif expresion.id_funcion == FUNCION_NATIVA.TRUNC:
+            parametro1 = None
+            parametro2 = None
+
+            if isinstance(val1, string_types):
+                if val1.isdecimal():
+                    parametro1 = float(val1)
+                elif val1.isnumeric():
+                    parametro1 = int(val1)
+            elif isinstance(val1, int) or isinstance(val1, float):
+                parametro1 = val1
+
+            if isinstance(val2, string_types):
+                if val2.isdecimal():
+                    # Agregar error semantico
+                    print('Error se espera un entero no un decimal')
+                elif val2.isnumeric():
+                    parametro2 = int(val2)
+            elif isinstance(val2, int):
+                parametro2 = val2
+            elif  isinstance(val2, float):
+                # Agregar error semantico
+                print('Error se espera un entero no un decimal')
+
+            if parametro1 is not None and parametro2 is not None:
+                return round(parametro1, parametro2)
+
+            if parametro1 is None:
+                print('Error en gcd parametro 1')
+            if parametro2 is None:
+                print('Error en gcd parametro 2')
+
+            return None
+
+        elif expresion.id_funcion == FUNCION_NATIVA.ATAN2:
+            parametro1 = None
+            parametro2 = None
+
+            if isinstance(val1, string_types):
+                if val1.isdecimal():
+                    parametro1 = float(val1)
+                elif val1.isnumeric():
+                    parametro1 = int(val1)
+            elif isinstance(val1, int) or isinstance(val1, float):
+                parametro1 = val1
+
+            if isinstance(val2, string_types):
+                if val2.isdecimal():
+                    parametro2 = float(val2)
+                elif val2.isnumeric():
+                    parametro2 = int(val2)
+            elif isinstance(val2, int) or isinstance(val2, float):
+                parametro2 = val2
+
+            if parametro1 is not None and parametro2 is not None:
+                return math.atan2(parametro1, parametro2)
+
+            if parametro1 is None:
+                print('Error en gcd parametro 1')
+            if parametro2 is None:
+                print('Error en gcd parametro 2')
+
+            return None
+
+        elif expresion.id_funcion == FUNCION_NATIVA.ATAN2D:
+            parametro1 = None
+            parametro2 = None
+
+            if isinstance(val1, string_types):
+                if val1.isdecimal():
+                    parametro1 = float(val1)
+                elif val1.isnumeric():
+                    parametro1 = int(val1)
+            elif isinstance(val1, int) or isinstance(val1, float):
+                parametro1 = val1
+
+            if isinstance(val2, string_types):
+                if val2.isdecimal():
+                    parametro2 = float(val2)
+                elif val2.isnumeric():
+                    parametro2 = int(val2)
+            elif isinstance(val2, int) or isinstance(val2, float):
+                parametro2 = val2
+
+            if parametro1 is not None and parametro2 is not None:
+                return math.degrees(math.atan2(parametro1, parametro2))
+
+            if parametro1 is None:
+                print('Error en gcd parametro 1')
+            if parametro2 is None:
+                print('Error en gcd parametro 2')
+
+            return None
+        elif expresion.id_funcion == FUNCION_NATIVA.EXTRACT:
+            parametro1 = None
+            parametro2 = None
+
+            if isinstance(val1, string_types):
+                parametro1 = val1
+
+            if isinstance(val2, string_types):
+                try:
+                    if re.compile("^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$").match(val2):
+                        print('Es una fecha sin hora')
+                        print(val2 + " 00:00:00")
+                        parametro2 = datetime.strptime(val2 + " 00:00:00", '%Y-%m-%d %H:%M:%S')
+                    elif re.compile("^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])[ ]+(00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$").match(val2):
+                        parametro2 = datetime.strptime(val2, '%Y-%m-%d %H:%M:%S')
+
+                except ValueError:
+                    # raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+                    print('ERROR AL CONVERTIR CADENA EN OBJETO DATETIME')
+
+            if parametro1 is not None and parametro2 is not None:
+                if parametro1 == 'YEAR':
+                    return parametro2.year
+                elif parametro1 == 'MONTH':
+                    return parametro2.month
+                elif parametro1 == 'DAY':
+                    return parametro2.day
+                elif parametro1 == 'HOUR':
+                    return parametro2.hour
+                elif parametro1 == 'MINUTE':
+                    return parametro2.minute
+                elif parametro1 == 'SECOND':
+                    return parametro2.second
+
+            if parametro1 is None:
+                print('Error en gcd parametro 1')
+            if parametro2 is None:
+                print('Error en gcd parametro 2')
+
+            return None
     return None
 
-
+def procesar_unidad_tiempo(expresion, ts):
+    return expresion.nombre
 
 # -------------------------------------------------------------------------------------------------
 # --------------------------------- EJECUCION -----------------------------------------------------

@@ -1538,10 +1538,6 @@ class Alter_table_Add_Foreign_Key(Instruccion):
             imprir("ALTER TABLE:   La Base de datos no existe")
             #colocar error semantico
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 class Alter_Table_Add_Constraint(Instruccion):
     def __init__(self, id_table, id_constraint, id_column):
         self.id_table = id_table

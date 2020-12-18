@@ -425,8 +425,8 @@ def p_init(t):
     arbolito = Ast2(t[0])
     arbolito.crearReporte()
     #SEGUNDA PASADA
-    #arbolito2 = interprete2(t[0])
-    #arbolito2.ejecucion()
+    arbolito2 = interprete2(t[0])
+    arbolito2.ejecucion()
 
 
 def p_instrucciones_lista(t):
@@ -1787,7 +1787,18 @@ def p_Tipo_Tiempo(t):
                         | MONTH
                         | MINUTE
                         | SECOND '''
-    t[0] = t[1]
+    if t[1] == 'YEAR':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.YEAR)
+    elif t[1] == 'MONTH':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MONTH)
+    elif t[1] == 'DAY':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.DAY)
+    elif t[1] == 'HOUR':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.HOUR)
+    elif t[1] == 'MINUTE':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MINUTE)
+    elif t[1] == 'SECOND':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND)
 
 
 def p_instruccion_tiempo2(t):
@@ -2151,7 +2162,8 @@ def p_funciones_math(t):
                             | CONVERT PARIZQ expresion_aritmetica AS TIPO_CAMPO PARDER
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
-                            | NOW PARIZQ PARDER'''
+                            | NOW PARIZQ PARDER
+                            | EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER'''
     if t[1] == 'ABS':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ABS)
     elif t[1] == 'CBRT':
@@ -2262,7 +2274,8 @@ def p_funciones_math(t):
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.RANDOM)
     elif t[1] == 'NOW':
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW)
-
+    elif t[1] == 'EXTRACT':
+        t[0] = ExpresionFuncion(t[3], ExpresionValor(t[6]), None, None, FUNCION_NATIVA.EXTRACT)
 # def p_expnumerica(t):
 #     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
 #                    | EXPNUMERICA DIVISION EXPNUMERICA

@@ -1946,6 +1946,8 @@ class Ast2:
             return '|'
         elif padreID==OPERACION_ARITMETICA.POTENCIA:
             return '^'
+        elif padreID == FUNCION_NATIVA.EXTRACT:
+            return 'EXTRACT'
         else:
             return 'op'
 
