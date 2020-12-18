@@ -1104,6 +1104,10 @@ class Ast2:
                 print("Es un Campo Accedido Por la Cuerpo ")
                 self.GrafoGroupBy(i.Lista_Campos, i.Condiciones, padre)
 
+            elif isinstance(i,OrderBy):
+                print("Es un Campo Accedido  Order by ")
+                self.GrafoOrderBy(i.Lista_Campos, i.Condiciones, padre)
+
             elif isinstance(i, AccesoLimit):
                 print("Es un Campo Accedido Limit ")
                 self.GrafoLimit(i.Reservada, i.Expresion_Numerica, padre)
@@ -1489,6 +1493,53 @@ class Ast2:
            self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
 
 
+
+
+# grafo Order by
+    def GrafoOrderBy(self, Lista_Campos, Condiciones, padre):
+        global dot
+       #Group by ListaCampos Having Condiciones
+        if ((Lista_Campos!=False) and  (Condiciones!=False)):
+
+            self.inc();
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "INSTRUCCION ORDER BY ")
+            dot.edge(padre, 'Node' + str(self.i))
+
+
+            self.inc();
+            dot.node('Node' + str(self.i), "ORDER BY")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "HAVING")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc();
+            dot.node('Node' + str(self.i), "CONDICIONES")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.Recorrer_Condiciones(Condiciones, 'Node' + str(self.i))
+
+       #Group by ListaCampos
+        elif ((Lista_Campos != False) and (Condiciones == False)):
+
+           self.inc();
+           nuevoPadre = self.i
+           dot.node('Node' + str(self.i), "INSTRUCCION ORDER BY ")
+           dot.edge(padre, 'Node' + str(self.i))
+
+           self.inc();
+           dot.node('Node' + str(self.i), "ORDER BY")
+           dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           self.inc();
+           dot.node('Node' + str(self.i), "LISTA_CAMPOS")
+           dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+           self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
 
 
 
@@ -1897,6 +1948,7 @@ class Ast2:
             return '^'
         else:
             return 'op'
+
 #----------------------------------------------------------------------------------------------------------
 #-----------------------GRAFICAR CREATE TABLE-------------------------------------------------------------------
     def grafoCreateTable(self, id, cuerpo, inher, padre):

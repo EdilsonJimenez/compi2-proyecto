@@ -29,6 +29,7 @@ reservadas = {
     'outer': 'OUTER',
     'group': 'GROUP',
     'by': 'BY',
+    'order':'ORDER',
     'asc': 'ASC',
     'desc': 'DESC',
     'nulls': 'NULLS',
@@ -496,11 +497,11 @@ def p_ListaCampos_Lista(t):
     t[0] = [t[1]]
 
 
-def p_Lista_NombreS(t):
+def p_Lista_NombreSss(t):
     'LISTAA          : ID PUNTO CAMPOS S'
-
-
     t[0] = Campo_Accedido(t[1],t[3],t[4])
+
+
 
 
 def p_Lista_Nombre(t):
@@ -509,7 +510,7 @@ def p_Lista_Nombre(t):
 
 
 
-def p_Lista_CampoS(t):
+def p_Lista_CampoSs(t):
     'LISTAA          : CAMPOS S'
     t[0] = Campo_Accedido("", t[1], t[2])
 
@@ -523,36 +524,49 @@ def p_Lista_Campo(t):
 
 
 
-def p_Lista_ExprecionesCase(t):
+def p_Lista_ExprecionesCases(t):
     'LISTAA          :  EXPRESIONES_C'
     t[0] = t[1]
 
 
-def p_Lista_SubsQuery(t):
+def p_Lista_SubsQuerys(t):
     'LISTAA    :   QUERY'
     t[0] = t[1]
 
 
 
-def p_Lista_COMA(t):
+def p_Lista_COMAs(t):
     'LISTAA    :   COMA'
+    print("estoy entrando")
     t[0] = str(t[1])
 
 
 
-def p_Campos_id(t):
+
+def p_Campos_ids(t):
     'CAMPOS          : ID'
     t[0] = t[1]
 
+def p_Campos_expresion(t):
+    'CAMPOS          : expresion'
+    t[0] = str(t[1])
 
-def p_Campos_Asterisco(t):
-    'CAMPOS          : ASTERISCO'
+def p_Campos_expresion(t):
+    'CAMPOS          : ENTERO'
+    t[0] = str(t[1])
+
+
+def p_Campos_Asteriscos(t):
+    'CAMPOS          :  ASTERISCO'
     t[0] = t[1]
 
 
-def p_NombreT_id(t):
+
+
+def p_NombreT_idj(t):
     'NOMBRE_T        : ID'
     t[0] = t[1]
+
 
 
 def p_Alias_id(t):
@@ -824,6 +838,20 @@ def p_Group_GroupBy(t):
 def p_Group_GroupBySin(t):
     'GROUPP    : GROUP BY EXPRE_LIST'
     t[0] = GroupBy(t[3],False)
+
+
+def p_Group_orderby(t):
+    'GROUPP    : ORDER BY EXPRE_LIST HAVING expresion'
+    t[0] = OrderBy(t[3],t[5])
+
+
+def p_Group_OrderBySin(t):
+    'GROUPP    : ORDER BY EXPRE_LIST'
+    t[0] = OrderBy(t[3],False)
+
+
+
+
 
 
 def p_ExpreList_Lista(t):
@@ -1389,7 +1417,6 @@ def p_instruccion_dml_comandos_INSERT(t):
 
 def p_instruccion_dml_comandos_INSERT2(t):
     'DML_COMANDOS       : INSERT INTO  NOMBRES_TABLAS DEFAULT VALUES PUNTOCOMA'
-    # t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])+  str(t[5])
     print('\n' + str(t[0]) + '\n')
 
 
@@ -1575,11 +1602,6 @@ def p_instruccion_dml_comandos_ALTER_TABLE5(t):
 
 
 
-
-
-
-
-
 # ->idtabla  (->columna) references  ->columnaAfectada  (validacion agregar la columna)
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID FOREIGN KEY PARIZQ ID PARDER REFERENCES ID PARIZQ ID PARDER PUNTOCOMA'
@@ -1593,7 +1615,6 @@ def p_instruccion_dml_comandos_ALTER_TABLEF6(t):
     t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]))
 
 
-
 #nombratabla  nombrecolumnaafectadaAgregarConstraint   buscacolumnaafectada
 def p_instruccion_dml_comandos_ALTER_TABLE7(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID UNIQUE  PARIZQ ID PARDER  PUNTOCOMA'
@@ -1604,6 +1625,10 @@ def p_instruccion_dml_comandos_ALTER_TABLE7(t):
 def p_instruccion_dml_comandos_ALTER_TABLE8(t):
     'DML_COMANDOS       :  ALTER TABLE ID  LISTA_ALTER_COLUMN PUNTOCOMA ' #ID  TYPE TIPO_CAMPO  COMA'
     t[0] = Alter_COLUMN(t[3],t[4])
+
+
+
+
 
 
 # LISTADO DE IDS TIPE COMA--------------------------------------------------------
@@ -1626,6 +1651,8 @@ def p_CREATE_TABLE_LISTA_IDS3_2(t):
 def p_CREATE_TABLE_LISTA_IDS4_2(t):
     'LISTA_ALTER_COLUMN_  :   ALTER COLUMN ID TYPE TIPO_CAMPO'
     t[0] = ExpresionValor2(t[3], t[5])
+
+
 
 
 
