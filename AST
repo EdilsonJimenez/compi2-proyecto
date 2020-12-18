@@ -2,158 +2,24 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-<<<<<<< HEAD
-	Node1 [label=DELETE]
-=======
 	Node1 [label=INSTRUCCION_SELECT]
->>>>>>> master
 	Node0 -> Node1
 	Node2 [label=SELECT]
 	Node1 -> Node2
-<<<<<<< HEAD
-	Node3 [label=tbfuncionesmath]
-	Node2 -> Node3
-	Node4 [label=WHERE]
-	Node1 -> Node4
-	Node5 [label="VALOR CONDICION"]
-	Node4 -> Node5
-	6 [label=ExpresionRelacional]
-	7 [label=exp1]
-	6 -> 7
-	7 -> 8
-	8 [label="=="]
-	6 -> 8
-	9 [label=exp2]
-	6 -> 9
-	9 -> 10
-	10 [label=ExpresionValor]
-	10 -> 11
-	11 [label=1]
-	Node5 -> 6
-	Node13 [label=INSTRUCCION_SELECT]
-	Node0 -> Node13
-	Node14 [label=SELECT]
-	Node13 -> Node14
-	Node15 [label=LISTA_CAMPOS]
-	Node13 -> Node15
-	Node16 [label=ACCESO_CAMPO]
-	Node15 -> Node16
-	Node17 [label="*"]
-	Node16 -> Node17
-	Node18 [label=FROM]
-	Node13 -> Node18
-	Node19 [label=LISTA_TABLAS]
-	Node13 -> Node19
-	Node20 [label=Nombre_Tabla]
-	Node19 -> Node20
-	Node21 [label=tbfuncionesmath]
-	Node20 -> Node21
-	Node22 [label=Uniones]
-	Node13 -> Node22
-	Node23 [label=Final_Instruccion]
-	Node22 -> Node23
-	Node24 [label=";"]
-	Node23 -> Node24
-=======
 	Node3 [label=LISTA_CAMPOS]
 	Node1 -> Node3
-	Node4 [label=ACCESO_CAMPO]
-	Node3 -> Node4
-	Node5 [label=primernombre]
-	Node4 -> Node5
-	Node6 [label=ACCESO_CAMPO]
-	Node3 -> Node6
-	Node7 [label=primerapellido]
+	Node4 [label=FROM]
+	Node1 -> Node4
+	Node5 [label=LISTA_TABLAS]
+	Node1 -> Node5
+	Node6 [label=Nombre_Tabla]
+	Node5 -> Node6
+	Node7 [label=profesional]
 	Node6 -> Node7
-	Node8 [label=ACCESO_CAMPO]
-	Node3 -> Node8
-	Node9 [label=diaventa]
+	Node8 [label=Uniones]
+	Node1 -> Node8
+	Node9 [label=Final_Instruccion]
 	Node8 -> Node9
-	Node10 [label=FROM]
-	Node1 -> Node10
-	Node11 [label=LISTA_TABLAS]
-	Node1 -> Node11
-	Node12 [label=Nombre_Tabla]
-	Node11 -> Node12
-	Node13 [label=tbventa]
-	Node12 -> Node13
-	Node14 [label=Lista_Alias]
-	Node12 -> Node14
-	Node15 [label=Alias_Produccion]
-	Node14 -> Node15
-	Node16 [label=As]
-	Node15 -> Node16
-	Node17 [label=V]
-	Node15 -> Node17
-	Node18 [label=Nombre_Tabla]
-	Node11 -> Node18
-	Node19 [label=tbempleado]
-	Node18 -> Node19
-	Node20 [label=Lista_Alias]
-	Node18 -> Node20
-	Node21 [label=Alias_Produccion]
-	Node20 -> Node21
-	Node22 [label=As]
-	Node21 -> Node22
-	Node23 [label=E]
-	Node21 -> Node23
-	Node24 [label=CUERPO]
-	Node1 -> Node24
-	Node25 [label=Cuerpo]
-	Node24 -> Node25
-	Node26 [label=Where]
-	Node25 -> Node26
-	Node27 [label=CONDICION]
-	Node25 -> Node27
-	28 [label=ExpresionRelacional]
-	29 [label=exp1]
-	28 -> 29
-	29 -> 30
-	30 [label="ExpresionValor ID punto ID"]
-	30 -> 31
-	31 [label="V.V"]
-	32 [label="=="]
-	28 -> 32
-	33 [label=exp2]
-	28 -> 33
-	33 -> 34
-	34 [label="ExpresionValor ID punto ID"]
-	34 -> 35
-	35 [label="E.E"]
-	Node27 -> 28
-	Node37 [label="INSTRUCCION GROUP BY "]
-	Node24 -> Node37
-	Node38 [label="GROUP BY"]
-	Node37 -> Node38
-	Node39 [label=LISTA_CAMPOS]
-	Node37 -> Node39
-	Node40 [label=ACCESO_CAMPO]
-	Node39 -> Node40
-	Node41 [label=1]
-	Node40 -> Node41
-	Node42 [label=ACCESO_CAMPO]
-	Node39 -> Node42
-	Node43 [label=2]
-	Node42 -> Node43
-	Node44 [label=ACCESO_CAMPO]
-	Node39 -> Node44
-	Node45 [label=3]
-	Node44 -> Node45
-	Node46 [label="INSTRUCCION ORDER BY "]
-	Node24 -> Node46
-	Node47 [label="ORDER BY"]
-	Node46 -> Node47
-	Node48 [label=LISTA_CAMPOS]
-	Node46 -> Node48
-	Node49 [label=ACCESO_CAMPO]
-	Node48 -> Node49
-	Node50 [label=1]
-	Node49 -> Node50
-	Node51 [label=Uniones]
-	Node1 -> Node51
-	Node52 [label=Final_Instruccion]
-	Node51 -> Node52
-	Node53 [label=";"]
-	Node52 -> Node53
->>>>>>> master
+	Node10 [label=";"]
+	Node9 -> Node10
 }

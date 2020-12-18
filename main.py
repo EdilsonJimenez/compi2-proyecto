@@ -11,6 +11,13 @@ import jsonMode as json
 import Instruccion as INST
 import Interfaz.Interfaz as Gui
 
+import  os
+import  glob
+
+
+from os import  path
+from os import  remove
+
 
 
 def print_hi(name):
@@ -35,5 +42,11 @@ if __name__ == '__main__':
    # Inter.inicializarEjecucionAscendente("cont")
 
     #json.alterDropColumn("MiBase1","profesional",4)
-    #Gui.principal
+    Gui.principal
+    #if path.exists("C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json"):
+    #    remove('C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json')
     #g.parse()
+
+    files=glob.glob('C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json/*')
+    for ele in files:
+        os.remove(ele)

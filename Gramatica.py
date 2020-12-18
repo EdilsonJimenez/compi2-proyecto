@@ -425,8 +425,8 @@ def p_init(t):
     arbolito = Ast2(t[0])
     arbolito.crearReporte()
     #SEGUNDA PASADA
-    #arbolito2 = interprete2(t[0])
-    #arbolito2.ejecucion()
+    arbolito2 = interprete2(t[0])
+    arbolito2.ejecucion()
 
 
 def p_instrucciones_lista(t):
@@ -502,26 +502,18 @@ def p_Lista_NombreSss(t):
     t[0] = Campo_Accedido(t[1],t[3],t[4])
 
 
-
-
 def p_Lista_Nombre(t):
     'LISTAA          : ID PUNTO CAMPOS'
     t[0] = Campo_AccedidoSinLista(t[1], t[3])
-
 
 
 def p_Lista_CampoSs(t):
     'LISTAA          : CAMPOS S'
     t[0] = Campo_Accedido("", t[1], t[2])
 
-
-
-
 def p_Lista_Campo(t):
     'LISTAA          : CAMPOS'
     t[0] = Campo_AccedidoSinLista("",t[1])
-
-
 
 
 def p_Lista_ExprecionesCases(t):
@@ -848,9 +840,6 @@ def p_Group_orderby(t):
 def p_Group_OrderBySin(t):
     'GROUPP    : ORDER BY EXPRE_LIST'
     t[0] = OrderBy(t[3],False)
-
-
-
 
 
 
