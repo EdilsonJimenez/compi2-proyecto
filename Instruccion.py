@@ -390,7 +390,8 @@ class Select(Instruccion) :
                    print("eles")
                else:
                     imprir("Viene otro tipo de accion ")
-
+        else:
+            print("No existe la base de datos.")
         print(listaGeneral)
         listaGeneral.clear()
 
@@ -417,6 +418,8 @@ class Select(Instruccion) :
 
 
 
+
+       
         #Recorremos lista de Campos
 
         #Recorremos lista de nombres de tablas
@@ -1786,6 +1789,7 @@ class Alter_table_Add_Foreign_Key(Instruccion):
             imprir("ALTER TABLE:   La Base de datos no existe")
             #colocar error semantico
 
+
 class Alter_Table_Add_Constraint(Instruccion):
     def __init__(self, id_table, id_constraint, id_column):
         self.id_table = id_table
@@ -1852,3 +1856,8 @@ class Alter_Table_Add_Constraint(Instruccion):
         else:
             imprir("ALTER TABLE:   La Base de datos no existe")
             #colocar error semantico
+
+
+class useClase(Instruccion):
+    def __init__(self,id):
+        self.id = id

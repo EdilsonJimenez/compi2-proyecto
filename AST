@@ -2,87 +2,45 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label="CREATE DATABASE"]
+	Node1 [label=INSERT]
 	Node0 -> Node1
-	Node2 [label="Id: MiBase1"]
+	Node2 [label="ID TABLA"]
 	Node1 -> Node2
-	Node3 [label="Owner: Oscar"]
-	Node1 -> Node3
-	Node4 [label="Mode: 1"]
+	Node3 [label=profesional]
+	Node2 -> Node3
+	Node4 [label="VALORES TABLA"]
 	Node1 -> Node4
-	Node5 [label="CREATE TABLE"]
-	Node0 -> Node5
-	Node6 [label="Id: profesional"]
-	Node5 -> Node6
-	Node7 [label=CAMPO]
-	Node5 -> Node7
-	Node8 [label="Id: carne"]
-	Node7 -> Node8
-	Node9 [label="Tipo: INT"]
-	Node7 -> Node9
-	Node10 [label=CAMPO]
-	Node5 -> Node10
-	Node11 [label="Id: nombre"]
-	Node10 -> Node11
-	Node12 [label="Tipo: INT"]
-	Node10 -> Node12
-	Node13 [label=CAMPO]
-	Node5 -> Node13
-	Node14 [label="Id: apellido"]
-	Node13 -> Node14
-	Node15 [label="Tipo: VARCHAR"]
-	Node13 -> Node15
-	Node16 [label=EXPRESION]
-	Node15 -> Node16
-	17 [label=ExpresionValor]
-	17 -> 18
-	18 [label=20]
-	Node16 -> 17
-	Node19 [label=CAMPO]
-	Node5 -> Node19
-	Node20 [label="Id: bandera"]
-	Node19 -> Node20
-	Node21 [label="Tipo: BOOLEAN"]
-	Node19 -> Node21
-	Node22 [label=INSERT]
-	Node0 -> Node22
-	Node23 [label="ID TABLA"]
-	Node22 -> Node23
-	Node24 [label=profesional]
-	Node23 -> Node24
-	Node25 [label="VALORES TABLA"]
-	Node22 -> Node25
-	Node26 [label="VALOR NUEVO"]
-	Node25 -> Node26
-	27 [label="ExpresionFUNCION NATIVA"]
-	28 [label=EXTRACT]
-	27 -> 28
-	29 [label=exp1]
-	27 -> 29
-	29 -> 30
-	30 [label=exp2]
-	27 -> 30
-	30 -> 31
-	31 [label=ExpresionValor]
-	31 -> 32
-	32 [label="2020-12-18"]
-	Node26 -> 27
-	Node34 [label="VALOR NUEVO"]
-	Node25 -> Node34
-	35 [label=ExpresionValor]
-	35 -> 36
-	36 [label=123]
-	Node34 -> 35
-	Node38 [label="VALOR NUEVO"]
-	Node25 -> Node38
-	39 [label=ExpresionValor]
-	39 -> 40
-	40 [label=Mazariegos]
-	Node38 -> 39
-	Node42 [label="VALOR NUEVO"]
-	Node25 -> Node42
-	43 [label=ExpresionValor]
-	43 -> 44
-	44 [label=TRUE]
-	Node42 -> 43
+	Node5 [label="VALOR NUEVO"]
+	Node4 -> Node5
+	6 [label="ExpresionFUNCION NATIVA"]
+	7 [label=EXTRACT]
+	6 -> 7
+	8 [label=exp1]
+	6 -> 8
+	8 -> 9
+	9 [label=exp2]
+	6 -> 9
+	9 -> 10
+	10 [label=ExpresionValor]
+	10 -> 11
+	11 [label="2020-12-18 12:12:12"]
+	Node5 -> 6
+	Node13 [label="VALOR NUEVO"]
+	Node4 -> Node13
+	14 [label=ExpresionValor]
+	14 -> 15
+	15 [label=899]
+	Node13 -> 14
+	Node17 [label="VALOR NUEVO"]
+	Node4 -> Node17
+	18 [label=ExpresionValor]
+	18 -> 19
+	19 [label=Mazariegos]
+	Node17 -> 18
+	Node21 [label="VALOR NUEVO"]
+	Node4 -> Node21
+	22 [label=ExpresionValor]
+	22 -> 23
+	23 [label=FALSE]
+	Node21 -> 22
 }

@@ -454,6 +454,7 @@ def p_instruccion(t):
 # ==================== USE DATABASE =====================================
 def p_instruccion_Use_database(t):
     'DQL_COMANDOS       : USE ID PUNTOCOMA'
+    t[0] = useClase(t[2])
     global baseActual
     baseActual = str(t[2])
     rep_gramatica('\n <TR><TD> DQL_COMANDOS → USE ID PUNTOCOMA </TD><TD> DQL_COMANDOS=t[2] </TD></TR>')
