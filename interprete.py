@@ -1431,7 +1431,8 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i,Alter_COLUMN):
                 i.Ejecutar()
-                
+            elif isinstance(i,Select):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 
