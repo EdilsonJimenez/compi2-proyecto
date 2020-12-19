@@ -31,6 +31,7 @@ class OPERACION_LOGICA(Enum) :
     NOT_IN = 17
     EXISTS = 18
     NOT_EXISTS=19
+    NOT = 20
 
 class OPERACION_RELACIONAL(Enum) :
     IGUALQUE = 1
@@ -120,6 +121,7 @@ class FUNCION_NATIVA(Enum):
     DECODE = 55
     NOW = 56
     EXTRACT = 57
+    DATE_PART = 58
 
 
 class CONDICIONAL_SUBQUERY(Enum):

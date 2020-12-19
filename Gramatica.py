@@ -2153,7 +2153,8 @@ def p_funciones_math(t):
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | NOW PARIZQ PARDER
-                            | EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER'''
+                            | EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER
+                            | DATE_PART PARIZQ expresion_aritmetica COMA INTERVAL expresion_aritmetica PARDER'''
     if t[1] == 'ABS':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ABS)
     elif t[1] == 'CBRT':
@@ -2266,6 +2267,8 @@ def p_funciones_math(t):
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW)
     elif t[1] == 'EXTRACT':
         t[0] = ExpresionFuncion(t[3], ExpresionValor(t[6]), None, None, FUNCION_NATIVA.EXTRACT)
+    elif t[1] == 'DATE_PART':
+        t[0] = ExpresionFuncion(t[3], t[6], None, None, FUNCION_NATIVA.DATE_PART)
 # def p_expnumerica(t):
 #     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
 #                    | EXPNUMERICA DIVISION EXPNUMERICA
