@@ -1,10 +1,12 @@
 import ts as TS
+import prettytable
 import jsonMode as Master
 import interprete as Inter
 from six import string_types
 from errores import *
 from expresiones import *
 from random import *
+
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 Lista = []
@@ -32,8 +34,16 @@ def imprir(string):
     global Ejecucion
 
     Ejecucion += string + "\n"
-    Lista.clear();
+    Lista.clear()
     Lista.append(Ejecucion)
+
+
+def mostrarConsulta(resultado):
+    tabla = prettytable.PrettyTable()
+    for key, val in resultado.items():
+        tabla.add_column(key, val)
+
+    imprir(str(tabla))
 
 #----------------------------------------------------------
 #           TABLA DE SIMBOLOS
@@ -217,7 +227,7 @@ class Select(Instruccion) :
                                         if (str(y.id) == str(ii.Columna)):
 
 
-                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores 1")
                                             #Bamos a sacar todos los datos coincidentes
                                             #recorremos datos
 
@@ -300,7 +310,7 @@ class Select(Instruccion) :
                                         y: CampoTabla = ele
 
                                         if (y.id == ii.Columna):
-                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores 2")
 
                                             #verificamos el alias
 
@@ -390,43 +400,12 @@ class Select(Instruccion) :
                    print("eles")
                else:
                     imprir("Viene otro tipo de accion ")
-
-        print(listaGeneral)
-        listaGeneral.clear()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         else:
             print("No existe la base de datos.")
-        #Recorremos lista de Campos
 
-        #Recorremos lista de nombres de tablas
+        mostrarConsulta(listaGeneral)
 
-        #Bamos a ir buscando de las tablas cada uno de los campos a la vez iterando cada tabla con los campos
-
-        #Si viene tabla.nombre  bamos a buscar en especifico cada una de la cuestiones
+        listaGeneral.clear()
 
 #---------------------------------------------------------------------------------------------------
 class Select2(Instruccion) :
@@ -435,10 +414,6 @@ class Select2(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.unionn         = unionn
         self.Cuerpo = Cuerpo
-
-    def Ejecutar(self):
-        print("Ejecutando  Select ")
-
 
 
 
@@ -453,7 +428,338 @@ class Select3(Instruccion) :
 
 
     def Ejecutar(self):
-        print("Ejecutando  Select ")
+
+        global ts_global, baseActual
+        global LisErr
+
+
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+
+
+        if r is not None:
+
+
+           for ee in self.Nombres_Tablas:
+
+
+               if(isinstance(ee,AccesoTablaSinLista)): #viene sin alias
+
+
+                   ####Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+                       if (str(x.id) == str(ee.NombreT)):
+                          #si es la tabla validamos que tipo de campo viene
+
+                            for ii in self.Lista_Campos:
+                                if(isinstance(ii,Campo_AccedidoSinLista)): #nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                    #*  , nombrecampo,  nombrecampo alias
+                                    #listaGeneral
+                                    for ele in x.cuerpo: #recorremos lista de columnas
+                                        y:CampoTabla = ele
+                                        if (str(y.id) == str(ii.Columna)):
+
+                                            ##Vallidamos que la no venga sin datos
+                                            print(">>>> LISTA CAMPO <<<< ")
+                                            print("NombreT: "+ii.NombreT)
+                                            if(ii.NombreT !=""):
+                                                print("Estoy entrando <<<<<<<<<<<<<<<<<<<<< 2 ")
+                                                #hacemos una doble condicion para agarrar la columna que es
+
+                                                if(str(x.id)==ii.NombreT):
+                                                    print("Estoy entrando <<<<<<<<<<<<<<<<<<<<< ")
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            # comparamos si ya existe en la lista
+                                                            miniB = False
+                                                            for item in lista:
+                                                                if str(item) == str(t.valor):
+                                                                    print("------- METER EL OBJETOO COMPLETO DE DATOINSERT 1")
+                                                                    miniB = True
+
+                                                            if miniB == False:
+                                                                lista.append(str(t.valor))
+                                                            else:
+                                                                pass
+                                                            # fin comparacion insert
+
+                                                    listaGeneral[ii.Columna] = lista
+                                                else:
+                                                    print("")
+                                            else:# SI EL NOMBRE O ALIAS ESTA VACIO
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)): # COMPARAR CADA ATRIBUTO Y SI ES LA MISMA COLUMNA ALMACENAR
+                                                        print(str(t.valor))
+
+                                                        # comparamos si ya existe en la lista
+                                                        miniB = False
+                                                        for item in lista:
+                                                            miI: DatoInsert = item
+                                                            print("COMPARA: > " +str(miI.valor) + "-"+str(t.valor))
+                                                            if str(miI.valor) == str(t.valor):
+                                                                miniB = True
+
+                                                        if miniB == False:
+                                                            print(" SI ALMACENA: > "+str(t.valor))
+                                                            lista.append(t)
+                                                        else:
+                                                            pass
+                                                        # fin comparacion insert
+
+                                                listaGeneral[ii.Columna] = lista
+                                        elif(str(ii.Columna) == "*"):
+                                            print("Vienen todo los datos de la tabla")
+
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT!=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                # comparamos si ya existe en la lista
+                                                                miniB = False
+                                                                for item in Lista2:
+                                                                    if str(item) == str(t.valor):
+                                                                        print("--------YA ESTOY 2")
+                                                                        miniB = True
+
+                                                                if miniB == False:
+                                                                    Lista2.append(str(t.valor))
+                                                                else:
+                                                                    pass
+                                                                # fin comparacion insert
+                                                        listaGeneral[pp.id] = Lista2
+
+                                            #viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            # comparamos si ya existe en la lista
+                                                            miniB = False
+                                                            for item in Lista2:
+                                                                if str(item) == str(t.valor):
+                                                                    print("--------YA ESTOY 3")
+                                                                    miniB = True
+
+                                                            if miniB == False:
+                                                                Lista2.append(str(t.valor))
+                                                            else:
+                                                                pass
+                                                            # fin comparacion insert
+                                                    listaGeneral[pp.id] = Lista2
+
+
+                                        else:
+                                            print("")
+
+                                elif(isinstance(ii,Campo_Accedido)): # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                    #listaGeneral
+                                    for ele in x.cuerpo:
+                                        y: CampoTabla = ele
+
+                                        if (y.id == ii.Columna):
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores 4")
+
+                                            #verificamos el alias
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+
+
+
+                                            print("ahora la columna se llama"+str(nuevoNave))
+
+                                            # Bamos a sacar todos los datos coincidentes
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+                                                            # comparamos si ya existe en la lista
+                                                            miniB = False
+                                                            for item in lista:
+                                                                if str(item) == str(t.valor):
+                                                                    print("--------YA ESTOY 4")
+                                                                    miniB = True
+
+                                                            if miniB == False:
+                                                                lista.append(str(t.valor))
+                                                            else:
+                                                                pass
+                                                            # fin comparacion insert
+                                                    listaGeneral[str(nuevoNave)] = lista
+                                                else:
+                                                    print("")
+                                            else:
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+                                                        # comparamos si ya existe en la lista
+                                                        miniB = False
+                                                        for item in lista:
+                                                            if str(item) == str(t.valor):
+                                                                print("--------YA ESTOY 5")
+                                                                miniB = True
+
+                                                        if miniB == False:
+                                                            lista.append(str(t.valor))
+                                                        else:
+                                                            pass
+                                                        # fin comparacion insert
+                                                listaGeneral[str(nuevoNave)] = lista
+
+
+                                        elif(y.id == '*'):
+                                            #Recorrer todos los datos de la columna
+                                            print("Vienen todo los datos  los datos de esa columna")
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+
+                                            # Vallidamos que la no venga sin datos
+                                            if (ii.NombreT != ""):
+                                                # hacemos una doble condicion para agarrar la columna que es
+                                                if (str(x.id) == ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                # comparamos si ya existe en la lista
+                                                                miniB = False
+                                                                for item in Lista2:
+                                                                    if str(item) == str(t.valor):
+                                                                        print("--------YA ESTOY 6")
+                                                                        miniB = True
+
+                                                                if miniB == False:
+                                                                    Lista2.append(str(t.valor))
+                                                                else:
+                                                                    pass
+                                                                # fin comparacion insert
+                                                        listaGeneral[str(nuevoNave)] = Lista2
+
+                                            # viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            # comparamos si ya existe en la lista
+                                                            miniB = False
+                                                            for item in Lista2:
+                                                                if str(item) == str(t.valor):
+                                                                    print("--------YA ESTOY 7")
+                                                                    miniB = True
+
+                                                            if miniB == False:
+                                                                Lista2.append(str(t.valor))
+                                                            else:
+                                                                pass
+                                                            # fin comparacion insert
+                                                    listaGeneral[str(nuevoNave)] = Lista2
+                                        else:
+                                            print("")
+                                else:
+                                    print("Otros posibles tipos ")
+                       else:
+                           print(" LAS TABLAS NO SON CORRECTAS")
+
+               elif(isinstance(ee,AccesoTabla)): #viene con un alias
+                   print("eles")
+               else:
+                    imprir("Viene otro tipo de accion ")
+        else:
+            print("No existe la base de datos.")
+
+
+        # primero obtener la primera lista
+        miCuenta = 0
+        titulo = []
+        primera = []
+        for lista in listaGeneral:
+            if miCuenta != 1:
+                primera = listaGeneral.get(lista)
+                miCuenta += 1
+            break
+
+        #obtener la primera  {'carne', [a , b, c], 'apellido'}
+        for lista in listaGeneral:
+            titulo.append(str(lista))
+
+        nuevoDic = {}
+        resdistinct = []
+        for reg in primera: #[a, b, c]
+            p: DatoInsert = reg
+            for t in titulo: #[carne, apellido]
+                for dat in ts_global.Datos: #Datos
+                    de:DatoInsert = ts_global.obtenerDato(dat)
+                    for titu in titulo: #[carne, apellido]
+                        if de.columna == titu:
+                            if p.columna == t and p.fila == de.fila:
+                                resdistinct.append(de)
+
+        #ingreso lista final
+        for t in titulo:
+            lis = []
+            for u in resdistinct:
+                if u.columna == t:
+                    lis.append(u.valor)
+            nuevoDic[t]=lis
+
+        print(nuevoDic)
+        mostrarConsulta(nuevoDic)
+        listaGeneral.clear()
+        nuevoDic.clear()
 
 
 #---------------------------------------------------------------------------------------------------
@@ -775,7 +1081,7 @@ class Insert_Datos(Instruccion):
 
                         sr = Master.insert(baseActual, str(self.id_table[0].val), listaTemp)
                         print(baseActual + str(self.id_table[0].val) + str(len(listaTemp)))
-                        if sr is 0:
+                        if sr == 0:
                             imprir("INSERT BD:  Insert realizado con exito.")
                         else:
                             imprir("INSERT BD:  No se realizo el insert.")
@@ -871,13 +1177,14 @@ class Delete_Datos(Instruccion):
             rt = ts_global.obtenerTabla(self.id_table[0].val)
             if rt is None:
                 imprir("DELETE: No existe la tabla de datos. ")
+                imprir("DELETE: No existe la tabla de datos. ")
                 er = ErrorRep('Semantico', 'No existe la tabla indicada.', 0)
                 LisErr.agregar(er)
             else:
                 resultado = Inter.procesar_expresion(self.valore_where, ts_global)
                 listaEliminar = []
                 # recorrer lista de valores a eliminar.
-                if len(resultado) is 0:
+                if len(resultado) == 0:
                     imprir("DELETE: No existen registros.")
                     er = ErrorRep('Semantico', 'No existen registros que cumplan la condicion para eliminar.', 0)
                     LisErr.agregar(er)
@@ -1151,7 +1458,7 @@ class Update_Datos(Instruccion):
             else:
                 resultado = Inter.procesar_expresion(self.valor_where, ts_global)
                 listaUpdate = []
-                if len(resultado) is 0:
+                if len(resultado) == 0:
                     imprir("UPDATE: No existen registros.")
                     er = ErrorRep('Semantico', 'No existen registros que cumplan la condicion para actualizar.', 0)
                     LisErr.agregar(er)
@@ -1789,10 +2096,7 @@ class Alter_table_Add_Foreign_Key(Instruccion):
             imprir("ALTER TABLE:   La Base de datos no existe")
             #colocar error semantico
 
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 class Alter_Table_Add_Constraint(Instruccion):
     def __init__(self, id_table, id_constraint, id_column):
         self.id_table = id_table
@@ -1864,3 +2168,5 @@ class Alter_Table_Add_Constraint(Instruccion):
 class useClase(Instruccion):
     def __init__(self,id):
         self.id = id
+
+

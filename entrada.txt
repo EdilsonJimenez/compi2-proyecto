@@ -9,14 +9,19 @@ CREATE TABLE profesional(
     bandera BOOLEAN
 );
 
-INSERT INTO profesional VALUES(300,123,'Mazariegos', TRUE);
-INSERT INTO profesional VALUES(400,456, 'Lopez', TRUE);
-INSERT INTO profesional VALUES(250,789,'Mazariegos', FALSE);
-INSERT INTO profesional VALUES(50,899,'Mazariegos', FALSE);
-DELETE FROM profesional WHERE carne > 50 AND nombre = 789;
-UPDATE profesional SET carne = 999 , WHERE carne = 50 AND nombre = 789;
+INSERT INTO profesional VALUES(80,123,'Grcia', TRUE);
+INSERT INTO profesional VALUES(200,456, 'Grcia', TRUE);
+INSERT INTO profesional VALUES(9000,789,'Mazariegos', FALSE);
+INSERT INTO profesional VALUES(150,899,'Mazariegos', TRUE);
+INSERT INTO profesional VALUES(150,89,'OtroMas2', FALSE);
+INSERT INTO profesional VALUES(639,9,'OtroMas', FALSE);
 
-ALTER TABLE profesional  ADD  COLUMN  columna1 int, columna2 int; 
+select * from profesional;
+select carne Carnet from profesional;
+select distinct bandera Opciones from profesional;
+select distinct carne,apellido from profesional;
+
+200 123 Garcia TRUE
 
 
 ALTER TABLE profesional  DROP COLUMN  columna1;
