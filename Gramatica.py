@@ -653,9 +653,12 @@ def p_CuerpoS_CuerpoS(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-def p_Cuerpo_Where(t):
-    'CUERPO   : WHERE expresion'
-    t[0] = Cuerpo_Condiciones(t[2])
+#def p_Cuerpo_Where(t):
+#    'CUERPO   : WHERE expresion'
+#    t[0] = Cuerpo_Condiciones(t[2])
+
+
+
 
 def p_Cuerpos_Cuerpo(t):
     'CUERPOS   :  CUERPO'
@@ -1852,6 +1855,7 @@ def p_expresion_aritmetica(t):
                             | expresion_aritmetica DIVISION expresion_aritmetica
                             | expresion_aritmetica PORCENTAJE expresion_aritmetica
                             | expresion_aritmetica POTENCIA expresion_aritmetica'''
+
     if t[2] == '+':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
     elif t[2] == '-':

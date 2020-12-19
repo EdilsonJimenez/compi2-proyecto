@@ -13,6 +13,17 @@ INSERT INTO profesional VALUES(300,123,'Mazariegos', TRUE);
 INSERT INTO profesional VALUES(400,456, 'Lopez', TRUE);
 INSERT INTO profesional VALUES(250,789,'Mazariegos', FALSE);
 INSERT INTO profesional VALUES(50,899,'Mazariegos', FALSE);
+
+
+
+select nombre,apellido from profesional limit 2;
+
+
+select bandera from profesional limit 2;
+
+
+
+
 DELETE FROM profesional WHERE carne > 50 AND nombre = 789;
 UPDATE profesional SET carne = 999 , WHERE carne = 50 AND nombre = 789;
 
