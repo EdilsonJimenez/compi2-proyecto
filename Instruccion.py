@@ -7,6 +7,9 @@ from expresiones import *
 from random import *
 from expresiones import *
 
+from prettytable import PrettyTable
+
+
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 Lista = []
@@ -30,12 +33,27 @@ class Instruccion():
         pass
 
 
+
+
 def imprir(string):
     global Ejecucion
-
     Ejecucion += string + "\n"
     Lista.clear();
     Lista.append(Ejecucion)
+
+
+def mostrarConsulta(resultado):
+    tabla = PrettyTable()
+    for key, val in resultado.items():
+        tabla.add_column(key, val)
+    imprir(str(tabla))
+
+
+
+
+
+
+
 
 #----------------------------------------------------------
 #           TABLA DE SIMBOLOS
@@ -391,6 +409,7 @@ class Select(Instruccion) :
                    AliasTabla = ee.Lista_Alias
                    # Tenemos el alias
                    AliasT = AliasTabla.Alias
+
                    # Recorremos el diccionario general para ver si existe la tabla que queremos
                    # recorremos lista General de Tablas
                    for elemento2 in ts_global.Tablas:
@@ -398,14 +417,15 @@ class Select(Instruccion) :
                        if (str(x.id) == str(ee.NombreT)):
                            # si es la tabla validamos que tipo de campo viene
                            for ii in self.Lista_Campos:
+
+
                                if (isinstance(ii,Campo_AccedidoSinLista)):  # nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
                                    # *  , nombrecampo,  nombrecampo alias
                                    # listaGeneral
                                    for ele in x.cuerpo:  # recorremos lista de columnas
                                        y: CampoTabla = ele
                                        if (str(y.id) == str(ii.Columna)):
-                                           print("LA columan " + str(
-                                               ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
                                            # Bamos a sacar todos los datos coincidentes
                                            # recorremos datos
                                            # Vallidamos que la no venga sin datos
@@ -418,9 +438,12 @@ class Select(Instruccion) :
                                                        if (str(t.columna) == str(ii.Columna)):
                                                            print(str(t.valor))
                                                            lista.append(str(t.valor))
+
                                                    listaGeneral[ii.Columna] = lista
+
                                                else:
                                                    print("")
+
                                            else:
                                                i = ts_global.Datos
                                                lista = []
@@ -430,10 +453,12 @@ class Select(Instruccion) :
                                                        print(str(t.valor))
                                                        lista.append(str(t.valor))
                                                listaGeneral[ii.Columna] = lista
+
                                        elif (str(ii.Columna) == "*"):
                                            print("Vienen todo los datos de la tabla")
                                            # Vallidamos que la no venga sin datos
                                            if (ii.NombreT != ""):
+
                                                # hacemos una doble condicion para agarrar la columna que es
                                                if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
@@ -462,16 +487,24 @@ class Select(Instruccion) :
                                                    listaGeneral[pp.id] = Lista2
                                        else:
                                            print("")
-                               elif (isinstance(ii, Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                               elif (isinstance(ii,Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+
+
                                    # listaGeneral
                                    for ele in x.cuerpo:
                                        y: CampoTabla = ele
                                        if (y.id == ii.Columna):
                                            print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
                                            # verificamos el alias
+
                                            ListaAlias = ii.Lista_Alias
                                            # Tenemos el alias
                                            nuevoNave = ListaAlias.Alias
+
+
+
                                            print("ahora la columna se llama" + str(nuevoNave))
                                            # Bamos a sacar todos los datos coincidentes
                                            # Vallidamos que la no venga sin datos
@@ -497,12 +530,14 @@ class Select(Instruccion) :
                                                        print(str(t.valor))
                                                        lista.append(str(t.valor))
                                                listaGeneral[str(nuevoNave)] = lista
+
                                        elif (y.id == '*'):
                                            # Recorrer todos los datos de la columna
                                            print("Vienen todo los datos  los datos de esa columna")
                                            ListaAlias = ii.Lista_Alias
                                            # Tenemos el alias
                                            nuevoNave = ListaAlias.Alias
+
                                            # Vallidamos que la no venga sin datos
                                            if (ii.NombreT != ""):
                                                # hacemos una doble condicion para agarrar la columna que es
@@ -936,13 +971,22 @@ class Select2(Instruccion) :
                 elif (isinstance(tiposCuerpo, ExpresionLogica)):
                     print("Tenemos que es de tipo Expresion Logica")
 
+
+
+
             elif (isinstance(tiposCuerpo, GroupBy)):
                 print("Bamos a ver los tipos de grupos a realizar ")
                 # Recorremos diccionario
                 # for item in listaGeneral:
                 #    print("dfdsf")
+
+
+
             elif (isinstance(tiposCuerpo, OrderBy)):
                 print("Bamos a ordenar  segun lo que venga ")
+
+
+
 
 
 
@@ -982,6 +1026,7 @@ class Select2(Instruccion) :
                 print("Bamos a ver el cuerpo de cada subconsulta")
 
         print(listaGeneral)
+        mostrarConsulta(listaGeneral)
         #listaGeneral.clear()
 
 
@@ -1140,8 +1185,6 @@ class Select3(Instruccion):
                                                                 pass
                                                             # fin comparacion insert
                                                     listaGeneral[pp.id] = Lista2
-
-
                                         else:
                                             print("")
 
@@ -1288,6 +1331,12 @@ class Select3(Instruccion):
         else:
             print("No existe la base de datos.")
 
+
+
+
+
+
+
         # primero obtener la primera lista
         miCuenta = 0
         titulo = []
@@ -1304,6 +1353,7 @@ class Select3(Instruccion):
 
         nuevoDic = {}
         resdistinct = []
+
         for reg in primera:  # [a, b, c]
             p: DatoInsert = reg
             for t in titulo:  # [carne, apellido]
@@ -1313,6 +1363,7 @@ class Select3(Instruccion):
                         if de.columna == titu:
                             if p.columna == t and p.fila == de.fila:
                                 resdistinct.append(de)
+
 
         # ingreso lista final
         for t in titulo:
