@@ -962,15 +962,15 @@ def p_Expresion_Atributos(t):
 # -----------------------------------------------------------------------------------------------------------------
 # SUBCONSULTAS
 
-def p_Query_Ate(t):
-    'QUERY : expresion  PARIZQ QUE_SUBS PARDER'
-    t[0]= AccesoSubConsultas(t[1],t[3],False)
+# def p_Query_Ate(t):
+#     QUERY : expresion  PARIZQ QUE_SUBS PARDER
+#     t[0]= AccesoSubConsultas(t[1],t[3],False)
 
 
 
-def p_Query_AteAs(t):
-    'QUERY : expresion PARIZQ QUE_SUBS  PARDER AS_NO'
-    t[0] = AccesoSubConsultas(t[1], t[3], t[5])
+# def p_Query_AteAs(t):
+#     QUERY : expresion PARIZQ QUE_SUBS  PARDER AS_NO
+#     t[0] = AccesoSubConsultas(t[1], t[3], t[5])
 
 
 
@@ -2010,8 +2010,8 @@ def p_expresion_logica_predicados_4(t):
         t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IS_NOT_UNKNOWN)
 
 def p_expresion_logica_exists_sub(t):
-    '''expresion_logica : EXISTS '''
-    t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.EXISTS)
+    '''expresion_logica : EXISTS expresion_aritmetica'''
+    t[0] = ExpresionLogica(t[2], None, OPERACION_LOGICA.EXISTS)
 
 def p_expresion_logica_not_exists_sub(t):
     '''expresion_logica : NOT EXISTS '''
@@ -2020,12 +2020,12 @@ def p_expresion_logica_not_exists_sub(t):
 
 
 def p_expresion_logica_in(t):
-    '''expresion_logica : expresion_aritmetica IN
-                        | expresion_aritmetica NOT IN '''
+    '''expresion_logica : expresion_aritmetica IN expresion_aritmetica
+                        | expresion_aritmetica NOT IN expresion_aritmetica'''
     if t[2] == 'IN':
-        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IN)
+        t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.IN)
     elif t[2] == 'NOT':
-        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.NOT_IN)
+        t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.NOT_IN)
 
 
 
