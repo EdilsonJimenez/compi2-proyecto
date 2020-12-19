@@ -1517,6 +1517,8 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i,Select2):
                 i.Ejecutar()
+            elif isinstance(i,Select3):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 

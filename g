@@ -7,7 +7,7 @@ graph g {
                                 <TD>COLUMNA</TD>
                                 <TD>VALOR </TD>
                                 <TD>FILA</TD>
-                            </TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>300</TD><TD>409</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>123</TD><TD>409</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>Mazariegos</TD><TD>409</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>TRUE</TD><TD>409</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>400</TD><TD>235</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>456</TD><TD>235</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>Lopez</TD><TD>235</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>TRUE</TD><TD>235</TD></TR> <TR>
+                            </TR><TR><TD>test</TD><TD>tbusuario</TD><TD>idusuario</TD><TD>1</TD><TD>124</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>nombre</TD><TD>Luis Fernando</TD><TD>124</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>apellido</TD><TD>Salazar Rodriguez</TD><TD>124</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>usuario</TD><TD>lsalazar</TD><TD>124</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>password</TD><TD>None</TD><TD>124</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>fechacreacion</TD><TD>10-11-42</TD><TD>124</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>idusuario</TD><TD>1</TD><TD>305</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>nombre</TD><TD>Luis Fernando</TD><TD>305</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>apellido</TD><TD>Salazar Rodriguez</TD><TD>305</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>usuario</TD><TD>lsalazar</TD><TD>305</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>password</TD><TD>None</TD><TD>305</TD></TR><TR><TD>test</TD><TD>tbusuario</TD><TD>fechacreacion</TD><TD>None</TD><TD>305</TD></TR> <TR>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
@@ -20,7 +20,7 @@ graph g {
                                 <TD>TIPO COLUMNA</TD>
                                 <TD>  </TD>
                                 <TD>  </TD>
-                            </TR><TR><TD>profesional</TD><TD>carne</TD><TD>INT</TD><TD></TD><TD></TD></TR><TR><TD>profesional</TD><TD>nombre</TD><TD>INT</TD><TD></TD><TD></TD></TR><TR><TD>profesional</TD><TD>apellido</TD><TD>VARCHAR</TD><TD></TD><TD></TD></TR><TR><TD>profesional</TD><TD>bandera</TD><TD>BOOLEAN</TD><TD></TD><TD></TD></TR> <TR>
+                            </TR><TR><TD>tbusuario</TD><TD>idusuario</TD><TD>integer</TD><TD></TD><TD></TD></TR><TR><TD>tbusuario</TD><TD>nombre</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbusuario</TD><TD>apellido</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbusuario</TD><TD>usuario</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbusuario</TD><TD>password</TD><TD>VARCHAR</TD><TD></TD><TD></TD></TR><TR><TD>tbusuario</TD><TD>fechacreacion</TD><TD>date</TD><TD></TD><TD></TD></TR> <TR>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
@@ -33,5 +33,5 @@ graph g {
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
-                            </TR><TR><TD>MiBase1</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+                            </TR><TR><TD>test</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
 }
