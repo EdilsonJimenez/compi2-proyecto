@@ -119,12 +119,21 @@ class FUNCION_NATIVA(Enum):
     ENCODE = 54
     DECODE = 55
     NOW = 56
+    EXTRACT = 57
 
 
 class CONDICIONAL_SUBQUERY(Enum):
     ALL = 1
     ANY = 2
     SOME = 3
+
+class UNIDAD_TIEMPO(Enum):
+    YEAR = 1
+    MONTH = 2
+    DAY = 3
+    HOUR = 4
+    MINUTE = 5
+    SECOND = 6
 
 #------------------------------------------------------------------------
 
@@ -298,3 +307,8 @@ class CAMPO_TABLA_ID_PUNTO_ID(Expresion):
         self.tablaid = tablaid
         self.campoid = campoid
         self.tipovariable = tipovariable
+
+class ExpresionTiempo(Expresion):
+    def __init__(self, nombre, id_tiempo):
+        self.nombre = nombre
+        self.id_tiempo = id_tiempo

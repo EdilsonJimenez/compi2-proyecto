@@ -402,9 +402,13 @@ class Select(Instruccion) :
                     imprir("Viene otro tipo de accion ")
         else:
             print("No existe la base de datos.")
+<<<<<<< HEAD
 
         mostrarConsulta(listaGeneral)
 
+=======
+        print(listaGeneral)
+>>>>>>> master
         listaGeneral.clear()
 
 #---------------------------------------------------------------------------------------------------
@@ -498,6 +502,8 @@ class Select3(Instruccion) :
                                                 lista = []
                                                 for gg in ts_global.Datos:
                                                     t: DatoInsert = ts_global.obtenerDato(gg)
+       
+        #Recorremos lista de Campos
 
                                                     if (str(t.columna) == str(ii.Columna)): # COMPARAR CADA ATRIBUTO Y SI ES LA MISMA COLUMNA ALMACENAR
                                                         print(str(t.valor))
@@ -1273,7 +1279,7 @@ class CreateDataBase(Instruccion):
                     print("> Base de datos ya existe Se va a Reemplazar ")
             else:
                 imprir("CREATE DB:  Se encontro la BD Bamos a Reemplazar!")
-                Lista.clear();
+                Lista.clear()
                 Lista.append(Ejecucion)
                 print("Si encontre la BD. Bamos a Reemplazar la Misma! ")
 
@@ -2051,7 +2057,7 @@ class Alter_table_Add_Foreign_Key(Instruccion):
 
                     elemento       = self.id_column
                     elemento2      = self.id_column_references
-                    tipoReferencia = "";
+                    tipoReferencia = ""
 
 
                     if isinstance(elemento,ExpresionValor) and isinstance(elemento,ExpresionValor):
@@ -2119,7 +2125,7 @@ class Alter_Table_Add_Constraint(Instruccion):
                     elemento       = self.id_constraint
                     elemento2      = self.id_column
 
-                    tipoReferencia = "";
+                    tipoReferencia = ""
 
 
                     if isinstance(elemento,ExpresionValor) and isinstance(elemento,ExpresionValor):
