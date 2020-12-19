@@ -36,6 +36,11 @@ if __name__ == '__main__':
     #r = JSON_INGE.insert("base1", "tabla1", Lista2)
     r2 = JSON_INGE.update("base1", "tabla1", d, ["1"])
 
+    #diccionario={0:[2,"23","2323"],1:[4,"232","34fd"],2:[4,"opo","wewew"]}
+
+    #dicc = sorted(diccionario.items([0]))
+    #print(dicc)
+
     #Inter.limpiarValores()
     #Inter.inicializarTS()
 
@@ -47,6 +52,6 @@ if __name__ == '__main__':
     #    remove('C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json')
     #g.parse()
 
-    files=glob.glob('C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json/*')
+    files = glob.glob('data/json/*')
     for ele in files:
         os.remove(ele)

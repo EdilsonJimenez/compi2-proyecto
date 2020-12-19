@@ -454,7 +454,6 @@ def p_instruccion(t):
 # ==================== USE DATABASE =====================================
 def p_instruccion_Use_database(t):
     'DQL_COMANDOS       : USE ID PUNTOCOMA'
-    t[0] = useClase(t[2])
     global baseActual
     baseActual = str(t[2])
     rep_gramatica('\n <TR><TD> DQL_COMANDOS → USE ID PUNTOCOMA </TD><TD> DQL_COMANDOS=t[2] </TD></TR>')
@@ -654,9 +653,12 @@ def p_CuerpoS_CuerpoS(t):
     t[1].append(t[2])
     t[0] = t[1]
 
-def p_Cuerpo_Where(t):
-    'CUERPO   : WHERE expresion'
-    t[0] = Cuerpo_Condiciones(t[2])
+#def p_Cuerpo_Where(t):
+#    'CUERPO   : WHERE expresion'
+#    t[0] = Cuerpo_Condiciones(t[2])
+
+
+
 
 def p_Cuerpos_Cuerpo(t):
     'CUERPOS   :  CUERPO'
@@ -1777,6 +1779,7 @@ def p_Tipo_Tiempo(t):
                         | MONTH
                         | MINUTE
                         | SECOND '''
+    t[0] = t[1]
     if t[1] == 'YEAR':
         t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.YEAR)
     elif t[1] == 'MONTH':
@@ -1789,7 +1792,6 @@ def p_Tipo_Tiempo(t):
         t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MINUTE)
     elif t[1] == 'SECOND':
         t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND)
-
 
 def p_instruccion_tiempo2(t):
     'DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA'
@@ -1864,6 +1866,7 @@ def p_expresion_aritmetica(t):
                             | expresion_aritmetica DIVISION expresion_aritmetica
                             | expresion_aritmetica PORCENTAJE expresion_aritmetica
                             | expresion_aritmetica POTENCIA expresion_aritmetica'''
+
     if t[2] == '+':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
     elif t[2] == '-':
@@ -2269,12 +2272,7 @@ def p_funciones_math(t):
         t[0] = ExpresionFuncion(t[3], ExpresionValor(t[6]), None, None, FUNCION_NATIVA.EXTRACT)
     elif t[1] == 'DATE_PART':
         t[0] = ExpresionFuncion(t[3], t[6], None, None, FUNCION_NATIVA.DATE_PART)
-# def p_expnumerica(t):
-#     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
-#                    | EXPNUMERICA DIVISION EXPNUMERICA
-#                    | EXPNUMERICA PORCENTAJE EXPNUMERICA
-#                    | EXPNUMERICA MENOS EXPNUMERICA
-#                    | EXPNUMERICA MAS EXPNUMERICA'''
+
 
 def p_expresion_binario(t):
     '''expresion_aritmetica : expresion_aritmetica AMPERSAND expresion_aritmetica

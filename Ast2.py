@@ -128,11 +128,12 @@ class Ast2:
                 self.grafoAlter_AddForeignKey(i.id_table, i.id_column, i.id_column_references, padre)
             elif isinstance(i, Alter_Table_Add_Constraint):
                 self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column, padre)
-
-            elif isinstance(i, useClase):
-                self.grafoUse(i.id,padre)
+            
             else:
                 print("No es droptable")
+
+
+
 
 
     def RecorrerTipoSelect(self, sente, padre):
@@ -163,7 +164,6 @@ class Ast2:
     # INSTRUCCIONES NECESARIAS PARA LOS SELECT
     # ----------------------------------------------------------------------------------------------------------
     # ----------------------------------------------------------------------------------------------------------
-
 
 
     # CAMPOS ACCEDIDOS
@@ -1957,6 +1957,8 @@ class Ast2:
             return '^'
         elif padreID == FUNCION_NATIVA.EXTRACT:
             return 'EXTRACT'
+        elif padreID == FUNCION_NATIVA.DATE_PART:
+            return 'DATE_PART'
         else:
             return 'op'
 
@@ -2728,17 +2730,6 @@ class Ast2:
         self.graficar_expresion(expresion.exp1)
 
 
-    def grafoUse(self, id, padre):
-        global dot, i
-
-        self.inc()
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "USE DATABASE")
-        dot.edge(padre, 'Node' + str(self.i))
-
-        self.inc()
-        dot.node('Node' + str(self.i), 'Id: '+id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 #crearBASEDATOS(objeto)
 

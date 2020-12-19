@@ -61,6 +61,7 @@ def inicializarTS():
 # EJECUTANDO EXPRESIONES============================
 # VERIFICANDO QUE TIPO DE EXPRESION ES
 def procesar_expresion(expresiones, ts):
+
     if isinstance(expresiones, ExpresionAritmetica):
         return procesar_aritmetica(expresiones, ts)
     elif isinstance(expresiones, ExpresionRelacional):
@@ -310,10 +311,6 @@ def procesar_logica(expresion, ts):
             return 1 if (val and val2) else 0
         elif expresion.operador == OPERACION_LOGICA.OR:
             return 1 if (val or val2) else 0
-        elif expresion.operador ==OPERACION_LOGICA.IS_DISTINCT:
-            return 1 if (val != val2) else 0
-        elif expresion.operador == OPERACION_LOGICA.IS_NOT_DISTINCT:
-            return 1 if (val == val2) else 0
     elif (isinstance(val[0], DatoInsert) and isinstance(val2[0], DatoInsert)):
         if expresion.operador == OPERACION_LOGICA.OR:
             print( "Logica en OR")
@@ -337,28 +334,6 @@ def procesar_logica(expresion, ts):
                         listaP.append(vv2)
 
             return listaP
-        elif expresion.operador ==OPERACION_LOGICA.IS_DISTINCT:
-            listaP = []
-            for v in val:
-                vv: DatoInsert = v
-                for v2 in val2:
-                    vv2: DatoInsert = v2
-                    if vv2.fila != vv.fila:
-                        listaP.append(vv2)
-
-            return listaP
-
-        elif expresion.operador ==OPERACION_LOGICA.IS_NOT_DISTINCT:
-            listaP = []
-            for v in val:
-                vv: DatoInsert = v
-                for v2 in val2:
-                    vv2: DatoInsert = v2
-                    if vv2.fila == vv.fila:
-                        listaP.append(vv2)
-
-            return listaP
-
     elif ((val == None) and isinstance(val2[0], DatoInsert)):
         if expresion.operador == OPERACION_LOGICA.OR:
             print( "Logica en OR")
@@ -508,6 +483,7 @@ def procesar_funcion(expresion, ts):
             fecha = datetime.today()
             fechaString = '{:%Y-%m-%d %H:%M:%S}'.format(fecha)
             return fechaString
+
     if expresion.exp1 is not None:
         val1 = procesar_expresion(expresion.exp1, ts)
 
@@ -1121,13 +1097,12 @@ def procesar_funcion(expresion, ts):
                 # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
                 # LisErr.agregar(newErr)
                 return None
-
         elif expresion.id_funcion == FUNCION_NATIVA.ROUND:
             if isinstance(val1, string_types):
                 if val1.isdecimal():
-                    return round(float(val1)**(1/3))
+                    return round(float(val1) ** (1 / 3))
                 elif val1.isnumeric():
-                    return round(int(val1)**(1/3))
+                    return round(int(val1) ** (1 / 3))
                 else:
                     return None
 
@@ -1138,8 +1113,6 @@ def procesar_funcion(expresion, ts):
                 # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
                 # LisErr.agregar(newErr)
                 return None
-
-
 
     if expresion.exp2 is not None:
         val1 = procesar_expresion(expresion.exp1, ts)
@@ -1436,7 +1409,7 @@ def procesar_funcion(expresion, ts):
             return None
 
 
-    if expresion.exp2 is not None:
+    if expresion.exp3 is not None:
         val1 = procesar_expresion(expresion.exp1, ts)
         val2 = procesar_expresion(expresion.exp2, ts)
         val3 = procesar_expresion(expresion.exp3, ts)
@@ -1480,8 +1453,10 @@ def procesar_funcion(expresion, ts):
 
     return None
 
+
 def procesar_unidad_tiempo(expresion, ts):
     return expresion.nombre
+
 
 # -------------------------------------------------------------------------------------------------
 # --------------------------------- EJECUCION -----------------------------------------------------
@@ -1539,6 +1514,8 @@ class interprete2:
             elif isinstance(i,Alter_COLUMN):
                 i.Ejecutar()
             elif isinstance(i,Select):
+                i.Ejecutar()
+            elif isinstance(i,Select2):
                 i.Ejecutar()
             else:
                 print("NO ejecuta")

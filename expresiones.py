@@ -129,6 +129,7 @@ class CONDICIONAL_SUBQUERY(Enum):
     ANY = 2
     SOME = 3
 
+
 class UNIDAD_TIEMPO(Enum):
     YEAR = 1
     MONTH = 2
