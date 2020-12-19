@@ -402,13 +402,12 @@ class Select(Instruccion) :
                     imprir("Viene otro tipo de accion ")
         else:
             print("No existe la base de datos.")
-<<<<<<< HEAD
+
 
         mostrarConsulta(listaGeneral)
 
-=======
         print(listaGeneral)
->>>>>>> master
+
         listaGeneral.clear()
 
 #---------------------------------------------------------------------------------------------------
@@ -435,7 +434,7 @@ class Select3(Instruccion) :
 
         global ts_global, baseActual
         global LisErr
-
+        print("Otro push")
 
         r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
 
