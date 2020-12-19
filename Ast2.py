@@ -2717,7 +2717,17 @@ class Ast2:
         self.graficar_expresion(expresion.exp1)
 
 
+    def grafoUse(self, id, padre):
+        global dot, i
 
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "USE DATABASE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Id: '+id)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 #crearBASEDATOS(objeto)
 
 # retun = llamarfunicion(Objeto.nombre)
