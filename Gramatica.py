@@ -2162,7 +2162,7 @@ def p_funciones_math(t):
                             | ATANH PARIZQ expresion_aritmetica PARDER
                             | LENGTH PARIZQ expresion_aritmetica PARDER
                             | SUBSTRING PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
-                            | TRIM PARIZQ expresion_aritmetica PARDER
+                            | TRIM PARIZQ expresion_aritmetica FROM expresion_aritmetica PARDER
                             | MD5 PARIZQ expresion_aritmetica PARDER
                             | SHA256 PARIZQ expresion_aritmetica PARDER
                             | SUBSTR PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
@@ -2172,7 +2172,7 @@ def p_funciones_math(t):
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | NOW PARIZQ PARDER
-                            | EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER
+                            | EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP expresion_aritmetica PARDER
                             | DATE_PART PARIZQ expresion_aritmetica COMA INTERVAL expresion_aritmetica PARDER'''
     if t[1] == 'ABS':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ABS)
@@ -2247,7 +2247,7 @@ def p_funciones_math(t):
     elif t[1] == 'LENGTH':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.LENGTH)
     elif t[1] == 'TRIM':
-        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TRIM)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.TRIM)
     elif t[1] == 'MD5':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.MD5)
     elif t[1] == 'SHA256':
@@ -2285,7 +2285,7 @@ def p_funciones_math(t):
     elif t[1] == 'NOW':
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW)
     elif t[1] == 'EXTRACT':
-        t[0] = ExpresionFuncion(t[3], ExpresionValor(t[6]), None, None, FUNCION_NATIVA.EXTRACT)
+        t[0] = ExpresionFuncion(t[3], t[6], None, None, FUNCION_NATIVA.EXTRACT)
     elif t[1] == 'DATE_PART':
         t[0] = ExpresionFuncion(t[3], t[6], None, None, FUNCION_NATIVA.DATE_PART)
 

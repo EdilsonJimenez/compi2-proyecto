@@ -21,9 +21,9 @@ CREATE TABLE tbrol (
 insert into tbrol values (1,'Administrador');
 insert into tbrol values (2,'Admin');
 insert into tbrol values (3,'Ventas');
-insert into tbusuario values(1,'Luis Fernando1','Salazar Rodriguez','lsalazar',MD5('paswword'),'10-11-42');
-insert into tbusuario values(1,'David Fernando2','Salazar Rodriguez','lFer',MD5('paswword'),'10-11-42');
-insert into tbusuario values(3,'Juan Fernando3','Salazar Rodriguez','DavidFer',MD5('paswword'),'10-11-42');
+insert into tbusuario values(1,'Luis Fernando1','Salazar Rodriguez','lsalazar',MD5('paswword'),NOW());
+insert into tbusuario values(1,'David Fernando2','Salazar Rodriguez','lFer',SHA256('paswword'),NOW());
+insert into tbusuario values(3,'Juan Fernando3','Salazar Rodriguez','DavidFer',MD5('paswword'),NOW());
 
 select rol, usuario from tbrol, tbusuario
 where tbrol.idrol = tbusuario.idusuario AND tbrol.idrol = 2;

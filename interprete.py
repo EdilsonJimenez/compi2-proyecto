@@ -13,6 +13,7 @@ from random import random
 from datetime import datetime
 import re
 import IntervalParser
+import hashlib
 ##------------------------------------------
 # TABLA DE SIMBOLOS GLOBAL
 ts_global = TS.TablaDeSimbolos()
@@ -99,72 +100,54 @@ def procesar_expresion(expresiones, ts):
 
 
 def procesar_aritmetica(expresion, ts):
+    global LisErr
     val = procesar_expresion(expresion.exp1, ts)
     val2 = procesar_expresion(expresion.exp2, ts)
+
     if expresion.operador == OPERACION_ARITMETICA.MAS:
-        if isinstance(val, string_types) and isinstance(val2, string_types):
-            return val + val2
-        elif ((isinstance(val, int) or isinstance(val, float))
+        if ((isinstance(val, int) or isinstance(val, float))
               and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val + val2
         else:
-            # consola.insert('end','>>Error: tipos no pueden sumarse \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden sumarse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "+", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.MENOS:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val - val2
         else:
-            # consola.insert('end','>>Error: tipos no pueden restarse \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden restarse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "-", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.MULTI:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val * val2
         else:
-            # consola.insert('end','>>Error: tipos no pueden multiplicarse \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden multiplicarse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "*", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.DIVIDIDO:
         if val2 == 0:
-            print('Error: No se puede dividir entre 0')
-            # consola.insert('end','>>Error: No se puede dividir entre cero'+str(val)+' '+str(val2)+'\n>>')
-            # newErr=ErrorRep('Semantico','No se puede dividir entre cero '+str(val)+' '+str(val2),indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "/", "numerico diferente de 0 en el segundo parametro", 0, 0)
             return None
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val / val2
         else:
-            print('Error: Tipos no pueden dividirse')
-            # consola.insert('end','>>Error: tipos no pueden dividires \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden dividirse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "/", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.RESIDUO:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val % val2
         else:
-            print('Error: Tipos no pueden operarse %')
-            # consola.insert('end','>>Error: tipos no pueden operarse por residuo \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden operarse por residuo ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "/", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.POTENCIA:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return pow(val, val2)
         else:
-            print('Error: Tipos no pueden operarse %')
-            # consola.insert('end','>>Error: tipos no pueden operarse por residuo \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden operarse por residuo ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "%", "numerico", 0,0)
             return None
 
 
@@ -495,36 +478,32 @@ def procesar_variable(tV, ts):
 def procesar_unitaria_aritmetica(expresion, ts):
     val = procesar_expresion(expresion.exp1, ts)
     if expresion.operador == OPERACION_ARITMETICA.CUADRATICA:
-        if isinstance(val, string_types):
-            if(val.isdecimal()):
-                return float(val) * float(val)
-            elif(val.isnumeric()):
-                return int(val) * int(val)
-            else:
-                return None
+        # if isinstance(val, string_types):
+        #     if(val.isdecimal()):
+        #         return float(val) * float(val)
+        #     elif(val.isnumeric()):
+        #         return int(val) * int(val)
+        #     else:
+        #         return None
 
-        elif isinstance(val, int) or isinstance(val, float):
+        if isinstance(val, int) or isinstance(val, float):
             return val * val
         else:
-            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, "", "|", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.CUBICA:
-        if isinstance(val, string_types):
-            if (val.isdecimal()):
-                return pow(float(val), 3)
-            elif (val.isnumeric()):
-                return pow(int(val), 3)
-            else:
-                return None
+        # if isinstance(val, string_types):
+        #     if (val.isdecimal()):
+        #         return pow(float(val), 3)
+        #     elif (val.isnumeric()):
+        #         return pow(int(val), 3)
+        #     else:
+        #         return None
 
-        elif isinstance(val, int) or isinstance(val, float):
-            return val * val
+        if isinstance(val, int) or isinstance(val, float):
+            return val * val * val
         else:
-            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, "", "||", "numerico", 0, 0)
             return None
 
 
@@ -544,66 +523,60 @@ def procesar_funcion(expresion, ts):
         val1 = procesar_expresion(expresion.exp1, ts)
 
         if expresion.id_funcion == FUNCION_NATIVA.ABS:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return abs(float(val1))
-                elif val1.isnumeric():
-                    return abs(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return abs(float(val1))
+            #     elif val1.isnumeric():
+            #         return abs(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return abs(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "ABS", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.CBRT:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return float(val1)**(1/3)
-                elif val1.isnumeric():
-                    return int(val1)**(1/3)
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return float(val1)**(1/3)
+            #     elif val1.isnumeric():
+            #         return int(val1)**(1/3)
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return val1 ** (1/3)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "CBRT", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.CEIL:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.ceil(float(val1)**(1/3))
-                elif val1.isnumeric():
-                    return math.ceil(int(val1)**(1/3))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.ceil(float(val1)**(1/3))
+            #     elif val1.isnumeric():
+            #         return math.ceil(int(val1)**(1/3))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.ceil(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "CEIL", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.CEILING:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if float(val1) > 0:
-                        return int(float(val1)) + 1
-                    else:
-                        return int(float(val1))
-                elif val1.isnumeric():
-                    return val1
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if float(val1) > 0:
+            #             return int(float(val1)) + 1
+            #         else:
+            #             return int(float(val1))
+            #     elif val1.isnumeric():
+            #         return val1
+            #     else:
+            #         return None
 
-            elif isinstance(val1, float):
+            if isinstance(val1, float):
                 if val1 > 0:
                     return int(val1) + 1
                 else:
@@ -611,563 +584,521 @@ def procesar_funcion(expresion, ts):
             elif isinstance(val1, int):
                 return val1
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "CEILING", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.DEGREES:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.degrees(float(val1))
-                elif val1.isnumeric():
-                    return math.degrees(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.degrees(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.degrees(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.degrees(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "DEGREES", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.EXP:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.exp(float(val1))
-                elif val1.isnumeric():
-                    return math.exp(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.exp(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.exp(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.exp(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "EXP", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.FACTORIAL:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return None
-                elif val1.isnumeric():
-                    return math.factorial(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return None
+            #     elif val1.isnumeric():
+            #         return math.factorial(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int):
+            if isinstance(val1, int):
                 return math.factorial(val1)
             elif isinstance(val1, float):
                 return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "FACTORIAL", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.FLOOR:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.floor(float(val1)**(1/3))
-                elif val1.isnumeric():
-                    return math.floor(int(val1)**(1/3))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.floor(float(val1)**(1/3))
+            #     elif val1.isnumeric():
+            #         return math.floor(int(val1)**(1/3))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.floor(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "FLOOR", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.LN:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.log(float(val1))
-                elif val1.isnumeric():
-                    return math.log(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.log(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.log(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.log(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "LN", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.LOG:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.log10(float(val1))
-                elif val1.isnumeric():
-                    return math.log10(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.log10(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.log10(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.log10(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "LN", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.RADIANS:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.radians(float(val1))
-                elif val1.isnumeric():
-                    return math.radians(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.radians(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.radians(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.radians(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "RADIANS", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.SIGN:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if float(val1) > 0:
-                        return 1
-                    else:
-                        return -1
-                elif val1.isnumeric():
-                    if int(val1) > 0:
-                        return 1
-                    else:
-                        return -1
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if float(val1) > 0:
+            #             return 1
+            #         else:
+            #             return -1
+            #     elif val1.isnumeric():
+            #         if int(val1) > 0:
+            #             return 1
+            #         else:
+            #             return -1
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if val1 > 0:
                     return 1
                 else:
                     return -1
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "SIGN", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.SQRT:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if float(val1) > 0:
-                        return math.sqrt(float(val1))
-                    else:
-                        return None
-                elif val1.isnumeric():
-                    if int(val1) > 0:
-                        return math.sqrt(int(val1))
-                    else:
-                        return None
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if float(val1) > 0:
+            #             return math.sqrt(float(val1))
+            #         else:
+            #             return None
+            #     elif val1.isnumeric():
+            #         if int(val1) > 0:
+            #             return math.sqrt(int(val1))
+            #         else:
+            #             return None
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if val1 > 0:
                     return math.sqrt(val1)
                 else:
                     return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "SQRT", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ACOS:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if -1 <= float(val1) <= 1:
-                        return math.acos(float(val1))
-                    else:
-                        return None
-                elif val1.isnumeric():
-                    if -1 <= int(val1) <= 1:
-                        return math.acos(int(val1))
-                    else:
-                        return None
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if -1 <= float(val1) <= 1:
+            #             return math.acos(float(val1))
+            #         else:
+            #             return None
+            #     elif val1.isnumeric():
+            #         if -1 <= int(val1) <= 1:
+            #             return math.acos(int(val1))
+            #         else:
+            #             return None
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if -1 <= val1 <= 1:
                     return math.acos(val1)
                 else:
                     return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "ACOS", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ACOSD:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if -1 <= float(val1) <= 1:
-                        return math.degrees(math.acos(float(val1)))
-                    else:
-                        return None
-                elif val1.isnumeric():
-                    if -1 <= int(val1) <= 1:
-                        return math.degrees(math.acos(int(val1)))
-                    else:
-                        return None
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if -1 <= float(val1) <= 1:
+            #             return math.degrees(math.acos(float(val1)))
+            #         else:
+            #             return None
+            #     elif val1.isnumeric():
+            #         if -1 <= int(val1) <= 1:
+            #             return math.degrees(math.acos(int(val1)))
+            #         else:
+            #             return None
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if -1 <= val1 <= 1:
                     return math.degrees(math.acos(val1))
                 else:
                     return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None,None, None, "ACOSD", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ASIN:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if -1 <= float(val1) <= 1:
-                        return math.asin(float(val1))
-                    else:
-                        return None
-                elif val1.isnumeric():
-                    if -1 <= int(val1) <= 1:
-                        return math.asin(int(val1))
-                    else:
-                        return None
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if -1 <= float(val1) <= 1:
+            #             return math.asin(float(val1))
+            #         else:
+            #             return None
+            #     elif val1.isnumeric():
+            #         if -1 <= int(val1) <= 1:
+            #             return math.asin(int(val1))
+            #         else:
+            #             return None
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if -1 <= val1 <= 1:
                     return math.asin(val1)
                 else:
                     return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ASIN", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ASIND:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if -1 <= float(val1) <= 1:
-                        return math.degrees(math.asin(float(val1)))
-                    else:
-                        return None
-                elif val1.isnumeric():
-                    if -1 <= int(val1) <= 1:
-                        return math.degrees(math.asin(int(val1)))
-                    else:
-                        return None
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if -1 <= float(val1) <= 1:
+            #             return math.degrees(math.asin(float(val1)))
+            #         else:
+            #             return None
+            #     elif val1.isnumeric():
+            #         if -1 <= int(val1) <= 1:
+            #             return math.degrees(math.asin(int(val1)))
+            #         else:
+            #             return None
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if -1 <= val1 <= 1:
                     return math.degrees(math.asin(val1))
                 else:
                     return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ASIND", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ATAN:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.atan(float(val1))
-                elif val1.isnumeric():
-                    return math.atan(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.atan(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.atan(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.atan(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ATAN", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ATAND:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.degrees(math.atan(float(val1)))
-                elif val1.isnumeric():
-                    return math.degrees(math.atan(int(val1)))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.degrees(math.atan(float(val1)))
+            #     elif val1.isnumeric():
+            #         return math.degrees(math.atan(int(val1)))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.degrees(math.atan(val1))
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ATAND", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.COS:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.cos(float(val1))
-                elif val1.isnumeric():
-                    return math.cos(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.cos(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.cos(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.cos(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "COS", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.COSD:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.degrees(math.cos(float(val1)))
-                elif val1.isnumeric():
-                    return math.degrees(math.cos(int(val1)))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.degrees(math.cos(float(val1)))
+            #     elif val1.isnumeric():
+            #         return math.degrees(math.cos(int(val1)))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.degrees(math.cos(val1))
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "COSD", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.COT:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return 1 / math.tan(float(val1))
-                elif val1.isnumeric():
-                    return 1 / math.tan(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return 1 / math.tan(float(val1))
+            #     elif val1.isnumeric():
+            #         return 1 / math.tan(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return 1 / math.tan(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "COT", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.COTD:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.degrees(1 / math.tan(float(val1)))
-                elif val1.isnumeric():
-                    return math.degrees(1 / math.tan(int(val1)))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.degrees(1 / math.tan(float(val1)))
+            #     elif val1.isnumeric():
+            #         return math.degrees(1 / math.tan(int(val1)))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.degrees(1 / math.tan(val1))
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "COTD", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.SIN:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.sin(float(val1))
-                elif val1.isnumeric():
-                    return math.sin(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.sin(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.sin(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.sin(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "SIN", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.SIND:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.degrees(math.sin(float(val1)))
-                elif val1.isnumeric():
-                    return math.degrees(math.sin(int(val1)))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.degrees(math.sin(float(val1)))
+            #     elif val1.isnumeric():
+            #         return math.degrees(math.sin(int(val1)))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.degrees(math.sin(val1))
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "SIND", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.TAN:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.tan(float(val1))
-                elif val1.isnumeric():
-                    return math.tan(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.tan(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.tan(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.tan(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "TAN", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.TAND:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.degrees(math.tan(float(val1)))
-                elif val1.isnumeric():
-                    return math.degrees(math.tan(int(val1)))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.degrees(math.tan(float(val1)))
+            #     elif val1.isnumeric():
+            #         return math.degrees(math.tan(int(val1)))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.degrees(math.tan(val1))
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "TAND", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.SINH:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.sinh(float(val1))
-                elif val1.isnumeric():
-                    return math.sinh(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.sinh(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.sinh(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.sinh(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "SINH", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.COSH:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.cosh(float(val1))
-                elif val1.isnumeric():
-                    return math.cosh(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.cosh(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.cosh(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.cosh(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "COSH", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.TANH:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.tanh(float(val1))
-                elif val1.isnumeric():
-                    return math.tanh(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.tanh(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.tanh(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.tanh(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "TANH", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ASINH:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return math.tanh(float(val1))
-                elif val1.isnumeric():
-                    return math.tanh(int(val1))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return math.tanh(float(val1))
+            #     elif val1.isnumeric():
+            #         return math.tanh(int(val1))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return math.tanh(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ASINH", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ACOSH:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if float(val1) >= 1:
-                        return math.acosh(float(val1))
-                    else:
-                        return None
-                elif val1.isnumeric():
-                    if int(val1) >= 1:
-                        return math.acosh(int(val1))
-                    else:
-                        return None
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if float(val1) >= 1:
+            #             return math.acosh(float(val1))
+            #         else:
+            #             return None
+            #     elif val1.isnumeric():
+            #         if int(val1) >= 1:
+            #             return math.acosh(int(val1))
+            #         else:
+            #             return None
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if val1 >= 1:
                     return math.acosh(val1)
                 else:
+                    agregarErrorFuncion(val1, None, None, None, "ACOSH", "numerico >= 1", 0, 0)
                     return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ACOSH", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ATANH:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    if -1 < float(val1) < 1:
-                        return math.atanh(float(val1))
-                    else:
-                        return None
-                elif val1.isnumeric():
-                    if -1 < int(val1) < 1:
-                        return math.atanh(int(val1))
-                    else:
-                        return None
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         if -1 < float(val1) < 1:
+            #             return math.atanh(float(val1))
+            #         else:
+            #             return None
+            #     elif val1.isnumeric():
+            #         if -1 < int(val1) < 1:
+            #             return math.atanh(int(val1))
+            #         else:
+            #             return None
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 if -1 < val1 < 1:
                     return math.atanh(val1)
                 else:
+                    agregarErrorFuncion(val1, None, None, None, "ATANH", "numerico entre -1 y 1", 0, 0)
                     return None
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ATANH", "numerico", 0, 0)
                 return None
         elif expresion.id_funcion == FUNCION_NATIVA.ROUND:
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    return round(float(val1) ** (1 / 3))
-                elif val1.isnumeric():
-                    return round(int(val1) ** (1 / 3))
-                else:
-                    return None
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         return round(float(val1) ** (1 / 3))
+            #     elif val1.isnumeric():
+            #         return round(int(val1) ** (1 / 3))
+            #     else:
+            #         return None
 
-            elif isinstance(val1, int) or isinstance(val1, float):
+            if isinstance(val1, int) or isinstance(val1, float):
                 return round(val1)
             else:
-                # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-                # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-                # LisErr.agregar(newErr)
+                agregarErrorFuncion(val1, None, None, None, "ROUND", "numerico", 0, 0)
+                return None
+        elif expresion.id_funcion == FUNCION_NATIVA.LENGTH:
+            if isinstance(val1, string_types):
+                return len(val1)
+            else:
+                agregarErrorFuncion(val1, None, None, None, "LENGTH", "string", 0, 0)
+                return None
+        elif expresion.id_funcion == FUNCION_NATIVA.MD5:
+            if isinstance(val1, string_types):
+                return str(hashlib.md5(val1.encode()).hexdigest())
+            else:
+                agregarErrorFuncion(val1, None, None, None, "MD5", "string", 0, 0)
+                return None
+        elif expresion.id_funcion == FUNCION_NATIVA.SHA256:
+            if isinstance(val1, string_types):
+                return str(hashlib.sha256(val1.encode()).hexdigest())
+            else:
+                agregarErrorFuncion(val1, None, None, None, "MD5", "string", 0, 0)
                 return None
 
     if expresion.exp2 is not None:
@@ -1178,29 +1109,32 @@ def procesar_funcion(expresion, ts):
             parametro1 = None
             parametro2 = None
 
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    parametro1 = float(val1)
-                elif val1.isnumeric():
-                    parametro1 = int(val1)
-            elif isinstance(val1, int) or isinstance(val1, float):
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         parametro1 = float(val1)
+            #     elif val1.isnumeric():
+            #         parametro1 = int(val1)
+            if isinstance(val1, int) or isinstance(val1, float):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isdecimal():
-                    parametro2 = float(val2)
-                elif val2.isnumeric():
-                    parametro2 = int(val2)
-            elif isinstance(val2, int) or isinstance(val2, float):
+            # if isinstance(val2, string_types):
+            #     if val2.isdecimal():
+            #         parametro2 = float(val2)
+            #     elif val2.isnumeric():
+            #         parametro2 = int(val2)
+            if isinstance(val2, int) or isinstance(val2, float):
                 parametro2 = val2
 
             if parametro1 is not None and parametro2 is not None:
-                return parametro1 / parametro2
+                if parametro2 != 0:
+                    return parametro1 / parametro2
+                else:
+                    agregarErrorFuncion(val2, None, None, None, "DIV", "numerico diferentes de 0 en el dividendo", 0, 0)
 
             if parametro1 is None:
-                print('Error en div parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "DIV", "numerico", 0, 0)
             if parametro2 is None:
-                print('Error en div parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "DIV", "numerico", 0, 0)
 
             return None
 
@@ -1208,29 +1142,29 @@ def procesar_funcion(expresion, ts):
             parametro1 = None
             parametro2 = None
 
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    parametro1 = float(val1)
-                elif val1.isnumeric():
-                    parametro1 = int(val1)
-            elif isinstance(val1, int) or isinstance(val1, float):
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         parametro1 = float(val1)
+            #     elif val1.isnumeric():
+            #         parametro1 = int(val1)
+            if isinstance(val1, int) or isinstance(val1, float):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isdecimal():
-                    parametro2 = float(val2)
-                elif val2.isnumeric():
-                    parametro2 = int(val2)
-            elif isinstance(val2, int) or isinstance(val2, float):
+            # if isinstance(val2, string_types):
+            #     if val2.isdecimal():
+            #         parametro2 = float(val2)
+            #     elif val2.isnumeric():
+            #         parametro2 = int(val2)
+            if isinstance(val2, int) or isinstance(val2, float):
                 parametro2 = val2
 
             if parametro1 is not None and parametro2 is not None:
                 return math.gcd(parametro1, parametro2)
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "GCD", "numerico", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "GCD", "numerico", 0, 0)
 
             return None
 
@@ -1238,29 +1172,29 @@ def procesar_funcion(expresion, ts):
             parametro1 = None
             parametro2 = None
 
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    parametro1 = float(val1)
-                elif val1.isnumeric():
-                    parametro1 = int(val1)
-            elif isinstance(val1, int) or isinstance(val1, float):
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         parametro1 = float(val1)
+            #     elif val1.isnumeric():
+            #         parametro1 = int(val1)
+            if isinstance(val1, int) or isinstance(val1, float):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isdecimal():
-                    parametro2 = float(val2)
-                elif val2.isnumeric():
-                    parametro2 = int(val2)
-            elif isinstance(val2, int) or isinstance(val2, float):
+            # if isinstance(val2, string_types):
+            #     if val2.isdecimal():
+            #         parametro2 = float(val2)
+            #     elif val2.isnumeric():
+            #         parametro2 = int(val2)
+            if isinstance(val2, int) or isinstance(val2, float):
                 parametro2 = val2
 
             if parametro1 is not None and parametro2 is not None:
                 return parametro1 % parametro2
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "MOD", "numerico", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "MOD", "numerico", 0, 0)
 
             return None
 
@@ -1268,29 +1202,29 @@ def procesar_funcion(expresion, ts):
             parametro1 = None
             parametro2 = None
 
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    parametro1 = float(val1)
-                elif val1.isnumeric():
-                    parametro1 = int(val1)
-            elif isinstance(val1, int) or isinstance(val1, float):
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         parametro1 = float(val1)
+            #     elif val1.isnumeric():
+            #         parametro1 = int(val1)
+            if isinstance(val1, int) or isinstance(val1, float):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isdecimal():
-                    parametro2 = float(val2)
-                elif val2.isnumeric():
-                    parametro2 = int(val2)
-            elif isinstance(val2, int) or isinstance(val2, float):
+            # if isinstance(val2, string_types):
+            #     if val2.isdecimal():
+            #         parametro2 = float(val2)
+            #     elif val2.isnumeric():
+            #         parametro2 = int(val2)
+            if isinstance(val2, int) or isinstance(val2, float):
                 parametro2 = val2
 
             if parametro1 is not None and parametro2 is not None:
                 return parametro1 ** parametro2
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "POWER", "numerico", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "POWER", "numerico", 0, 0)
 
             return None
 
@@ -1298,33 +1232,33 @@ def procesar_funcion(expresion, ts):
             parametro1 = None
             parametro2 = None
 
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    parametro1 = float(val1)
-                elif val1.isnumeric():
-                    parametro1 = int(val1)
-            elif isinstance(val1, int) or isinstance(val1, float):
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         parametro1 = float(val1)
+            #     elif val1.isnumeric():
+            #         parametro1 = int(val1)
+            if isinstance(val1, int) or isinstance(val1, float):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isdecimal():
-                    # Agregar error semantico
-                    print('Error se espera un entero no un decimal')
-                elif val2.isnumeric():
-                    parametro2 = int(val2)
-            elif isinstance(val2, int):
+            # if isinstance(val2, string_types):
+            #     if val2.isdecimal():
+            #         # Agregar error semantico
+            #         print('Error se espera un entero no un decimal')
+            #     elif val2.isnumeric():
+            #         parametro2 = int(val2)
+            if isinstance(val2, int):
                 parametro2 = val2
             elif  isinstance(val2, float):
                 # Agregar error semantico
-                print('Error se espera un entero no un decimal')
+                agregarErrorFuncion(val2, None, None, None, "TRUNC", "numerico entero como segundo parametro", 0, 0)
 
             if parametro1 is not None and parametro2 is not None:
                 return round(parametro1, parametro2)
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "TRUNC", "numerico", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "TRUNC", "numerico", 0, 0)
 
             return None
 
@@ -1332,29 +1266,29 @@ def procesar_funcion(expresion, ts):
             parametro1 = None
             parametro2 = None
 
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    parametro1 = float(val1)
-                elif val1.isnumeric():
-                    parametro1 = int(val1)
-            elif isinstance(val1, int) or isinstance(val1, float):
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         parametro1 = float(val1)
+            #     elif val1.isnumeric():
+            #         parametro1 = int(val1)
+            if isinstance(val1, int) or isinstance(val1, float):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isdecimal():
-                    parametro2 = float(val2)
-                elif val2.isnumeric():
-                    parametro2 = int(val2)
-            elif isinstance(val2, int) or isinstance(val2, float):
+            # if isinstance(val2, string_types):
+            #     if val2.isdecimal():
+            #         parametro2 = float(val2)
+            #     elif val2.isnumeric():
+            #         parametro2 = int(val2)
+            if isinstance(val2, int) or isinstance(val2, float):
                 parametro2 = val2
 
             if parametro1 is not None and parametro2 is not None:
                 return math.atan2(parametro1, parametro2)
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "ATAN2", "numerico", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "ATAN2", "numerico", 0, 0)
 
             return None
 
@@ -1362,29 +1296,29 @@ def procesar_funcion(expresion, ts):
             parametro1 = None
             parametro2 = None
 
-            if isinstance(val1, string_types):
-                if val1.isdecimal():
-                    parametro1 = float(val1)
-                elif val1.isnumeric():
-                    parametro1 = int(val1)
-            elif isinstance(val1, int) or isinstance(val1, float):
+            # if isinstance(val1, string_types):
+            #     if val1.isdecimal():
+            #         parametro1 = float(val1)
+            #     elif val1.isnumeric():
+            #         parametro1 = int(val1)
+            if isinstance(val1, int) or isinstance(val1, float):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isdecimal():
-                    parametro2 = float(val2)
-                elif val2.isnumeric():
-                    parametro2 = int(val2)
-            elif isinstance(val2, int) or isinstance(val2, float):
+            # if isinstance(val2, string_types):
+            #     if val2.isdecimal():
+            #         parametro2 = float(val2)
+            #     elif val2.isnumeric():
+            #         parametro2 = int(val2)
+            if isinstance(val2, int) or isinstance(val2, float):
                 parametro2 = val2
 
             if parametro1 is not None and parametro2 is not None:
                 return math.degrees(math.atan2(parametro1, parametro2))
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "ATAN2D", "numerico", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "ATAN2D", "numerico", 0, 0)
 
             return None
         elif expresion.id_funcion == FUNCION_NATIVA.EXTRACT:
@@ -1405,7 +1339,7 @@ def procesar_funcion(expresion, ts):
 
                 except ValueError:
                     # raise ValueError("Incorrect data format, should be YYYY-MM-DD")
-                    print('ERROR AL CONVERTIR CADENA EN OBJETO DATETIME')
+                    agregarErrorFuncion(val2, None, None, None, "EXTRACT", "string con formato de fecha", 0, 0)
 
             if parametro1 is not None and parametro2 is not None:
                 if parametro1 == 'YEAR':
@@ -1422,9 +1356,9 @@ def procesar_funcion(expresion, ts):
                     return parametro2.second
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "EXTRACT", "unidad de tiempo", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "EXTRACT", "string", 0, 0)
 
             return None
 
@@ -1441,6 +1375,7 @@ def procesar_funcion(expresion, ts):
 
                 except ValueError:
                     # raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+                    agregarErrorFuncion(val2, None, None, None, "DATE_PART", "string con sintaxys de intervalo de tiempo", 0, 0)
                     print('ERROR AL CONVERTIR CADENA EN OBJETO DATETIME')
 
             if parametro1 is not None and parametro2 is not None:
@@ -1458,9 +1393,32 @@ def procesar_funcion(expresion, ts):
                     return parametro2.seconds
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "DATE_PART", "string de unidad de tiempo", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "DATE_PART", "string con sintaxys de intervalo de tiempo", 0, 0)
+
+            return None
+
+        elif expresion.id_funcion == FUNCION_NATIVA.TRIM:
+            parametro1 = None
+            parametro2 = None
+
+            if isinstance(val1, string_types):
+                parametro1 = val1
+
+            if isinstance(val2, string_types):
+                parametro2 = val2
+
+            if parametro1 is not None and parametro2 is not None:
+                if parametro1 != "":
+                    return parametro2.strip(parametro1)
+                else:
+                    agregarErrorFuncion(val1, None, None, None, "TRIM", "string con una longitud mayor a 0", 0, 0)
+
+            if parametro1 is None:
+                agregarErrorFuncion(val1, None, None, None, "TRIM", "string", 0, 0)
+            if parametro2 is None:
+                agregarErrorFuncion(val2, None, None, None, "TRIM", "string", 0, 0)
 
             return None
 
@@ -1478,17 +1436,17 @@ def procesar_funcion(expresion, ts):
             if isinstance(val1, string_types):
                 parametro1 = val1
 
-            if isinstance(val2, string_types):
-                if val2.isnumeric():
-                    parametro2 = int(val2)
+            # if isinstance(val2, string_types):
+            #     if val2.isnumeric():
+            #         parametro2 = int(val2)
 
-            elif isinstance(val2, int):
+            if isinstance(val2, int):
                 parametro2 = val2
 
-            if isinstance(val3, string_types):
-                if val3.isnumeric():
-                    parametro3 = int(val3)
-            elif isinstance(val3, int):
+            # if isinstance(val3, string_types):
+            #     if val3.isnumeric():
+            #         parametro3 = int(val3)
+            if isinstance(val3, int):
                 parametro3 = val3
 
             if parametro1 is not None and parametro2 is not None and parametro3 is not None:
@@ -1496,14 +1454,16 @@ def procesar_funcion(expresion, ts):
                     if parametro2 <= parametro3:
                         return parametro1[parametro2:parametro3]
                     else:
-                        print('Error inicio de subcadena mayor al final')
+                        agregarErrorFuncion(val2, None, None, None, "SUBSTRING", "entero menor o igual tercer parametro", 0, 0)
                 else:
-                    print('error indices fuera de rango de cadena')
+                    agregarErrorFuncion(val1, val2, None, None, "SUBSTRING", "entero dentro de la longitud de la cadena", 0, 0)
 
             if parametro1 is None:
-                print('Error en gcd parametro 1')
+                agregarErrorFuncion(val1, None, None, None, "SUBSTRING", "string", 0, 0)
             if parametro2 is None:
-                print('Error en gcd parametro 2')
+                agregarErrorFuncion(val2, None, None, None, "SUBSTRING", "entero como segundo parametro", 0, 0)
+            if parametro3 is None:
+                agregarErrorFuncion(val3, None, None, None, "SUBSTRING", "entero como tercer parametro", 0, 0)
 
             return None
 
@@ -1609,6 +1569,29 @@ def reporte_errores():
     Rep.render('g', format='png', view=True)
     print('Hecho')
 
+def agregarErrorDatosOperacion(val1, val2, op, tipoEsperado, linea, columna):
+    global LisErr
+    er = ErrorRep('Semantico',
+                  'Los datos ingresados: "' + str(val1) + '", "' + str(val2)
+                  + '"; No se pueden operar con "' + str(op) + '", se esperaban datos de tipo ' + str(tipoEsperado), linea)
+    LisErr.agregar(er)
+
+def agregarErrorFuncion(val1, val2, val3, val4,funcion, tipoEsperado, linea, columna):
+    global LisErr
+    datos = ""
+    if val1 is not None:
+        datos = '"' + str(val1) + '"'
+    if val2 is not None:
+        datos = datos + ", " + '"' + str(val2) + '"'
+    if val3 is not None:
+        datos = datos + ", " + '"' + str(val3) + '"'
+    if val4 is not None:
+        datos = datos + ", " + '"' + str(val4) + '"'
+
+    er = ErrorRep('Semantico',
+                  'Los datos ingresados: ' + datos + '; No se pueden usar en la funcion "'
+                  + str(funcion) + '", se esperaban datos de tipo '+ str(tipoEsperado), linea)
+    LisErr.agregar(er)
 
 ## PROCESAR SELECT -----------------------------------------------------------------------------------------------------
 
@@ -1653,69 +1636,49 @@ def procesar_aritmetica_select(expresion, ts):
     val = procesar_expresion_select(expresion.exp1, ts)
     val2 = procesar_expresion_select(expresion.exp2, ts)
     if expresion.operador == OPERACION_ARITMETICA.MAS:
-        if isinstance(val, string_types) and isinstance(val2, string_types):
-            return val + val2
-        elif ((isinstance(val, int) or isinstance(val, float))
+        if ((isinstance(val, int) or isinstance(val, float))
               and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val + val2
         else:
-            # consola.insert('end','>>Error: tipos no pueden sumarse \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden sumarse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "+", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.MENOS:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val - val2
         else:
-            # consola.insert('end','>>Error: tipos no pueden restarse \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden restarse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "-", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.MULTI:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val * val2
         else:
-            # consola.insert('end','>>Error: tipos no pueden multiplicarse \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden multiplicarse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "*", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.DIVIDIDO:
         if val2 == 0:
-            print('Error: No se puede dividir entre 0')
-            # consola.insert('end','>>Error: No se puede dividir entre cero'+str(val)+' '+str(val2)+'\n>>')
-            # newErr=ErrorRep('Semantico','No se puede dividir entre cero '+str(val)+' '+str(val2),indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "/", "numerico diferente de 0 en el segundo operador", 0, 0)
             return None
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val / val2
         else:
-            print('Error: Tipos no pueden dividirse')
-            # consola.insert('end','>>Error: tipos no pueden dividires \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden dividirse ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "/", "numerico", 0, 0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.RESIDUO:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return val % val2
         else:
-            print('Error: Tipos no pueden operarse %')
-            # consola.insert('end','>>Error: tipos no pueden operarse por residuo \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden operarse por residuo ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "%", "numerico", 0, 0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.POTENCIA:
         if ((isinstance(val, int) or isinstance(val, float))
                 and ((isinstance(val2, int) or isinstance(val2, float)))):
             return pow(val, val2)
         else:
-            print('Error: Tipos no pueden operarse %')
-            # consola.insert('end','>>Error: tipos no pueden operarse por residuo \n>>')
-            # newErr=ErrorRep('Semantico','Tipos no puden operarse por residuo ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, val2, "*", "numerico", 0, 0)
             return None
 
 
@@ -1970,10 +1933,8 @@ def procesar_logica_select(expresion, ts):
             return  val
     else:
         print('Error: No se puede realizar la op. logica')
-        # consola.insert('end','>>Error: Expresion logica con tipos incompatibles'+str(expresion.operador)+'\n>>')
-        # newErr=ErrorRep('Semantico','Expresion logica con tipos incompatibles '+str(expresion.operador),indice)
-        # LisErr.agregar(newErr)
-
+        agregarErrorDatosOperacion(val, val2, 'Operadores Logicos', "", 0, 0)
+        return None
 
 def procesar_negAritmetica_select(expresion, ts):
     try:
@@ -2041,34 +2002,30 @@ def procesar_variable_select(tV, ts):
 def procesar_unitaria_aritmetica_select(expresion, ts):
     val = procesar_expresion_select(expresion.exp1, ts)
     if expresion.operador == OPERACION_ARITMETICA.CUADRATICA:
-        if isinstance(val, string_types):
-            if(val.isdecimal()):
-                return float(val) * float(val)
-            elif(val.isnumeric()):
-                return int(val) * int(val)
-            else:
-                return None
+        # if isinstance(val, string_types):
+        #     if(val.isdecimal()):
+        #         return float(val) * float(val)
+        #     elif(val.isnumeric()):
+        #         return int(val) * int(val)
+        #     else:
+        #         return None
 
-        elif isinstance(val, int) or isinstance(val, float):
+        if isinstance(val, int) or isinstance(val, float):
             return val * val
         else:
-            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, "", "|", "numerico", 0,0)
             return None
     elif expresion.operador == OPERACION_ARITMETICA.CUBICA:
-        if isinstance(val, string_types):
-            if (val.isdecimal()):
-                return pow(float(val), 3)
-            elif (val.isnumeric()):
-                return pow(int(val), 3)
-            else:
-                return None
+        # if isinstance(val, string_types):
+        #     if (val.isdecimal()):
+        #         return pow(float(val), 3)
+        #     elif (val.isnumeric()):
+        #         return pow(int(val), 3)
+        #     else:
+        #         return None
 
-        elif isinstance(val, int) or isinstance(val, float):
-            return val * val
+        if isinstance(val, int) or isinstance(val, float):
+            return val * val * val
         else:
-            # consola.insert('end','>>Error: tipo no pueden elevarse al cuadrado \n>>')
-            # newErr=ErrorRep('Semantico','Tipo no pude elevarse al cuadrado ',indice)
-            # LisErr.agregar(newErr)
+            agregarErrorDatosOperacion(val, "", "||", "numerico", 0,0)
             return None
