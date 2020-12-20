@@ -85,6 +85,8 @@ def procesar_expresion(expresiones, ts):
         return procesar_funcion(expresiones, ts)
     elif isinstance(expresiones, ExpresionTiempo):
         return procesar_unidad_tiempo(expresiones, ts)
+    elif isinstance(expresiones, ExpresionConstante):
+        return procesar_constante(expresiones, ts)
     elif isinstance(expresiones, Absoluto):
         try:
             return procesar_expresion(expresiones.variable, ts)
@@ -1474,6 +1476,18 @@ def procesar_unidad_tiempo(expresion, ts):
     return expresion.nombre
 
 
+def procesar_constante(expresion, ts):
+    if expresion.id_constate == CONSTANTES.CURRENT_TIME:
+        fecha = datetime.now().time()
+        fechaString = '{:%H:%M:%S}'.format(fecha)
+        return fechaString
+    if expresion.id_constate == CONSTANTES.CURRENT_DATE:
+        fecha = datetime.now()
+        fechaString = '{:%Y-%m-%d}'.format(fecha)
+        return fechaString
+
+
+
 # -------------------------------------------------------------------------------------------------
 # --------------------------------- EJECUCION -----------------------------------------------------
 
@@ -1534,6 +1548,8 @@ class interprete2:
             elif isinstance(i,Select2):
                 i.Ejecutar()
             elif isinstance(i,Select3):
+                i.Ejecutar()
+            elif isinstance(i, SelectExpresion):
                 i.Ejecutar()
             else:
                 print("NO ejecuta")
@@ -2029,3 +2045,4 @@ def procesar_unitaria_aritmetica_select(expresion, ts):
         else:
             agregarErrorDatosOperacion(val, "", "||", "numerico", 0,0)
             return None
+

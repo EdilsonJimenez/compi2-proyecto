@@ -550,7 +550,7 @@ def p_Campos_ids(t):
 
 def p_Campos_expresion(t):
     'CAMPOS          : expresion'
-    t[0] = str(t[1])
+    t[0] = t[1]
 
 def p_Campos_expresionn(t):
     'CAMPOS          : ENTERO'
@@ -1781,11 +1781,14 @@ def p_if_exists_database_e(t):
 
 # -----------------------------------------------------------------------------------------------------------------
 
+def p_select_expresion(t):
+    'DQL_COMANDOS : SELECT LISTA_CAMPOS PUNTOCOMA'
+    t[0] = SelectExpresion(t[2])
 
 # SELECT DATE/TIME
-def p_instruccion_tiempo(t):
-    'DQL_COMANDOS       : SELECT EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER PUNTOCOMA'
-    t[0] = SelectExtract(t[4], t[7])
+# def p_instruccion_tiempo(t):
+#     DQL_COMANDOS       : SELECT EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER PUNTOCOMA
+#     t[0] = SelectExtract(t[4], t[7])
 
 
 def p_Tipo_Tiempo(t):
@@ -1809,29 +1812,31 @@ def p_Tipo_Tiempo(t):
     elif t[1] == 'SECOND':
         t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND)
 
-def p_instruccion_tiempo2(t):
-    'DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA'
-    t[0] = SelectDatePart(t[4], t[7])
+# def p_instruccion_tiempo2(t):
+#     DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA
+#     t[0] = SelectDatePart(t[4], t[7])
 
 
-def p_instruccion_tiempo3(t):
-    'DQL_COMANDOS       : SELECT TIPO_CURRENT PUNTOCOMA'
-    t[0] = SelectTipoCurrent(t[2])
+# def p_instruccion_tiempo3(t):
+#     DQL_COMANDOS       : SELECT TIPO_CURRENT PUNTOCOMA
+#     t[0] = SelectTipoCurrent(t[2])
 
 def p_Tipo_Current(t):
-    '''TIPO_CURRENT     : CURRENT_DATE
+    '''expresion_aritmetica : CURRENT_DATE
                         | CURRENT_TIME '''
-    t[0] = t[1]
+    if t[1] == 'CURRENT_DATE':
+        t[0] = ExpresionConstante(t[1], CONSTANTES.CURRENT_DATE)
+    elif t[1] == 'CURRENT_TIME':
+        t[0] = ExpresionConstante(t[1], CONSTANTES.CURRENT_TIME)
+
+# def p_instruccion_tiempo4(t):
+#     DQL_COMANDOS       : SELECT TIMESTAMP  CADENASIMPLE PUNTOCOMA
+#     t[0] = SelectStamp(t[3])
 
 
-def p_instruccion_tiempo4(t):
-    'DQL_COMANDOS       : SELECT TIMESTAMP  CADENASIMPLE PUNTOCOMA'
-    t[0] = SelectStamp(t[3])
-
-
-def p_instruccion_tiempo5(t):
-    'DQL_COMANDOS       : SELECT NOW PARIZQ PARDER PUNTOCOMA'
-    t[0] = Selectnow(ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW))
+# def p_instruccion_tiempo5(t):
+#     DQL_COMANDOS       : SELECT NOW PARIZQ PARDER PUNTOCOMA
+#     t[0] = Selectnow(ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW))
 
 
 def p_instrucion_ctypes(t):

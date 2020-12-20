@@ -2092,8 +2092,32 @@ class Select4(Instruccion) :
         listaGeneral.clear()
 
 
+class SelectExpresion(Instruccion):
+    def __init__(self, listaCampos = []):
+        self.listaCampos = listaCampos
+
+    def Ejecutar(self):
+        global ts_global
+        numero = 1
+        for campo in self.listaCampos:
+            print(campo)
+            if isinstance(campo, Campo_AccedidoSinLista):
+                if isinstance(campo.Columna, string_types):
+                    if campo.Columna.isnumeric() or campo.Columna.isdecimal():
+                        result = int(campo.Columna)
+                        listaGeneral['Expresion' + str(numero)] = [result]
+                        numero += 1
+                else:
+                    result = Inter.procesar_expresion(campo.Columna, ts_global)
+                    listaGeneral['Expresion' + str(numero)] = [result]
+                    numero += 1
 
 
+
+
+
+        mostrarConsulta(listaGeneral)
+        listaGeneral.clear()
 
 
 #subSelect sin cuerpo

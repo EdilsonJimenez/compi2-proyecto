@@ -138,6 +138,10 @@ class UNIDAD_TIEMPO(Enum):
     MINUTE = 5
     SECOND = 6
 
+class CONSTANTES(Enum):
+    CURRENT_DATE = 1
+    CURRENT_TIME = 2
+
 #------------------------------------------------------------------------
 
 class Casteo() :
@@ -315,3 +319,8 @@ class ExpresionTiempo(Expresion):
     def __init__(self, nombre, id_tiempo):
         self.nombre = nombre
         self.id_tiempo = id_tiempo
+
+class ExpresionConstante(Expresion):
+    def __init__(self, nombre, id_constate):
+        self.nombre = nombre
+        self.id_constate = id_constate
