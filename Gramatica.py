@@ -975,15 +975,15 @@ def p_Expresion_Atributos(t):
 # -----------------------------------------------------------------------------------------------------------------
 # SUBCONSULTAS
 
-def p_Query_Ate(t):
-    'QUERY : expresion  PARIZQ QUE_SUBS PARDER'
-    t[0]= AccesoSubConsultas(t[1],t[3],False)
+# def p_Query_Ate(t):
+#     QUERY : expresion  PARIZQ QUE_SUBS PARDER
+#     t[0]= AccesoSubConsultas(t[1],t[3],False)
 
 
 
-def p_Query_AteAs(t):
-    'QUERY : expresion PARIZQ QUE_SUBS  PARDER AS_NO'
-    t[0] = AccesoSubConsultas(t[1], t[3], t[5])
+# def p_Query_AteAs(t):
+#     QUERY : expresion PARIZQ QUE_SUBS  PARDER AS_NO
+#     t[0] = AccesoSubConsultas(t[1], t[3], t[5])
 
 
 
@@ -1793,7 +1793,18 @@ def p_Tipo_Tiempo(t):
                         | MINUTE
                         | SECOND '''
     t[0] = t[1]
-
+    if t[1] == 'YEAR':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.YEAR)
+    elif t[1] == 'MONTH':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MONTH)
+    elif t[1] == 'DAY':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.DAY)
+    elif t[1] == 'HOUR':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.HOUR)
+    elif t[1] == 'MINUTE':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MINUTE)
+    elif t[1] == 'SECOND':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND)
 
 def p_instruccion_tiempo2(t):
     'DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA'
@@ -2012,8 +2023,8 @@ def p_expresion_logica_predicados_4(t):
         t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IS_NOT_UNKNOWN)
 
 def p_expresion_logica_exists_sub(t):
-    '''expresion_logica : EXISTS '''
-    t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.EXISTS)
+    '''expresion_logica : EXISTS expresion_aritmetica'''
+    t[0] = ExpresionLogica(t[2], None, OPERACION_LOGICA.EXISTS)
 
 def p_expresion_logica_not_exists_sub(t):
     '''expresion_logica : NOT EXISTS '''
@@ -2022,12 +2033,12 @@ def p_expresion_logica_not_exists_sub(t):
 
 
 def p_expresion_logica_in(t):
-    '''expresion_logica : expresion_aritmetica IN
-                        | expresion_aritmetica NOT IN '''
+    '''expresion_logica : expresion_aritmetica IN expresion_aritmetica
+                        | expresion_aritmetica NOT IN expresion_aritmetica'''
     if t[2] == 'IN':
-        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IN)
+        t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.IN)
     elif t[2] == 'NOT':
-        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.NOT_IN)
+        t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.NOT_IN)
 
 
 
@@ -2157,7 +2168,9 @@ def p_funciones_math(t):
                             | CONVERT PARIZQ expresion_aritmetica AS TIPO_CAMPO PARDER
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
-                            | NOW PARIZQ PARDER'''
+                            | NOW PARIZQ PARDER
+                            | EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER
+                            | DATE_PART PARIZQ expresion_aritmetica COMA INTERVAL expresion_aritmetica PARDER'''
     if t[1] == 'ABS':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ABS)
     elif t[1] == 'CBRT':
@@ -2268,13 +2281,11 @@ def p_funciones_math(t):
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.RANDOM)
     elif t[1] == 'NOW':
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW)
+    elif t[1] == 'EXTRACT':
+        t[0] = ExpresionFuncion(t[3], ExpresionValor(t[6]), None, None, FUNCION_NATIVA.EXTRACT)
+    elif t[1] == 'DATE_PART':
+        t[0] = ExpresionFuncion(t[3], t[6], None, None, FUNCION_NATIVA.DATE_PART)
 
-# def p_expnumerica(t):
-#     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
-#                    | EXPNUMERICA DIVISION EXPNUMERICA
-#                    | EXPNUMERICA PORCENTAJE EXPNUMERICA
-#                    | EXPNUMERICA MENOS EXPNUMERICA
-#                    | EXPNUMERICA MAS EXPNUMERICA'''
 
 def p_expresion_binario(t):
     '''expresion_aritmetica : expresion_aritmetica AMPERSAND expresion_aritmetica

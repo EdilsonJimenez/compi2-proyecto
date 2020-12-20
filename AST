@@ -2,6 +2,7 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
+<<<<<<< HEAD
 	Node1 [label=INSTRUCCION_SELECT]
 	Node0 -> Node1
 	Node2 [label=SELECT]
@@ -42,4 +43,56 @@ digraph AST {
 	Node18 -> Node19
 	Node20 [label=";"]
 	Node19 -> Node20
+=======
+	Node1 [label=INSERT]
+	Node0 -> Node1
+	Node2 [label="ID TABLA"]
+	Node1 -> Node2
+	Node3 [label=profesional]
+	Node2 -> Node3
+	Node4 [label="VALORES TABLA"]
+	Node1 -> Node4
+	Node5 [label="VALOR NUEVO"]
+	Node4 -> Node5
+	6 [label="ExpresionFUNCION NATIVA"]
+	7 [label=EXTRACT]
+	6 -> 7
+	8 [label=exp1]
+	6 -> 8
+	8 -> 9
+	9 [label=exp2]
+	6 -> 9
+	9 -> 10
+	10 [label=ExpresionValor]
+	10 -> 11
+	11 [label="2001-02-16 20:38:40"]
+	Node5 -> 6
+	Node13 [label="VALOR NUEVO"]
+	Node4 -> Node13
+	14 [label="ExpresionFUNCION NATIVA"]
+	15 [label=DATE_PART]
+	14 -> 15
+	16 [label=exp1]
+	14 -> 16
+	16 -> 17
+	17 [label=ExpresionValor]
+	17 -> 18
+	18 [label=hour]
+	19 [label=exp2]
+	14 -> 19
+	19 -> 20
+	20 [label=ExpresionValor]
+	20 -> 21
+	21 [label="4 hours 3 minutes"]
+	Node13 -> 14
+	Node23 [label="VALOR NUEVO"]
+	Node4 -> Node23
+	Node23 -> 24
+	Node25 [label="VALOR NUEVO"]
+	Node4 -> Node25
+	26 [label=ExpresionValor]
+	26 -> 27
+	27 [label=FALSE]
+	Node25 -> 26
+>>>>>>> 196bb4de936be54ca0cd05230387d6399e166146
 }
