@@ -24,6 +24,11 @@ def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
+#def gets(data2):
+#    for data in diccionario:
+#       if (data2 == diccionario.get(data)[0]):
+#            return data
+#    return 0
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -36,11 +41,25 @@ if __name__ == '__main__':
     #r = JSON_INGE.insert("base1", "tabla1", Lista2)
     r2 = JSON_INGE.update("base1", "tabla1", d, ["1"])
 
-    #diccionario={0:[2,"23","2323"],1:[4,"232","34fd"],2:[4,"opo","wewew"]}
 
-    #dicc = sorted(diccionario.items([0]))
+   #  diccionario={0:[6,"23","2323"],1:[3,"232","34fd"],2:[9,"opo","wewew"]}
+   #  diccionario2={}
+   # #diccionario2 = sorted(diccionario.get()[0])
+   #  lista=[]
+   #  indice=0
+   #  for n in diccionario:
+   #      lista.append(diccionario.get(n)[0])
+   #  print(lista)
+   #  for n2 in sorted(lista):
+   #      diccionario2[gets(n2)]=diccionario.get(gets(n2))
+   #  print(diccionario2)
+
+
+
+
+
+
     #print(dicc)
-
     #Inter.limpiarValores()
     #Inter.inicializarTS()
 

@@ -8,6 +8,9 @@ from prettytable import PrettyTable
 from random import *
 from expresiones import *
 
+from prettytable import PrettyTable
+
+
 LisErr = TablaError([])
 ts_global = TS.TablaDeSimbolos()
 Lista = []
@@ -31,9 +34,10 @@ class Instruccion():
         pass
 
 
+
+
 def imprir(string):
     global Ejecucion
-
     Ejecucion += string + "\n"
     Lista.clear();
     Lista.append(Ejecucion)
@@ -397,21 +401,24 @@ class Select(Instruccion) :
                    AliasTabla = ee.Lista_Alias
                    # Tenemos el alias
                    AliasT = AliasTabla.Alias
+
                    # Recorremos el diccionario general para ver si existe la tabla que queremos
                    # recorremos lista General de Tablas
                    for elemento2 in ts_global.Tablas:
                        x: CreateTable = ts_global.obtenerTabla(elemento2)
+
                        if (str(x.id) == str(ee.NombreT)):
                            # si es la tabla validamos que tipo de campo viene
                            for ii in self.Lista_Campos:
+
+
                                if (isinstance(ii,Campo_AccedidoSinLista)):  # nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
                                    # *  , nombrecampo,  nombrecampo alias
                                    # listaGeneral
                                    for ele in x.cuerpo:  # recorremos lista de columnas
                                        y: CampoTabla = ele
                                        if (str(y.id) == str(ii.Columna)):
-                                           print("LA columan " + str(
-                                               ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
                                            # Bamos a sacar todos los datos coincidentes
                                            # recorremos datos
                                            # Vallidamos que la no venga sin datos
@@ -426,8 +433,10 @@ class Select(Instruccion) :
                                                            lista.append(str(t.valor))
 
                                                    listaGeneral[ii.Columna] = lista
+
                                                else:
                                                    print("")
+
                                            else:
                                                i = ts_global.Datos
                                                lista = []
@@ -437,10 +446,12 @@ class Select(Instruccion) :
                                                        print(str(t.valor))
                                                        lista.append(str(t.valor))
                                                listaGeneral[ii.Columna] = lista
+
                                        elif (str(ii.Columna) == "*"):
                                            print("Vienen todo los datos de la tabla")
                                            # Vallidamos que la no venga sin datos
                                            if (ii.NombreT != ""):
+
                                                # hacemos una doble condicion para agarrar la columna que es
                                                if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
@@ -469,17 +480,21 @@ class Select(Instruccion) :
                                                    listaGeneral[pp.id] = Lista2
                                        else:
                                            print("")
-                               elif (isinstance(ii, Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                               elif (isinstance(ii,Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
                                    # listaGeneral
                                    for ele in x.cuerpo:
                                        y: CampoTabla = ele
                                        if (y.id == ii.Columna):
                                            print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
                                            # verificamos el alias
+
                                            ListaAlias = ii.Lista_Alias
                                            # Tenemos el alias
                                            nuevoNave = ListaAlias.Alias
                                            print("ahora la columna se llama" + str(nuevoNave))
+
                                            # Bamos a sacar todos los datos coincidentes
                                            # Vallidamos que la no venga sin datos
                                            if (ii.NombreT != ""):
@@ -504,12 +519,14 @@ class Select(Instruccion) :
                                                        print(str(t.valor))
                                                        lista.append(str(t.valor))
                                                listaGeneral[str(nuevoNave)] = lista
+
                                        elif (y.id == '*'):
                                            # Recorrer todos los datos de la columna
                                            print("Vienen todo los datos  los datos de esa columna")
                                            ListaAlias = ii.Lista_Alias
                                            # Tenemos el alias
                                            nuevoNave = ListaAlias.Alias
+
                                            # Vallidamos que la no venga sin datos
                                            if (ii.NombreT != ""):
                                                # hacemos una doble condicion para agarrar la columna que es
@@ -551,7 +568,6 @@ class Select(Instruccion) :
         print(listaGeneral)
         mostrarConsulta(listaGeneral)
         listaGeneral.clear()
-
 
 
 
@@ -942,13 +958,40 @@ class Select2(Instruccion) :
                     for r in resultado:
                         print(">>"+str(r.valor))
 
+
+
+
             elif (isinstance(tiposCuerpo, GroupBy)):
                 print("Vamos a ver los tipos de grupos a realizar ")
                 # Recorremos diccionario
                 # for item in listaGeneral:
                 #    print("dfdsf")
+
+
+
             elif (isinstance(tiposCuerpo, OrderBy)):
                 print("Vamos a ordenar  segun lo que venga ")
+
+                #Diccionarios auxiliares
+                #ListaN ={}
+                # listas Auxiliares
+
+                #Esta lista tendra concatenado tanto el nombre o con el alias
+                #listaColumnas=[]
+
+                #Recorremos lista General
+                #contador=0
+
+                #primero llenamos el nuevo diccionario  amarrando las tuplas
+                #for campo in listaGeneral:
+                #    for datos listaGeneral.get(campo)
+
+
+
+
+
+
+
 
 
 
@@ -1143,8 +1186,6 @@ class Select3(Instruccion):
                                                                 pass
                                                             # fin comparacion insert
                                                     listaGeneral[pp.id] = Lista2
-
-
                                         else:
                                             print("")
 
@@ -1578,6 +1619,12 @@ class Select3(Instruccion):
         else:
             imprir("SELECT : No existe la base de datos acual")
 
+
+
+
+
+
+
         # primero obtener la primera lista
         miCuenta = 0
         titulo = []
@@ -1601,6 +1648,7 @@ class Select3(Instruccion):
 
         nuevoDic = {}
         resdistinct = []
+
         for reg in primera:  # [a, b, c]
             p: DatoInsert = reg
             for t in titulo:  # [carne, apellido]
@@ -1667,7 +1715,382 @@ class Select4(Instruccion) :
         self.Cuerpo = Cuerpo
 
     def Ejecutar(self):
-        print("Ejecutando  Select ")
+
+        global ts_global, baseActual
+        global LisErr
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+
+
+        if r is not None:
+
+
+           for ee in self.Nombres_Tablas:
+
+
+               if(isinstance(ee,AccesoTablaSinLista)): #viene sin alias
+
+
+                   #Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+
+                       if (str(x.id) == str(ee.NombreT)):
+                          #si es la tabla validamos que tipo de campo viene
+
+
+
+                            for ii in self.Lista_Campos:
+                                if(isinstance(ii,Campo_AccedidoSinLista)): #nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                    #*  , nombrecampo,  nombrecampo alias
+                                    #listaGeneral
+                                    for ele in x.cuerpo: #recorremos lista de columnas
+                                        y:CampoTabla = ele
+                                        if (str(y.id) == str(ii.Columna)):
+
+
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                            #Bamos a sacar todos los datos coincidentes
+                                            #recorremos datos
+
+                                            #Vallidamos que la no venga sin datos
+                                            print(ii.NombreT)
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+
+                                                if(str(x.id)==ii.NombreT):
+                                                    print("Estoy entrando <<<<<<<<<<<<<<<<<<<<< ")
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[ii.Columna] = lista
+                                                else:
+                                                    print("")
+
+                                            else:
+
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[ii.Columna] = lista
+
+
+                                        elif(str(ii.Columna) == "*"):
+                                            print("Vienen todo los datos de la tabla")
+
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT!=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[pp.id] = Lista2
+
+                                            #viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[pp.id] = Lista2
+
+
+                                        else:
+                                            print("")
+
+                                elif(isinstance(ii,Campo_Accedido)): # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                    #listaGeneral
+                                    for ele in x.cuerpo:
+                                        y: CampoTabla = ele
+
+                                        if (y.id == ii.Columna):
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+
+                                            #verificamos el alias
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+                                            print("ahora la columna se llama"+str(nuevoNave))
+
+                                            # Bamos a sacar todos los datos coincidentes
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = lista
+                                                else:
+                                                    print("")
+                                            else:
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[str(nuevoNave)] = lista
+
+
+                                        elif(y.id == '*'):
+                                            #Recorrer todos los datos de la columna
+                                            print("Vienen todo los datos  los datos de esa columna")
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+
+                                            # Vallidamos que la no venga sin datos
+                                            if (ii.NombreT != ""):
+                                                # hacemos una doble condicion para agarrar la columna que es
+                                                if (str(x.id) == ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[str(nuevoNave)] = Lista2
+
+                                            # viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = Lista2
+                                        else:
+                                            print("")
+                                else:
+                                    print("Otros posibles tipos ")
+                       else:
+                           print("")
+#============================================================================   Acceso a las tablas con alias
+               elif(isinstance(ee,AccesoTabla)): #viene con un alias
+
+                   # verificamos el alias
+                   AliasTabla = ee.Lista_Alias
+                   # Tenemos el alias
+                   AliasT = AliasTabla.Alias
+
+                   # Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                       if (str(x.id) == str(ee.NombreT)):
+                           # si es la tabla validamos que tipo de campo viene
+                           for ii in self.Lista_Campos:
+
+
+                               if (isinstance(ii,Campo_AccedidoSinLista)):  # nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                   # *  , nombrecampo,  nombrecampo alias
+                                   # listaGeneral
+                                   for ele in x.cuerpo:  # recorremos lista de columnas
+                                       y: CampoTabla = ele
+                                       if (str(y.id) == str(ii.Columna)):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # recorremos datos
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+
+                                                   listaGeneral[ii.Columna] = lista
+
+                                               else:
+                                                   print("")
+
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[ii.Columna] = lista
+
+                                       elif (str(ii.Columna) == "*"):
+                                           print("Vienen todo los datos de la tabla")
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[pp.id] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[pp.id] = Lista2
+                                       else:
+                                           print("")
+
+                               elif (isinstance(ii,Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                   # listaGeneral
+                                   for ele in x.cuerpo:
+                                       y: CampoTabla = ele
+                                       if (y.id == ii.Columna):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # verificamos el alias
+
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+                                           print("ahora la columna se llama" + str(nuevoNave))
+
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = lista
+                                               else:
+                                                   print("")
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[str(nuevoNave)] = lista
+
+                                       elif (y.id == '*'):
+                                           # Recorrer todos los datos de la columna
+                                           print("Vienen todo los datos  los datos de esa columna")
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[str(nuevoNave)] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = Lista2
+                                       else:
+                                           print("")
+                               else:
+                                   print("Otros posibles tipos ")
+                       else:
+                           print("")
+               else:
+                    imprir("Viene otro tipo de accion ")
+        else:
+            imprir("SELECT : No existe la base de datos acual")
+        print(listaGeneral)
+        mostrarConsulta(listaGeneral)
+        listaGeneral.clear()
+
 
 
 
@@ -1681,6 +2104,389 @@ class SubSelect(Instruccion) :
         self.Lista_Campos   = Lista_Campos
         self.Nombres_Tablas = Nombres_Tablas
 
+    def Ejecutar(self):
+
+        global ts_global, baseActual
+        global LisErr
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+
+
+        if r is not None:
+
+
+           for ee in self.Nombres_Tablas:
+
+
+               if(isinstance(ee,AccesoTablaSinLista)): #viene sin alias
+
+
+                   #Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+
+                       if (str(x.id) == str(ee.NombreT)):
+                          #si es la tabla validamos que tipo de campo viene
+
+
+
+                            for ii in self.Lista_Campos:
+                                if(isinstance(ii,Campo_AccedidoSinLista)): #nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                    #*  , nombrecampo,  nombrecampo alias
+                                    #listaGeneral
+                                    for ele in x.cuerpo: #recorremos lista de columnas
+                                        y:CampoTabla = ele
+                                        if (str(y.id) == str(ii.Columna)):
+
+
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                            #Bamos a sacar todos los datos coincidentes
+                                            #recorremos datos
+
+                                            #Vallidamos que la no venga sin datos
+                                            print(ii.NombreT)
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+
+                                                if(str(x.id)==ii.NombreT):
+                                                    print("Estoy entrando <<<<<<<<<<<<<<<<<<<<< ")
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[ii.Columna] = lista
+                                                else:
+                                                    print("")
+
+                                            else:
+
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[ii.Columna] = lista
+
+
+                                        elif(str(ii.Columna) == "*"):
+                                            print("Vienen todo los datos de la tabla")
+
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT!=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[pp.id] = Lista2
+
+                                            #viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[pp.id] = Lista2
+
+
+                                        else:
+                                            print("")
+
+                                elif(isinstance(ii,Campo_Accedido)): # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                    #listaGeneral
+                                    for ele in x.cuerpo:
+                                        y: CampoTabla = ele
+
+                                        if (y.id == ii.Columna):
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+
+                                            #verificamos el alias
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+                                            print("ahora la columna se llama"+str(nuevoNave))
+
+                                            # Bamos a sacar todos los datos coincidentes
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = lista
+                                                else:
+                                                    print("")
+                                            else:
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[str(nuevoNave)] = lista
+
+
+                                        elif(y.id == '*'):
+                                            #Recorrer todos los datos de la columna
+                                            print("Vienen todo los datos  los datos de esa columna")
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+
+                                            # Vallidamos que la no venga sin datos
+                                            if (ii.NombreT != ""):
+                                                # hacemos una doble condicion para agarrar la columna que es
+                                                if (str(x.id) == ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[str(nuevoNave)] = Lista2
+
+                                            # viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = Lista2
+                                        else:
+                                            print("")
+                                else:
+                                    print("Otros posibles tipos ")
+                       else:
+                           print("")
+#============================================================================   Acceso a las tablas con alias
+               elif(isinstance(ee,AccesoTabla)): #viene con un alias
+
+                   # verificamos el alias
+                   AliasTabla = ee.Lista_Alias
+                   # Tenemos el alias
+                   AliasT = AliasTabla.Alias
+
+                   # Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                       if (str(x.id) == str(ee.NombreT)):
+                           # si es la tabla validamos que tipo de campo viene
+                           for ii in self.Lista_Campos:
+
+
+                               if (isinstance(ii,Campo_AccedidoSinLista)):  # nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                   # *  , nombrecampo,  nombrecampo alias
+                                   # listaGeneral
+                                   for ele in x.cuerpo:  # recorremos lista de columnas
+                                       y: CampoTabla = ele
+                                       if (str(y.id) == str(ii.Columna)):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # recorremos datos
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+
+                                                   listaGeneral[ii.Columna] = lista
+
+                                               else:
+                                                   print("")
+
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[ii.Columna] = lista
+
+                                       elif (str(ii.Columna) == "*"):
+                                           print("Vienen todo los datos de la tabla")
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[pp.id] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[pp.id] = Lista2
+                                       else:
+                                           print("")
+
+                               elif (isinstance(ii,Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                   # listaGeneral
+                                   for ele in x.cuerpo:
+                                       y: CampoTabla = ele
+                                       if (y.id == ii.Columna):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # verificamos el alias
+
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+                                           print("ahora la columna se llama" + str(nuevoNave))
+
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = lista
+                                               else:
+                                                   print("")
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[str(nuevoNave)] = lista
+
+                                       elif (y.id == '*'):
+                                           # Recorrer todos los datos de la columna
+                                           print("Vienen todo los datos  los datos de esa columna")
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[str(nuevoNave)] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = Lista2
+                                       else:
+                                           print("")
+                               else:
+                                   print("Otros posibles tipos ")
+                       else:
+                           print("")
+               else:
+                    imprir("Viene otro tipo de accion ")
+        else:
+            imprir("SELECT : No existe la base de datos acual")
+        print(listaGeneral)
+        mostrarConsulta(listaGeneral)
+        listaGeneral.clear()
+
+
+
+
+
+
+
 #subSelect con cuerpo
 #---------------------------------------------------------------------------------------------------
 class SubSelect2(Instruccion) :
@@ -1688,6 +2494,389 @@ class SubSelect2(Instruccion) :
         self.Lista_Campos   = Lista_Campos
         self.Nombres_Tablas = Nombres_Tablas
         self.Cuerpo = Cuerpo
+
+    def Ejecutar(self):
+
+        global ts_global, baseActual
+        global LisErr
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+
+
+        if r is not None:
+
+
+           for ee in self.Nombres_Tablas:
+
+
+               if(isinstance(ee,AccesoTablaSinLista)): #viene sin alias
+
+
+                   #Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+
+                       if (str(x.id) == str(ee.NombreT)):
+                          #si es la tabla validamos que tipo de campo viene
+
+
+
+                            for ii in self.Lista_Campos:
+                                if(isinstance(ii,Campo_AccedidoSinLista)): #nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                    #*  , nombrecampo,  nombrecampo alias
+                                    #listaGeneral
+                                    for ele in x.cuerpo: #recorremos lista de columnas
+                                        y:CampoTabla = ele
+                                        if (str(y.id) == str(ii.Columna)):
+
+
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                            #Bamos a sacar todos los datos coincidentes
+                                            #recorremos datos
+
+                                            #Vallidamos que la no venga sin datos
+                                            print(ii.NombreT)
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+
+                                                if(str(x.id)==ii.NombreT):
+                                                    print("Estoy entrando <<<<<<<<<<<<<<<<<<<<< ")
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[ii.Columna] = lista
+                                                else:
+                                                    print("")
+
+                                            else:
+
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[ii.Columna] = lista
+
+
+                                        elif(str(ii.Columna) == "*"):
+                                            print("Vienen todo los datos de la tabla")
+
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT!=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[pp.id] = Lista2
+
+                                            #viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[pp.id] = Lista2
+
+
+                                        else:
+                                            print("")
+
+                                elif(isinstance(ii,Campo_Accedido)): # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                    #listaGeneral
+                                    for ele in x.cuerpo:
+                                        y: CampoTabla = ele
+
+                                        if (y.id == ii.Columna):
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+
+                                            #verificamos el alias
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+                                            print("ahora la columna se llama"+str(nuevoNave))
+
+                                            # Bamos a sacar todos los datos coincidentes
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = lista
+                                                else:
+                                                    print("")
+                                            else:
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[str(nuevoNave)] = lista
+
+
+                                        elif(y.id == '*'):
+                                            #Recorrer todos los datos de la columna
+                                            print("Vienen todo los datos  los datos de esa columna")
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+
+                                            # Vallidamos que la no venga sin datos
+                                            if (ii.NombreT != ""):
+                                                # hacemos una doble condicion para agarrar la columna que es
+                                                if (str(x.id) == ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[str(nuevoNave)] = Lista2
+
+                                            # viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = Lista2
+                                        else:
+                                            print("")
+                                else:
+                                    print("Otros posibles tipos ")
+                       else:
+                           print("")
+#============================================================================   Acceso a las tablas con alias
+               elif(isinstance(ee,AccesoTabla)): #viene con un alias
+
+                   # verificamos el alias
+                   AliasTabla = ee.Lista_Alias
+                   # Tenemos el alias
+                   AliasT = AliasTabla.Alias
+
+                   # Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                       if (str(x.id) == str(ee.NombreT)):
+                           # si es la tabla validamos que tipo de campo viene
+                           for ii in self.Lista_Campos:
+
+
+                               if (isinstance(ii,Campo_AccedidoSinLista)):  # nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                   # *  , nombrecampo,  nombrecampo alias
+                                   # listaGeneral
+                                   for ele in x.cuerpo:  # recorremos lista de columnas
+                                       y: CampoTabla = ele
+                                       if (str(y.id) == str(ii.Columna)):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # recorremos datos
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+
+                                                   listaGeneral[ii.Columna] = lista
+
+                                               else:
+                                                   print("")
+
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[ii.Columna] = lista
+
+                                       elif (str(ii.Columna) == "*"):
+                                           print("Vienen todo los datos de la tabla")
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[pp.id] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[pp.id] = Lista2
+                                       else:
+                                           print("")
+
+                               elif (isinstance(ii,Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                   # listaGeneral
+                                   for ele in x.cuerpo:
+                                       y: CampoTabla = ele
+                                       if (y.id == ii.Columna):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # verificamos el alias
+
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+                                           print("ahora la columna se llama" + str(nuevoNave))
+
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = lista
+                                               else:
+                                                   print("")
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[str(nuevoNave)] = lista
+
+                                       elif (y.id == '*'):
+                                           # Recorrer todos los datos de la columna
+                                           print("Vienen todo los datos  los datos de esa columna")
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[str(nuevoNave)] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = Lista2
+                                       else:
+                                           print("")
+                               else:
+                                   print("Otros posibles tipos ")
+                       else:
+                           print("")
+               else:
+                    imprir("Viene otro tipo de accion ")
+        else:
+            imprir("SELECT : No existe la base de datos acual")
+        print(listaGeneral)
+        mostrarConsulta(listaGeneral)
+        listaGeneral.clear()
+
+
+
+
+
+
 
 #subSelect sin cuerpo con distict
 #---------------------------------------------------------------------------------------------------
@@ -1698,6 +2887,387 @@ class SubSelect3(Instruccion) :
         self.Lista_Campos   = Lista_Campos
         self.Nombres_Tablas = Nombres_Tablas
 
+    def Ejecutar(self):
+
+        global ts_global, baseActual
+        global LisErr
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+
+
+        if r is not None:
+
+
+           for ee in self.Nombres_Tablas:
+
+
+               if(isinstance(ee,AccesoTablaSinLista)): #viene sin alias
+
+
+                   #Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+
+                       if (str(x.id) == str(ee.NombreT)):
+                          #si es la tabla validamos que tipo de campo viene
+
+
+
+                            for ii in self.Lista_Campos:
+                                if(isinstance(ii,Campo_AccedidoSinLista)): #nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                    #*  , nombrecampo,  nombrecampo alias
+                                    #listaGeneral
+                                    for ele in x.cuerpo: #recorremos lista de columnas
+                                        y:CampoTabla = ele
+                                        if (str(y.id) == str(ii.Columna)):
+
+
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                            #Bamos a sacar todos los datos coincidentes
+                                            #recorremos datos
+
+                                            #Vallidamos que la no venga sin datos
+                                            print(ii.NombreT)
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+
+                                                if(str(x.id)==ii.NombreT):
+                                                    print("Estoy entrando <<<<<<<<<<<<<<<<<<<<< ")
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[ii.Columna] = lista
+                                                else:
+                                                    print("")
+
+                                            else:
+
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[ii.Columna] = lista
+
+
+                                        elif(str(ii.Columna) == "*"):
+                                            print("Vienen todo los datos de la tabla")
+
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT!=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[pp.id] = Lista2
+
+                                            #viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[pp.id] = Lista2
+
+
+                                        else:
+                                            print("")
+
+                                elif(isinstance(ii,Campo_Accedido)): # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                    #listaGeneral
+                                    for ele in x.cuerpo:
+                                        y: CampoTabla = ele
+
+                                        if (y.id == ii.Columna):
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+
+                                            #verificamos el alias
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+                                            print("ahora la columna se llama"+str(nuevoNave))
+
+                                            # Bamos a sacar todos los datos coincidentes
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = lista
+                                                else:
+                                                    print("")
+                                            else:
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[str(nuevoNave)] = lista
+
+
+                                        elif(y.id == '*'):
+                                            #Recorrer todos los datos de la columna
+                                            print("Vienen todo los datos  los datos de esa columna")
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+
+                                            # Vallidamos que la no venga sin datos
+                                            if (ii.NombreT != ""):
+                                                # hacemos una doble condicion para agarrar la columna que es
+                                                if (str(x.id) == ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[str(nuevoNave)] = Lista2
+
+                                            # viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = Lista2
+                                        else:
+                                            print("")
+                                else:
+                                    print("Otros posibles tipos ")
+                       else:
+                           print("")
+#============================================================================   Acceso a las tablas con alias
+               elif(isinstance(ee,AccesoTabla)): #viene con un alias
+
+                   # verificamos el alias
+                   AliasTabla = ee.Lista_Alias
+                   # Tenemos el alias
+                   AliasT = AliasTabla.Alias
+
+                   # Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                       if (str(x.id) == str(ee.NombreT)):
+                           # si es la tabla validamos que tipo de campo viene
+                           for ii in self.Lista_Campos:
+
+
+                               if (isinstance(ii,Campo_AccedidoSinLista)):  # nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                   # *  , nombrecampo,  nombrecampo alias
+                                   # listaGeneral
+                                   for ele in x.cuerpo:  # recorremos lista de columnas
+                                       y: CampoTabla = ele
+                                       if (str(y.id) == str(ii.Columna)):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # recorremos datos
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+
+                                                   listaGeneral[ii.Columna] = lista
+
+                                               else:
+                                                   print("")
+
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[ii.Columna] = lista
+
+                                       elif (str(ii.Columna) == "*"):
+                                           print("Vienen todo los datos de la tabla")
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[pp.id] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[pp.id] = Lista2
+                                       else:
+                                           print("")
+
+                               elif (isinstance(ii,Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                   # listaGeneral
+                                   for ele in x.cuerpo:
+                                       y: CampoTabla = ele
+                                       if (y.id == ii.Columna):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # verificamos el alias
+
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+                                           print("ahora la columna se llama" + str(nuevoNave))
+
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = lista
+                                               else:
+                                                   print("")
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[str(nuevoNave)] = lista
+
+                                       elif (y.id == '*'):
+                                           # Recorrer todos los datos de la columna
+                                           print("Vienen todo los datos  los datos de esa columna")
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[str(nuevoNave)] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = Lista2
+                                       else:
+                                           print("")
+                               else:
+                                   print("Otros posibles tipos ")
+                       else:
+                           print("")
+               else:
+                    imprir("Viene otro tipo de accion ")
+        else:
+            imprir("SELECT : No existe la base de datos acual")
+        print(listaGeneral)
+        mostrarConsulta(listaGeneral)
+        listaGeneral.clear()
+
+
+
+
+
 #subSelect con cuerpo con distict
 #---------------------------------------------------------------------------------------------------
 class SubSelect4(Instruccion) :
@@ -1707,6 +3277,382 @@ class SubSelect4(Instruccion) :
         self.Nombres_Tablas = Nombres_Tablas
         self.Cuerpo = Cuerpo
 
+    def Ejecutar(self):
+
+        global ts_global, baseActual
+        global LisErr
+        r = ts_global.obtenerBasesDatos(baseActual)  # buscamos en el diccionario de la base de datos
+
+
+        if r is not None:
+
+
+           for ee in self.Nombres_Tablas:
+
+
+               if(isinstance(ee,AccesoTablaSinLista)): #viene sin alias
+
+
+                   #Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+
+                       if (str(x.id) == str(ee.NombreT)):
+                          #si es la tabla validamos que tipo de campo viene
+
+
+
+                            for ii in self.Lista_Campos:
+                                if(isinstance(ii,Campo_AccedidoSinLista)): #nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                    #*  , nombrecampo,  nombrecampo alias
+                                    #listaGeneral
+                                    for ele in x.cuerpo: #recorremos lista de columnas
+                                        y:CampoTabla = ele
+                                        if (str(y.id) == str(ii.Columna)):
+
+
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                            #Bamos a sacar todos los datos coincidentes
+                                            #recorremos datos
+
+                                            #Vallidamos que la no venga sin datos
+                                            print(ii.NombreT)
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+
+                                                if(str(x.id)==ii.NombreT):
+                                                    print("Estoy entrando <<<<<<<<<<<<<<<<<<<<< ")
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[ii.Columna] = lista
+                                                else:
+                                                    print("")
+
+                                            else:
+
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[ii.Columna] = lista
+
+
+                                        elif(str(ii.Columna) == "*"):
+                                            print("Vienen todo los datos de la tabla")
+
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT!=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[pp.id] = Lista2
+
+                                            #viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[pp.id] = Lista2
+
+
+                                        else:
+                                            print("")
+
+                                elif(isinstance(ii,Campo_Accedido)): # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                    #listaGeneral
+                                    for ele in x.cuerpo:
+                                        y: CampoTabla = ele
+
+                                        if (y.id == ii.Columna):
+                                            print("LA columan "+str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+
+                                            #verificamos el alias
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+                                            print("ahora la columna se llama"+str(nuevoNave))
+
+                                            # Bamos a sacar todos los datos coincidentes
+                                            #Vallidamos que la no venga sin datos
+                                            if(ii.NombreT !=""):
+                                                #hacemos una doble condicion para agarrar la columna que es
+                                                if(str(x.id)==ii.NombreT):
+                                                    i = ts_global.Datos
+                                                    lista = []
+                                                    for gg in ts_global.Datos:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                        if (str(t.columna) == str(ii.Columna)):
+                                                            print(str(t.valor))
+
+                                                            lista.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = lista
+                                                else:
+                                                    print("")
+                                            else:
+                                                i = ts_global.Datos
+                                                lista = []
+                                                for gg in ts_global.Datos:
+                                                    t: DatoInsert = ts_global.obtenerDato(gg)
+
+                                                    if (str(t.columna) == str(ii.Columna)):
+                                                        print(str(t.valor))
+                                                        lista.append(str(t.valor))
+                                                listaGeneral[str(nuevoNave)] = lista
+
+
+                                        elif(y.id == '*'):
+                                            #Recorrer todos los datos de la columna
+                                            print("Vienen todo los datos  los datos de esa columna")
+
+                                            ListaAlias = ii.Lista_Alias
+                                            #Tenemos el alias
+                                            nuevoNave = ListaAlias.Alias
+
+                                            # Vallidamos que la no venga sin datos
+                                            if (ii.NombreT != ""):
+                                                # hacemos una doble condicion para agarrar la columna que es
+                                                if (str(x.id) == ii.NombreT):
+
+                                                    # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                    for columnas in x.cuerpo:
+                                                        pp: CampoTabla = columnas
+                                                        Lista2 = []
+                                                        i = ts_global.Datos
+                                                        for gg in i:
+                                                            t: DatoInsert = ts_global.obtenerDato(gg)
+                                                            if (pp.id == t.columna):
+                                                                print(str(t.valor))
+                                                                Lista2.append(str(t.valor))
+                                                        listaGeneral[str(nuevoNave)] = Lista2
+
+                                            # viene sin referencia a tabla
+                                            else:
+                                                # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                for columnas in x.cuerpo:
+                                                    pp: CampoTabla = columnas
+                                                    Lista2 = []
+                                                    i = ts_global.Datos
+                                                    for gg in i:
+                                                        t: DatoInsert = ts_global.obtenerDato(gg)
+                                                        if (pp.id == t.columna):
+                                                            print(str(t.valor))
+                                                            Lista2.append(str(t.valor))
+                                                    listaGeneral[str(nuevoNave)] = Lista2
+                                        else:
+                                            print("")
+                                else:
+                                    print("Otros posibles tipos ")
+                       else:
+                           print("")
+#============================================================================   Acceso a las tablas con alias
+               elif(isinstance(ee,AccesoTabla)): #viene con un alias
+
+                   # verificamos el alias
+                   AliasTabla = ee.Lista_Alias
+                   # Tenemos el alias
+                   AliasT = AliasTabla.Alias
+
+                   # Recorremos el diccionario general para ver si existe la tabla que queremos
+                   # recorremos lista General de Tablas
+                   for elemento2 in ts_global.Tablas:
+                       x: CreateTable = ts_global.obtenerTabla(elemento2)
+
+                       if (str(x.id) == str(ee.NombreT)):
+                           # si es la tabla validamos que tipo de campo viene
+                           for ii in self.Lista_Campos:
+
+
+                               if (isinstance(ii,Campo_AccedidoSinLista)):  # nombrecampo   #nombretabla.nombrecampo     # select * from tabla1;    sin alias
+                                   # *  , nombrecampo,  nombrecampo alias
+                                   # listaGeneral
+                                   for ele in x.cuerpo:  # recorremos lista de columnas
+                                       y: CampoTabla = ele
+                                       if (str(y.id) == str(ii.Columna)):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # recorremos datos
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+
+                                                   listaGeneral[ii.Columna] = lista
+
+                                               else:
+                                                   print("")
+
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[ii.Columna] = lista
+
+                                       elif (str(ii.Columna) == "*"):
+                                           print("Vienen todo los datos de la tabla")
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[pp.id] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[pp.id] = Lista2
+                                       else:
+                                           print("")
+
+                               elif (isinstance(ii,Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
+
+                                   # listaGeneral
+                                   for ele in x.cuerpo:
+                                       y: CampoTabla = ele
+                                       if (y.id == ii.Columna):
+                                           print("LA columan " + str(ii.Columna) + "Esta en la tabla y bamos a retornar sus valores")
+                                           # verificamos el alias
+
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+                                           print("ahora la columna se llama" + str(nuevoNave))
+
+                                           # Bamos a sacar todos los datos coincidentes
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   i = ts_global.Datos
+                                                   lista = []
+                                                   for gg in ts_global.Datos:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (str(t.columna) == str(ii.Columna)):
+                                                           print(str(t.valor))
+                                                           lista.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = lista
+                                               else:
+                                                   print("")
+                                           else:
+                                               i = ts_global.Datos
+                                               lista = []
+                                               for gg in ts_global.Datos:
+                                                   t: DatoInsert = ts_global.obtenerDato(gg)
+                                                   if (str(t.columna) == str(ii.Columna)):
+                                                       print(str(t.valor))
+                                                       lista.append(str(t.valor))
+                                               listaGeneral[str(nuevoNave)] = lista
+
+                                       elif (y.id == '*'):
+                                           # Recorrer todos los datos de la columna
+                                           print("Vienen todo los datos  los datos de esa columna")
+                                           ListaAlias = ii.Lista_Alias
+                                           # Tenemos el alias
+                                           nuevoNave = ListaAlias.Alias
+
+                                           # Vallidamos que la no venga sin datos
+                                           if (ii.NombreT != ""):
+                                               # hacemos una doble condicion para agarrar la columna que es
+                                               if (str(x.id) == ii.NombreT or str(AliasT) == ii.NombreT):
+                                                   # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                                   for columnas in x.cuerpo:
+                                                       pp: CampoTabla = columnas
+                                                       Lista2 = []
+                                                       i = ts_global.Datos
+                                                       for gg in i:
+                                                           t: DatoInsert = ts_global.obtenerDato(gg)
+                                                           if (pp.id == t.columna):
+                                                               print(str(t.valor))
+                                                               Lista2.append(str(t.valor))
+                                                       listaGeneral[str(nuevoNave)] = Lista2
+                                           # viene sin referencia a tabla
+                                           else:
+                                               # Recorremos todo de nuevo para ver si vienen las columnas propias de la tabla que estamos actualmente
+                                               for columnas in x.cuerpo:
+                                                   pp: CampoTabla = columnas
+                                                   Lista2 = []
+                                                   i = ts_global.Datos
+                                                   for gg in i:
+                                                       t: DatoInsert = ts_global.obtenerDato(gg)
+                                                       if (pp.id == t.columna):
+                                                           print(str(t.valor))
+                                                           Lista2.append(str(t.valor))
+                                                   listaGeneral[str(nuevoNave)] = Lista2
+                                       else:
+                                           print("")
+                               else:
+                                   print("Otros posibles tipos ")
+                       else:
+                           print("")
+               else:
+                    imprir("Viene otro tipo de accion ")
+        else:
+            imprir("SELECT : No existe la base de datos acual")
+        print(listaGeneral)
+        mostrarConsulta(listaGeneral)
+        listaGeneral.clear()
 
 
 

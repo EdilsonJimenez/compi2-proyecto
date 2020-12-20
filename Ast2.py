@@ -1714,6 +1714,14 @@ class Ast2:
             self.inc()
             padreID=self.i
             dot.node(str(padreID),str(expresiones.tablaid)+"."+str(expresiones.campoid))
+        elif isinstance(expresiones, Variable):
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), 'Variable')
+            dot.edge(str(padreID), str(padreID + 1))
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), str(expresiones.id))
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
         global  dot,tag,i
@@ -1765,6 +1773,7 @@ class Ast2:
         padreID=self.i
         dot.node(str(padreID),'Expresion'+tipo_exp)
         dot.edge(str(padreID),str(padreID+1))
+        print(expresion)
         if isinstance(expresion,UnitariaNegAritmetica):
             self.graficar_expresion(expresion.exp)
         else:
@@ -1946,6 +1955,10 @@ class Ast2:
             return '|'
         elif padreID==OPERACION_ARITMETICA.POTENCIA:
             return '^'
+        elif padreID == FUNCION_NATIVA.EXTRACT:
+            return 'EXTRACT'
+        elif padreID == FUNCION_NATIVA.DATE_PART:
+            return 'DATE_PART'
         else:
             return 'op'
 
