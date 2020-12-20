@@ -498,8 +498,17 @@ def p_ListaCampos_Lista(t):
 
 
 def p_Lista_NombreSss(t):
-    'LISTAA          : ID PUNTO CAMPOS S'
+    'LISTAA          : ID PUNTO ID LISTALIASS'
+
     t[0] = Campo_Accedido(t[1],t[3],t[4])
+
+
+def p_Lista_NombreSssAsterisco(t):
+    'LISTAA          : ID PUNTO ASTERISCO LISTALIASS'
+
+    t[0] = Campo_Accedido(t[1],t[3],t[4])
+
+
 
 
 def p_Lista_Nombre(t):
@@ -508,7 +517,7 @@ def p_Lista_Nombre(t):
 
 
 def p_Lista_CampoSs(t):
-    'LISTAA          : CAMPOS S'
+    'LISTAA          : CAMPOS LISTALIASS'
     t[0] = Campo_Accedido("", t[1], t[2])
 
 def p_Lista_Campo(t):
@@ -534,7 +543,6 @@ def p_Lista_COMAs(t):
 
 
 
-
 def p_Campos_ids(t):
     'CAMPOS          : ID'
     t[0] = t[1]
@@ -543,7 +551,7 @@ def p_Campos_expresion(t):
     'CAMPOS          : expresion'
     t[0] = str(t[1])
 
-def p_Campos_expresion(t):
+def p_Campos_expresionn(t):
     'CAMPOS          : ENTERO'
     t[0] = str(t[1])
 
@@ -562,21 +570,26 @@ def p_NombreT_idj(t):
 
 
 def p_Alias_id(t):
-    'ALIAS          : ID'
+    'ALIAS          :  ID'
     t[0] = t[1]
 
 
 def p_S_AsAlias(t):
-    'S          : AS ALIAS'
-    t[0] = Alias_Campos_ListaCamposSinLista(t[2])
+    """LISTALIASS  : AS ID
+                  |  ID """
+    if(str(t[1]).upper()=="AS"):
+       t[0] = Alias_Campos_ListaCamposSinLista(t[2])
+    else:
+       t[0] = Alias_Campos_ListaCamposSinLista(t[1])
 
 
-def p_S_Aliass(t):
-    'S          :  ALIAS '
-    t[0] = Alias_Campos_ListaCamposSinLista(t[1])
+
+#def p_S_Aliass(t):
+   # 'S          :  ALIAS'
+   # t[0] = Alias_Campos_ListaCamposSinLista(t[1])
 
 
-    # t[0] = str(t[1])
+
 
 
 # ------------------------------------------------------------------------------------------------------------------
