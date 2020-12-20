@@ -4,6 +4,7 @@
 from unittest import case
 import ply.lex as lex
 from errores import *
+import re
 from interprete import baseActual
 
 #TABLA DE ERRORES===============
@@ -1213,6 +1214,7 @@ def p_Create_TABLE_CAMPOS2(t):
     t[0] = CampoTabla(t[1], t[2], t[3])
 
 
+
 def p_Create_TABLE_CAMPOS3(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE '
     t[0] = constraintTabla(t[3], t[2], None, None, None, None)
@@ -1395,6 +1397,7 @@ def p_Create_TABLE_TIPO_CAMPO5(t):
 def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ expresion PARDER'
     t[0] = CampoValidacion(t[2], str("No viene check"))
+    print("-------------------------------------------- CONSTRAINT CHECK")
 
 
 # FIN CREATE TABLE
@@ -2040,7 +2043,7 @@ def p_valor_id(t):
 
 def p_valor_id_2(t):
     '''expresion_aritmetica : ID PUNTO ID'''
-    t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[1], TIPO_VARIABLE.TEMPORAL)
+    t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[3], TIPO_VARIABLE.TEMPORAL)
 
 def p_valor_number(t):
     '''expresion_aritmetica : ENTERO'''

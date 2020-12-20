@@ -921,7 +921,6 @@ class Select2(Instruccion) :
                                     print("Otros posibles tipos ")
                         else:
                             print("")
-
                 else:
                     imprir("Viene otro tipo de accion ")
         else:
@@ -936,12 +935,12 @@ class Select2(Instruccion) :
         for tiposCuerpo in self.Cuerpo:
             if (isinstance(tiposCuerpo, Cuerpo_TipoWhere)):
                 print("Vamos a ver condiciones y luego a mostrar datos de las condiciones")
-                if (isinstance(tiposCuerpo.Cuerpo, ExpresionAritmetica)):
-                    print("Tenemos que es de tipo expresion Aritmetica ")
-                elif (isinstance(tiposCuerpo.Cuerpo, ExpresionRelacional)):
-                    print("Tenemos que es de tipo expresion Relacional")
-                elif (isinstance(tiposCuerpo, ExpresionLogica)):
-                    print("Tenemos que es de tipo Expresion Logica")
+                resultado = Inter.procesar_expresion_select(tiposCuerpo.Cuerpo, ts_global)
+                if resultado is None:
+                    imprir("SELECT: No existen registros.")
+                else:
+                    for r in resultado:
+                        print(">>"+str(r.valor))
 
             elif (isinstance(tiposCuerpo, GroupBy)):
                 print("Vamos a ver los tipos de grupos a realizar ")
@@ -1627,7 +1626,6 @@ class Select3(Instruccion):
         mostrarConsulta(nuevoDic)
         nuevoDic.clear()
         listaGeneral.clear()
-
 
     def quitarIzq(self,Cadena):
         resultado = ""

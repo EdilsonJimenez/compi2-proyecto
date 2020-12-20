@@ -1,3 +1,109 @@
+CREATE DATABASE IF NOT EXISTS test
+    OWNER = root
+    MODE = 1;
+
+USE test;
+
+CREATE TABLE tbusuario (
+    idusuario integer NOT NULL primary key,
+	nombre varchar(50),
+	apellido varchar(50),
+	usuario varchar(15)  UNIQUE NOT NULL,
+	password varchar(15) NOT NULL,
+	fechacreacion date
+);
+
+CREATE TABLE tbrol (
+    idrol integer NOT NULL primary key,
+	rol varchar(15)
+);
+
+insert into tbrol values (1,'Administrador');
+insert into tbrol values (2,'Admin');
+insert into tbrol values (3,'Ventas');
+insert into tbusuario values(1,'Luis Fernando1','Salazar Rodriguez','lsalazar',MD5('paswword'),'10-11-42');
+insert into tbusuario values(1,'David Fernando2','Salazar Rodriguez','lFer',MD5('paswword'),'10-11-42');
+insert into tbusuario values(3,'Juan Fernando3','Salazar Rodriguez','DavidFer',MD5('paswword'),'10-11-42');
+
+select rol, usuario from tbrol, tbusuario
+where tbrol.idrol = tbusuario.idusuario AND tbrol.idrol = 2;
+************************************************************************************************************************
+CREATE DATABASE IF NOT EXISTS test
+    OWNER = root
+    MODE = 1;
+
+USE test;
+
+create table tbestado
+( idestado integer not null PRIMARY KEY,
+  estado varchar(30)
+);
+
+create table tbempleado
+( idempleado integer not null UNIQUE PRIMARY KEY,
+  primernombre varchar(50) not null,
+ segundonombre varchar(50),
+ primerapellido varchar(50) not null,
+ segundoapellido varchar(50),
+ fechadenacimiento DATE CONSTRAINT birth_data CHECK (fechadenacimiento > '1900-01-01'),
+ fechacontratacion DATE CHECK (fechacontratacion > fechadenacimiento),
+ idestado integer
+);
+
+ create table tbempleadoidentificacion(
+	idempleado integer not null primary key,
+	identificacion varchar(25) not null,
+	ididentificaciontipo integer
+);
+
+create table tbidentificaciontipo(
+	ididentificaciontipo integer not null primary key,
+	tipoidentificacion varchar(20)
+);
+
+insert into tbidentificaciontipo values(1,'DPI');
+insert into tbidentificaciontipo values(2,'Nit');
+insert into tbidentificaciontipo values(3,'Pasaporte');
+insert into tbestado values(1,'Activo');
+insert into tbestado values(2,'Inactivo');
+
+insert into tbestado values(1,'Activo');
+insert into tbestado values(2,'Inactivo');
+
+insert into tbempleado values(1,'Thelma','Esquit','-','-','1981-01-25','2014-07-06',1);
+insert into tbempleado values(1,'Thelma','Esquit','-','-''1981-01-25','2014-07-06',1);
+insert into tbempleado values(2,'Maria','Lopez','-','-','1990-12-01','2016-09-21',1);
+insert into tbempleado values(3,'Julio','Roberto','-','-','Rodriguez','1985-06-05','2012-01-22',1);
+insert into tbempleado values(4,'Roberto','Benjamin','-','-','Duque','1996-04-09','2018-10-03',1);
+insert into tbempleado values(5,'Francisco','','Juarez','-','-','Perez','1997-10-05','2010-03-01',1);
+
+insert into tbempleado values(5,'Francisco','','Juarez','Perez','-','1997-10-05','2010-03-01',1);
+
+insert into tbempleadoidentificacion values(1,'4578-784525-6562',1);
+insert into tbempleadoidentificacion values(1,'8874585-5',2);
+insert into tbempleadoidentificacion values(2,'1245-488454-7854',1);
+insert into tbempleadoidentificacion values(3,'2610-417055-0101',1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 CREATE DATABASE MiBase1 OWNER = Oscar MODE = 1;
 
 USE MiBase1;
@@ -16,13 +122,16 @@ INSERT INTO profesional VALUES(150,899,'Mazariegos', TRUE);
 INSERT INTO profesional VALUES(150,89,'OtroMas2', FALSE);
 INSERT INTO profesional VALUES(639,9,'OtroMas', FALSE);
 
+SELECT numero.CARNET from profesional;
 
 select E.*,estado,I.identificacion,tipoidentificacion
 from tbempleado E, tbestado ES,tbempleadoidentificacion I,tbidentificaciontipo IT
-where ES.idestado = E.idestado
+where
+
+( idestado = idestado
 and I.idempleado = E.idempleado
-and IT.ididentificaciontipo = I.ididentificaciontipo;
-.
+and IT.ididentificaciontipo = I.ididentificaciontipo; )
+
 
 
 
