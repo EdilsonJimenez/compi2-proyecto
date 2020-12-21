@@ -1836,7 +1836,7 @@ def p_instruccion_tiempo5(t):
 
 def p_instrucion_ctypes(t):
     'DQL_COMANDOS       : CREATE TYPE ID AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA'
-    t[0] = CreacionEnum(t[7])
+    t[0] = CreacionEnum(t[3], t[7])
 
 def p_listas_cs(t):
     'LISTAS_CS       : LISTAS_CS LISTA_CS'

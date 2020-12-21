@@ -1,13 +1,17 @@
 graph g {
 	node [height=.1 shape=plaintext]
-	table [label=<<TABLE>
+	table [label=<<TABLE border="1" cellpadding="0" cellspacing="0"   >
                             <TR>
-                                <TD>BASE DATOS</TD>
-                                <TD>TABLA</TD>
-                                <TD>COLUMNA</TD>
-                                <TD>VALOR </TD>
-                                <TD>FILA</TD>
-                            </TR><TR><TD>test</TD><TD>tbidentificaciontipo</TD><TD>ididentificaciontipo</TD><TD>1</TD><TD>442</TD></TR><TR><TD>test</TD><TD>tbidentificaciontipo</TD><TD>tipoidentificacion</TD><TD>DPI</TD><TD>442</TD></TR><TR><TD>test</TD><TD>tbidentificaciontipo</TD><TD>ididentificaciontipo</TD><TD>2</TD><TD>347</TD></TR><TR><TD>test</TD><TD>tbidentificaciontipo</TD><TD>tipoidentificacion</TD><TD>Nit</TD><TD>347</TD></TR><TR><TD>test</TD><TD>tbidentificaciontipo</TD><TD>ididentificaciontipo</TD><TD>3</TD><TD>476</TD></TR><TR><TD>test</TD><TD>tbidentificaciontipo</TD><TD>tipoidentificacion</TD><TD>Pasaporte</TD><TD>476</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>idestado</TD><TD>1</TD><TD>5</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>estado</TD><TD>Activo</TD><TD>5</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>idestado</TD><TD>2</TD><TD>322</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>estado</TD><TD>Inactivo</TD><TD>322</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>idestado</TD><TD>1</TD><TD>216</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>estado</TD><TD>Activo</TD><TD>216</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>idestado</TD><TD>2</TD><TD>485</TD></TR><TR><TD>test</TD><TD>tbestado</TD><TD>estado</TD><TD>Inactivo</TD><TD>485</TD></TR> <TR>
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>DATOS</B> </TD>
+                            </TR>
+                            <TR bgcolor="#BEF781">
+                                <TD bgcolor="#BEF781">BASE DATOS</TD>
+                                <TD bgcolor="#BEF781">TABLA</TD>
+                                <TD bgcolor="#BEF781">COLUMNA</TD>
+                                <TD bgcolor="#BEF781">VALOR </TD>
+                                <TD bgcolor="#BEF781">FILA</TD>
+                            </TR>
+                            <TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>80</TD><TD>24</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>123</TD><TD>24</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>Grcia</TD><TD>24</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>TRUE</TD><TD>24</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>200</TD><TD>172</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>456</TD><TD>172</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>Grcia</TD><TD>172</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>TRUE</TD><TD>172</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>9000</TD><TD>445</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>789</TD><TD>445</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>Mazariegos</TD><TD>445</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>FALSE</TD><TD>445</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>150</TD><TD>347</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>899</TD><TD>347</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>Mazariegos</TD><TD>347</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>TRUE</TD><TD>347</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>150</TD><TD>335</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>89</TD><TD>335</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>OtroMas2</TD><TD>335</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>FALSE</TD><TD>335</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>carne</TD><TD>639</TD><TD>468</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>nombre</TD><TD>9</TD><TD>468</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>apellido</TD><TD>OtroMas</TD><TD>468</TD></TR><TR><TD>MiBase1</TD><TD>profesional</TD><TD>bandera</TD><TD>FALSE</TD><TD>468</TD></TR> <TR>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
@@ -15,12 +19,15 @@ graph g {
                                 <TD></TD>
                             </TR>
                             <TR>
-                                <TD>ID TABLA</TD>
-                                <TD>ID COLUMNA</TD>
-                                <TD>TIPO COLUMNA</TD>
-                                <TD>  </TD>
-                                <TD>  </TD>
-                            </TR><TR><TD>tbestado</TD><TD>idestado</TD><TD>integer</TD><TD></TD><TD></TD></TR><TR><TD>tbestado</TD><TD>estado</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>idempleado</TD><TD>integer</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>primernombre</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>segundonombre</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>primerapellido</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>segundoapellido</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>fechadenacimiento</TD><TD>DATE</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>fechacontratacion</TD><TD>DATE</TD><TD></TD><TD></TD></TR><TR><TD>tbempleado</TD><TD>idestado</TD><TD>integer</TD><TD></TD><TD></TD></TR><TR><TD>tbempleadoidentificacion</TD><TD>idempleado</TD><TD>integer</TD><TD></TD><TD></TD></TR><TR><TD>tbempleadoidentificacion</TD><TD>identificacion</TD><TD>varchar</TD><TD></TD><TD></TD></TR><TR><TD>tbempleadoidentificacion</TD><TD>ididentificaciontipo</TD><TD>integer</TD><TD></TD><TD></TD></TR><TR><TD>tbidentificaciontipo</TD><TD>ididentificaciontipo</TD><TD>integer</TD><TD></TD><TD></TD></TR><TR><TD>tbidentificaciontipo</TD><TD>tipoidentificacion</TD><TD>varchar</TD><TD></TD><TD></TD></TR> <TR>
+                                <TD COLSPAN="5" bgcolor="#FA8258"><B> TABLAS</B> </TD>
+                            </TR>
+                            <TR bgcolor="#BEF781">
+                                <TD bgcolor="#BEF781">ID TABLA</TD>
+                                <TD bgcolor="#BEF781">ID COLUMNA</TD>
+                                <TD bgcolor="#BEF781">TIPO COLUMNA</TD>
+                                <TD bgcolor="#BEF781">  </TD>
+                                <TD bgcolor="#BEF781">  </TD>
+                            </TR><TR><TD>profesional</TD><TD>carne</TD><TD>INT</TD><TD></TD><TD></TD></TR><TR><TD>profesional</TD><TD>nombre</TD><TD>INT</TD><TD></TD><TD></TD></TR><TR><TD>profesional</TD><TD>apellido</TD><TD>VARCHAR</TD><TD></TD><TD></TD></TR><TR><TD>profesional</TD><TD>bandera</TD><TD>BOOLEAN</TD><TD></TD><TD></TD></TR> <TR>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
@@ -28,10 +35,29 @@ graph g {
                                 <TD></TD>
                             </TR>
                             <TR>
-                                <TD>ID BASE DE DATOS</TD>
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>TIPOS </B></TD>
+                            </TR>
+                            <TR bgcolor="#BEF781">
+                                <TD bgcolor="#BEF781">BASE DE DATOS</TD>
+                                <TD bgcolor="#BEF781"> TIPO </TD>
+                                <TD bgcolor="#BEF781">VALOR</TD>
+                                <TD bgcolor="#BEF781">  </TD>
+                                <TD bgcolor="#BEF781">  </TD>
+                            </TR><TR><TD>MiBase1</TD><TD>TIPO</TD><TD>CHAR</TD><TD></TD><TD></TD></TR><TR><TD>MiBase1</TD><TD>TIPO</TD><TD>INT</TD><TD></TD><TD></TD></TR><TR><TD>MiBase1</TD><TD>TIPO</TD><TD>STRING</TD><TD></TD><TD></TD></TR><TR><TD>MiBase1</TD><TD>OPERADOR</TD><TD>MAS</TD><TD></TD><TD></TD></TR><TR><TD>MiBase1</TD><TD>OPERADOR</TD><TD>MENOS</TD><TD></TD><TD></TD></TR><TR><TD>MiBase1</TD><TD>OPERADOR</TD><TD>POR</TD><TD></TD><TD></TD></TR> <TR>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
-                            </TR><TR><TD>test</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>BASES DE DATOS</B> </TD>
+                            </TR>
+                            <TR>
+                                <TD bgcolor="#BEF781">ID BASE DE DATOS</TD>
+                                <TD bgcolor="#BEF781"></TD>
+                                <TD bgcolor="#BEF781"></TD>
+                                <TD bgcolor="#BEF781"></TD>
+                                <TD bgcolor="#BEF781"></TD>
+                            </TR><TR><TD>MiBase1</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
 }

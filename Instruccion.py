@@ -68,6 +68,16 @@ def tabla_simbolos():
         fun=ts.obtenerDato(fn)
         cadena+='<TR><TD>'+str(fun.bd)+'</TD>'+'<TD>'+str(fun.tabla)+'</TD>'+'<TD>'+str(fun.columna)+'</TD>'+'<TD>'+str(fun.valor)+'</TD>'+'<TD>'+str(fun.fila)+'</TD></TR>'
 
+    cadena4 = ''
+    for fn in ts.Tipos:
+        fun:DatoTipo = ts.obtenerTipo(fn)
+        cadena4 += '<TR><TD>' + str(fun.bd) + '</TD>' + '<TD>' + str(fun.tipo) + '</TD>' + '<TD>' + str(fun.valor) + '</TD>' + '<TD>' + '</TD>' + '<TD>' + '</TD></TR>'
+
+    cadena = ''
+    for fn in ts.Datos:
+        fun = ts.obtenerDato(fn)
+        cadena += '<TR><TD>' + str(fun.bd) + '</TD>' + '<TD>' + str(fun.tabla) + '</TD>' + '<TD>' + str(
+            fun.columna) + '</TD>' + '<TD>' + str(fun.valor) + '</TD>' + '<TD>' + str(fun.fila) + '</TD></TR>'
 
     #DICIONARIO Tablas
     cadena2=''
@@ -86,14 +96,18 @@ def tabla_simbolos():
 
 
 
-    SymbolT.node('table','''<<TABLE>
+    SymbolT.node('table','''<<TABLE border="1" cellpadding="0" cellspacing="0"   >
                             <TR>
-                                <TD>BASE DATOS</TD>
-                                <TD>TABLA</TD>
-                                <TD>COLUMNA</TD>
-                                <TD>VALOR </TD>
-                                <TD>FILA</TD>
-                            </TR>'''
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>DATOS</B> </TD>
+                            </TR>
+                            <TR bgcolor="#BEF781">
+                                <TD bgcolor="#BEF781">BASE DATOS</TD>
+                                <TD bgcolor="#BEF781">TABLA</TD>
+                                <TD bgcolor="#BEF781">COLUMNA</TD>
+                                <TD bgcolor="#BEF781">VALOR </TD>
+                                <TD bgcolor="#BEF781">FILA</TD>
+                            </TR>
+                            '''
                             +cadena+
                             ''' <TR>
                                 <TD></TD>
@@ -103,11 +117,14 @@ def tabla_simbolos():
                                 <TD></TD>
                             </TR>
                             <TR>
-                                <TD>ID TABLA</TD>
-                                <TD>ID COLUMNA</TD>
-                                <TD>TIPO COLUMNA</TD>
-                                <TD>  </TD>
-                                <TD>  </TD>
+                                <TD COLSPAN="5" bgcolor="#FA8258"><B> TABLAS</B> </TD>
+                            </TR>
+                            <TR bgcolor="#BEF781">
+                                <TD bgcolor="#BEF781">ID TABLA</TD>
+                                <TD bgcolor="#BEF781">ID COLUMNA</TD>
+                                <TD bgcolor="#BEF781">TIPO COLUMNA</TD>
+                                <TD bgcolor="#BEF781">  </TD>
+                                <TD bgcolor="#BEF781">  </TD>
                             </TR>'''
                              + cadena2 +
                              ''' <TR>
@@ -118,11 +135,32 @@ def tabla_simbolos():
                                 <TD></TD>
                             </TR>
                             <TR>
-                                <TD>ID BASE DE DATOS</TD>
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>TIPOS </B></TD>
+                            </TR>
+                            <TR bgcolor="#BEF781">
+                                <TD bgcolor="#BEF781">BASE DE DATOS</TD>
+                                <TD bgcolor="#BEF781"> TIPO </TD>
+                                <TD bgcolor="#BEF781">VALOR</TD>
+                                <TD bgcolor="#BEF781">  </TD>
+                                <TD bgcolor="#BEF781">  </TD>
+                            </TR>'''
+                             + cadena4 +
+                             ''' <TR>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>BASES DE DATOS</B> </TD>
+                            </TR>
+                            <TR>
+                                <TD bgcolor="#BEF781">ID BASE DE DATOS</TD>
+                                <TD bgcolor="#BEF781"></TD>
+                                <TD bgcolor="#BEF781"></TD>
+                                <TD bgcolor="#BEF781"></TD>
+                                <TD bgcolor="#BEF781"></TD>
                             </TR>'''
                             +cadena3+
                         '''</TABLE>>''')
@@ -942,9 +980,6 @@ class Select2(Instruccion) :
         else:
             imprir("SELECT : No existe la base de datos acual")
         print(listaGeneral)
-        #listaGeneral.clear()
-
-
 
         #====================================================================   Proceso del cuerpo para editar valores en la tabla
        #procesando el cuerpo General de las tablas al insertar correctamente
@@ -953,21 +988,41 @@ class Select2(Instruccion) :
                 print("Vamos a ver condiciones y luego a mostrar datos de las condiciones")
                 resultado = Inter.procesar_expresion_select(tiposCuerpo.Cuerpo, ts_global)
                 if resultado is None:
-                    imprir("SELECT: No existen registros.")
+                    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++SELECT: No existen registros.")
                 else:
+                    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++SELECT: No existen registros.2222")
                     for r in resultado:
-                        print(">>"+str(r.valor))
+                        print(str(r.valor)+" "+str(r.tabla)+" "+str(r.fila))
 
+                titulos = []
+                for campo in listaGeneral:
+                    titulos.append(str(campo))
 
+                lis = []
+                for t in titulos:
+                    for res in resultado:
+                        for item in ts_global.Datos:
+                            x: DatoInsert = ts_global.obtenerDato(item)
+                            if t == x.columna and x.fila == res.fila:
+                                lis.append(x)
 
+                nuevoDicc = {}
+                # ingreso lista final FALTA
+                for t in titulos:
+                    lis2 = []
+                    for u in lis:
+                        if u.columna == t:
+                            lis2.append(u.valor)
+                    nuevoDicc[t] = lis2
+
+                print(nuevoDicc)
+                mostrarConsulta(nuevoDicc)
 
             elif (isinstance(tiposCuerpo, GroupBy)):
                 print("Vamos a ver los tipos de grupos a realizar ")
                 # Recorremos diccionario
                 # for item in listaGeneral:
                 #    print("dfdsf")
-
-
 
             elif (isinstance(tiposCuerpo, OrderBy)):
                 print("Vamos a ordenar  segun lo que venga ")
@@ -985,17 +1040,6 @@ class Select2(Instruccion) :
                 #primero llenamos el nuevo diccionario  amarrando las tuplas
                 #for campo in listaGeneral:
                 #    for datos listaGeneral.get(campo)
-
-
-
-
-
-
-
-
-
-
-
 
             elif (isinstance(tiposCuerpo, AccesoLimit)):
                 print("Bamos a elegir el limite ")
@@ -1030,10 +1074,10 @@ class Select2(Instruccion) :
             elif (isinstance(tiposCuerpo, AccesoSubConsultas)):
                 print("Bamos a ver el cuerpo de cada subconsulta")
 
-        print(listaGeneral)
+        #print(listaGeneral)
 
-        mostrarConsulta(listaGeneral)
-        listaGeneral.clear
+        #mostrarConsulta(listaGeneral)
+        #listaGeneral.clear
 
 
 # Con Distinct
@@ -1100,6 +1144,8 @@ class Select3(Instruccion):
                                                                 lista.append(t)
                                                             else:
                                                                 pass
+                                                        else:
+                                                            print("ALGUNA ESPECIE DE ERROR")
                                                             # fin comparacion insert
 
                                                     listaGeneral[ii.Columna] = lista
@@ -1128,6 +1174,8 @@ class Select3(Instruccion):
                                                             lista.append(t)
                                                         else:
                                                             pass
+                                                    else:
+                                                        print("ALGUNA ESPECIE DE ERROR")
                                                         # fin comparacion insert
 
                                                 listaGeneral[ii.Columna] = lista
@@ -1159,6 +1207,8 @@ class Select3(Instruccion):
                                                                     Lista2.append(t)
                                                                 else:
                                                                     pass
+                                                            else:
+                                                                print("ALGUNA ESPECIE DE ERROR")
                                                                 # fin comparacion insert
                                                         listaGeneral[pp.id] = Lista2
 
@@ -1184,10 +1234,12 @@ class Select3(Instruccion):
                                                                 Lista2.append(t)
                                                             else:
                                                                 pass
+                                                        else:
+                                                            print("ALGUNA ESPECIE DE ERROR")
                                                             # fin comparacion insert
                                                     listaGeneral[pp.id] = Lista2
                                         else:
-                                            print("")
+                                            print(" ERROR NO EXISTE LA TABLA")
 
                                 elif (isinstance(ii, Campo_Accedido)):  # nombre alias ssj      #nombretabla.nombrecampo alias  tss
 
@@ -1230,6 +1282,8 @@ class Select3(Instruccion):
                                                                 lista.append(t)
                                                             else:
                                                                 pass
+                                                        else:
+                                                            print("ALGUNA ESPECIE DE ERROR")
                                                             # fin comparacion insert
                                                     listaGeneral[str(nuevoNave)+"."+str(ii.Columna)] = lista
                                                 else:
@@ -1253,6 +1307,8 @@ class Select3(Instruccion):
                                                             lista.append(t)
                                                         else:
                                                             pass
+                                                    else:
+                                                        print("ALGUNA ESPECIE DE ERROR")
                                                         # fin comparacion insert
                                                 listaGeneral[str(nuevoNave)+"."+str(ii.Columna)] = lista
 
@@ -1290,6 +1346,8 @@ class Select3(Instruccion):
                                                                     Lista2.append(t)
                                                                 else:
                                                                     pass
+                                                            else:
+                                                                print("ALGUNA ESPECIE DE ERROR")
                                                                 # fin comparacion insert
                                                         listaGeneral[str(nuevoNave)+"."+str(ii.Columna)] = Lista2
 
@@ -1315,10 +1373,12 @@ class Select3(Instruccion):
                                                                 Lista2.append(t)
                                                             else:
                                                                 pass
+                                                        else:
+                                                            print("ALGUNA ESPECIE DE ERROR")
                                                             # fin comparacion insert
                                                     listaGeneral[str(nuevoNave)+"."+str(ii.Columna)] = Lista2
                                         else:
-                                            print("")
+                                            print("E RRRRORRR ")
                                 else:
                                     print("Otros posibles tipos ")
                         else:
@@ -1608,20 +1668,16 @@ class Select3(Instruccion):
 
                                                     listaGeneral[str(nuevoNave)+"."+str(ii.Columna)] = Lista2
                                         else:
-                                            print("")
+                                            print("un posible error")
                                 else:
                                     print("Otros posibles tipos ")
                         else:
-                            print("")
+                            print("un posible error")
                 else:
 
                     imprir("Viene otro tipo de accion ")
         else:
             imprir("SELECT : No existe la base de datos acual")
-
-
-
-
 
 
 
@@ -1642,9 +1698,15 @@ class Select3(Instruccion):
             sinP = derecha.replace(".", "")
             titulo.append(str(sinP))
 
+        for listA in listaGeneral:
+            derecha = self.quitarDer(listA)
+            sinP = derecha.replace(".", "")
+            print(sinP)
+
         # obtener los alias con punto
         for lista in listaGeneral:
             alias.append(str(lista))
+            print(str(lista))
 
         nuevoDic = {}
         resdistinct = []
@@ -1659,14 +1721,22 @@ class Select3(Instruccion):
                             if p.columna == t and p.fila == de.fila:
                                 resdistinct.append(de)
 
-        # ingreso lista final FALTA
-        for t in titulo:
+        print("TITULOSSSS")
+
+        for aliasTitulo in alias:
+            aliasT = self.quitarDer(aliasTitulo)
+            nombre = self.quitarIzq(aliasTitulo)
+            nombre = nombre.replace(".", "")
+            print("Insertar en: "+str(aliasT))
             lis = []
             for u in resdistinct:
-                v = self.quitarIzq("asdddd")
-                if u.columna == t:
+                print(str(u.columna)+str(nombre))
+                if str(u.columna) == str(nombre):
+                    print("Si guarda")
                     lis.append(u.valor)
-            nuevoDic[t] = lis
+                    print(lis)
+
+            nuevoDic[aliasT] = lis
 
         print(nuevoDic)
         #mostrarConsulta(nuevoDic)
@@ -3876,6 +3946,7 @@ class Insert_Datos(Instruccion):
 
                 cC = 0
                 for c in rT.cuerpo:
+                    
                     cC += 1
 
                 cV = 0
@@ -4267,8 +4338,31 @@ class Selectnow(Instruccion):
         self.constru = constru
 
 class CreacionEnum(Instruccion):
-    def __init__(self, listaCadenas):
+    def __init__(self, id, listaCadenas):
         self.listaCadenas = listaCadenas
+        self.id = id
+
+    def Ejecutar(self):
+        global ts_global, baseActual, ListaTablasG
+        global LisErr
+
+        if self.listaCadenas.__len__() != 0:
+            for cadena in self.listaCadenas:
+
+                if str(cadena) not in ts_global.Tipos:
+                    mi = DatoTipo(baseActual, str(self.id), str(cadena))
+                    ts_global.agregarTipo(mi)
+                else:
+                    print("ERROR: YA existe")
+        else:
+            print("NO HAY CADENAS EN EL ENUM TYPE")
+
+        print("AQUI ESTAN")
+        for ca in ts_global.Tipos:
+            a = ts_global.Tipos.get(ca)
+            print(str(a.tipo))
+
+
 # Crear funciones de ejecucion ----------------------------------
 
 #Prueba clase errores
@@ -5017,3 +5111,11 @@ class Alter_Table_Add_Constraint(Instruccion):
 class useClase(Instruccion):
     def __init__(self,id):
         self.id = id
+
+
+class DatoTipo(Instruccion):
+    def __init__(self, bd, tipo, valor):
+        self.bd = bd
+        self.tipo = tipo
+        self.valor = valor
+
