@@ -589,7 +589,7 @@ def p_NombreT_idj(t):
 
 def p_Alias_id(t):
     'ALIAS          :  ID'
-    t[0] = t[1]
+    t[0] = str(t[1])
     rep_gramatica('\n <TR><TD> ALIAS → '+str(t[1])+'    </TD><TD>  t[0] = t[1] </TD></TR>')
 
 
@@ -647,7 +647,7 @@ def p_Tabla_NombreT(t):
 
 
 def p_Tabla_NombreTS(t):
-    'TABLA   : NOMBRE_T NOMBRE_T'
+    'TABLA   : NOMBRE_T S1'
     t[0] = AccesoTabla(t[1], t[2])
     rep_gramatica('\n <TR><TD> TABLA →   NOMBRE_T  NOMBRE_T  </TD><TD>  t[0] = AccesoTabla(t[1], t[2]) </TD></TR>')
 
@@ -2006,7 +2006,7 @@ def p_Tipo_Tiempo(t):
         t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MINUTE)
     elif t[1] == 'SECOND':
         t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND)
-     rep_gramatica('\n <TR><TD> TIPO_TIEMPO →  '+str(t[1])+' </TD><TD> t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND) </TD></TR>')
+    rep_gramatica('\n <TR><TD> TIPO_TIEMPO →  '+str(t[1])+' </TD><TD> t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND) </TD></TR>')
 
 # def p_instruccion_tiempo2(t):
 #     DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA
