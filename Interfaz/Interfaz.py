@@ -105,6 +105,12 @@ class Aplicacion:
             except:
                 print("error en el reporte gramatical :(")
                 
+    def reporte_AST_(self):     
+            try:
+               Gram.reporte_AST_GLOB()
+            except:
+                print("error en el reporte gramatical :(")
+
 
     def graficaTabla(self):
         INST.tabla_simbolos()
@@ -135,7 +141,7 @@ class Aplicacion:
         self.menuAnalizar = Menu(self.barraMenu, tearoff=0)
         #self.menuAnalizar.add_command(label="Run", command=self.enviarDatos)
         self.menuAnalizar.add_command(label="Ejecucion", command=self.Seleccionar)
-        self.menuAnalizar.add_command(label="Graficar Arbol", command=self.Graficar)
+        self.menuAnalizar.add_command(label="Graficar Arbol", command=self.reporte_AST_)
 
         self.menuReportes = Menu(self.barraMenu, tearoff=0)
         self.menuReportes.add_command(label="Reporte Errores", command=self.Errores)

@@ -389,7 +389,7 @@ ListaProduccionesG[:] = []  # ListaProduccionesG
 # variables a utilizar
 aux = []  # Aux
 Input2 = ''  # Input2
-
+listaglobalAST = []
 # ASOCIACION DE OPERADORES CON PRESEDENCIA
 
 
@@ -420,11 +420,12 @@ precedence = (
 
 def p_init(t):
     'INICIO     : INSTRUCCIONES'
+    global listaglobalAST
     t[0] = t[1]
-
+    listaglobalAST = t[0]
     #PRIMERA PASADA
-    arbolito = Ast2(t[0])
-    arbolito.crearReporte()
+    #arbolito = Ast2(t[0])
+    #arbolito.crearReporte()
     #SEGUNDA PASADA
     arbolito2 = interprete2(t[0])
     arbolito2.ejecucion()
@@ -2584,19 +2585,6 @@ def reporte_gramatical():
     global cadena
     print("------------REPORTE GRAMATICAL---------------")    
     SymbolT2 =  Graph('g', filename='reportegramatical.gv', format='png',node_attr={'shape': 'plaintext', 'height': '.1'})
-
-
-    #SymbolT.node('table','''<<TABLE>
-     #                       <TR>
-      #                          <TD>BASE DATOS</TD>
-       #                         <TD>TABLA</TD>
-        #                        <TD>COLUMNA</TD>
-         #                       <TD>VALOR </TD>
-          #                      <TD>FILA</TD>
-           #                 </TR>'''
-            #                +cadena+                            
-             #           '''</TABLE>>''')
-    
     
     SymbolT2.node('table','<<TABLE><TR><TD>PRODUCCION</TD><TD>REGLAS SEMANTICAS</TD></TR>'+cadena+'</TABLE>>')
 
@@ -2605,6 +2593,11 @@ def reporte_gramatical():
 
     SymbolT2.render('g', format='png', view=True)
 
+
+def reporte_AST_GLOB():
+    global listaglobalAST
+    arbolito = Ast2(listaglobalAST)
+    arbolito.crearReporte()
 
 def parse(Entrada,Errores):
     # Variables Utilizadas
