@@ -1575,6 +1575,16 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i,CreacionEnum):
                 i.Ejecutar()
+            elif isinstance(i,Select4):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect2):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect3):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect4):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 

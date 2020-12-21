@@ -18,7 +18,7 @@ CREATE TABLE tbrol (
 	rol varchar(15)
 );
 
-insert into tbrol values (1,'Administrador');
+insert into tbrol values (4,'Administrador');
 insert into tbrol values (2,'Admin');
 insert into tbrol values (3,'Ventas');
 insert into tbusuario values(1,'Luis Fernando1','Salazar Rodriguez','Administrador',MD5('paswword'),'10-11-42');
