@@ -18,15 +18,24 @@ CREATE TABLE tbrol (
 	rol varchar(15)
 );
 
-insert into tbrol values (1,'Administrador');
+insert into tbrol values (4,'Administrador');
 insert into tbrol values (2,'Admin');
 insert into tbrol values (3,'Ventas');
-insert into tbusuario values(1,'Luis Fernando1','Salazar Rodriguez','lsalazar',MD5('paswword'),NOW());
-insert into tbusuario values(1,'David Fernando2','Salazar Rodriguez','lFer',SHA256('paswword'),NOW());
-insert into tbusuario values(3,'Juan Fernando3','Salazar Rodriguez','DavidFer',MD5('paswword'),NOW());
+insert into tbusuario values(1,'Luis Fernando1','Salazar Rodriguez','Administrador',MD5('paswword'),'10-11-42');
+insert into tbusuario values(2,'David Fernando2','Salazar Rodriguez','Administrador',MD5('paswword'),'10-11-42');
+insert into tbusuario values(4,'Juan Fernando3','Salazar Rodriguez','Ventas',MD5('paswword'),'10-11-42');
 
-select rol, usuario from tbrol, tbusuario
-where tbrol.idrol = tbusuario.idusuario AND tbrol.idrol = 2;
+select rol, nombre from tbrol, tbusuario
+where tbrol.idrol = tbusuario.idusuario AND tbrol.idrol=2;
+
+select rol, nombre from tbrol, tbusuario
+where tbrol.idrol = tbusuario.idusuario;
+
+select rol from tbrol
+where tbrol.idrol = 1 OR tbrol.idrol=3;
+
+
+
 ************************************************************************************************************************
 CREATE DATABASE IF NOT EXISTS test
     OWNER = root
@@ -124,6 +133,9 @@ INSERT INTO profesional VALUES(639,9,'OtroMas', FALSE);
 
 SELECT numero.CARNET from profesional;
 
+select distinct bandera Opciones from profesional;
+select distinct carne,apellido from profesional;
+
 select E.*,estado,I.identificacion,tipoidentificacion
 from tbempleado E, tbestado ES,tbempleadoidentificacion I,tbidentificaciontipo IT
 where
@@ -132,7 +144,7 @@ where
 and I.idempleado = E.idempleado
 and IT.ididentificaciontipo = I.ididentificaciontipo; )
 
-
+CREATE TYPE ENUM ID ("");
 
 
 CREATE DATABASE IF NOT EXISTS test

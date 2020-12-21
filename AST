@@ -10,24 +10,12 @@ digraph AST {
 	Node2 -> Node3
 	Node3 -> 4
 	4 [label="ExpresionFUNCION NATIVA"]
-	5 [label=PI]
+	5 [label=MD5]
 	4 -> 5
-	Node6 [label=ACCESO_CAMPO]
-	Node2 -> Node6
-	Node6 -> 7
-	7 [label="ExpresionFUNCION NATIVA"]
-	8 [label=POWER]
+	6 [label=exp1]
+	4 -> 6
+	6 -> 7
+	7 [label=ExpresionValor]
 	7 -> 8
-	9 [label=exp1]
-	7 -> 9
-	9 -> 10
-	10 [label=ExpresionValor]
-	10 -> 11
-	11 [label=5]
-	12 [label=exp2]
-	7 -> 12
-	12 -> 13
-	13 [label=ExpresionValor]
-	13 -> 14
-	14 [label=2]
+	8 [label=hola]
 }

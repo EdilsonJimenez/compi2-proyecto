@@ -233,50 +233,49 @@ def procesar_relacional(expresion, ts):
                 if int(Vd.valor) < val2:
                     listaV.append(Vd)
             return listaV
-        '''
-    elif isinstance(val, int) and isinstance(val2[0], DatoInsert):
+    elif isinstance(val[0], DatoInsert) and isinstance(val2, string_types):
         if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
             listaV = []
-            for v in val2:
+            for v in val:
                 Vd:DatoInsert = v
-                if int(Vd.valor) == val2:
+                if str(Vd.valor) == val2:
                     listaV.append(Vd)
             return listaV
         elif expresion.operador == OPERACION_RELACIONAL.DISTINTO:
             listaV = []
-            for v in val2:
+            for v in val:
                 Vd:DatoInsert = v
-                if int(Vd.valor) != val2:
+                if str(Vd.valor) != val2:
                     listaV.append(Vd)
             return listaV
         elif expresion.operador == OPERACION_RELACIONAL.MAYORIGUAL:
             listaV = []
             for v in val:
                 Vd:DatoInsert = v
-                if  val >= int(Vd.valor):
+                if str(Vd.valor) >= val2:
                     listaV.append(Vd)
             return listaV
         elif expresion.operador == OPERACION_RELACIONAL.MENORIGUAL:
             listaV = []
             for v in val:
                 Vd:DatoInsert = v
-                if int(Vd.valor) <= val2:
+                if str(Vd.valor) <= val2:
                     listaV.append(Vd)
             return listaV
         elif expresion.operador == OPERACION_RELACIONAL.MAYORQUE:
             listaV = []
             for v in val:
                 Vd:DatoInsert = v
-                if int(Vd.valor) > val2:
+                if str(Vd.valor) > val2:
                     listaV.append(Vd)
             return listaV
         elif expresion.operador == OPERACION_RELACIONAL.MENORQUE:
             listaV = []
             for v in val:
                 Vd:DatoInsert = v
-                if int(Vd.valor) < val2:
+                if str(Vd.valor) < val2:
                     listaV.append(Vd)
-            return listaV'''
+            return listaV
     else:
         print('Error: Expresion relacional con tipos incompatibls')
         # consola.insert('end','>>Error: Expresion relacional con tipos incompatibles'+str(expresion.operador)+'\n>>')
@@ -310,7 +309,6 @@ def procesar_logica(expresion, ts):
             for v2 in val2:
                 vv2: DatoInsert = v2
                 listaP.append(vv2)
-
             return listaP
 
         elif expresion.operador == OPERACION_LOGICA.AND:
@@ -1551,6 +1549,18 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i, SelectExpresion):
                 i.Ejecutar()
+            elif isinstance(i,CreacionEnum):
+                i.Ejecutar()
+            elif isinstance(i,Select4):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect2):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect3):
+                i.Ejecutar()
+            elif isinstance(i,SubSelect4):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 
@@ -1780,16 +1790,16 @@ def procesar_relacional_select(expresion, ts):
                     listaV.append(Vd)
             return listaV
 
-    elif isinstance(val[0], DatoInsert) and isinstance(val2[0], DatoInsert): # Profe.ID = Colegio.ID
+    elif isinstance(val[0], DatoInsert) and isinstance(val2[0], DatoInsert):
         if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
             listaV = []
             for v in val:
                 Vd:DatoInsert = v
                 for v2 in val2:
                     Vd2:DatoInsert = v2
-                    print("Compara: "+" "+str(Vd.valor)+"<>"+str(Vd2.valor))
-                    if int(Vd.valor) == int(Vd2.valor):
+                    if str(Vd.valor) == str(Vd2.valor):
                         listaV.append(Vd)
+                        listaV.append(Vd2)
             return listaV
         elif expresion.operador == OPERACION_RELACIONAL.DISTINTO:
             listaV = []
@@ -1797,7 +1807,7 @@ def procesar_relacional_select(expresion, ts):
                 Vd:DatoInsert = v
                 for v2 in val:
                     Vd2:DatoInsert = v2
-                    if int(Vd.valor) != int(Vd2.valor):
+                    if str(Vd.valor) != str(Vd2.valor):
                         listaV.append(Vd)
             return listaV
         elif expresion.operador == OPERACION_RELACIONAL.MAYORIGUAL:
@@ -1836,6 +1846,50 @@ def procesar_relacional_select(expresion, ts):
                     if int(Vd.valor) < int(Vd2.valor):
                         listaV.append(Vd)
             return listaV
+    elif isinstance(val[0], DatoInsert) and isinstance(val2, string_types):
+        if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
+            listaV = []
+            for v in val:
+                Vd:DatoInsert = v
+                if str(Vd.valor) == str(val2):
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.DISTINTO:
+            listaV = []
+            for v in val:
+                Vd: DatoInsert = v
+                if str(Vd.valor) != str(val2):
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MAYORIGUAL:
+            # error semantico
+            listaV = []
+            for v in val:
+                Vd: DatoInsert = v
+                if str(Vd.valor) >= str(val2):
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MENORIGUAL:
+            listaV = []
+            for v in val:
+                Vd: DatoInsert = v
+                if str(Vd.valor) <= str(val2):
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MAYORQUE:
+            listaV = []
+            for v in val:
+                Vd: DatoInsert = v
+                if str(Vd.valor) > str(val2):
+                    listaV.append(Vd)
+            return listaV
+        elif expresion.operador == OPERACION_RELACIONAL.MENORQUE:
+            listaV = []
+            for v in val:
+                Vd: DatoInsert = v
+                if str(Vd.valor) < str(val2):
+                    listaV.append(Vd)
+            return listaV
     else:
         print('Error: Expresion relacional con tipos incompatibls')
         # consola.insert('end','>>Error: Expresion relacional con tipos incompatibles'+str(expresion.operador)+'\n>>')
@@ -1857,7 +1911,6 @@ def procesar_logica_select(expresion, ts):
             return 1 if (val or val2) else 0
     elif (isinstance(val[0], DatoInsert) and isinstance(val2[0], DatoInsert)):
         if expresion.operador == OPERACION_LOGICA.OR:
-            print( "Logica en OR")
             listaP = []
             for v in val:
                 vv: DatoInsert = v
@@ -1867,17 +1920,16 @@ def procesar_logica_select(expresion, ts):
                 listaP.append(vv2)
 
             return listaP
-
         elif expresion.operador == OPERACION_LOGICA.AND:
             listaP = []
-            for v in val:
+            for v in val2:
                 vv: DatoInsert = v
-                for v2 in val2:
+                for v2 in val:
                     vv2: DatoInsert = v2
-                    if vv2.fila == vv.fila:
+                    if str(vv2.fila) == str(vv.fila):
                         listaP.append(vv2)
             return listaP
-        elif expresion.operador ==OPERACION_LOGICA.IS_DISTINCT:
+        elif expresion.operador == OPERACION_LOGICA.IS_DISTINCT:
             listaP = []
             for v in val:
                 vv: DatoInsert = v
@@ -1885,10 +1937,9 @@ def procesar_logica_select(expresion, ts):
                     vv2: DatoInsert = v2
                     if vv2.fila != vv.fila:
                         listaP.append(vv2)
-
             return listaP
 
-        elif expresion.operador ==OPERACION_LOGICA.IS_NOT_DISTINCT:
+        elif expresion.operador == OPERACION_LOGICA.IS_NOT_DISTINCT:
             listaP = []
             for v in val:
                 vv: DatoInsert = v
@@ -1896,7 +1947,6 @@ def procesar_logica_select(expresion, ts):
                     vv2: DatoInsert = v2
                     if vv2.fila == vv.fila:
                         listaP.append(vv2)
-
             return listaP
     elif ((val == None) and isinstance(val2[0], DatoInsert)):
         if expresion.operador == OPERACION_LOGICA.OR:
@@ -1946,7 +1996,7 @@ def procesar_logica_select(expresion, ts):
 
         elif expresion.operador ==OPERACION_LOGICA.IS_NOT_DISTINCT:
 
-            return  val
+            return val
     else:
         print('Error: No se puede realizar la op. logica')
         agregarErrorDatosOperacion(val, val2, 'Operadores Logicos', "", 0, 0)
@@ -2002,7 +2052,6 @@ def procesar_variable_select(tV, ts):
     for item in ts.Datos:
         v:DatoInsert = ts.obtenerDato(item)
         # Se obtienen los datos de la columna.
-        print(str(v.columna)+"<>"+str(variable.campoid)+"-"+str(v.bd)+"<>"+str(baseN[0])+"-"+str(v.tabla)+"<>"+str(variable.tablaid))
         if str(v.columna) == str(variable.campoid) and str(v.bd) == str(baseN[0]) and str(v.tabla) == str(variable.tablaid):
             print(" <> En listar: " + str(v.valor))
             listaRes.append(v)

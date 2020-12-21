@@ -12,6 +12,7 @@ from Instruccion import *
 
 
 
+
 # ------------------------------------------- VENTANA PRINCIPAL ------------------------------------------------------ #
 class Aplicacion:
 
@@ -63,12 +64,10 @@ class Aplicacion:
             ruta = ""
 
 
-
     def enviarDatos(self):
         contenido = self.entrada.get(1.0, "end-1c")
         self.consola.insert('insert', contenido)
         Inter.inicializarEjecucionAscendente(contenido)
-
 
 
     def Seleccionar(self):
@@ -77,10 +76,9 @@ class Aplicacion:
         self.consola.delete(1.0, "end")
         self.miVentana.title("TytusDB G16")
         Lista.clear()
-
+        listaGeneral.clear()
 
         try:
-
             cadena = self.entrada.get(SEL_FIRST, SEL_LAST)
             nueva = str(cadena).upper()
             print(nueva)
@@ -94,10 +92,12 @@ class Aplicacion:
             nuevaV = str(cadena2).upper()
             print(nuevaV)
             Inter.inicializarEjecucionAscendente(cadena2)
+
             if len(Lista) >0:
                 self.consola.insert('insert', Lista[0])
             else:
                 return
+
 
     def graficaTabla(self):
         INST.tabla_simbolos()
