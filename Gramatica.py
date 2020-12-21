@@ -4,6 +4,7 @@
 from unittest import case
 import ply.lex as lex
 from errores import *
+import re
 from interprete import baseActual
 
 #TABLA DE ERRORES===============
@@ -501,10 +502,20 @@ def p_ListaCampos_Lista(t):
     rep_gramatica('\n <TR><TD> LISTA_CAMPOS →   LISTAA     </TD><TD> t[0] = [t[1]] </TD></TR>')
 
 
+
 def p_Lista_NombreSss(t):
-    'LISTAA          : ID PUNTO CAMPOS S'
+    'LISTAA          : ID PUNTO ID LISTALIASS'
+
     t[0] = Campo_Accedido(t[1],t[3],t[4])
     rep_gramatica('\n <TR><TD> LISTAA → ID . CAMPOS  ARRAY[]  </TD><TD> t[0] = Campo_Accedido(t[1],t[3],t[4]) </TD></TR>')
+
+
+def p_Lista_NombreSssAsterisco(t):
+    'LISTAA          : ID PUNTO ASTERISCO LISTALIASS'
+
+    t[0] = Campo_Accedido(t[1],t[3],t[4])
+
+
 
 
 def p_Lista_Nombre(t):
@@ -514,7 +525,7 @@ def p_Lista_Nombre(t):
 
 
 def p_Lista_CampoSs(t):
-    'LISTAA          : CAMPOS S'
+    'LISTAA          : CAMPOS LISTALIASS'
     t[0] = Campo_Accedido("", t[1], t[2])
     rep_gramatica('\n <TR><TD> LISTAA →  CAMPOS ARRAY[]  </TD><TD> t[0] = Campo_Accedido(NULLL, t[1], t[2]) </TD></TR>')
 
@@ -545,18 +556,17 @@ def p_Lista_COMAs(t):
 
 
 
-
 def p_Campos_ids(t):
     'CAMPOS          : ID'
     t[0] = t[1]
     rep_gramatica('\n <TR><TD> LISTAA → '+str(t[1])+'    </TD><TD>  t[0] = t[1] </TD></TR>')
 
 def p_Campos_expresion(t):
-    'CAMPOS          : expresion'
-    t[0] = str(t[1])
+    'CAMPOS          : expresion'    
+    t[0] = t[1]
     rep_gramatica('\n <TR><TD> CAMPOS →   expresion  </TD><TD>  t[0] = str(t[1]) </TD></TR>')
 
-def p_Campos_expresion_(t):
+def p_Campos_expresionn(t):
     'CAMPOS          : ENTERO'
     t[0] = str(t[1])
     rep_gramatica('\n <TR><TD> CAMPOS →   ENTERO  </TD><TD>  t[0] = str(t[1]) </TD></TR>')
@@ -578,24 +588,29 @@ def p_NombreT_idj(t):
 
 
 def p_Alias_id(t):
-    'ALIAS          : ID'
+    'ALIAS          :  ID'
     t[0] = t[1]
     rep_gramatica('\n <TR><TD> ALIAS → '+str(t[1])+'    </TD><TD>  t[0] = t[1] </TD></TR>')
 
 
 def p_S_AsAlias(t):
-    'S          : AS ALIAS'
-    t[0] = Alias_Campos_ListaCamposSinLista(t[2])
-    rep_gramatica('\n <TR><TD> S → AS ALIAS    </TD><TD>  t[0] = Alias_Campos_ListaCamposSinLista(t[2]) </TD></TR>')
+    """LISTALIASS  : AS ID
+                  |  ID """
+    if(str(t[1]).upper()=="AS"):
+       t[0] = Alias_Campos_ListaCamposSinLista(t[2])
+       rep_gramatica('\n <TR><TD> LISTALIASS →  AS ID    </TD><TD>  t[0] = Alias_Campos_ListaCamposSinLista(t[2]) </TD></TR>')
+    else:
+       t[0] = Alias_Campos_ListaCamposSinLista(t[1])
+       rep_gramatica('\n <TR><TD> LISTALIASS →   ID    </TD><TD>   t[0] = Alias_Campos_ListaCamposSinLista(t[1])  </TD></TR>')
 
 
-def p_S_Aliass(t):
-    'S          :  ALIAS '
-    t[0] = Alias_Campos_ListaCamposSinLista(t[1])
-    rep_gramatica('\n <TR><TD> S →  ALIAS    </TD><TD>  t[0] = Alias_Campos_ListaCamposSinLista(t[1]) </TD></TR>')
+
+#def p_S_Aliass(t):
+   # 'S          :  ALIAS'
+   # t[0] = Alias_Campos_ListaCamposSinLista(t[1])
 
 
-    # t[0] = str(t[1])
+
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -679,10 +694,12 @@ def p_CuerpoS_CuerpoS(t):
     t[0] = t[1]
     rep_gramatica('\n <TR><TD> CUERPOS →   CUERPOS CUERPO ARRAY[]   </TD><TD>   t[1].append(t[2]) t[0] = t[1] </TD></TR>')
 
-def p_Cuerpo_Where(t):
-    'CUERPO   : WHERE expresion'
-    t[0] = Cuerpo_Condiciones(t[2])
-    rep_gramatica('\n <TR><TD> CUERPOS →   WHERE expresion    </TD><TD>   t[0] = Cuerpo_Condiciones(t[2]) </TD></TR>')
+#def p_Cuerpo_Where(t):
+#    'CUERPO   : WHERE expresion'
+#    t[0] = Cuerpo_Condiciones(t[2])
+
+
+
 
 def p_Cuerpos_Cuerpo(t):
     'CUERPOS   :  CUERPO'
@@ -948,6 +965,8 @@ def p_Expre_Campo8(t):
     rep_gramatica('\n <TR><TD> EXPRES →   CAMPOS S2 STATE     </TD><TD> t[0] = AccesoGroupBy(, t[1], t[2], False) </TD></TR>')
 
 
+
+
 def p_Expre_Campo9(t):
     'EXPRES    :  COMA'
     t[0] = str(t[1])
@@ -1027,17 +1046,15 @@ def p_Expresion_Atributos(t):
 # -----------------------------------------------------------------------------------------------------------------
 # SUBCONSULTAS
 
-def p_Query_Ate(t):
-    'QUERY : expresion  PARIZQ QUE_SUBS PARDER'
-    t[0]= AccesoSubConsultas(t[1],t[3],False)
-    rep_gramatica('\n <TR><TD> QUERY →      expresion  PARIZQ QUE_SUBS PARDER    </TD><TD> t[0]= AccesoSubConsultas(t[1],t[3],False) </TD></TR>')
+# def p_Query_Ate(t):
+#     QUERY : expresion  PARIZQ QUE_SUBS PARDER
+#     t[0]= AccesoSubConsultas(t[1],t[3],False)
 
 
 
-def p_Query_AteAs(t):
-    'QUERY : expresion PARIZQ QUE_SUBS  PARDER AS_NO'
-    t[0] = AccesoSubConsultas(t[1], t[3], t[5])
-    rep_gramatica('\n <TR><TD> QUERY →      expresion PARIZQ QUE_SUBS  PARDER AS_NO   </TD><TD> t[0] = AccesoSubConsultas(t[1], t[3], t[5]) </TD></TR>')
+# def p_Query_AteAs(t):
+#     QUERY : expresion PARIZQ QUE_SUBS  PARDER AS_NO
+#     t[0] = AccesoSubConsultas(t[1], t[3], t[5])
 
 
 
@@ -1052,6 +1069,8 @@ def p_Query_QueryAs(t):
     'QUERY :  PARIZQ QUE_SUBS PARDER AS_NO'
     t[0] = AccesoSubConsultas(False, t[2], t[4])
     rep_gramatica('\n <TR><TD> QUERY →      PARIZQ QUE_SUBS PARDER AS_NO  </TD><TD> t[0] = AccesoSubConsultas(False, t[2], t[4]) </TD></TR>')
+
+
 
 
 def p_Query_Coma(t):
@@ -1311,6 +1330,7 @@ def p_Create_TABLE_CAMPOS2(t):
     rep_gramatica('\n <TR><TD> LISTA2 →     NOMBRE_T TIPO_CAMPO VALIDACIONES_CREATE_TABLE   </TD><TD> t[0] = CampoTabla(t[1], t[2], t[3]) </TD></TR>')
 
 
+
 def p_Create_TABLE_CAMPOS3(t):
     'LISTA2  : CONSTRAINT ID  UNIQUE '
     t[0] = constraintTabla(t[3], t[2], None, None, None, None)
@@ -1524,6 +1544,7 @@ def p_Create_TABLE_TIPO_CAMPO6(t):
     'VALIDACION_CAMPO_CREATE  :  CONSTRAINT  ID CHECK PARIZQ expresion PARDER'
     t[0] = CampoValidacion(t[2], str("No viene check"))
     rep_gramatica('\n <TR><TD> VALIDACION_CAMPO_CREATE →    CONSTRAINT  ID CHECK PARIZQ expresion PARDER  </TD><TD>  t[0] = CampoValidacion(t[2], str("No viene check") </TD></TR>')
+    print("-------------------------------------------- CONSTRAINT CHECK")
 
 
 # FIN CREATE TABLE
@@ -1955,12 +1976,14 @@ def p_if_exists_database_e(t):
 
 # -----------------------------------------------------------------------------------------------------------------
 
+def p_select_expresion(t):
+    'DQL_COMANDOS : SELECT LISTA_CAMPOS PUNTOCOMA'
+    t[0] = SelectExpresion(t[2])
 
 # SELECT DATE/TIME
-def p_instruccion_tiempo(t):
-    'DQL_COMANDOS       : SELECT EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER PUNTOCOMA'
-    t[0] = SelectExtract(t[4], t[7])
-    rep_gramatica('\n <TR><TD> DQL_COMANDOS →  SELECT EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER PUNTOCOMA </TD><TD> t[0] = SelectExtract(t[4], t[7]) </TD></TR>')
+# def p_instruccion_tiempo(t):
+#     DQL_COMANDOS       : SELECT EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP CADENASIMPLE PARDER PUNTOCOMA
+#     t[0] = SelectExtract(t[4], t[7])
 
 
 def p_Tipo_Tiempo(t):
@@ -1971,46 +1994,52 @@ def p_Tipo_Tiempo(t):
                         | MINUTE
                         | SECOND '''
     t[0] = t[1]
-    rep_gramatica('\n <TR><TD> TIPO_TIEMPO →  '+str(t[1])+' </TD><TD> t[0] = t[1] </TD></TR>')
+    if t[1] == 'YEAR':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.YEAR)
+    elif t[1] == 'MONTH':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MONTH)
+    elif t[1] == 'DAY':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.DAY)
+    elif t[1] == 'HOUR':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.HOUR)
+    elif t[1] == 'MINUTE':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.MINUTE)
+    elif t[1] == 'SECOND':
+        t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND)
+     rep_gramatica('\n <TR><TD> TIPO_TIEMPO →  '+str(t[1])+' </TD><TD> t[0] = ExpresionTiempo(t[1], UNIDAD_TIEMPO.SECOND) </TD></TR>')
+
+# def p_instruccion_tiempo2(t):
+#     DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA
+#     t[0] = SelectDatePart(t[4], t[7])
 
 
-
-def p_instruccion_tiempo2(t):
-    'DQL_COMANDOS       : SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA'
-    t[0] = SelectDatePart(t[4], t[7])
-    rep_gramatica('\n <TR><TD> DQL_COMANDOS →  SELECT DATE_PART PARIZQ CADENASIMPLE COMA INTERVAL CADENASIMPLE PARDER PUNTOCOMA </TD><TD> t[0] = SelectDatePart(t[4], t[7]) </TD></TR>')
-
-
-def p_instruccion_tiempo3(t):
-    'DQL_COMANDOS       : SELECT TIPO_CURRENT PUNTOCOMA'
-    t[0] = SelectTipoCurrent(t[2])
-    rep_gramatica('\n <TR><TD> DQL_COMANDOS → SELECT TIPO_CURRENT PUNTOCOMA </TD><TD> t[0] = SelectTipoCurrent(t[2]) </TD></TR>')
-
+# def p_instruccion_tiempo3(t):
+#     DQL_COMANDOS       : SELECT TIPO_CURRENT PUNTOCOMA
+#     t[0] = SelectTipoCurrent(t[2])
 
 def p_Tipo_Current(t):
-    '''TIPO_CURRENT     : CURRENT_DATE
+    '''expresion_aritmetica : CURRENT_DATE
                         | CURRENT_TIME '''
-    t[0] = t[1]
-    rep_gramatica('\n <TR><TD> TIPO_CURRENT → CURRENT_DATE -OR-  CURRENT_TIME </TD><TD> t[0] = t[1] </TD></TR>')
+    if t[1] == 'CURRENT_DATE':
+        t[0] = ExpresionConstante(t[1], CONSTANTES.CURRENT_DATE)
+    elif t[1] == 'CURRENT_TIME':
+        t[0] = ExpresionConstante(t[1], CONSTANTES.CURRENT_TIME)
+    rep_gramatica('\n <TR><TD> expresion_aritmetica → CURRENT_DATE -OR-  CURRENT_TIME </TD><TD> t[0] = ExpresionConstante(t[1], CONSTANTES.CURRENT_DATE) </TD></TR>')
+
+# def p_instruccion_tiempo4(t):
+#     DQL_COMANDOS       : SELECT TIMESTAMP  CADENASIMPLE PUNTOCOMA
+#     t[0] = SelectStamp(t[3])
 
 
-def p_instruccion_tiempo4(t):
-    'DQL_COMANDOS       : SELECT TIMESTAMP  CADENASIMPLE PUNTOCOMA'
-    t[0] = SelectStamp(t[3])
-    rep_gramatica('\n <TR><TD> DQL_COMANDOS → SELECT TIMESTAMP  CADENASIMPLE PUNTOCOMA </TD><TD> t[0] = SelectStamp(t[3]) </TD></TR>')
-
-
-def p_instruccion_tiempo5(t):
-    'DQL_COMANDOS       : SELECT NOW PARIZQ PARDER PUNTOCOMA'
-    t[0] = Selectnow(ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW))
-    rep_gramatica('\n <TR><TD> DQL_COMANDOS → SELECT NOW PARIZQ PARDER PUNTOCOMA </TD><TD> t[0] = Selectnow(ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW)) </TD></TR>')
+# def p_instruccion_tiempo5(t):
+#     DQL_COMANDOS       : SELECT NOW PARIZQ PARDER PUNTOCOMA
+#     t[0] = Selectnow(ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW))
 
 
 def p_instrucion_ctypes(t):
     'DQL_COMANDOS       : CREATE TYPE ID AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA'
-    t[0] = CreacionEnum(t[7])
-    rep_gramatica('\n <TR><TD> DQL_COMANDOS → CREATE TYPE ID AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA </TD><TD> t[0] = CreacionEnum(t[7]) </TD></TR>')
-
+    t[0] = CreacionEnum(t[3], t[7])
+    rep_gramatica('\n <TR><TD> DQL_COMANDOS → CREATE TYPE ID AS ENUM PARIZQ  LISTAS_CS PARDER PUNTOCOMA </TD><TD> t[0] = CreacionEnum(t[3], t[7])  </TD></TR>')
 
 def p_listas_cs(t):
     'LISTAS_CS       : LISTAS_CS LISTA_CS'
@@ -2061,6 +2090,7 @@ def p_expresion_aritmetica(t):
                             | expresion_aritmetica DIVISION expresion_aritmetica
                             | expresion_aritmetica PORCENTAJE expresion_aritmetica
                             | expresion_aritmetica POTENCIA expresion_aritmetica'''
+
     if t[2] == '+':
         t[0] = ExpresionAritmetica(t[1], t[3], OPERACION_ARITMETICA.MAS)
     elif t[2] == '-':
@@ -2221,10 +2251,9 @@ def p_expresion_logica_predicados_4(t):
 
 
 def p_expresion_logica_exists_sub(t):
-    '''expresion_logica : EXISTS '''
-    t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.EXISTS)
-    rep_gramatica('\n <TR><TD> expresion_logica →  EXISTS   </TD><TD>  t[0] = ExpresionLogica(None, None, OPERACION_LOGICA.EXISTS) </TD></TR>')
-
+    '''expresion_logica : EXISTS expresion_aritmetica'''
+    t[0] = ExpresionLogica(t[2], None, OPERACION_LOGICA.EXISTS)
+    rep_gramatica('\n <TR><TD> expresion_logica →  EXISTS expresion_aritmetica   </TD><TD>  t[0] = ExpresionLogica(t[2], None, OPERACION_LOGICA.EXISTS) </TD></TR>')
 
 def p_expresion_logica_not_exists_sub(t):
     '''expresion_logica : NOT EXISTS '''
@@ -2234,13 +2263,13 @@ def p_expresion_logica_not_exists_sub(t):
 
 
 def p_expresion_logica_in(t):
-    '''expresion_logica : expresion_aritmetica IN
-                        | expresion_aritmetica NOT IN '''
+    '''expresion_logica : expresion_aritmetica IN expresion_aritmetica
+                        | expresion_aritmetica NOT IN expresion_aritmetica'''
     if t[2] == 'IN':
-        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.IN)
+        t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.IN)
     elif t[2] == 'NOT':
-        t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.NOT_IN)
-    rep_gramatica('\n <TR><TD> expresion_logica → expresion_aritmetica IN -OR-NOT IN   </TD><TD>  t[0] = ExpresionLogica(t[1], None, OPERACION_LOGICA.NOT_IN) </TD></TR>')
+        t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.NOT_IN)
+    rep_gramatica('\n <TR><TD> expresion_logica → expresion_aritmetica IN -OR-NOT IN   </TD><TD>   t[0] = ExpresionLogica(t[1], t[3], OPERACION_LOGICA.IN) </TD></TR>')
 
 
 
@@ -2268,8 +2297,8 @@ def p_valor_id(t):
 
 def p_valor_id_2(t):
     '''expresion_aritmetica : ID PUNTO ID'''
-    t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[1], TIPO_VARIABLE.TEMPORAL)
-    rep_gramatica('\n <TR><TD> expresion_aritmetica → ID PUNTO ID    </TD><TD>  t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[1], TIPO_VARIABLE.TEMPORAL) </TD></TR>')
+    t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[3], TIPO_VARIABLE.TEMPORAL)
+    rep_gramatica('\n <TR><TD> expresion_aritmetica → ID PUNTO ID    </TD><TD>   t[0] = CAMPO_TABLA_ID_PUNTO_ID(t[1],t[3], TIPO_VARIABLE.TEMPORAL) </TD></TR>')
 
 def p_valor_number(t):
     '''expresion_aritmetica : ENTERO'''
@@ -2372,7 +2401,7 @@ def p_funciones_math(t):
                             | ATANH PARIZQ expresion_aritmetica PARDER
                             | LENGTH PARIZQ expresion_aritmetica PARDER
                             | SUBSTRING PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
-                            | TRIM PARIZQ expresion_aritmetica PARDER
+                            | TRIM PARIZQ expresion_aritmetica FROM expresion_aritmetica PARDER
                             | MD5 PARIZQ expresion_aritmetica PARDER
                             | SHA256 PARIZQ expresion_aritmetica PARDER
                             | SUBSTR PARIZQ expresion_aritmetica COMA expresion_aritmetica COMA expresion_aritmetica PARDER
@@ -2381,7 +2410,9 @@ def p_funciones_math(t):
                             | CONVERT PARIZQ expresion_aritmetica AS TIPO_CAMPO PARDER
                             | ENCODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
                             | DECODE PARIZQ expresion_aritmetica COMA expresion_aritmetica PARDER
-                            | NOW PARIZQ PARDER'''
+                            | NOW PARIZQ PARDER
+                            | EXTRACT PARIZQ TIPO_TIEMPO FROM TIMESTAMP expresion_aritmetica PARDER
+                            | DATE_PART PARIZQ expresion_aritmetica COMA INTERVAL expresion_aritmetica PARDER'''
     if t[1] == 'ABS':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.ABS)
     elif t[1] == 'CBRT':
@@ -2455,7 +2486,7 @@ def p_funciones_math(t):
     elif t[1] == 'LENGTH':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.LENGTH)
     elif t[1] == 'TRIM':
-        t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.TRIM)
+        t[0] = ExpresionFuncion(t[3], t[5], None, None, FUNCION_NATIVA.TRIM)
     elif t[1] == 'MD5':
         t[0] = ExpresionFuncion(t[3], None, None, None, FUNCION_NATIVA.MD5)
     elif t[1] == 'SHA256':
@@ -2492,13 +2523,11 @@ def p_funciones_math(t):
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.RANDOM)
     elif t[1] == 'NOW':
         t[0] = ExpresionFuncion(None, None, None, None, FUNCION_NATIVA.NOW)
+    elif t[1] == 'EXTRACT':
+        t[0] = ExpresionFuncion(t[3], t[6], None, None, FUNCION_NATIVA.EXTRACT)
+    elif t[1] == 'DATE_PART':
+        t[0] = ExpresionFuncion(t[3], t[6], None, None, FUNCION_NATIVA.DATE_PART)
 
-# def p_expnumerica(t):
-#     '''EXPNUMERICA : EXPNUMERICA ASTERISCO EXPNUMERICA
-#                    | EXPNUMERICA DIVISION EXPNUMERICA
-#                    | EXPNUMERICA PORCENTAJE EXPNUMERICA
-#                    | EXPNUMERICA MENOS EXPNUMERICA
-#                    | EXPNUMERICA MAS EXPNUMERICA'''
 
 def p_expresion_binario(t):
     '''expresion_aritmetica : expresion_aritmetica AMPERSAND expresion_aritmetica

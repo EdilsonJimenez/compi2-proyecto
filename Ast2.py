@@ -128,7 +128,8 @@ class Ast2:
                 self.grafoAlter_AddForeignKey(i.id_table, i.id_column, i.id_column_references, padre)
             elif isinstance(i, Alter_Table_Add_Constraint):
                 self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column, padre)
-            
+            elif isinstance(i, SelectExpresion):
+                self.grafoSelectExpresion(i.listaCampos, padre)
             else:
                 print("No es droptable")
 
@@ -153,7 +154,7 @@ class Ast2:
             print("Es Una Instruccion Select 4")
             self.GrafoSelect4(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn, padre)
         else:
-            print("No hay tipo aun");
+            print("No hay tipo aun")
 
 
 
@@ -175,33 +176,33 @@ class Ast2:
         global dot
         # NombreT.Campo Lista
         if ((NombreT != "") and (Columna != "") and (Lista_Alias != False )):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT + '.' + Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
 
         # Campo Lista
         elif ((NombreT == "") and (Columna != "") and (Lista_Alias != False)):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             # Recorrer la lista de alias
@@ -214,24 +215,32 @@ class Ast2:
         # Campos Accedidos Sin Lista
     def GrafoCampo_AccedidoSinLista(self, NombreT, Columna, padre):
         global dot
-         # NombreT.Campo
-        if ((NombreT != "") and (Columna != "")):
-            self.inc();
+
+        if not isinstance(Columna, string_types):
+             self.inc()
+             nuevoPadre = self.i
+             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
+             dot.edge(padre, 'Node' + str(self.i))
+             dot.edge('Node' + str(self.i), str(nuevoPadre + 1))
+             self.graficar_expresion(Columna)
+
+        elif ((NombreT != "") and (Columna != "")):
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT + '.' + Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         # Campo
         elif ((NombreT == "") and (Columna != "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         else:
@@ -250,17 +259,17 @@ class Ast2:
         global dot
         if ((NombreT != "") and (Lista_Alias != False)):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Nombre_Tabla")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             # Verificar el Tipo que viene
@@ -276,12 +285,12 @@ class Ast2:
         global dot
         # Nombre
         if ((NombreT != "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Nombre_Tabla")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         else:
@@ -301,17 +310,17 @@ class Ast2:
 
         # Tabla.Columna Alias
         if ((NombreT != "") and (Columna != "") and (Lista_Alias != False ) and (Estado == "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT + '.' + Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -323,12 +332,12 @@ class Ast2:
 
         # Tabla.Columna
         elif((NombreT != "") and (Columna != "") and (Lista_Alias == False) and (Estado == "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT + '.' + Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -336,17 +345,17 @@ class Ast2:
 
         #columna Alias
         elif ((NombreT == "") and (Columna != "") and (Lista_Alias != False) and (Estado == "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i),Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -358,27 +367,27 @@ class Ast2:
 
         #Columna
         elif ((NombreT == "") and (Columna != "") and (Lista_Alias == False) and (Estado == "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
         #Tabla.Columna Alias Estado
         elif ((NombreT != "") and (Columna != "") and (Lista_Alias != False) and (Estado != "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT + '.' + Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
@@ -388,55 +397,55 @@ class Ast2:
 
         #Tabla.Columna  Estado
         elif ((NombreT != "") and (Columna != "") and (Lista_Alias == False) and (Estado != "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), NombreT + '.' + Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Estado)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         #Columna Alias Estado
         elif ((NombreT == "") and (Columna != "") and (Lista_Alias != False) and (Estado != "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i),  Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
             #Agregar el tipo de alias del group by
 
             # Estado
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Estado)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
         #Columna  Estado
         elif ((NombreT == "") and (Columna != "") and (Lista_Alias == False) and (Estado != "")):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "ACCESO_CAMPO")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Columna)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Estado
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Estado)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -456,14 +465,14 @@ class Ast2:
         #AnteQuery ( query )
         if  (AnteQuery != False) and  (Query !=False) and  (Lista_Alias ==False):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Acceso_Subconsulta")
             dot.edge(padre, 'Node' + str(self.i))
 
 
             #Recorrido de las Expresiones Ante Query
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "AnteQuery")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.Recorrer_Condiciones(AnteQuery, 'Node' + str(self.i))
@@ -471,7 +480,7 @@ class Ast2:
 
 
             #Recorrido de las subconsultas
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "(  SubQuery  )")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerListaSubconsultas(Query,'Node' + str(self.i) )
@@ -480,25 +489,25 @@ class Ast2:
         # AnteQuery ( query ) Alias
         elif (AnteQuery != False) and (Query != False) and (Lista_Alias != False):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Acceso_Subconsulta")
             dot.edge(padre, 'Node' + str(self.i))
 
             # Recorrido de las Expresiones Ante Query
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "AnteQuery ")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.Recorrer_Condiciones(AnteQuery, 'Node' + str(self.i))
 
             # Recorrido de las subconsultas
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "(  SubQuery  )")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerListaSubconsultas(Query, 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
@@ -506,13 +515,13 @@ class Ast2:
 
         # ( query )
         elif (AnteQuery == False) and (Query != False) and (Lista_Alias == False):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Acceso_Subconsulta ")
             dot.edge(padre, 'Node' + str(self.i))
 
             # Recorrido de las subconsultas
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "(  SubQuery  )")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerListaSubconsultas(Query, 'Node' + str(self.i))
@@ -520,19 +529,19 @@ class Ast2:
 
         # ( query ) Alias
         elif (AnteQuery == False) and (Query != False) and (Lista_Alias != False):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Acceso_Subconsulta")
             dot.edge(padre, 'Node' + str(self.i))
 
             # Recorrido de las subconsultas
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "(  SubQuery  )")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerListaSubconsultas(Query, 'Node' + str(self.i))
 
             # Recorrido De la Lista de Alias
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "Lista_Alias")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTiposAlias(Lista_Alias, 'Node' + str(self.i))
@@ -549,30 +558,30 @@ class Ast2:
 
         #Comportamiento Reservada Consulta
         if((Comportamiento!="")and(Reservada!="")and(Consulta==False)):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Acceso_UNION")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la de consultas
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONSULTA")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
 
         #Comportamiento Consulta
         elif (( Comportamiento!= "") and (Reservada == "") and (Consulta != False)):
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Acceso_UNION")
             dot.edge(padre, 'Node' + str(self.i))
 
             # Recorrido De la de consultas
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONSULTA")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerTipoSelect(Consulta, 'Node' + str(self.i))
@@ -580,14 +589,14 @@ class Ast2:
         # puntocoma
         elif (( Comportamiento == "") and (Reservada != "") and (Consulta == False)):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Final_Instruccion")
             dot.edge(padre, 'Node' + str(self.i))
 
             # Punto coma final clausula
-            self.inc();
-            dot.node('Node' + str(self.i), ";")
+            self.inc()
+            dot.node('Node' + str(self.i), "")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         else:
@@ -602,18 +611,18 @@ class Ast2:
     # Campos Accedidos por  case   : Objeto Accedido "CaseCuerpo"  : Campos  Cuerpo, Lista_When=[]
     def GrafoCampoCasePuro(self,Lista_When,Cuerpo,padre):
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "Acceso_Case")
         dot.edge(padre, 'Node' + str(self.i))
 
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "CASE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         # Recorrido DE LOS TIPOS DE WHEN
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "TIPOS_WHEN")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         #Recorrer Lista Case
@@ -621,7 +630,7 @@ class Ast2:
 
 
         #FIN CONDICION
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i),Cuerpo)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -632,17 +641,17 @@ class Ast2:
     # Campos Accedidos por  Expresion :Objeto Accedido "ExpresionesCase"  : Reservada, ListaExpresiones=[]
     def GrafoExpresionCase(self,Reservada,ListaExpresiones,padre):
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "Acceso_Case_Expresiones")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i),Reservada )
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         # Recorrido lista expresiones
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "EXPRESIONES")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer la lista de when
@@ -654,7 +663,7 @@ class Ast2:
     #Recorriendo tipos de when : Objeto al que Accesa "TiposWhen"  : Campos: Reservada,Reservada2,Reservada3,ListaExpresiones1=[],ListaExpresiones2=[],ListaExpresiones3=[])
     def GrafoTiposWhen(self,Reservada,ListaExpresiones1,Reservada2,ListaExpresiones2,Reservada3,ListaExpresiones3,padre):
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "TIPOS WHEN ENTRADA")
         dot.edge(padre, 'Node' + str(self.i))
@@ -662,25 +671,25 @@ class Ast2:
         #When ListaExpresiones1 then listaExpresiones3
         if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2=="")and(ListaExpresiones2==False )and(Reservada3!="")and(ListaExpresiones3!=False)):
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la ListaExpresiones 1
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
             self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
 
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada3)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
             # Recorrido De la ListaExpresiones 3
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES3")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
@@ -692,12 +701,12 @@ class Ast2:
         # When ListaExpresiones1 Else listaExpresiones2 then ListaExpresiones3
         if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2!="")and(ListaExpresiones2!=False )and(Reservada3 !="")and(ListaExpresiones3 !=False)):
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la ListaExpresiones 1
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
@@ -705,12 +714,12 @@ class Ast2:
 
 
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada2)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la ListaExpresiones 2
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES2")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
@@ -718,13 +727,13 @@ class Ast2:
 
 
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada3)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
             # Recorrido De la ListaExpresiones 3
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES3")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
@@ -735,12 +744,12 @@ class Ast2:
         # When ListaExpresiones1
         if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2=="")and(ListaExpresiones2==False )and(Reservada3 =="")and(ListaExpresiones3 ==False)):
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la ListaExpresiones 1
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
            # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
@@ -752,23 +761,23 @@ class Ast2:
         # When ListaExpresiones1 Else listaExpresiones2
         if((Reservada!="")and(ListaExpresiones1!=False)and(Reservada2!="")and(ListaExpresiones2 !=False )and(Reservada3 =="")and(ListaExpresiones3 ==False)):
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la ListaExpresiones 1
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES1")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
             self.Recorrer_Condiciones(ListaExpresiones1,'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Reservada2)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             # Recorrido De la ListaExpresiones 2
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES_EXPRESIONES2")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             # self.RecorrerTipoSelect(Consulta,'Node' + str(self.i))
@@ -795,16 +804,16 @@ class Ast2:
         # as Alias
         if ((Alias != "") ):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Alias_Produccion")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "As")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Alias)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         else:
@@ -824,16 +833,16 @@ class Ast2:
         # as Alias
         if (Alias != "" ):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Alias_Produccion")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "As")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Alias)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -857,16 +866,16 @@ class Ast2:
         # as Alias
         if (Alias != "" ):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Alias_Produccion")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "As")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Alias)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -888,16 +897,16 @@ class Ast2:
         # as Alias
         if (Alias != "" ):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Alias_Produccion")
             dot.edge(padre, 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "As")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), Alias)
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -913,12 +922,12 @@ class Ast2:
     # ----------------------------------------------------------------------------------------------------------
     # Where Expreciones
     def GrafoCuerpo_Condiciones(self,Lista,padre):
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "Cuerpo")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "Where")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -931,7 +940,7 @@ class Ast2:
 
         # GRAFICANDO EXPRESION===========================
             i = Lista
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICION")
             dot.edge(padre, 'Node' + str(self.i))
 
@@ -966,7 +975,8 @@ class Ast2:
                 elif isinstance(j,ExpresionesCase ):
                     print("Es un Acceso a  una expresion Case")
                     self.GrafoExpresionCase(j.Reservada, j.ListaExpresiones, padre)
-
+                # elif isinstance(j, Campo_Accedido):
+                #     self.GrafoCampo_Accedido(j.NombreT, j.Columna, j.Lista_Alias, padre)
                 else:
                     print("No Ningun Tipo  vos ")
 
@@ -1147,30 +1157,30 @@ class Ast2:
     def GrafoSelect(self, ListaCampos, NombresTablas, Uniones, padre):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i),"Uniones")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         #Recorrer lista de uniones
@@ -1180,36 +1190,36 @@ class Ast2:
     def GrafoSelect2(self,ListaCampos, NombresTablas,cuerpo, Uniones, padre ):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "CUERPO")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i),"Uniones")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         #Recorrer lista de uniones
@@ -1219,35 +1229,35 @@ class Ast2:
     def GrafoSelect3(self,Distict, ListaCampos, NombresTablas, Uniones, padre):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), Distict)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i),"Uniones")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         #Recorrer lista de uniones
@@ -1258,41 +1268,41 @@ class Ast2:
     def GrafoSelect4(self,Distict,ListaCampos, NombresTablas,cuerpo, Uniones, padre ):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), Distict)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "CUERPO")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i),"Uniones")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         #Recorrer lista de uniones
@@ -1311,25 +1321,25 @@ class Ast2:
     def GrafoSubSelect(self, ListaCampos, NombresTablas, padre):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
@@ -1341,30 +1351,30 @@ class Ast2:
     def GrafoSubSelect2(self, ListaCampos, NombresTablas, cuerpo, padre):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "CUERPO")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
@@ -1375,31 +1385,31 @@ class Ast2:
     def GrafoSubSelect3(self,Distinct,ListaCampos, NombresTablas, padre):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), Distinct)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
@@ -1410,34 +1420,34 @@ class Ast2:
     def GrafoSubSelect4(self,Distinct,ListaCampos, NombresTablas, cuerpo, padre):
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION_SELECT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "SELECT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), Distinct)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_CAMPOS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i));
+        self.RecorrerListadeCampos(ListaCampos, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "FROM")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "LISTA_TABLAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListadeNombres(NombresTablas, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), "CUERPO")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
@@ -1452,26 +1462,26 @@ class Ast2:
        #Group by ListaCampos Having Condiciones
         if ((Lista_Campos!=False) and  (Condiciones!=False)):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "INSTRUCCION GROUP BY ")
             dot.edge(padre, 'Node' + str(self.i))
 
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "GROUP BY")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "LISTA_CAMPOS")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "HAVING")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.Recorrer_Condiciones(Condiciones, 'Node' + str(self.i))
@@ -1479,15 +1489,15 @@ class Ast2:
        #Group by ListaCampos
         elif ((Lista_Campos != False) and (Condiciones == False)):
 
-           self.inc();
+           self.inc()
            nuevoPadre = self.i
            dot.node('Node' + str(self.i), "INSTRUCCION GROUP BY ")
            dot.edge(padre, 'Node' + str(self.i))
 
-           self.inc();
+           self.inc()
            dot.node('Node' + str(self.i), "GROUP BY")
            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-           self.inc();
+           self.inc()
            dot.node('Node' + str(self.i), "LISTA_CAMPOS")
            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
            self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
@@ -1501,26 +1511,26 @@ class Ast2:
        #Group by ListaCampos Having Condiciones
         if ((Lista_Campos!=False) and  (Condiciones!=False)):
 
-            self.inc();
+            self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "INSTRUCCION ORDER BY ")
             dot.edge(padre, 'Node' + str(self.i))
 
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "ORDER BY")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "LISTA_CAMPOS")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "HAVING")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), "CONDICIONES")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
             self.Recorrer_Condiciones(Condiciones, 'Node' + str(self.i))
@@ -1528,15 +1538,15 @@ class Ast2:
        #Group by ListaCampos
         elif ((Lista_Campos != False) and (Condiciones == False)):
 
-           self.inc();
+           self.inc()
            nuevoPadre = self.i
            dot.node('Node' + str(self.i), "INSTRUCCION ORDER BY ")
            dot.edge(padre, 'Node' + str(self.i))
 
-           self.inc();
+           self.inc()
            dot.node('Node' + str(self.i), "ORDER BY")
            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-           self.inc();
+           self.inc()
            dot.node('Node' + str(self.i), "LISTA_CAMPOS")
            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
            self.RecorrerListaCamposGroupBy(Lista_Campos,'Node' + str(self.i))
@@ -1551,16 +1561,16 @@ class Ast2:
 
         global dot
 
-        self.inc();
+        self.inc()
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "INSTRUCCION LIMIT")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), Reservada)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), Expresion_Numerica)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
@@ -1593,13 +1603,13 @@ class Ast2:
         dot.node('Node'+str(self.i),"DROP_TABLE")
         dot.edge(padre,'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre2 = self.i
         dot.node('Node'+str(self.i),"ID TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
         for i in id:
-            self.inc();
+            self.inc()
             dot.node('Node'+  str(self.i), i.val)
             dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
 
@@ -1615,17 +1625,17 @@ class Ast2:
         dot.node('Node'+str(self.i),"INSERT")
         dot.edge(padre,'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre2 = self.i
         dot.node('Node'+str(self.i),"ID TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
         for i in id:
-            self.inc();
+            self.inc()
             dot.node('Node'+  str(self.i), i.val)
             dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"VALORES TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
@@ -1633,7 +1643,7 @@ class Ast2:
 
        #GRAFICANDO EXPRESION===========================
         for i in valores:
-            self.inc();
+            self.inc()
             dot.node('Node'+  str(self.i), "VALOR NUEVO")
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
             #LLAMAMOS A GRAFICAR EXPRESION
@@ -1714,6 +1724,30 @@ class Ast2:
             self.inc()
             padreID=self.i
             dot.node(str(padreID),str(expresiones.tablaid)+"."+str(expresiones.campoid))
+        elif isinstance(expresiones, Variable):
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), 'Variable')
+            dot.edge(str(padreID), str(padreID + 1))
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), str(expresiones.id))
+        elif isinstance(expresiones, ExpresionTiempo):
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), 'Unidad Tiempo')
+            dot.edge(str(padreID), str(padreID + 1))
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), expresiones.nombre)
+        elif isinstance(expresiones, ExpresionConstante):
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), 'Constante')
+            dot.edge(str(padreID), str(padreID + 1))
+            self.inc()
+            padreID = self.i
+            dot.node(str(padreID), expresiones.nombre)
 
     def graficar_arit_log_rel_bb(self,expresion,tipo_exp="") :
         global  dot,tag,i
@@ -1765,6 +1799,7 @@ class Ast2:
         padreID=self.i
         dot.node(str(padreID),'Expresion'+tipo_exp)
         dot.edge(str(padreID),str(padreID+1))
+        print(expresion)
         if isinstance(expresion,UnitariaNegAritmetica):
             self.graficar_expresion(expresion.exp)
         else:
@@ -1946,6 +1981,16 @@ class Ast2:
             return '|'
         elif padreID==OPERACION_ARITMETICA.POTENCIA:
             return '^'
+        elif padreID == FUNCION_NATIVA.EXTRACT:
+            return 'EXTRACT'
+        elif padreID == FUNCION_NATIVA.DATE_PART:
+            return 'DATE_PART'
+        elif padreID == FUNCION_NATIVA.NOW:
+            return 'NOW'
+        elif padreID == FUNCION_NATIVA.PI:
+            return 'PI'
+        elif padreID == FUNCION_NATIVA.RANDOM:
+            return 'RANDOM'
         else:
             return 'op'
 
@@ -1983,7 +2028,7 @@ class Ast2:
 
         '''CONSTRAINTS OPTIONS: '''
 
-        self.inc();
+        self.inc()
         nuevop = self.i
         dot.node('Node' + str(self.i), "CONSTRAINT:")
         dot.edge('Node' + str(padre), 'Node' + str(self.i))
@@ -2001,7 +2046,7 @@ class Ast2:
         if contraint.condiciones != None:
             for i in contraint.condiciones:
                 #print(i)
-                self.inc();
+                self.inc()
                 dot.node('Node' + str(self.i), "VALOR NUEVO")
                 dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
                 # LLAMAMOS A GRAFICAR EXPRESION
@@ -2031,14 +2076,14 @@ class Ast2:
 
     def grafoListaIDs(self, lista : ExpresionValor, padre):
         for v in lista:
-            self.inc();
+            self.inc()
             dot.node('Node'+ str(self.i), str(v.val))
             dot.edge('Node' + str(padre), 'Node'+str(self.i))
 
     def grafoCampoTabla(self, campo, padre):
         global dot, i
 
-        self.inc();
+        self.inc()
         nuevop = self.i
         dot.node('Node' + str(self.i), "CAMPO")
         dot.edge('Node' + str(padre), 'Node' + str(self.i))
@@ -2053,7 +2098,7 @@ class Ast2:
             dot.node('Node' + str(self.i), 'Tipo: ' + str(campo.tipo.valor))
             dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
-            self.inc();
+            self.inc()
             nuevoPadre4 = self.i
             dot.node('Node' + str(self.i), 'EXPRESION')
             dot.edge('Node' + str(nuevoPadre3), 'Node' + str(self.i))
@@ -2074,7 +2119,7 @@ class Ast2:
     def grafoCampoValidaciones(self, validacion, padre):
         global dot, i
 
-        self.inc();
+        self.inc()
         nuevop = self.i
         dot.node('Node' + str(self.i), "VALIDACION")
         dot.edge('Node' + str(padre), 'Node' + str(self.i))
@@ -2091,7 +2136,7 @@ class Ast2:
     def grafoInhertis(self, id, padre):
         global dot, i
 
-        self.inc();
+        self.inc()
         nuevop = self.i
         dot.node('Node' + str(self.i), "INHERITS")
         dot.edge('Node' + str(padre), 'Node' + str(self.i))
@@ -2264,7 +2309,7 @@ class Ast2:
 
     def grafoListaCadenas(self, lista, padre):
         for v in lista:
-            self.inc();
+            self.inc()
             dot.node('Node'+ str(self.i), str(v))
             dot.edge('Node' + str(padre), 'Node'+str(self.i))
 
@@ -2276,7 +2321,7 @@ class Ast2:
 #    self.contador+1
 #    rootActual = self.contador
 #    self.c +='Node'+str(self.contador)+ '[label="Campo"]\n'
-#     self.c +='Node'+ padre + '->'+'Node'+str(self.contador)+';\n'
+#     self.c +='Node'+ padre + '->'+'Node'+str(self.contador)+'\n'
 #  self.contador+1
 # self.c +='Node'+str(self.contador)+'[label="'+NombreT+]
 
@@ -2292,23 +2337,23 @@ class Ast2:
         dot.node('Node'+str(self.i),"DELETE")
         dot.edge(padre,'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre2 = self.i
         dot.node('Node'+str(self.i),"ID TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
         for i in id:
-            self.inc();
+            self.inc()
             dot.node('Node'+  str(self.i), i.val)
             dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"WHERE")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
        #GRAFICANDO EXPRESION===========================
         i = valores
-        self.inc();
+        self.inc()
         dot.node('Node'+  str(self.i), "VALOR CONDICION")
         dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
         #LLAMAMOS A GRAFICAR EXPRESION
@@ -2328,25 +2373,25 @@ class Ast2:
         dot.node('Node'+str(self.i),"UPDATE")
         dot.edge(padre,'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre2 = self.i
         dot.node('Node'+str(self.i),"ID TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
         for i in id:
-            self.inc();
+            self.inc()
             dot.node('Node'+  str(self.i), i.val)
             dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
 
 
         #GRAFICAR============VALORES DEL SET======================
-        self.inc();
+        self.inc()
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"SET")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
        #GRAFICANDO EXPRESION===========================
         for i in valores_set:
-            self.inc();
+            self.inc()
             dot.node('Node'+  str(self.i), "VALOR CONDICION SET")
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
             #LLAMAMOS A GRAFICAR EXPRESION
@@ -2356,13 +2401,13 @@ class Ast2:
             dot.edge('Node'+str(padrenuevo4),str(padrenuevo4+1))
 
         #GRAFICAR============VALORES DEL WHERE======================
-        self.inc();
+        self.inc()
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"WHERE")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
        #GRAFICANDO EXPRESION===========================
         i = valores
-        self.inc();
+        self.inc()
         dot.node('Node'+  str(self.i), "VALOR CONDICION WHERE")
         dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
         #LLAMAMOS A GRAFICAR EXPRESION
@@ -2383,23 +2428,23 @@ class Ast2:
         dot.node('Node'+str(self.i),"ALTER TABLE ADD COLUMN")
         dot.edge(padre,'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre2 = self.i
         dot.node('Node'+str(self.i),"ID TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node'+  str(self.i), str(id_tablas))
         dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
 
 
-        self.inc();
+        self.inc()
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"COLUMNAS")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
         for i in id_columnas:
-            self.inc();
+            self.inc()
             dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
             dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
 
@@ -2414,29 +2459,29 @@ class Ast2:
         dot.node('Node'+str(self.i),"ALTER COLUMN")
         dot.edge(padre,'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre2 = self.i
         dot.node('Node'+str(self.i),"ID TABLA")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node'+  str(self.i), str(id_tabla))
         dot.edge('Node' + str(nuevoPadre2),'Node'+str(self.i))
 
 
 
-        self.inc();
+        self.inc()
         nuevoPadre3 = self.i
         dot.node('Node'+str(self.i),"COLUMNAS")
         dot.edge('Node' + str(nuevoPadre),'Node'+str(self.i))
 
         for i in columnas:
             if isinstance(i.tipo, valorTipo):
-                self.inc();
+                self.inc()
                 dot.node('Node'+  str(self.i), ' Tipo: '+ i.tipo.valor)
                 dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
             else:
-                self.inc();
+                self.inc()
                 dot.node('Node'+  str(self.i), i.val +' Tipo: '+ i.tipo)
                 dot.edge('Node' + str(nuevoPadre3),'Node'+str(self.i))
            
@@ -2456,27 +2501,27 @@ class Ast2:
         dot.node('Node' + str(self.i), "DML_COMANDOS")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ALTER TABLE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), str( id_tabla ))
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "DROP COLUMN")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), "COLUMNAS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         for columna in columnas:
-            self.inc();
+            self.inc()
             dot.node('Node' + str(self.i), columna.val)
             dot.edge('Node' + str(nuevoPadre3), 'Node' + str(self.i))
 
@@ -2488,31 +2533,31 @@ class Ast2:
         dot.node('Node' + str(self.i), "DML_COMANDOS")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ALTER TABLE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), str(id_tabla))
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "RENAME COLUMN")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), old_column.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), "TO")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), new_column.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
@@ -2525,21 +2570,21 @@ class Ast2:
         dot.node('Node' + str(self.i), "DML_COMANDOS")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ALTER TABLE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), str(id_tabla))
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "DROP CONSTRAINT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), id_constraint.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
@@ -2552,26 +2597,26 @@ class Ast2:
         dot.node('Node' + str(self.i), "DML_COMANDOS")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ALTER TABLE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), str(id_tabla))
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ALTER COLUMN")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), id_column.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "SET NOT NULL")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
@@ -2585,31 +2630,31 @@ class Ast2:
         dot.node('Node' + str(self.i), "DML_COMANDOS")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ALTER TABLE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), str(id_tabla))
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ADD FOREIGN KEY")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), id_column.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "REFERENCES")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), id_column_references.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
@@ -2624,49 +2669,48 @@ class Ast2:
         dot.node('Node' + str(self.i), "DML_COMANDOS")
         dot.edge(padre, 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ALTER TABLE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         dot.node('Node' + str(self.i), str(id_tabla))
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "ADD CONSTRAINT")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), id_constraint.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre2 = self.i
         dot.node('Node' + str(self.i), "UNIQUE")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-        self.inc();
+        self.inc()
         # nuevoPadre3 = self.i
         dot.node('Node' + str(self.i), id_column.val)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
     def graficarExpresionFuncion(self, expresion, tipo_exp="") :
         global  dot,tag,i
-        if expresion.exp1:
-            self.inc()
-            padreID = self.i
-            padre = padreID
-            dot.node(str(padreID), 'Expresion' + tipo_exp)
+        self.inc()
+        padreID = self.i
+        padre = padreID
+        dot.node(str(padreID), 'Expresion' + tipo_exp)
 
-            self.inc()
-            padreID = self.i
-            dot.node(str(padreID), self.getVar(expresion.id_funcion))
-            dot.edge(str(padre), str(padreID))
+        self.inc()
+        padreID = self.i
+        dot.node(str(padreID), self.getVar(expresion.id_funcion))
+        dot.edge(str(padre), str(padreID))
 
-
+        if expresion.exp1 is not None:
             self.inc()
             padreID=self.i
             dot.node(str(padreID),'exp1')
@@ -2716,6 +2760,34 @@ class Ast2:
 
         self.graficar_expresion(expresion.exp1)
 
+
+    def grafoUse(self, id, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "SELECT EXPRESION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'Id: '+id)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+    def grafoSelectExpresion(self, listaCampos, padre):
+        global dot, i
+        
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "Select Expresion")
+        dot.edge(padre, 'Node' + str(self.i))
+        self.inc()
+        dot.node('Node' + str(self.i), 'SELECT')
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        # dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
+        self.RecorrerListadeCampos(listaCampos, 'Node' + str(self.i))
 
 
 #crearBASEDATOS(objeto)
