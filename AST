@@ -2,24 +2,46 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=INSTRUCCION_SELECT]
+	Node1 [label="CREATE DATABASE"]
 	Node0 -> Node1
-	Node2 [label=SELECT]
+	Node2 [label="Id: MiBase1"]
 	Node1 -> Node2
-	Node3 [label=LISTA_CAMPOS]
+	Node3 [label="Owner: Oscar"]
 	Node1 -> Node3
-	Node4 [label=FROM]
+	Node4 [label="Mode: 1"]
 	Node1 -> Node4
-	Node5 [label=LISTA_TABLAS]
-	Node1 -> Node5
-	Node6 [label=Nombre_Tabla]
+	Node5 [label="CREATE TABLE"]
+	Node0 -> Node5
+	Node6 [label="Id: profesional"]
 	Node5 -> Node6
-	Node7 [label=profesional]
-	Node6 -> Node7
-	Node8 [label=Uniones]
-	Node1 -> Node8
-	Node9 [label=Final_Instruccion]
-	Node8 -> Node9
-	Node10 [label=";"]
-	Node9 -> Node10
+	Node7 [label=CAMPO]
+	Node5 -> Node7
+	Node8 [label="Id: carne"]
+	Node7 -> Node8
+	Node9 [label="Tipo: INT"]
+	Node7 -> Node9
+	Node10 [label=CAMPO]
+	Node5 -> Node10
+	Node11 [label="Id: nombre"]
+	Node10 -> Node11
+	Node12 [label="Tipo: INT"]
+	Node10 -> Node12
+	Node13 [label=CAMPO]
+	Node5 -> Node13
+	Node14 [label="Id: apellido"]
+	Node13 -> Node14
+	Node15 [label="Tipo: VARCHAR"]
+	Node13 -> Node15
+	Node16 [label=EXPRESION]
+	Node15 -> Node16
+	17 [label=ExpresionValor]
+	17 -> 18
+	18 [label=20]
+	Node16 -> 17
+	Node19 [label=CAMPO]
+	Node5 -> Node19
+	Node20 [label="Id: bandera"]
+	Node19 -> Node20
+	Node21 [label="Tipo: BOOLEAN"]
+	Node19 -> Node21
 }

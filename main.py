@@ -46,6 +46,7 @@ if __name__ == '__main__':
     #if path.exists("C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json"):
     #    remove('C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json')
     #g.parse()
+    g.reporte_gramatical()
 
     files=glob.glob('C:/Users/Jonathan/Documents/GitHub/compi2-proyecto/data/json/*')
     for ele in files:
