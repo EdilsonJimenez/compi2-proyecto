@@ -498,6 +498,7 @@ def p_ListaCampos_Lista(t):
     t[0] = [t[1]]
 
 
+
 def p_Lista_NombreSss(t):
     'LISTAA          : ID PUNTO ID LISTALIASS'
 
@@ -909,6 +910,8 @@ def p_Expre_Campo8(t):
     t[0] = AccesoGroupBy("", t[1], t[2], False)
 
 
+
+
 def p_Expre_Campo9(t):
     'EXPRES    :  COMA'
     t[0] = str(t[1])
@@ -998,6 +1001,8 @@ def p_Query_Query(t):
 def p_Query_QueryAs(t):
     'QUERY :  PARIZQ QUE_SUBS PARDER AS_NO'
     t[0] = AccesoSubConsultas(False, t[2], t[4])
+
+
 
 
 def p_Query_Coma(t):

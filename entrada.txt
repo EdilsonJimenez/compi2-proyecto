@@ -18,14 +18,66 @@ CREATE TABLE tbrol (
 	rol varchar(15)
 );
 
-insert into tbrol values (1,'Administrador');
+insert into tbrol values (4,'Administrador');
 insert into tbrol values (2,'Admin');
 insert into tbrol values (3,'Ventas');
-insert into tbusuario values(1,'Luis Fernando1','Salazar Rodriguez','lsalazar',MD5('paswword'),'10-11-42');
+insert into tbusuario values(4,'Luis Fernando1','Salazar Rodriguez','lsalazar',MD5('paswword'),'10-11-42');
 insert into tbusuario values(1,'David Fernando2','Salazar Rodriguez','lFer',MD5('paswword'),'10-11-42');
 insert into tbusuario values(3,'Juan Fernando3','Salazar Rodriguez','DavidFer',MD5('paswword'),'10-11-42');
 
-select rol, usuario from tbrol, tbusuario
+select idusuario, rol, usuario from tbrol, tbusuario order by idusuario;
+
+
+#====================================================================================================================
+CREATE DATABASE IF NOT EXISTS test
+    OWNER = root
+    MODE = 1;
+
+USE test;
+
+CREATE TABLE tbusuario (
+    idusuario integer NOT NULL primary key,
+	nombre varchar(50),
+	apellido varchar(50),
+	usuario varchar(15)  UNIQUE NOT NULL,
+	password varchar(15) NOT NULL,
+	fechacreacion date
+);
+
+CREATE TABLE tbrol (
+    idrol integer NOT NULL primary key,
+	rol varchar(15)
+);
+
+insert into tbrol values (4,'Administrador');
+insert into tbrol values (2,'Admin');
+insert into tbrol values (3,'Ventas');
+insert into tbusuario values(5,'Luis Fernando1','Salazar Rodriguez','lsalazar',MD5('paswword'),'10-11-42');
+insert into tbusuario values(1,'David Fernando2','Salazar Rodriguez','lFer',MD5('paswword'),'10-11-42');
+insert into tbusuario values(3,'Juan Fernando3','Salazar Rodriguez','DavidFer',MD5('paswword'),'10-11-42');
+
+select idusuario carro, rol, usuario from tbrol, tbusuario order by carro asc;
+
+select idusuario carro, rol, usuario from tbrol, tbusuario Group by carro  HAVING 34+33;
+
+
+select idusuario carro, rol, usuario from tbrol, tbusuario Group by carro HAVING 10+10>12;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 where tbrol.idrol = tbusuario.idusuario AND tbrol.idrol = 2;
 ************************************************************************************************************************
 CREATE DATABASE IF NOT EXISTS test
