@@ -4101,6 +4101,8 @@ class SelectExpresion(Instruccion):
         listaGeneral.clear()
 
 
+
+
 #subSelect sin cuerpo
 #---------------------------------------------------------------------------------------------------
 class SubSelect(Instruccion) :
