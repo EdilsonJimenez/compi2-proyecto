@@ -2100,7 +2100,7 @@ class SelectExpresion(Instruccion):
         global ts_global
         numero = 1
         for campo in self.listaCampos:
-            print(campo)
+
             if isinstance(campo, Campo_AccedidoSinLista):
                 if isinstance(campo.Columna, string_types):
                     if campo.Columna.isnumeric() or campo.Columna.isdecimal():
@@ -2111,7 +2111,18 @@ class SelectExpresion(Instruccion):
                     result = Inter.procesar_expresion(campo.Columna, ts_global)
                     listaGeneral['Expresion' + str(numero)] = [result]
                     numero += 1
-
+            if isinstance(campo, Campo_Accedido):
+                columna = campo.Columna
+                alias = campo.Lista_Alias.Alias
+                if isinstance(columna, string_types):
+                    if columna.isnumeric() or columna.isdecimal():
+                        result = int(columna)
+                        listaGeneral[alias] = [result]
+                        numero += 1
+                else:
+                    result = Inter.procesar_expresion(columna, ts_global)
+                    listaGeneral[alias] = [result]
+                    numero += 1
 
 
 

@@ -975,7 +975,8 @@ class Ast2:
                 elif isinstance(j,ExpresionesCase ):
                     print("Es un Acceso a  una expresion Case")
                     self.GrafoExpresionCase(j.Reservada, j.ListaExpresiones, padre)
-
+                # elif isinstance(j, Campo_Accedido):
+                #     self.GrafoCampo_Accedido(j.NombreT, j.Columna, j.Lista_Alias, padre)
                 else:
                     print("No Ningun Tipo  vos ")
 
