@@ -1,6 +1,0 @@
-INSERT INTO products VALUES (1, 2,2.2);
-UPDATE products SET price = 10 WHERE price = 5;
-UPDATE products SET price = 2 * 2;
-UPDATE mytable SET  a = 5, b = 3, c = 1 WHERE a > 0;
-
-INSERT INTO products VALUES (1, substring("Prueba", 1, 4), B'1111' || B'1111' # ~ B'1111' || B'1111' & B'1111' >> 2  | B'1111' << 3 );

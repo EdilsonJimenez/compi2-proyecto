@@ -145,6 +145,7 @@ tokens = [
              'MENORIGUAL',
              'MAYORIGUAL',
 
+
              'PARIZQ',
              'PARDER',
              'COMA',
@@ -180,7 +181,7 @@ tokens = [
          ] + list(reservadas.values())
 
 # TOKENS DE LOS SIMBOLOS UTILIZADOS EN EL LENGUAJE
-t_DIFERENTE = r'!='
+t_DIFERENTE = r'(!=)|(<>)'
 t_NEGACION  = r'\!'
 t_IGUAL     = r'='
 t_MAYOR     = r'>'
@@ -387,6 +388,7 @@ precedence = (
     ('left', 'OR'),
     ('left', 'AND'),
     ('right', 'NOT'),
+    ('', 'MENOR', 'MAYOR', 'MENORIGUAL', 'MAYORIGUAL', 'IGUAL', '', 'DIFERENTE'),
     ('left', 'DOBLEPLECA', 'AMPERSAND', 'PLECA', 'NUMERAL', 'LEFTSHIFT', 'RIGHTSHIFT'),
     ('right', 'VIRGULILLA'),
     ('left', 'MAS', 'MENOS'),
@@ -477,7 +479,7 @@ def p_s_asalias(t):
     'S_ASALIAS          : AS ALIAS'
     t[0] = str(t[1]) + str(t[2])
 
-def p_s_asalias_(t):
+def p_s_asalias(t):
     'S_ASALIAS          : '
     t[0] = ''
 
@@ -485,7 +487,7 @@ def p_s_comalista(t):
     'S_COMALISTA:           : COMA LISTAA'
     t[0] = str(t[1]) + str(t[2])
 
-def p_s_comalista_(t):
+def p_s_comalista(t):
     'S_COMALISTA:'
     t[0] = ''
 
@@ -505,7 +507,7 @@ import ply.yacc as yacc
 lexer = lex.lex()
 parser = yacc.yacc()
 
-f = open("./entrada2.txt", "r")
+f = open("entrada2.sql", "r")
 input = f.read()
 print(input)
 parser.parse(input)
