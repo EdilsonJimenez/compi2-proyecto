@@ -212,7 +212,11 @@ reservadas = {
     #end esta arriva
     'for'     : 'FOR',
     'loop'    : 'LOOP',
-    'reverse' :'REVERSE'
+    'reverse' :'REVERSE',
+    'execute' :'EXECUTE',
+    'array'   :'ARRAY',
+    'slice'   :'SLICE',
+    'foreach' :'FOREACH'
 
 
 
@@ -2600,20 +2604,21 @@ def p_expresion_binario_n(t):
     t[0] = UnitariaAritmetica(t[2], OPERACION_BIT_A_BIT.COMPLEMENTO)
 
 
+
+
 # ================================================        MANEJO DE FUNCIONES   =====================================================
 # ===================================================================================================================================
 
+
+
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  ID PARIZQ PARAMETROSG PARDER RETURNS expresion AS INSTRUCCION LANGUAGE SQL PUNTOCOMA'
-    t[0]=str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) +str(t[7]) + str(t[8]) + str(t[9]) +str(t[10]) + str(t[11]) +str(t[12])
-    print( "Si lo acepte wey " + str(t[0]))
+    'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS INSTRUCCIONES DECLAEP CODE  PUNTOCOMA'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
+    #print( "Si lo acepte wey funcion " + str(t[0]))
+    t[0]=Funciones_(t[1],t[3],t[7], t[5], t[10], t[11], t[12])
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
 
-
-def p_Funciones_Procedure(t):
-    'FUNCIONESS  :  FUNTIONE  FUNTION ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS INSTRUCCION DECLA CODE  PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
-    print( "Si lo acepte wey funcion " + str(t[0]))
-
+#----------------------------------------------------- Tipos de Create y Reservadas
 def p_Funcionee(t):
     'FUNTIONE  :  CREATE '
     t[0] = str(t[1])
@@ -2622,7 +2627,20 @@ def p_Funcionee(t):
 
 def p_FuncioneeR(t):
     'FUNTIONE  :  CREATE OR REPLACE'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
+    t[0] = str(t[1])+" "+ str(t[2])+" "+ str(t[3])
+
+
+
+def p_ReservadaFunc(t):
+    'FUNCI  :  FUNTION'
+    t[0] = str(t[1])
+
+
+def p_ReservadaEpsilon(t):
+    'FUNCI  :  '
+    t[0] = ""
+
+
 
 # -----------------------------------------------------  LISTA DE PARAMETROS
 
@@ -2630,37 +2648,22 @@ def p_Parametros_General(t):
     'PARAMETROSG  :  PARAMETROS '
     t[0] = t[1]
 
-
 def p_Parametros_GeneralEpsilon(t):
     'PARAMETROSG  :   '
     t[0] = ""
-
-
-
 #+++++++ Lista de comandos
 def p_Parametros_P(t):
     'PARAMETROS  :  PARAMETROS COMA PARAMETRO'
     t[1].append(t[3])
     t[0] = t[1]
 
-
 def p_Parametros_List(t):
     'PARAMETROS  :  PARAMETRO '
     t[0] = [t[1]]
 
-
-
-
-
-
-
-
-
 def p_ParametrosT(t):
     'PARAMETRO  :  ARGU_N   ARGU_N  ARGU_N'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3])
-
-
+    t[0] = str(t[1]) +"  "+ str(t[2]) +"  "+ str(t[3])
 
 def p_Parametros_Argumentos(t):
     'ARGU_N  :  ID'
@@ -2671,24 +2674,35 @@ def p_Parametros_ArgumentosEpsilon(t):
     t[0] = ""
 
 
+# ----------------------------------------------------------  VARIABLES DECLARADAS
+#-------------  Lista Epsilon
+def p_Declaracion_ListaMore(t):
+    'DECLAEP  :   VARIABLES_N'
+    t[0] = t[1]
 
 
-# ----------------------------------------------------------  DECLARACIONES
-
-def p_DeclaracionesS(t):
-    'DECLA  :  DECLARE   VARIABLES_N'
-    t[0] = str(t[1]) + str(t[2])
-
-
-def p_DeclaracionesSEpsilon(t):
-    'DECLA  :  '
+def p_Declaracion_Epsion(t):
+    'DECLAEP  :   '
     t[0] = ""
 
-# ----------------------------------------------------------  VARIABLES DECLARADAS
+
+def p_DeclaList_(t):
+    'VARIABLES_N  : VARIABLES_N VARIABLES_S'
+    t[1].append(t[2])
+    t[0]=t[1]
+
+
+def p_DeclaList_lis(t):
+    'VARIABLES_N  :  VARIABLES_S'
+    t[0]=[t[1]]
+
 
 def p_Declaracion_Variables(t):
-    'VARIABLES_N  : ID ID'
-    t[0] = str(t[1]) + str(t[2])
+    'VARIABLES_S  : ID ID'
+    #t[0] =  str(t[1]) + str(t[2])
+    t[0] = Variables_Name(t[1],t[2])
+
+
 
 
 
@@ -2696,8 +2710,25 @@ def p_Declaracion_Variables(t):
 #-----------------------------------------------------------  SECCION DE CODIGO
 
 def p_Code_Estructures(t):
-    'CODE  : BEGIN CODEEPSILON END ARGU_N'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    'CODE  : BEGIN CODEEPSILON END ARGU_N_N'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
+    t[0] = Code_Funciones(t[4],t[2])
+
+
+#-------------------------------------  Tipos de Argumento
+def p_ArgumentosFunciones(t):
+    'ARGU_N_N  :  LANGUAGE SQL'
+    t[0] = str(t[1]) +" "+ str(t[2])
+
+
+def p_ArgumentosFuncionesArg(t):
+    'ARGU_N_N  :  ID'
+    t[0] = str(t[1])
+
+def p_ArgumentosFuncionesArgEpsilon(t):
+    'ARGU_N_N  :  '
+    t[0] = ""
+
 
 
 #-------------------------------------  epsilon
@@ -2711,7 +2742,8 @@ def p_Code_CodeEpsilon(t):
     t[0] = ""
 
 
-#+++++++ Lista de comandos
+
+#---------------------------------- Lista de comandos
 def p_ListaCodigo_(t):
     'CODE_S  :  CODE_S  CODE_'
     t[1].append(t[2])
@@ -2726,20 +2758,47 @@ def p_ListaCodigo_List(t):
 
 
 
-
-
-
 #----------------------------------------------------------  PRODUCCION A CODIGO FOR
 def p_Codigo_For(t):
-    'CODE_  :   FOR ID TIPEE expresion BY_EXPRE  LOOP  CODEEPSILON  END LOOP ARGU_N PUNTOCOMA'
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11])
+    'CODE_  :   FOR ID IN TIPEE EXPRESI  BY_EXPRE  LOOP  CODEEPSILON  END LOOP ARGU_N PUNTOCOMA'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
+    t[0]= ForInstruccion(t[2],t[4],t[6],t[11],t[5],t[8])
+
+
+
+
+#------------ Lista Expresiones
+def p_ExpressEs(t):
+    'EXPRESI  :  LISTAEXPRES'
+    t[0] = t[1]
+
+
+
+def p_ExpressEpsilon(t):
+    'EXPRESI  :  '
+    t[0]=""
+
+
+def p_ListExpre(t):
+    'LISTAEXPRES  :  LISTAEXPRES  LISTEXPR'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_ListExll(t):
+    'LISTAEXPRES  :  LISTEXPR'
+    t[0] = [t[1]]
+
+
+
+def p_Lista_ExpresionesFor(t):
+    'LISTEXPR  :  expresion'
+    t[0] = t[1]
 
 
 
 
 
-
-#FOR ID TIPEE expresion BY_EXPRE  LOOP  CODE_S END LOOP ARGU_N PUNTOCOMA'
 
 #------------  Tipo de Recorrido
 def p_TipeOrS(t):
@@ -2747,6 +2806,14 @@ def p_TipeOrS(t):
     t[0] = str(t[1])
 
 
+def p_TipeOrExecute(t):
+    'TIPEE  :  EXECUTE'
+    t[0] = str(t[1])
+
+
+
+
+#AQUI VIENEN QUERYS
 def p_TipeOrEpsilon(t):
     'TIPEE  :  '
     t[0] = ""
@@ -2756,7 +2823,14 @@ def p_TipeOrEpsilon(t):
 
 def p_ExpresionBy_Loop(t):
     'BY_EXPRE  :  BY expresion'
-    t[0] = str(t[1]) + str(t[2])
+    #t[0] = str(t[1]) + str(t[2])
+    t[0] = Name_Expresion(t[1],t[2])
+
+
+def p_ExpresionUsing_Loop(t):
+    'BY_EXPRE  :  USING expresion'
+    #t[0] = str(t[1]) + str(t[2])
+    t[0] = Name_Expresion(t[1], t[2])
 
 
 def p_ExpresionBy_LoopEpsilon(t):
@@ -2764,10 +2838,24 @@ def p_ExpresionBy_LoopEpsilon(t):
     t[0] = ""
 
 
+#----------------------------------------------------------  PRODUCCION A CODIGO FOREACH
+def p_Codigo_Foreach(t):
+    'CODE_  :   FOREACH ID SLICEC IN ARRAY expresion  LOOP  CODEEPSILON  END LOOP ARGU_N PUNTOCOMA'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
+    t[0] = ForeachInstruccion(t[2],t[3],t[6],t[11],t[8] )
 
 
 
+def p_slices_Foreach(t):
+    'SLICEC  :  SLICE  expresion'
+    #t[0] = str(t[1]) + str(t[2])
+    t[0] = Name_Expresion(t[1], t[2])
 
+
+
+def p_slices_ForeachEpsilon(t):
+    'SLICEC  :  '
+    t[0] = ""
 
 
 

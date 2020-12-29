@@ -8022,3 +8022,65 @@ class DatoTipo(Instruccion):
         self.bd = bd
         self.tipo = tipo
         self.valor = valor
+
+
+
+
+#=======================================================================  INSTRUCCIONES PL SQL
+
+
+#----------------------------   FUNCIONES
+class Funciones_(Instruccion):
+    def __init__(self,Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
+        self.Reservada     = Reservada
+        self.Nombre        = Nombre
+        self.Retorno       = Retorno
+        self.Parametros    = Parametros
+        self.Instrucciones = Instrucciones
+        self.Declaraciones = Declaraciones
+        self.Codigo        = Codigo
+
+
+#---------------------------------------  codigo funciones
+class Code_Funciones(Instruccion):
+    def __init__(self,Argumento,Codigo=[]):
+        self.Argumento     = Argumento
+        self.Codigo        = Codigo
+
+
+class Name_Expresion(Instruccion):
+    def __init__(self,Reservada,Expresion):
+        self.Reservada     = Reservada
+        self.Expresion        = Expresion
+
+
+#-------------------------------------- Objeto Variables
+class Variables_Name(Instruccion):
+    def __init__(self,Identificador,Valor):
+        self.Identificador = Identificador
+        self.Valor         = Valor
+
+
+
+
+#=======================================================================  INSTRUCCION FOR  y FOREACH
+class ForInstruccion(Instruccion):
+    def __init__(self, Nombre, Tipo, By_Expre,Argumento,Lista_Expresiones=[],Lista_Codigo=[]):
+        self.Nombre            = Nombre
+        self.Tipo              = Tipo
+        self.By_Expre          = By_Expre
+        self.Argumento         = Argumento
+        self.Lista_Expresiones = Lista_Expresiones
+        self.Lista_Codigo      = Lista_Codigo
+
+
+
+
+class ForeachInstruccion(Instruccion):
+    def __init__(self, Nombre, Slice, Expre,Argumento,Lista_Codigo=[]):
+        self.Nombre       = Nombre
+        self.Slice        = Slice
+        self.Expre        = Expre
+        self.Argumento    = Argumento
+        self.Lista_Codigo = Lista_Codigo
+

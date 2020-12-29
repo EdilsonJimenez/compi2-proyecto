@@ -128,8 +128,11 @@ class Ast2:
                 self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column, padre)
             elif isinstance(i, SelectExpresion):
                 self.grafoSelectExpresion(i.listaCampos, padre)
+            elif isinstance(i, Funciones_):
+                self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
             else:
                 print("No es droptable")
+
 
     def RecorrerTipoSelect(self, sente, padre):
         i = sente
@@ -2533,6 +2536,7 @@ class Ast2:
 
     def graficarExpresionFuncion(self, expresion, tipo_exp=""):
         global dot, tag, i
+
         self.inc()
         padreID = self.i
         padre = padreID
@@ -2619,12 +2623,345 @@ class Ast2:
         # dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
         self.RecorrerListadeCampos(listaCampos, 'Node' + str(self.i))
 
-# crearBASEDATOS(objeto)
 
-# retun = llamarfunicion(Objeto.nombre)
-# if return = 0
-#  agreagarts()
-# elif return = 1
-# "ERRPR"
-# elif retunr = 2
-# "ERRPR"
+
+
+#==============================================================  GRAFICAS DE LOS PROCEDIMIENTOS, FUNCIONES  OPERADORES
+
+    #Funciones_   (Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]
+
+    def grafoFuncion(self,Reservada, Nombre,Retorno, Parametros, Instrucciones, Declaraciones, Codigo,padre):
+        global dot
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "FUNCION_PRODUCCION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), Reservada)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "FUNTION")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), Nombre)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        #--------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "("+"PARAMETROS"+")")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        # Recorrer Lista de Parametros
+        self.GrafoRecorridoParametros(Parametros,'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "RETURNS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "EXPRESION_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.Recorrer_Condiciones( Retorno, 'Node' + str(self.i))
+
+
+        # Recorrer Expresion
+        # recorrer
+
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "AS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "COMANDO_SQL")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        # Recorrer Comandos Sql
+        self.recorrerInstrucciones(Instrucciones, 'Node' + str(self.i))
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "DECLARACIONES")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        # Recorrer Lista Declaraciones
+        self.GrafoRecorridoDeclaraciones(Declaraciones, 'Node' + str(self.i))
+        # recorrer
+
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "CODIGO_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.GrafoCuerpoCodigo(Codigo, 'Node' + str(self.i))
+        # Recorrer Codigo
+        # recorrer
+
+
+
+
+
+#---------------  Recorremos los parametros
+
+    def GrafoRecorridoParametros(self, Parametros,padre):
+        global dot
+        if (isinstance(Parametros,list)):
+            self.inc()
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "PARAMETROS")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            for ele in Parametros:
+                self.inc()
+                dot.node('Node' + str(self.i), ele)
+                dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        else:
+            print("Viene un Epsilon no se hace nada... ")
+
+
+# --------------  Recorremos las Declaraciones
+    def GrafoRecorridoDeclaraciones(self, Declaraciones,padre):
+        global dot
+
+
+        if (isinstance(Declaraciones,list)):
+            self.inc()
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "DECLARACIONES")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            for ele in Declaraciones:
+                if isinstance(ele,Variables_Name):
+                    self.inc()
+                    dot.node('Node' + str(self.i),ele.Identificador + "  " + ele.Valor)
+                    dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        else:
+            print("Viene un Epsilon no se hace nada... ")
+
+
+#---------------  Grafo Cuerpo Codigo
+    def GrafoCuerpoCodigo(self,CuerpoC, padre):
+        global dot
+        if(isinstance(CuerpoC,Code_Funciones)):
+            self.inc()
+            nuevoPadre = self.i
+            dot.node('Node' + str(self.i), "CUERPO_CODE")
+            dot.edge(padre, 'Node' + str(self.i))
+
+            self.inc()
+            dot.node('Node' + str(self.i), "BEGIN")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            # --------------------------------------------------------
+            self.inc()
+            dot.node('Node' + str(self.i), "_CODIGO_")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.GrafoRecorridoCodigo(CuerpoC.Codigo, 'Node' + str(self.i))
+            # Recorrer Codigo
+            # recorrer
+
+
+            self.inc()
+            dot.node('Node' + str(self.i), "END")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc()
+            dot.node('Node' + str(self.i), CuerpoC.Argumento +";")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        else:
+            print("Otro tipo de Objeto")
+
+
+
+# --------------  Recorremos el codigo
+    def GrafoRecorridoCodigo(self, Codigo,padre):
+        global dot
+        if (isinstance(Codigo,list)):
+            for ele in Codigo:
+                self.inc()
+                nuevoPadre = self.i
+                dot.node('Node' + str(self.i), "CODIGO_GENERADO")
+                dot.edge(padre, 'Node' + str(self.i))
+
+                if isinstance(ele,ForInstruccion):
+                    #Mandamos a Graficar la instruccion  for
+                    self.grafoFor(ele.Nombre,ele.Tipo, ele.By_Expre,ele.Argumento,ele.Lista_Expresiones,ele.Lista_Codigo,'Node' + str(self.i))
+
+                elif isinstance(ele,ForeachInstruccion):
+                     # Mandamos a Graficar la instruccion  foreach
+                    self.grafoForEach(ele.Nombre, ele.Slice, ele.Expre, ele.Argumento, ele.Lista_Codigo, 'Node' + str(self.i))
+        else:
+            print("Viene un Epsilon no se hace nada... ")
+
+
+    #   ForInstruccion (self, Nombre, Tipo, By_Expre,Argumento,Lista_Expresiones=[],Lista_Codigo=[]):
+    def grafoFor(self, Nombre, Tipo, By_Expre,Argumento,Lista_Expresiones,Lista_Codigo, padre):
+        global dot
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i),"FOR_INSTRUCCION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "FOR")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), Nombre+ "   IN")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), Tipo)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "_EXPRESIONES_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.Recorrer_CondicioneSLista( Lista_Expresiones, 'Node' + str(self.i))
+        # Recorrer Expresiones
+        # recorrer
+
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "_BY_EXP_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.RecorridoByExpre(By_Expre, 'Node' + str(self.i))
+
+        # Recorrer by expre
+        # recorrer
+
+        self.inc()
+        dot.node('Node' + str(self.i), "LOOP")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "_CODIGO_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.GrafoRecorridoCodigo( Lista_Codigo, 'Node' + str(self.i))
+        # Recorrer el cuerpo con mas codigo
+        # recorrer
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "END  LOOP")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), Argumento + ";")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+#-------------------   Expresion tipo By
+
+    def RecorridoByExpre(self,Expre, padre):
+        global dot
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i),"EXPRESION_TIPOB")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        if(isinstance(Expre,Name_Expresion)):
+
+            self.inc()
+            dot.node('Node' + str(self.i), Expre.Reservada)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+            # --------------------------------------------------------
+            self.inc()
+            dot.node('Node' + str(self.i), "EXPRESION_")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+            self.Recorrer_Condiciones(Expre.Expresion , 'Node' + str(self.i))
+
+
+        else:
+            print("Es Otro Tipo de Expresion")
+
+
+
+
+
+
+
+    #  ForeachInstruccion (self, Nombre, Slice, Expre,Argumento,Lista_Codigo=[]):
+    def grafoForEach(self,Nombre, Slice, Expre,Argumento,Lista_Codigo, padre):
+        global dot
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i),"FOREACH_INSTRUCCION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "FOREACH")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), Nombre)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), Slice + "IN ARRAY")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
+
+       # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "_EXPRESION_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.Recorrer_Condiciones(Expre, 'Node' + str(self.i))
+
+        # Recorrer Expresiones
+
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "LOOP")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+       # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "_CODIGO_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.GrafoRecorridoCodigo(Lista_Codigo, 'Node' + str(self.i))
+        # Recorrer Expresiones
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), Slice + "END  LOOP")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), Argumento)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
