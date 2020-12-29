@@ -3,7 +3,7 @@ from graphviz import Digraph
 from graphviz import escape
 from expresiones import *
 import interprete as Inter
-
+from sentencias import *
 
 class Ast2:
 
@@ -128,6 +128,20 @@ class Ast2:
                 self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column, padre)
             elif isinstance(i, SelectExpresion):
                 self.grafoSelectExpresion(i.listaCampos, padre)
+            elif isinstance(i, CaseSimple):
+                self.grafoCaseSimple(i, padre)
+            elif isinstance(i, CaseBuscado):
+                self.grafoCaseBuscado(i, padre)
+            elif isinstance(i, LoopSimple):
+                self.grafoLoopSimple(i, padre)
+            elif isinstance(i, Exit):
+                self.grafoSalir(i, padre)
+            elif isinstance(i, Continue):
+                self.grafoContinuar(i, padre)
+            elif isinstance(i, Declaracion):
+                self.grafoDeclaracion(i, padre)
+            elif isinstance(i, Asignacion):
+                self.grafoAsignacion(i, padre)
             else:
                 print("No es droptable")
 
@@ -2618,6 +2632,233 @@ class Ast2:
 
         # dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
         self.RecorrerListadeCampos(listaCampos, 'Node' + str(self.i))
+
+
+
+    def grafoCaseSimple(self, casesimple, padre):
+        global dot, i
+
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "CASE SIMPLE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
+        self.graficar_expresion(casesimple.busqueda)
+
+
+        for when in casesimple.listawhen:
+
+            self.inc()
+            dot.node('Node' + str(self.i), 'WHEN')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            padreWhen = self.i
+            for exp in when.expresiones:
+                dot.edge('Node' + str(padreWhen), str(self.i + 1))
+                self.graficar_expresion(exp)
+
+            self.inc()
+            dot.node('Node' + str(self.i), 'THEN')
+            dot.edge('Node' + str(padreWhen), 'Node' + str(self.i))
+
+            if when.sentencias is not None:
+                self.recorrerInstrucciones(when.sentencias, 'Node' + str(self.i))
+
+        if casesimple.caseelse is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), 'ELSE')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            if casesimple.caseelse.sentencias is not None:
+                self.recorrerInstrucciones(casesimple.caseelse.sentencias, 'Node' + str(self.i))
+
+
+    def grafoCaseBuscado(self, casebuscado, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "CASE BUSCADO")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        for when in casebuscado.listawhen:
+
+            self.inc()
+            dot.node('Node' + str(self.i), 'WHEN')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            padreWhen = self.i
+            dot.edge('Node' + str(padreWhen), str(self.i + 1))
+            self.graficar_expresion(when.expresion)
+
+            self.inc()
+            dot.node('Node' + str(self.i), 'THEN')
+            dot.edge('Node' + str(padreWhen), 'Node' + str(self.i))
+
+            if when.sentencias is not None:
+                self.recorrerInstrucciones(when.sentencias, 'Node' + str(self.i))
+
+        if casebuscado.caseelse.sentencias is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), 'ELSE')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            if casebuscado.caseelse.sentencias is not None:
+                self.recorrerInstrucciones(casebuscado.caseelse.sentencias, 'Node' + str(self.i))
+
+
+    def grafoLoopSimple(self, loopsimple, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "LOOP SIMPLE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        if loopsimple.label is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), "LABEL")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc()
+            dot.node('Node' + str(self.i), loopsimple.label)
+            dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "SENTENCIAS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if loopsimple.sentencias is not None:
+            self.recorrerInstrucciones(loopsimple.sentencias, 'Node' + str(self.i))
+
+        if loopsimple.labelfinal is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), "LABEL")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc()
+            dot.node('Node' + str(self.i), loopsimple.labelfinal)
+            dot.edge('Node' + str(nuevoPadre - 1), 'Node' + str(self.i))
+
+    def grafoSalir(self, salir, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "EXIT")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        if salir.label is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), "LABEL")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc()
+            dot.node('Node' + str(self.i), salir.label)
+            dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        if salir.when is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), "WHEN")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            padreWhen = self.i
+            dot.edge('Node' + str(padreWhen), str(self.i + 1))
+            self.graficar_expresion(salir.when.expresion)
+
+
+    def grafoContinuar(self, continuar, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "CONTINUE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        if continuar.label is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), "LABEL")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            self.inc()
+            dot.node('Node' + str(self.i), continuar.label)
+            dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        if continuar.when is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), "WHEN")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            padreWhen = self.i
+            dot.edge('Node' + str(padreWhen), str(self.i + 1))
+            self.graficar_expresion(continuar.when.expresion)
+
+    def grafoDeclaracion(self, declaracion, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DECLARACION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "ID")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), declaracion.id)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        if declaracion.constante:
+            self.inc()
+            dot.node('Node' + str(self.i), "CONSTANT")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "TIPO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), declaracion.tipo)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        if declaracion.notnull:
+            self.inc()
+            dot.node('Node' + str(self.i), "NOT NULL")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if declaracion.simbolodeclaracion is not None and declaracion.expresion is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), declaracion.simbolodeclaracion)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
+            self.graficar_expresion(declaracion.expresion)
+
+    def grafoAsignacion(self, asignacion, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "ASIGNACION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "ID")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), asignacion.id)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+
+        dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
+        self.graficar_expresion(asignacion.expresion)
+
+
+
 
 # crearBASEDATOS(objeto)
 

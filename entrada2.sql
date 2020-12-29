@@ -1,3 +1,5 @@
+/*
+
 CREATE DATABASE IF NOT EXISTS test
     OWNER = root
     MODE = 1;
@@ -52,3 +54,39 @@ insert into tbestado values(5,'Activo1');
 select * from tbestado where ABS(LENGTH(SUBSTRING(tbestado.estado, 0, 4))) > 4;
 
 select * from tbempleado where DATE_PART('years', INTERVAL tbempleado.tiempo) > 1;
+
+
+*/
+
+
+LOOP
+
+CONTINUE v WHEN y < 10;
+
+
+CASE x 
+
+WHEN 1 THEN 
+
+
+EXIT x WHEN y > 10;
+
+CONTINUE v WHEN y < 10;
+
+
+END CASE;
+
+
+
+EXIT x WHEN y > 10;
+
+
+
+END LOOP;
+
+
+
+
+
+
+
