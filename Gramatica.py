@@ -123,6 +123,7 @@ reservadas = {
     'greatest': 'GREATEST',
     'least': 'LEAST',
     'else': 'ELSE',
+    'elsif': 'ELSIF',
     'end': 'END',
 
     # palabras reservadas DDL dabatabases
@@ -399,8 +400,10 @@ listaglobalAST = []
 # llamado de instruccion
 from Ast2 import *
 from Instruccion import *
+from Instruccion_pl import *
 from expresiones import *
 from interprete import *
+from Sentenciac3d import *
 cadena=''
 
 precedence = (
@@ -433,6 +436,9 @@ def p_init(t):
     arbolito2 = interprete2(t[0])
     arbolito2.ejecucion()
 
+    arbol = Codigo3d(t[0])
+    arbol.Traducir()
+
 
 def p_instrucciones_lista(t):
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
@@ -452,6 +458,7 @@ def p_instruccion(t):
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
                     | DML_COMANDOS
+                    | instruccion_if
                     | COMENTARIOMULTI
                     | COMENTARIONORMAL '''
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
@@ -2600,6 +2607,30 @@ def p_expresion_binario(t):
 def p_expresion_binario_n(t):
     'expresion_aritmetica : VIRGULILLA expresion_aritmetica'
     t[0] = UnitariaAritmetica(t[2], OPERACION_BIT_A_BIT.COMPLEMENTO)
+
+
+# ============================================== IF THEN ELSE END IF =============================================== #
+def p_instruccion_if(t):
+    'instruccion_if : IF expresion THEN expresion END IF PUNTOCOMA'
+    t[0] = If_inst(t[2], t[4], None)
+
+def p_instruccion_ifelse(t):
+    'instruccion_if : IF expresion THEN expresion ELSE expresion END IF PUNTOCOMA'
+    t[0] = If_inst(t[2], t[4], t[6])
+
+def p_listas_elsif(t):
+    'listas_elsif : listas_elsif elsif'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_lista_elsif(t):
+    'listas_elsif : elsif'
+    t[0] = [t[1]]
+
+def p_elsif(t):
+    'elsif : ELSIF expresion THEN expresion'
+    t[0] = t[1]
+
 
 # def p_expresion_subquery(t):
 #     expresion_aritmetica : QUE_SUBS
