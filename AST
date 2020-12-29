@@ -2,44 +2,118 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label="CREATE DATABASE"]
+	Node1 [label="LOOP SIMPLE"]
 	Node0 -> Node1
-	Node2 [label="Id: test2"]
+	Node2 [label=SENTENCIAS]
 	Node1 -> Node2
-	Node3 [label="CREATE TABLE"]
-	Node0 -> Node3
-	Node4 [label="Id: tbpuesto"]
+	Node3 [label=CONTINUE]
+	Node2 -> Node3
+	Node4 [label=LABEL]
 	Node3 -> Node4
-	Node5 [label=CAMPO]
-	Node3 -> Node5
-	Node6 [label="Id: idpuesto"]
-	Node5 -> Node6
-	Node7 [label="Tipo: smallint"]
-	Node5 -> Node7
-	Node8 [label=CAMPO]
-	Node3 -> Node8
-	Node9 [label="Id: puesto"]
-	Node8 -> Node9
-	Node10 [label="Tipo: character"]
-	Node8 -> Node10
-	Node11 [label=EXPRESION]
-	Node10 -> Node11
-	12 [label=ExpresionValor]
+	Node5 [label=v]
+	Node4 -> Node5
+	Node6 [label=WHEN]
+	Node3 -> Node6
+	Node6 -> 7
+	7 [label=ExpresionRelacional]
+	8 [label=exp1]
+	7 -> 8
+	8 -> 9
+	9 [label=Variable]
+	9 -> 10
+	10 [label=y]
+	11 [label="<"]
+	7 -> 11
+	12 [label=exp2]
+	7 -> 12
 	12 -> 13
-	13 [label=25]
-	Node11 -> 12
-	Node14 [label=CAMPO]
-	Node3 -> Node14
-	Node15 [label="Id: salariobase"]
-	Node14 -> Node15
-	Node16 [label="Tipo: money"]
-	Node14 -> Node16
-	Node17 [label="CONSTRAINT:"]
-	Node3 -> Node17
-	Node18 [label="Valor: primary key"]
-	Node17 -> Node18
-	Node19 [label=COLUMNA]
-	Node17 -> Node19
-	Node20 [label=idpuesto]
-	Node19 -> Node20
+	13 [label=ExpresionValor]
+	13 -> 14
+	14 [label=10]
+	Node15 [label="CASE SIMPLE"]
+	Node2 -> Node15
+	Node15 -> 16
+	16 [label=ExpresionValor]
+	16 -> 17
+	17 [label=x]
+	Node18 [label=WHEN]
+	Node15 -> Node18
+	Node18 -> 19
+	19 [label=ExpresionValor]
+	19 -> 20
+	20 [label=1]
+	Node21 [label=THEN]
+	Node18 -> Node21
+	Node22 [label=EXIT]
+	Node21 -> Node22
+	Node23 [label=LABEL]
+	Node22 -> Node23
+	Node24 [label=x]
+	Node23 -> Node24
+	Node25 [label=WHEN]
+	Node22 -> Node25
+	Node25 -> 26
+	26 [label=ExpresionRelacional]
+	27 [label=exp1]
+	26 -> 27
+	27 -> 28
+	28 [label=Variable]
+	28 -> 29
+	29 [label=y]
+	30 [label=">"]
+	26 -> 30
+	31 [label=exp2]
+	26 -> 31
+	31 -> 32
+	32 [label=ExpresionValor]
+	32 -> 33
+	33 [label=10]
+	Node34 [label=CONTINUE]
+	Node21 -> Node34
+	Node35 [label=LABEL]
+	Node34 -> Node35
+	Node36 [label=v]
+	Node35 -> Node36
+	Node37 [label=WHEN]
+	Node34 -> Node37
+	Node37 -> 38
+	38 [label=ExpresionRelacional]
+	39 [label=exp1]
+	38 -> 39
+	39 -> 40
+	40 [label=Variable]
+	40 -> 41
+	41 [label=y]
+	42 [label="<"]
+	38 -> 42
+	43 [label=exp2]
+	38 -> 43
+	43 -> 44
+	44 [label=ExpresionValor]
+	44 -> 45
+	45 [label=10]
+	Node46 [label=EXIT]
+	Node2 -> Node46
+	Node47 [label=LABEL]
+	Node46 -> Node47
+	Node48 [label=x]
+	Node47 -> Node48
+	Node49 [label=WHEN]
+	Node46 -> Node49
+	Node49 -> 50
+	50 [label=ExpresionRelacional]
+	51 [label=exp1]
+	50 -> 51
+	51 -> 52
+	52 [label=Variable]
+	52 -> 53
+	53 [label=y]
+	54 [label=">"]
+	50 -> 54
+	55 [label=exp2]
+	50 -> 55
+	55 -> 56
+	56 [label=ExpresionValor]
+	56 -> 57
+	57 [label=10]
 }

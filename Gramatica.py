@@ -200,7 +200,10 @@ reservadas = {
     'power': 'POWER',
     #AGREGADAS
     'notexist':'NOTEXIST',
-    'notin':'NOTIN'
+    'notin':'NOTIN',
+    'loop': 'LOOP',
+    'exit': 'EXIT',
+    'continue': 'CONTINUE'
 }
 
 tokens = [
@@ -401,6 +404,9 @@ from Ast2 import *
 from Instruccion import *
 from expresiones import *
 from interprete import *
+from sentencias import *
+
+
 cadena=''
 
 precedence = (
@@ -453,7 +459,9 @@ def p_instruccion(t):
                     | DDL_COMANDOS
                     | DML_COMANDOS
                     | COMENTARIOMULTI
-                    | COMENTARIONORMAL '''
+                    | COMENTARIONORMAL
+                    | sentencia'''
+    print(t[1])
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
 
@@ -2600,6 +2608,147 @@ def p_expresion_binario(t):
 def p_expresion_binario_n(t):
     'expresion_aritmetica : VIRGULILLA expresion_aritmetica'
     t[0] = UnitariaAritmetica(t[2], OPERACION_BIT_A_BIT.COMPLEMENTO)
+
+
+
+
+#===================== cuerpo de sentencia de control =======================
+
+def p_cuerpo_control(t):
+    'cuerpo_control : sentencias'
+    t[0] = t[1]
+
+def p_cuerpo_control_e(t):
+    'cuerpo_control : '
+    t[0] = None
+
+
+def p_sentencias_loop(t):
+    'sentencias : sentencias sentencia'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_sentencias_loop2(t):
+    'sentencias : sentencia'
+    t[0] = [t[1]]
+
+
+def p_sentencia_loop(t):
+    '''sentencia : salir
+                | continuar
+                | case_simple
+                | case_buscado
+                | loop_simple'''
+    t[0] = t[1]
+
+
+
+# =================== PL CASE ==============================================
+
+def p_casesimple(t):
+    'case_simple : CASE expresion_busqueda lista_when case_else END CASE PUNTOCOMA'
+    t[0] = CaseSimple(t[2], t[3], t[4])
+
+def p_cs_expresion_busqueda(t):
+    'expresion_busqueda : ID'
+    t[0] = ExpresionValor(t[1])
+
+def p_cs_lista_when(t):
+    'lista_when : lista_when cs_when'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_cs_lista_when2(t):
+    'lista_when : cs_when'
+    t[0] = [t[1]]
+
+def p_cs_when(t):
+    'cs_when : WHEN cs_expresiones THEN cuerpo_control'
+    t[0] = CSWhen(t[2], t[4])
+
+def p_cs_else(t):
+    'case_else : ELSE cuerpo_control'
+    t[0] = CElse(t[2])
+
+def p_cs_else_e(t):
+    'case_else : '
+    t[0] = None
+
+def p_cs_expresiones(t):
+    'cs_expresiones : cs_expresiones  COMA expresion_aritmetica'
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_cs_expresione2(t):
+    'cs_expresiones : expresion_aritmetica'
+    t[0] = [t[1]]
+
+
+
+def p_case_buscado(t):
+    'case_buscado : CASE cb_lista_when case_else END CASE'
+    t[0] = CaseBuscado(t[2], t[3])
+
+def p_cb_lista_when(t):
+    'cb_lista_when : cb_lista_when cb_when'
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_cb_lista_when2(t):
+    'cb_lista_when : cb_when'
+    t[0] = [t[1]]
+
+def p_cb_when(t):
+    'cb_when : WHEN expresion THEN cuerpo_control'
+    t[0] = CBWhen(t[2], t[4])
+
+
+#================LOOP SIMPLE============================
+
+def p_loop_simple(t):
+    'loop_simple : label LOOP cuerpo_control END LOOP label_final PUNTOCOMA'
+    t[0] = LoopSimple(t[1], t[3], t[6])
+
+def p_label(t):
+    'label : MENOR MENOR ID MAYOR MAYOR'
+    t[0] = t[3]
+
+
+def p_label2(t):
+    'label : '
+    t[0]: None
+
+
+def p_label_final(t):
+    'label_final : ID'
+    t[0] = t[1]
+
+def p_label_final_e(t):
+    'label_final : '
+    t[0] = None
+
+def p_exit(t):
+    'salir : EXIT label_final when_auxiliar PUNTOCOMA'
+    t[0] = Exit(t[2], t[3])
+
+
+def p_continue(t):
+    'continuar : CONTINUE label_final when_auxiliar PUNTOCOMA'
+    t[0] = Continue(t[2], t[3])
+
+def p_when_auxiliar(t):
+    'when_auxiliar : WHEN expresion'
+    t[0] = WhenAuxilar(t[2])
+
+
+def p_when_auxiliar_e(t):
+    'when_auxiliar : '
+    t[0] = None
+
+
+
+
 
 # def p_expresion_subquery(t):
 #     expresion_aritmetica : QUE_SUBS
