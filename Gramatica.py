@@ -425,7 +425,7 @@ from expresiones import *
 from interprete import *
 from sentencias import *
 
-
+codigo3d = ''
 cadena=''
 
 precedence = (
@@ -445,14 +445,14 @@ precedence = (
 
 
 # Definición de la gramática
-
+codigo3d = ''
 
 
 
 
 def p_init(t):
     'INICIO     : INSTRUCCIONES'
-    global listaglobalAST
+    global listaglobalAST, codigo3d
     t[0] = t[1]
     listaglobalAST = t[0]
     #PRIMERA PASADA
@@ -461,6 +461,10 @@ def p_init(t):
     #SEGUNDA PASADA
     arbolito2 = interprete2(t[0])
     arbolito2.ejecucion()
+    codigo3d = '========================= CODIGO 3D =================================\n' + codigo3d
+    codigo3d = "from Instruccion import * \n" + codigo3d
+
+    print(codigo3d)
 
 
 def p_instrucciones_lista(t):
@@ -498,9 +502,13 @@ def p_instruccion(t):
 # ==================== USE DATABASE =====================================
 def p_instruccion_Use_database(t):
     'DQL_COMANDOS       : USE ID PUNTOCOMA'
-    global baseActual
+    global baseActual, codigo3d
     baseActual = str(t[2])
     t[0] = useClase(t[2])
+
+    codigo3d = codigo3d + 't0 = useClase("' + t[2] + '")\n'
+    codigo3d = codigo3d + 't0.Ejecutar()\n'
+
     rep_gramatica('\n <TR><TD> DQL_COMANDOS → USE ID PUNTOCOMA </TD><TD> DQL_COMANDOS=t[2] </TD></TR>')
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
@@ -1910,7 +1918,10 @@ def p_comando_ddl(t):
 
 def p_create_database(t):
     'CREATE_DATABASE : CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE PUNTOCOMA'
+    global codigo3d
     t[0] = CreateDataBase(t[2], t[4], t[5], t[6], t[7])
+    codigo3d = codigo3d +  't1 = CreateDataBase()\n'
+    codigo3d = codigo3d + 't1.Ejecutar()\n'
     rep_gramatica('\n <TR><TD> CREATE_DATABASE → CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE PUNTOCOMA  </TD><TD> t[0] = CreateDataBase(t[2], t[4], t[5], t[6], t[7])  </TD></TR>')
 
 
