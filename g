@@ -76,5 +76,5 @@ graph g {
                                 <TD bgcolor="#BEF781"></TD>
                                 <TD bgcolor="#BEF781"></TD>
                                 <TD bgcolor="#BEF781"></TD>
-                            </TR><TR><TD>test</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+                            </TR><TR><TD>BASE1</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
 }

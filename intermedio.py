@@ -5,7 +5,7 @@ def main():
     global heap
     print('Ejecutando codigo de 3 direcciones')
 
-    t0 = '''CREATE DATABASE IF NOT EXISTS test
+    t0 = '''CREATE DATABASE IF NOT EXISTS BASE1
     OWNER = root
     MODE = 1;'''
 

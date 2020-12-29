@@ -469,8 +469,8 @@ def p_init(t):
 
     print(codigo3d)
 
-    arbol = Codigo3d(t[0])
-    arbol.Traducir()
+    arbol = Codigo3d()
+    arbol.Traducir(t[0])
 
 
 def p_instrucciones_lista(t):

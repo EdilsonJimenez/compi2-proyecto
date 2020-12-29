@@ -2,4 +2,36 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
+	Node1 [label=INSERT]
+	Node0 -> Node1
+	Node2 [label="ID TABLA"]
+	Node1 -> Node2
+	Node3 [label=tbrol]
+	Node2 -> Node3
+	Node4 [label="VALORES TABLA"]
+	Node1 -> Node4
+	Node5 [label="VALOR NUEVO"]
+	Node4 -> Node5
+	6 [label=ExpresionAritmetica]
+	7 [label=exp1]
+	6 -> 7
+	7 -> 8
+	8 [label=ExpresionValor]
+	8 -> 9
+	9 [label=4]
+	10 [label="+"]
+	6 -> 10
+	11 [label=exp2]
+	6 -> 11
+	11 -> 12
+	12 [label=ExpresionValor]
+	12 -> 13
+	13 [label=69]
+	Node5 -> 6
+	Node15 [label="VALOR NUEVO"]
+	Node4 -> Node15
+	16 [label=ExpresionValor]
+	16 -> 17
+	17 [label=AAAA]
+	Node15 -> 16
 }
