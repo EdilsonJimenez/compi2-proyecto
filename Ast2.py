@@ -138,6 +138,10 @@ class Ast2:
                 self.grafoSalir(i, padre)
             elif isinstance(i, Continue):
                 self.grafoContinuar(i, padre)
+            elif isinstance(i, Declaracion):
+                self.grafoDeclaracion(i, padre)
+            elif isinstance(i, Asignacion):
+                self.grafoAsignacion(i, padre)
             else:
                 print("No es droptable")
 
@@ -2791,12 +2795,67 @@ class Ast2:
             dot.edge('Node' + str(padreWhen), str(self.i + 1))
             self.graficar_expresion(continuar.when.expresion)
 
+    def grafoDeclaracion(self, declaracion, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "DECLARACION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "ID")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), declaracion.id)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        if declaracion.constante:
+            self.inc()
+            dot.node('Node' + str(self.i), "CONSTANT")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "TIPO")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), declaracion.tipo)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        if declaracion.notnull:
+            self.inc()
+            dot.node('Node' + str(self.i), "NOT NULL")
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        if declaracion.simbolodeclaracion is not None and declaracion.expresion is not None:
+            self.inc()
+            dot.node('Node' + str(self.i), declaracion.simbolodeclaracion)
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+            dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
+            self.graficar_expresion(declaracion.expresion)
+
+    def grafoAsignacion(self, asignacion, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "ASIGNACION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "ID")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), asignacion.id)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
 
 
-
-
-
-
+        dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
+        self.graficar_expresion(asignacion.expresion)
 
 
 

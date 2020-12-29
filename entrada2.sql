@@ -61,7 +61,7 @@ select * from tbempleado where DATE_PART('years', INTERVAL tbempleado.tiempo) > 
 
 LOOP
 
-CONTINUE v WHEN y < 10
+CONTINUE v WHEN y < 10;
 
 
 CASE x 
@@ -69,20 +69,21 @@ CASE x
 WHEN 1 THEN 
 
 
-EXIT x WHEN y > 10
+EXIT x WHEN y > 10;
 
-CONTINUE v WHEN y < 10
-
-
-END CASE
+CONTINUE v WHEN y < 10;
 
 
-
-EXIT x WHEN y > 10
+END CASE;
 
 
 
-END LOOP
+EXIT x WHEN y > 10;
+
+
+
+END LOOP;
+
 
 
 

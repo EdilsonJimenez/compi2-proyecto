@@ -64,3 +64,21 @@ class WhenAuxilar():
         self.expresion = expresion
 
 
+class Declaracion(Sentencia):
+
+    def __init__(self, id, constante, tipo, notnull, simbolodeclaracion, expresion):
+        self.id = id
+        self.constante = constante
+        self.tipo = tipo
+        self.notnull = notnull
+        self.simbolodeclaracion = simbolodeclaracion
+        self.expresion = expresion
+
+
+class Asignacion(Sentencia):
+
+    def __init__(self, id, expresion):
+        self.id = id
+        self.expresion = expresion
+
+

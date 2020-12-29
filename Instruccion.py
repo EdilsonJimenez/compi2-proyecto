@@ -1484,9 +1484,6 @@ def ProcesoSub(Cuerpo,ts):
 
     return  listaGeneralSubQuery
 
-
-
-
 #Proceso Limit
 def Limites(listaGeneral,tiposCuerpo):
 
@@ -6637,8 +6634,6 @@ class AccesoGroupBy(Instruccion): #Tabla Lista
         self.Lista_Alias  = Lista_Alias
         self.Estado       = Estado
 
-
-
 #---------------------------------------------------------------------------------------------------
 
 # Campos Limit
@@ -7603,7 +7598,6 @@ class Alter_Table_Drop_Column(Instruccion):
             imprir("ALTER TABLE:   La Base de datos no existe")
             #colocar error semantico
 
-
 class Alter_Table_Rename_Column(Instruccion):
     def __init__(self, id_table, old_column, new_column):
         self.id_table = id_table
@@ -7850,7 +7844,6 @@ class Alter_table_Alter_Column_Set(Instruccion):
             imprir("ALTER TABLE:   La Base de datos no existe")
             # colocar error semantico
 
-
 class Alter_table_Add_Foreign_Key(Instruccion):
     def __init__(self, id_table, id_column, id_column_references, idforeign):
         self.id_table = id_table
@@ -8023,7 +8016,6 @@ class useClase(Instruccion):
 
     def Ejecutar(self):
         imprir("USE: Se usara la base de datos " + str(self.id))
-
 
 class DatoTipo(Instruccion):
     def __init__(self, bd, tipo, valor):
