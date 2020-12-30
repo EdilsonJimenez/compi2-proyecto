@@ -68,9 +68,9 @@ class Declaracion(Sentencia):
 
     def __init__(self, id, constante, tipo, notnull, simbolodeclaracion, expresion):
         self.id = id
-        self.constante = constante
+        self.constante = constante #puede venir o no la palabra constante
         self.tipo = tipo
-        self.notnull = notnull
+        self.notnull = notnull #puede venir o no la palabra not null
         self.simbolodeclaracion = simbolodeclaracion
         self.expresion = expresion
 
