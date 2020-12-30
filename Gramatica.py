@@ -501,7 +501,6 @@ def p_instruccion(t):
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
                     | DML_COMANDOS
-                    | instruccion_if
                     | COMENTARIOMULTI
                     | COMENTARIONORMAL
                     | FUNCIONESS '''
@@ -2955,6 +2954,7 @@ def p_CodigoFunciones(t):
     '''CODE_  :           case_simple
                         | case_buscado
                         | loop_simple
+                        | instruccion_if
                         | declaracion_variable
                         | asignacion_variable
                         | salir

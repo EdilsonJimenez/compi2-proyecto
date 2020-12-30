@@ -68,9 +68,9 @@ class Declaracion(Sentencia):
 
     def __init__(self, id, constante, tipo, notnull, simbolodeclaracion, expresion):
         self.id = id
-        self.constante = constante
+        self.constante = constante #puede venir o no la palabra constante
         self.tipo = tipo
-        self.notnull = notnull
+        self.notnull = notnull #puede venir o no la palabra not null
         self.simbolodeclaracion = simbolodeclaracion
         self.expresion = expresion
 
@@ -89,13 +89,13 @@ class Asignacion(Sentencia):
 #----------------------------   FUNCIONES
 class Funciones_(Sentencia):
     def __init__(self,Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
-        self.Reservada     = Reservada
-        self.Nombre        = Nombre
-        self.Retorno       = Retorno
-        self.Parametros    = Parametros
-        self.Instrucciones = Instrucciones
-        self.Declaraciones = Declaraciones
-        self.Codigo        = Codigo
+        self.Reservada     = Reservada #create or repacle
+        self.Nombre        = Nombre #
+        self.Retorno       = Retorno #que retorna, expresion
+        self.Parametros    = Parametros #lista de ID's ( nombre tipo )
+        self.Instrucciones = Instrucciones # sql
+        self.Declaraciones = Declaraciones #
+        self.Codigo        = Codigo # sentencias
 
 #----------------------------   PROCEDURES
 class Procedimientos_(Sentencia):

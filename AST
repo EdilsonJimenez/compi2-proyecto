@@ -81,10 +81,22 @@ digraph AST {
 	Node37 -> Node39
 	Node40 [label=CODIGO_GENERADO]
 	Node39 -> Node40
-	Node41 [label=FOR_INSTRUCCION]
+	Node41 [label=ASIGNACION]
 	Node40 -> Node41
-	Node42 [label=FOR]
+	Node42 [label=ID]
 	Node41 -> Node42
+<<<<<<< HEAD
+	Node43 [label=x]
+	Node42 -> Node43
+	Node41 -> 44
+	44 [label=ExpresionValor]
+	44 -> 45
+	45 [label=999]
+	Node46 [label=END]
+	Node37 -> Node46
+	Node47 [label="language sql;"]
+	Node37 -> Node47
+=======
 	Node43 [label="noonos   IN"]
 	Node41 -> Node43
 	Node44 [label=""]
@@ -301,4 +313,5 @@ digraph AST {
 	Node37 -> Node150
 	Node151 [label="language sql;"]
 	Node37 -> Node151
+>>>>>>> master
 }

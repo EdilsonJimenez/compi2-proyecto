@@ -12,10 +12,10 @@ def principal():
     # a - parametros
     # v1 - retornos
 
-    t0 = 15 + 6
-    t1 = t0 * 2
-
-    if t1 > 1:
+    t0 = 10 > 5
+    t1 = 8 == 8
+    t2 = t0 and t1
+    if t2:
         goto .L0
     else:
         goto .L1
