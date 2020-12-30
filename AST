@@ -10,7 +10,7 @@ digraph AST {
 	Node1 -> Node3
 	Node4 [label=cocoa]
 	Node1 -> Node4
-	Node5 [label="(PARAMETROS)"]
+	Node5 [label=PARAMETROS]
 	Node1 -> Node5
 	Node6 [label="()"]
 	Node5 -> Node6
@@ -275,11 +275,11 @@ digraph AST {
 	137 [label=EJECUCION_FUNCION]
 	Node138 [label=D]
 	137 -> Node138
-	Node139 [label="(PARAMETROS)"]
+	Node139 [label=PARAMETROS]
 	137 -> Node139
-	Node140 [label="parametro1    "]
+	Node140 [label="integer parametro1 "]
 	Node139 -> Node140
-	Node141 [label="parametro2    "]
+	Node141 [label="integer parametro2 "]
 	Node139 -> Node141
 	Node142 [label=CODIGO_GENERADO]
 	Node39 -> Node142
@@ -287,15 +287,15 @@ digraph AST {
 	143 [label=EJECUCION_FUNCION]
 	Node144 [label=Ejecucion]
 	143 -> Node144
-	Node145 [label="(PARAMETROS)"]
+	Node145 [label=PARAMETROS]
 	143 -> Node145
-	Node146 [label="parametro1    "]
+	Node146 [label="integer parametro1 "]
 	Node145 -> Node146
-	Node147 [label="parametro2    "]
+	Node147 [label="integer parametro2 "]
 	Node145 -> Node147
-	Node148 [label="parametro3    "]
+	Node148 [label="integer parametro3 "]
 	Node145 -> Node148
-	Node149 [label="parametro4    "]
+	Node149 [label="integer parametro4 "]
 	Node145 -> Node149
 	Node150 [label=END]
 	Node37 -> Node150

@@ -218,14 +218,16 @@ reservadas = {
     'reverse' :'REVERSE',
 
     #PARA EL WHULE
-    'while'   : 'WHILE'
+    'while'   : 'WHILE',
 
 
-    'execute' :'EXECUTE',
-    'array'   :'ARRAY',
-    'slice'   :'SLICE',
-    'foreach' :'FOREACH',
-    'constant' : 'CONSTANT'
+    'execute'  :'EXECUTE',
+    'array'    :'ARRAY',
+    'slice'    :'SLICE',
+    'foreach'  :'FOREACH',
+    'constant' : 'CONSTANT',
+    'plpgsql'  :'PLPGSQL',
+    'procedure':'PROCEDURE'
 
 
 }
@@ -2778,8 +2780,19 @@ def p_Funciones_General(t):
     'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
-    t[0]=Funciones_(t[1],t[3],t[7], t[5], t[10], t[11], t[12])
+    t[0]=Funciones_(t[1],t[3],t[8], t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
+
+
+def p_Store_ProcedureGeneral(t):
+    'FUNCIONESS  :  FUNTIONE  PROCEDURE  ID  PARIZQ PARAMETROSG PARDER  ARGU_N_N  AS CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
+    #print( "Si lo acepte wey funcion " + str(t[0]))
+    t[0]=Procedimientos_(t[1],t[3],t[7], t[5], t[9], t[10], t[11])
+
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando al procedure")
+
+
 
 #----------------------------------------------------- Tipos de Create y Reservadas
 def p_Funcionee(t):
@@ -2825,8 +2838,11 @@ def p_Parametros_List(t):
     t[0] = [t[1]]
 
 def p_ParametrosT(t):
-    'PARAMETRO  :  ARGU_N   ARGU_N  ARGU_N'
-    t[0] = str(t[1]) +"  "+ str(t[2]) +"  "+ str(t[3])
+    'PARAMETRO  :  TIPO_CAMPO   ARGU_N  ARGU_N'
+    t[0] = Parametros_(t[1],t[2],t[3])
+
+
+
 
 def p_Parametros_Argumentos(t):
     'ARGU_N  :  ID'
@@ -2886,6 +2902,10 @@ def p_ArgumentosFunciones(t):
     t[0] = str(t[1]) +" "+ str(t[2])
 
 
+def p_ArgumentoProcedure(t):
+    'ARGU_N_N  :  LANGUAGE PLPGSQL'
+    t[0] = str(t[1]) + " " + str(t[2])
+
 def p_ArgumentosFuncionesArg(t):
     'ARGU_N_N  :  ID'
     t[0] = str(t[1])
@@ -2926,7 +2946,7 @@ def p_ListaCodigo_List(t):
 #----------------------------------------------------------  PRODUCCION A CODIGO FOR
 def p_Codigo_For(t):
     'CODE_  :   FOR ID IN TIPEE EXPRESI  BY_EXPRE  LOOP  CODEEPSILON  END LOOP ARGU_N PUNTOCOMA'
-    t[0]= ForInstruccion(t[2],t[4],t[6],t[11],t[5],t[8])
+    t[0]  = ForInstruccion(t[2],t[4],t[6],t[11],t[5],t[8])
 
 
 

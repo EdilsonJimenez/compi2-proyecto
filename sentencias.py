@@ -97,6 +97,19 @@ class Funciones_(Sentencia):
         self.Declaraciones = Declaraciones
         self.Codigo        = Codigo
 
+#----------------------------   PROCEDURES
+class Procedimientos_(Sentencia):
+    def __init__(self,Reservada, Nombre,Comand, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
+        self.Reservada     = Reservada
+        self.Nombre        = Nombre
+        self.Comand        = Comand
+        self.Parametros    = Parametros
+        self.Instrucciones = Instrucciones
+        self.Declaraciones = Declaraciones
+        self.Codigo        = Codigo
+
+
+
 
 #---------------------------------------  codigo funciones
 class Code_Funciones(Sentencia):
@@ -116,6 +129,16 @@ class Variables_Name(Sentencia):
     def __init__(self,Identificador,Valor):
         self.Identificador = Identificador
         self.Valor         = Valor
+
+
+#-------------------------------------- Objeto Parametros
+class Parametros_(Sentencia):
+    def __init__(self,Tipo,Nombre,Valor):
+        self.Tipo   = Tipo
+        self.Nombre = Nombre
+        self.Valor  = Valor
+
+
 
 
 
