@@ -1540,6 +1540,9 @@ class Ast2:
             self.graficarExpresionFuncion(expresiones, "FUNCION NATIVA")
         elif isinstance(expresiones, UnitariaAritmetica):
             self.graficarUnitariaAritmetica(expresiones, "UnitariaAritmetica")
+        elif isinstance(expresiones,EjecucionFuncion):
+            self.GrafoEjecucion(expresiones.Id,expresiones.Parametros, "Node"+str(self.i-1))
+
         # NUEVAS UNITARIAS
 
         # ----------------------------------------
@@ -2947,9 +2950,10 @@ class Ast2:
     def GrafoRecorridoParametros(self, Parametros,padre):
         global dot
         if (isinstance(Parametros,list)):
+
             self.inc()
             nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "PARAMETROS")
+            dot.node('Node' + str(self.i), "(PARAMETROS)")
             dot.edge(padre, 'Node' + str(self.i))
 
             for ele in Parametros:
@@ -2959,6 +2963,9 @@ class Ast2:
 
         else:
             print("Viene un Epsilon no se hace nada... ")
+            self.inc()
+            dot.node('Node' + str(self.i), "()")
+            dot.edge(padre, 'Node' + str(self.i))
 
 
 # --------------  Recorremos las Declaraciones
@@ -3006,7 +3013,6 @@ class Ast2:
             self.inc()
             dot.node('Node' + str(self.i), CuerpoC.Argumento +";")
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
         else:
             print("Otro tipo de Objeto")
 
@@ -3048,6 +3054,10 @@ class Ast2:
                 elif isinstance(ele, If_inst):
                     self.grafoIf(ele)
                     print("graficar funcion")
+                elif isinstance(ele, EjecucionFuncion):
+                    self.GrafoEjecucion(ele.Id, ele.Parametros, "Node" + str(self.i))
+
+
         else:
             print("Viene un Epsilon no se hace nada... ")
 
@@ -3215,3 +3225,26 @@ class Ast2:
         nuevoPadre = self.i
         dot.node('Node' + str(self.i), "IF")
         dot.edge(padre, 'Node' + str(self.i))
+
+
+    #  Grafica de ejecucion de las funciones
+    #  ForeachInstruccion (self, Nombre, Slice, Expre,Argumento,Lista_Codigo=[]):
+    def GrafoEjecucion(self,Id, Lista_P, padre):
+        global dot,i
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i),"EJECUCION_FUNCION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), Id)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        #--------------------------------------------------------
+
+        # Recorrer Lista de Parametros
+        self.GrafoRecorridoParametros(Lista_P,'Node' + str(nuevoPadre))
+
+
