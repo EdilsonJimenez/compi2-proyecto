@@ -3,6 +3,7 @@ from graphviz import Digraph
 from graphviz import escape
 from expresiones import *
 import interprete as Inter
+from Instruccion_pl import *
 from sentencias import *
 
 class Ast2:
@@ -130,9 +131,8 @@ class Ast2:
                 self.grafoSelectExpresion(i.listaCampos, padre)
             elif isinstance(i, Funciones_):
                 self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
-
             else:
-                print("No es droptable")
+                print("No se grafica la instancia.")
 
 
     def RecorrerTipoSelect(self, sente, padre):
@@ -3045,7 +3045,9 @@ class Ast2:
                     self.grafoDeclaracion(ele, 'Node' + str(self.i))
                 elif isinstance(ele, Asignacion):
                     self.grafoAsignacion(ele, 'Node' + str(self.i))
-
+                elif isinstance(ele, If_inst):
+                    self.grafoIf(ele)
+                    print("graficar funcion")
         else:
             print("Viene un Epsilon no se hace nada... ")
 
@@ -3157,7 +3159,6 @@ class Ast2:
         dot.node('Node' + str(self.i),"FOREACH_INSTRUCCION")
         dot.edge(padre, 'Node' + str(self.i))
 
-
         self.inc()
         dot.node('Node' + str(self.i), "FOREACH")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
@@ -3204,3 +3205,13 @@ class Ast2:
         self.inc()
         dot.node('Node' + str(self.i), Argumento)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+    def grafoIf(self, instancia):
+        #  condicion, instIf, instElse
+        p: If_inst = instancia
+
+        global dot
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "IF")
+        dot.edge(padre, 'Node' + str(self.i))
