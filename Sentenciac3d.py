@@ -25,6 +25,10 @@ class Codigo3d:
                 self.t_If(i)
             elif isinstance(i, Funciones_):
                 self.t_Funciones_(i)
+            elif isinstance(i, Asignacion):
+                self.t_asignacion(i)
+            elif isinstance(i, EjecucionFuncion):
+                self.t_llamadaFuncion(i)
             else:
                 print("NO TRADUCE....")
 
@@ -60,26 +64,38 @@ class Codigo3d:
         # temporal, nombre, tipo, tam, pos, rol ,ambito
         metodo = tipoSimbolo(None,instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
         t_global.agregarSimbolo(metodo)
-        print(t_global.tablaSimbolos)
-
-        for param in instancia.Parametros:
-            print(param)
-
-
-
         cadena += "@with_goto\n"
         cadena += "def "+instancia.Nombre+"(): \n"
         ambitoFuncion = str(instancia.Nombre)
+
+        cadena+="\n# Parametros \n"
+        for param in instancia.Parametros:
+            print(str(param.Nombre)+"---"+str(param.Tipo))
+            tempoP = t_global.varParametro()
+            cadena += str(tempoP)+ "\n"
+
+            p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'local', instancia.Nombre)
+            t_global.agregarSimbolo(p)
+
+        # Temporal de retorno
+        cadena+="\n# Retorno \n"
+        tempoP = t_global.varParametro()
+        cadena += str(tempoP) + "\n"
+
+        p = tipoSimbolo(str(tempoP), "return", "return", 1, 1, 'local', instancia.Nombre)
+        t_global.agregarSimbolo(p)
+
+        cadena += "\n# declaraciones \n"
         for decla in instancia.Declaraciones:
             if decla != None:
-                print("declaacion")
-                r = self.procesar_expresion(decla.expresion,t_global)
+                r = self.procesar_expresion(decla.expresion, t_global)
                 tempo = t_global.varTemporal()
                 cadena += str(tempo) + "=" + str(r) + "\n"
 
                 v = tipoSimbolo(str(tempo), decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
                 t_global.agregarSimbolo(v)
 
+        #instrucciones
         codigo: Code_Funciones = instancia.Codigo
         self.Traducir(codigo.Codigo)
 
@@ -88,7 +104,40 @@ class Codigo3d:
         #        self.TraducirInstruccion(inst)
 
 
-        cadena += instancia.Nombre+"()\n"
+        cadena += instancia.Nombre+"()\n\n"
+
+    def t_asignacion(self, asignacion):
+        global t_global, cadena
+        # id, expresion
+        etiR = ""
+        for sim in t_global.tablaSimbolos:
+            s: tipoSimbolo = t_global.obtenerSimbolo(sim)
+            if s.nombre == asignacion.id and s.ambito == ambitoFuncion:
+                etiR = s.temporal
+
+        exp = self.procesar_expresion(asignacion.expresion, t_global)
+        cadena += "\n" + str(etiR) + "=" + str(exp) + "\n"
+
+    def t_llamadaFuncion(self, llamada):
+        global t_global, cadena
+        # Id, Lista-Parametros
+
+        listaEtiquetas = []
+        if llamada.Parametros != None:
+            for param in llama.Parametros:
+                listaEtiquetas.append(str(param))
+
+        print(listaEtiquetas)
+
+
+        etiR = ""
+        for sim in t_global.tablaSimbolos:
+            s: tipoSimbolo = t_global.obtenerSimbolo(sim)
+            if s.nombre == asignacion.id and s.ambito == ambitoFuncion:
+                etiR = s.temporal
+
+        exp = self.procesar_expresion(asignacion.expresion, t_global)
+        cadena += "\n" + str(etiR) + "=" + str(exp) + "\n"
 
 
     # EXPRESIONES

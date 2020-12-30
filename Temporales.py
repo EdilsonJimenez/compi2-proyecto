@@ -1,8 +1,9 @@
 from random import *
 
 class Temporales:
-    def __init__(self, tablaSimbolos={}, variables={}, funciones={}, temp= 0, etiqueta = 0):
+    def __init__(self, tablaSimbolos={}, variables={}, funciones={}, temp= 0, etiqueta = 0, parametro=0):
         self.variables = variables.copy()
+        self.parametro = parametro
         self.funciones = funciones.copy()
         self.tablaSimbolos = tablaSimbolos.copy()
         self.temp = temp
@@ -10,11 +11,17 @@ class Temporales:
 
     def limpiar(self):
         self.temp = 0
+        self.parametro = 0
         self.etiqueta = 0
 
     def varTemporal(self):
         variable = "t" + str(self.temp)
         self.temp += 1
+        return str(variable)
+
+    def varParametro(self):
+        variable = "p" + str(self.parametro)
+        self.parametro += 1
         return str(variable)
 
     def etiquetaT(self):

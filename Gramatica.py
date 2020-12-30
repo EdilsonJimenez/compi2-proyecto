@@ -2836,8 +2836,8 @@ def p_Parametros_List(t):
     t[0] = [t[1]]
 
 def p_ParametrosT(t):
-    'PARAMETRO  :  TIPO_CAMPO   ARGU_N  ARGU_N'
-    t[0] = Parametros_(t[1],t[2],t[3])
+    'PARAMETRO  :   ARGU_N TIPO_CAMPO ARGU_N'
+    t[0] = Parametros_(t[2],t[1],t[3])
 
 
 
