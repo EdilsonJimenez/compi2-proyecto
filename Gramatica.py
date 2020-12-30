@@ -2960,6 +2960,7 @@ def p_CodigoFunciones(t):
                         | continuar
                         | EJECUTARFUNCION PUNTOCOMA
                         | INSTRUCCIONES '''
+
     t[0] = t[1]
 
 
@@ -2989,8 +2990,8 @@ def p_ExpressEpsilon(t):
 
 
 def p_ListExpre(t):
-    'LISTAEXPRES  :  LISTAEXPRES  LISTEXPR'
-    t[1].append(t[2])
+    'LISTAEXPRES  :  LISTAEXPRES COMA LISTEXPR'
+    t[1].append(t[3])
     t[0] = t[1]
 
 

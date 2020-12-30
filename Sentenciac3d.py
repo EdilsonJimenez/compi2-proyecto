@@ -29,6 +29,8 @@ class Codigo3d:
                 self.t_asignacion(i)
             elif isinstance(i, EjecucionFuncion):
                 self.t_llamadaFuncion(i)
+            elif isinstance(i,ForInstruccion):
+                self.t_TraduccionFor(i)
             else:
                 print("NO TRADUCE....")
 
@@ -39,6 +41,8 @@ class Codigo3d:
         verdadero = str(t_global.etiquetaT())
         falso = str(t_global.etiquetaT())
         salto = str(t_global.etiquetaT())
+
+
         cadena += "if " + str(condicion) + ": \n"
         cadena += "\tgoto ."+verdadero+"\n"
         cadena += "else : \n"
@@ -61,8 +65,11 @@ class Codigo3d:
 
     def t_Funciones_(self, instancia):
         global t_global, cadena
+
         # temporal, nombre, tipo, tam, pos, rol ,ambito
         metodo = tipoSimbolo(None,instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
+
+
         t_global.agregarSimbolo(metodo)
         cadena += "@with_goto\n"
         cadena += "def "+instancia.Nombre+"(): \n"
@@ -138,6 +145,17 @@ class Codigo3d:
 
         exp = self.procesar_expresion(asignacion.expresion, t_global)
         cadena += "\n" + str(etiR) + "=" + str(exp) + "\n"
+
+
+
+#--------------------------------  TRADUCCION FOR
+    def t_TraduccionFor(self,Objeto):
+        #Objetos globales para la traduccion
+        global t_global, cadena
+        cadena += "--------- For --------------- \n"
+
+
+
 
 
     # EXPRESIONES

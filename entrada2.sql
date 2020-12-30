@@ -44,9 +44,8 @@ loop
  x integer =24; 
 end loop;
 
-ID = D(parametro1, parametro2);
-Ejecucion(parametro1, parametro2, parametro3, parametro4);
-
+ID = D(integer parametro1,integer parametro2);
+Ejecucion(integer parametro1,integer parametro2,integer parametro3,integer parametro4);
 end language sql; 
 
 
@@ -97,6 +96,27 @@ Ejecucion(integer parametro1,integer parametro2,integer parametro3,integer param
 end language sql; 
 
 
+
+
+-- Procedimiento 2 
+create or replace procedure cocoa () 
+as 
+select * from tabla1; 
+
+DECLARE
+	x integer =24; 
+
+begin
+
+for elemento in 1,2,3,4,5,6 
+    loop 
+
+    select * from tabla1; 
+	
+		
+    end loop;  
+
+end language sql; 
 
 
 
