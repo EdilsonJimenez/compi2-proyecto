@@ -219,10 +219,8 @@ reservadas = {
     'execute' :'EXECUTE',
     'array'   :'ARRAY',
     'slice'   :'SLICE',
-    'foreach' :'FOREACH'
-
-
-    'constant' : 'CONSTANT',
+    'foreach' :'FOREACH',
+    'constant' : 'CONSTANT'
 
 
 }
@@ -499,8 +497,7 @@ def p_instruccion(t):
                     | instruccion_if
                     | COMENTARIOMULTI
                     | COMENTARIONORMAL
-                    | FUNCIONESS
-                                '''
+                    | FUNCIONESS '''
 
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
@@ -2661,38 +2658,6 @@ def p_elsif(t):
 #     expresion_aritmetica : QUE_SUBS
 
 
-#===================== cuerpo de sentencia de control =======================
-
-def p_cuerpo_control(t):
-    'cuerpo_control : sentencias'
-    t[0] = t[1]
-
-def p_cuerpo_control_e(t):
-    'cuerpo_control : '
-    t[0] = None
-
-
-def p_sentencias_loop(t):
-    'sentencias : sentencias sentencia'
-    t[1].append(t[2])
-    t[0] = t[1]
-
-
-def p_sentencias_loop2(t):
-    'sentencias : sentencia'
-    t[0] = [t[1]]
-
-
-def p_sentencia_loop(t):
-    '''sentencia : salir
-                | continuar
-                | case_simple
-                | case_buscado
-                | loop_simple'''
-    t[0] = t[1]
-
-
-
 # =================== PL CASE ==============================================
 
 def p_casesimple(t):
@@ -2713,11 +2678,11 @@ def p_cs_lista_when2(t):
     t[0] = [t[1]]
 
 def p_cs_when(t):
-    'cs_when : WHEN cs_expresiones THEN cuerpo_control'
+    'cs_when : WHEN cs_expresiones THEN CODEEPSILON'
     t[0] = CSWhen(t[2], t[4])
 
 def p_cs_else(t):
-    'case_else : ELSE cuerpo_control'
+    'case_else : ELSE CODEEPSILON'
     t[0] = CElse(t[2])
 
 def p_cs_else_e(t):
@@ -2749,14 +2714,14 @@ def p_cb_lista_when2(t):
     t[0] = [t[1]]
 
 def p_cb_when(t):
-    'cb_when : WHEN expresion THEN cuerpo_control'
+    'cb_when : WHEN expresion THEN CODEEPSILON'
     t[0] = CBWhen(t[2], t[4])
 
 
 #================LOOP SIMPLE============================
 
 def p_loop_simple(t):
-    'loop_simple : label LOOP cuerpo_control END LOOP label_final PUNTOCOMA'
+    'loop_simple : label LOOP CODEEPSILON END LOOP label_final PUNTOCOMA'
     t[0] = LoopSimple(t[1], t[3], t[6])
 
 def p_label(t):
@@ -2951,8 +2916,9 @@ def p_ListaCodigo_List(t):
 #----------------------------------------------------------  PRODUCCION A CODIGO FOR
 def p_Codigo_For(t):
     'CODE_  :   FOR ID IN TIPEE EXPRESI  BY_EXPRE  LOOP  CODEEPSILON  END LOOP ARGU_N PUNTOCOMA'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
     t[0]= ForInstruccion(t[2],t[4],t[6],t[11],t[5],t[8])
+
+
 
 
 def p_CodigoFunciones(t):

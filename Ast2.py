@@ -130,20 +130,7 @@ class Ast2:
                 self.grafoSelectExpresion(i.listaCampos, padre)
             elif isinstance(i, Funciones_):
                 self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
-            elif isinstance(i, CaseSimple):
-                self.grafoCaseSimple(i, padre)
-            elif isinstance(i, CaseBuscado):
-                self.grafoCaseBuscado(i, padre)
-            elif isinstance(i, LoopSimple):
-                self.grafoLoopSimple(i, padre)
-            elif isinstance(i, Exit):
-                self.grafoSalir(i, padre)
-            elif isinstance(i, Continue):
-                self.grafoContinuar(i, padre)
-            elif isinstance(i, Declaracion):
-                self.grafoDeclaracion(i, padre)
-            elif isinstance(i, Asignacion):
-                self.grafoAsignacion(i, padre)
+
             else:
                 print("No es droptable")
 
@@ -2668,7 +2655,7 @@ class Ast2:
             dot.edge('Node' + str(padreWhen), 'Node' + str(self.i))
 
             if when.sentencias is not None:
-                self.recorrerInstrucciones(when.sentencias, 'Node' + str(self.i))
+                self.GrafoRecorridoCodigo(when.sentencias, 'Node' + str(self.i))
 
         if casesimple.caseelse is not None:
             self.inc()
@@ -2676,7 +2663,7 @@ class Ast2:
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             if casesimple.caseelse.sentencias is not None:
-                self.recorrerInstrucciones(casesimple.caseelse.sentencias, 'Node' + str(self.i))
+                self.GrafoRecorridoCodigo(casesimple.caseelse.sentencias, 'Node' + str(self.i))
 
 
     def grafoCaseBuscado(self, casebuscado, padre):
@@ -2702,7 +2689,7 @@ class Ast2:
             dot.edge('Node' + str(padreWhen), 'Node' + str(self.i))
 
             if when.sentencias is not None:
-                self.recorrerInstrucciones(when.sentencias, 'Node' + str(self.i))
+                self.GrafoRecorridoCodigo(when.sentencias, 'Node' + str(self.i))
 
         if casebuscado.caseelse.sentencias is not None:
             self.inc()
@@ -2710,7 +2697,7 @@ class Ast2:
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
             if casebuscado.caseelse.sentencias is not None:
-                self.recorrerInstrucciones(casebuscado.caseelse.sentencias, 'Node' + str(self.i))
+                self.GrafoRecorridoCodigo(casebuscado.caseelse.sentencias, 'Node' + str(self.i))
 
 
     def grafoLoopSimple(self, loopsimple, padre):
@@ -2735,7 +2722,7 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
         if loopsimple.sentencias is not None:
-            self.recorrerInstrucciones(loopsimple.sentencias, 'Node' + str(self.i))
+            self.GrafoRecorridoCodigo(loopsimple.sentencias, 'Node' + str(self.i))
 
         if loopsimple.labelfinal is not None:
             self.inc()
@@ -2984,7 +2971,7 @@ class Ast2:
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "DECLARACIONES")
             dot.edge(padre, 'Node' + str(self.i))
-            self.recorrerInstrucciones(Declaraciones,'Node' + str(self.i))
+            self.GrafoRecorridoCodigo(Declaraciones,'Node' + str(self.i))
 
         else:
             print("Viene un Epsilon no se hace nada... ")
@@ -3025,6 +3012,7 @@ class Ast2:
 
 
 
+
 # --------------  Recorremos el codigo
     def GrafoRecorridoCodigo(self, Codigo,padre):
         global dot
@@ -3042,6 +3030,22 @@ class Ast2:
                 elif isinstance(ele,ForeachInstruccion):
                      # Mandamos a Graficar la instruccion  foreach
                     self.grafoForEach(ele.Nombre, ele.Slice, ele.Expre, ele.Argumento, ele.Lista_Codigo, 'Node' + str(self.i))
+
+                elif isinstance(ele, CaseSimple):
+                    self.grafoCaseSimple(ele, 'Node' + str(self.i))
+                elif isinstance(ele, CaseBuscado):
+                    self.grafoCaseBuscado(ele, 'Node' + str(self.i))
+                elif isinstance(ele, LoopSimple):
+                    self.grafoLoopSimple(ele, 'Node' + str(self.i))
+                elif isinstance(ele, Exit):
+                    self.grafoSalir(ele, 'Node' + str(self.i))
+                elif isinstance(ele, Continue):
+                    self.grafoContinuar(ele, 'Node' + str(self.i))
+                elif isinstance(ele, Declaracion):
+                    self.grafoDeclaracion(ele, 'Node' + str(self.i))
+                elif isinstance(ele, Asignacion):
+                    self.grafoAsignacion(ele, 'Node' + str(self.i))
+
         else:
             print("Viene un Epsilon no se hace nada... ")
 
