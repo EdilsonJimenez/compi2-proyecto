@@ -216,6 +216,11 @@ reservadas = {
     'for'     : 'FOR',
     'loop'    : 'LOOP',
     'reverse' :'REVERSE',
+
+    #PARA EL WHULE
+    'while'   : 'WHILE'
+
+
     'execute' :'EXECUTE',
     'array'   :'ARRAY',
     'slice'   :'SLICE',
@@ -2769,7 +2774,7 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS INSTRUCCIONES DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
     t[0]=Funciones_(t[1],t[3],t[7], t[5], t[10], t[11], t[12])
@@ -2934,8 +2939,11 @@ def p_CodigoFunciones(t):
                         | asignacion_variable
                         | salir
                         | continuar
-                        | EJECUTARFUNCION PUNTOCOMA'''
+                        | EJECUTARFUNCION PUNTOCOMA
+                        | INSTRUCCIONES '''
     t[0] = t[1]
+
+
 
 
 
@@ -3037,6 +3045,8 @@ def p_declaracion_variable(t):
     else:
         t[0] = Declaracion(t[1], t[2], t[3], t[4], None, None)
 
+
+
 def p_declaracion_constante(t):
     'declaracion_constante : CONSTANT'
 
@@ -3063,19 +3073,31 @@ def p_slices_ForeachEpsilon(t):
 
 def p_declaracion_not_null_e(t):
     'declaracion_not_null : '
-
     t[0] = False
 
 def p_declaracion_asignacion(t):
     'declaracion_asignacion : declaracion_simbolo expresion'
-
     t[0] = [t[1], t[2]]
+
+#================= PRODUCCIONES PARA EL WHILE
+def p_Codigo_While(t):
+    'CODE_  :   WHILE expresion LOOP CODEEPSILON END LOOP ARGU_N PUNTOCOMA '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) 
+    
 
 def p_declaracion_asignacion_e(t):
     'declaracion_asignacion : '
 
     t[0] = None
 
+def p_instruccion_CODE(t):
+    '''CODE_  :      DQL_COMANDOS
+                    | DDL_COMANDOS
+                    | DML_COMANDOS
+                    | COMENTARIOMULTI
+                    | COMENTARIONORMAL '''
+    if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
+        t[0] = t[1]
 
 def p_declaracion_simbolo(t):
     '''declaracion_simbolo : IGUAL
