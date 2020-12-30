@@ -9,7 +9,7 @@ import Gramatica as Gram
 import interprete as Inter
 import Ast2 as ast
 from Instruccion import *
-
+from intermedio import main
 
 
 
@@ -151,10 +151,15 @@ class Aplicacion:
         self.menuReportes.add_command(label="Tabla de simbolos", command=self.graficaTabla)
         self.menuReportes.add_command(label="Reporte gramatical", command=self.reporte_gramatical_)
 
+        self.menu3D = Menu(self.barraMenu, tearoff=0)
+        # self.menu3D.add_command(label="Generar", command=self.Errores)
+        self.menu3D.add_command(label="Ejecutar", command=main)
+
 
         self.barraMenu.add_cascade(menu=self.menuArchivo, label="Archivo")
         self.barraMenu.add_cascade(menu=self.menuAnalizar, label="Run")
         self.barraMenu.add_cascade(menu=self.menuReportes, label="Reportes")
+        self.barraMenu.add_cascade(menu=self.menu3D, label="Codigo Intermedio")
 
         # Area de texto
         self.entrada = scrolledtext.ScrolledText(self.miVentana)

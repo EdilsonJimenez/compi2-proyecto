@@ -8022,3 +8022,8 @@ class DatoTipo(Instruccion):
         self.bd = bd
         self.tipo = tipo
         self.valor = valor
+
+
+
+
+

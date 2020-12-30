@@ -566,7 +566,6 @@ def procesar_unitaria_aritmetica(expresion, ts):
             agregarErrorDatosOperacion(val, "", "~", "entero", 0, 0)
             return None
 
-
 def procesar_funcion(expresion, ts):
 
     if expresion.exp1 is None:
@@ -1066,6 +1065,7 @@ def procesar_funcion(expresion, ts):
             else:
                 agregarErrorFuncion(val1, None, None, None, "TANH", "numerico", 0, 0)
                 return None
+
         elif expresion.id_funcion == FUNCION_NATIVA.ASINH:
             # if isinstance(val1, string_types):
             #     if val1.isdecimal():
