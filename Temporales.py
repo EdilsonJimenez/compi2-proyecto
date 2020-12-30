@@ -27,7 +27,7 @@ class Temporales:
 
     def agregarSimbolo(self, simbolo):
         rand = randint(1, 25000)
-        self.variables[str(simbolo.nombre)+str(rand)] = simbolo
+        self.tablaSimbolos[str(simbolo.nombre)+str(rand)] = simbolo
 
     def obtenerSimbolo(self, simbolo):
         if not simbolo in self.tablaSimbolos:
@@ -44,7 +44,7 @@ class Temporales:
             self.tablaSimbolos[simbolo] = nuevoSi
 
 class tipoSimbolo():
-    def __init__(self, temporal,nombre, tipo, tam, pos, rol, ambito):
+    def __init__(self, temporal, nombre, tipo, tam, pos, rol, ambito):
         self.temporal = temporal
         self.nombre = nombre
         self.tipo = tipo

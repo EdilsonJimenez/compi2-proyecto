@@ -5,6 +5,8 @@ from sentencias import *
 import Temporales as T
 t_global = T.Temporales()
 cadena = ""
+ambitoFuncion = "cocoa"
+
 class Codigo3d:
 
     def __init__(self):
@@ -50,7 +52,7 @@ class Codigo3d:
             if instancia.instElse != 0:
                 cadena += "     ~falso~" + "\n"
                 self.Traducir(instancia.instElse)
-        cadena += ">label ."+salto+"\n"
+        cadena += "label ."+salto+"\n"
 
 
     def t_Funciones_(self, instancia):
@@ -58,6 +60,7 @@ class Codigo3d:
         # temporal, nombre, tipo, tam, pos, rol ,ambito
         metodo = tipoSimbolo(None,instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
         t_global.agregarSimbolo(metodo)
+        print(t_global.tablaSimbolos)
 
         for param in instancia.Parametros:
             print(param)
@@ -66,8 +69,10 @@ class Codigo3d:
 
         cadena += "@with_goto\n"
         cadena += "def "+instancia.Nombre+"(): \n"
+        ambitoFuncion = str(instancia.Nombre)
         for decla in instancia.Declaraciones:
             if decla != None:
+                print("declaacion")
                 r = self.procesar_expresion(decla.expresion,t_global)
                 tempo = t_global.varTemporal()
                 cadena += str(tempo) + "=" + str(r) + "\n"
@@ -202,17 +207,17 @@ class Codigo3d:
             cadena += v + "= " + str(val) + " or " + str(val2) + "\n"
             return v
 
-    def procesar_variable(tV, ts):
-        global ListaTablasG, baseN
-        listaRes = []
-        for item in ts.Datos:
-            v: DatoInsert = ts.obtenerDato(item)
-            if str(v.columna) == str(tV.id) and str(v.bd) == str(baseN[0]) and str(v.tabla) == str(ListaTablasG[0]):
-                print(" <> En listar: " + str(v.valor))
-                listaRes.append(v)
-        print(" <><>")
-        if listaRes.__len__() == 0:
-            print(" >>> No hay datos para esta validación.")
-            return None
-        else:
-            return listaRes
+    def procesar_variable(self, tV, ts):
+        global t_global, ambitoFuncion
+        print("procesar variable")
+        r = ""
+        print(t_global.tablaSimbolos)
+        for item in t_global.tablaSimbolos:
+            v: tipoSimbolo = t_global.obtenerSimbolo(item)
+            print(v.nombre+"<>"+tV.id+" "+v.ambito+"<>"+ambitoFuncion)
+            if v.nombre == tV.id and v.ambito == ambitoFuncion:
+                r = str(v.temporal)
+            else:
+                r = " "
+
+        return r
