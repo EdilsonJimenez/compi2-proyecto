@@ -8,6 +8,10 @@ class Temporales:
         self.temp = temp
         self.etiqueta = etiqueta
 
+    def limpiar(self):
+        self.temp = 0
+        self.etiqueta = 0
+
     def varTemporal(self):
         variable = "t" + str(self.temp)
         self.temp += 1
@@ -40,7 +44,8 @@ class Temporales:
             self.tablaSimbolos[simbolo] = nuevoSi
 
 class tipoSimbolo():
-    def __init__(self, nombre, tipo, tam, pos, rol, ambito):
+    def __init__(self, temporal,nombre, tipo, tam, pos, rol, ambito):
+        self.temporal = temporal
         self.nombre = nombre
         self.tipo = tipo
         self.tam = tam

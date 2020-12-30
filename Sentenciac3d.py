@@ -10,6 +10,12 @@ class Codigo3d:
     def __init__(self):
         self.i = 0
 
+    def imprimir(self):
+        global cadena
+        print(cadena)
+        t_global.limpiar()
+        cadena = ""
+
     def Traducir(self, instrucciones):
         global ts_global
         for i in instrucciones:
@@ -20,57 +26,61 @@ class Codigo3d:
             else:
                 print("NO TRADUCE....")
 
-        print(cadena)
-
     def t_If(self, instancia):
-        print("Se traduce el if")
         global t_global, cadena
-
+        cadena += "--------- IF --------------- \n"
         condicion = self.procesar_expresion(instancia.condicion, t_global)
         verdadero = str(t_global.etiquetaT())
         falso = str(t_global.etiquetaT())
         salto = str(t_global.etiquetaT())
-
         cadena += "if " + str(condicion) + ": \n"
         cadena += "\tgoto ."+verdadero+"\n"
         cadena += "else : \n"
         cadena += "\tgoto ."+falso+"\n"
 
         cadena += "label . " + verdadero + "\n"
-        cadena += "print(\"Codigo si es Verdadero\")"+"\n"
+        cadena += "     ~verdadero~"+"\n"
         # Si el if trae instruciones en IF
         if instancia.instIf != 0:
-            cadena += "Trae Instrucciones If"
+            self.Traducir(instancia.instIf)
         cadena += "goto ."+salto+"\n"+"\n"
-
         cadena += "label ." + falso + "\n"
-        cadena += "print(\"Codigo si es Falso\")"+"\n"
         # Si el if trae instruciones en ELSE
         if instancia.instElse != None:
             if instancia.instElse != 0:
-                print("Trae Instrucciones Else")
-        cadena += "label ."+salto+"\n"
+                cadena += "     ~falso~" + "\n"
+                self.Traducir(instancia.instElse)
+        cadena += ">label ."+salto+"\n"
+
 
     def t_Funciones_(self, instancia):
         global t_global, cadena
-        # nombre, tipo, tam, pos, rol ,ambito
-        metodo = tipoSimbolo(instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
+        # temporal, nombre, tipo, tam, pos, rol ,ambito
+        metodo = tipoSimbolo(None,instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
         t_global.agregarSimbolo(metodo)
 
         for param in instancia.Parametros:
             print(param)
 
-        for decla in instancia.Declaraciones:
-            v = tipoSimbolo(decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
-            t_global.agregarSimbolo(v)
 
-        cadena += "@with_goto \n"
-        cadena += "def"+instancia.Nombre+"(): \n"
-        for decla in instancia.Declaraciones:
-            r += self.procesar_expresion(decla.expresion)
-            tempo = t_global.varTemporal
-            cadena += tempo +" = "+r + "\n"
 
+        cadena += "@with_goto\n"
+        cadena += "def "+instancia.Nombre+"(): \n"
+        for decla in instancia.Declaraciones:
+            if decla != None:
+                r = self.procesar_expresion(decla.expresion,t_global)
+                tempo = t_global.varTemporal()
+                cadena += str(tempo) + "=" + str(r) + "\n"
+
+                v = tipoSimbolo(str(tempo), decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
+                t_global.agregarSimbolo(v)
+
+        codigo: Code_Funciones = instancia.Codigo
+        self.Traducir(codigo.Codigo)
+
+        #for inst in codigo.Codigo:
+        #    if inst != None:
+        #        self.TraducirInstruccion(inst)
 
 
         cadena += instancia.Nombre+"()\n"

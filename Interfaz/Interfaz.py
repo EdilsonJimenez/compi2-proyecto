@@ -84,7 +84,7 @@ class Aplicacion:
         try:
             cadena = self.entrada.get(SEL_FIRST, SEL_LAST)
             nueva = str(cadena).upper()
-            print(nueva)
+            #print(nueva)
             Inter.inicializarEjecucionAscendente(cadena)
             if len(Lista) >0:
                 self.consola.insert('insert', Lista[0])
@@ -93,7 +93,7 @@ class Aplicacion:
         except:
             cadena2 = self.entrada.get(1.0, "end-1c")
             nuevaV = str(cadena2).upper()
-            print(nuevaV)
+            #print(nuevaV)
             Inter.inicializarEjecucionAscendente(cadena2)
 
             if len(Lista) >0:

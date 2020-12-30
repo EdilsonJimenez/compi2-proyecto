@@ -22,7 +22,6 @@ def principal():
 
     label .L0
     print("Codigo si es Verdadero.")
-    llamada()
     goto .Salto
 
     label .L1

@@ -218,9 +218,7 @@ reservadas = {
     'reverse' :'REVERSE',
 
     #PARA EL WHULE
-    'while'   : 'WHILE'
-
-
+    'while'   : 'WHILE',
     'execute' :'EXECUTE',
     'array'   :'ARRAY',
     'slice'   :'SLICE',
@@ -479,6 +477,7 @@ def p_init(t):
 
     arbol = Codigo3d()
     arbol.Traducir(t[0])
+    arbol.imprimir()
 
 
 def p_instrucciones_lista(t):
@@ -2642,11 +2641,11 @@ def p_expresion_binario_n(t):
 
 # ============================================== IF THEN ELSE END IF =============================================== #
 def p_instruccion_if(t):
-    'instruccion_if : IF expresion THEN expresion END IF PUNTOCOMA'
+    'instruccion_if : IF expresion THEN CODEEPSILON END IF PUNTOCOMA'
     t[0] = If_inst(t[2], t[4], None)
 
 def p_instruccion_ifelse(t):
-    'instruccion_if : IF expresion THEN expresion ELSE expresion END IF PUNTOCOMA'
+    'instruccion_if : IF expresion THEN CODEEPSILON ELSE CODEEPSILON END IF PUNTOCOMA'
     t[0] = If_inst(t[2], t[4], t[6])
 
 def p_listas_elsif(t):
@@ -2876,7 +2875,7 @@ def p_Declaracion_VariablesAsignacion(t):
 def p_Code_Estructures(t):
     'CODE  : BEGIN CODEEPSILON END ARGU_N_N'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    t[0] = Code_Funciones(t[4],t[2])
+    t[0] = Code_Funciones(t[4], t[2])
 
 
 #-------------------------------------  Tipos de Argumento
