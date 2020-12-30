@@ -3052,7 +3052,7 @@ class Ast2:
                 elif isinstance(ele, Asignacion):
                     self.grafoAsignacion(ele, 'Node' + str(self.i))
                 elif isinstance(ele, If_inst):
-                    self.grafoIf(ele)
+                    self.grafoIf(ele, 'Node' + str(self.i))
                     print("graficar funcion")
                 elif isinstance(ele, EjecucionFuncion):
                     self.GrafoEjecucion(ele.Id, ele.Parametros, "Node" + str(self.i))
@@ -3216,7 +3216,7 @@ class Ast2:
         dot.node('Node' + str(self.i), Argumento)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-    def grafoIf(self, instancia):
+    def grafoIf(self, instancia, padre):
         #  condicion, instIf, instElse
         p: If_inst = instancia
 

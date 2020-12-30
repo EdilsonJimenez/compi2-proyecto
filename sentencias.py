@@ -89,13 +89,13 @@ class Asignacion(Sentencia):
 #----------------------------   FUNCIONES
 class Funciones_(Sentencia):
     def __init__(self,Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
-        self.Reservada     = Reservada
-        self.Nombre        = Nombre
-        self.Retorno       = Retorno
-        self.Parametros    = Parametros
-        self.Instrucciones = Instrucciones
-        self.Declaraciones = Declaraciones
-        self.Codigo        = Codigo
+        self.Reservada     = Reservada #create or repacle
+        self.Nombre        = Nombre #
+        self.Retorno       = Retorno #que retorna, expresion
+        self.Parametros    = Parametros #lista de ID's ( nombre tipo )
+        self.Instrucciones = Instrucciones # sql
+        self.Declaraciones = Declaraciones #
+        self.Codigo        = Codigo # sentencias
 
 
 #---------------------------------------  codigo funciones

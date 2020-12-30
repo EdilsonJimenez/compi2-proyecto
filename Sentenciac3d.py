@@ -15,8 +15,8 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i, If_inst):
                 self.t_If(i)
-            elif isinstance(i, Declaracion):
-                self.t_Declaracion(i)
+            elif isinstance(i, Funciones_):
+                self.t_Funciones_(i)
             else:
                 print("NO TRADUCE....")
 
@@ -51,8 +51,29 @@ class Codigo3d:
                 print("Trae Instrucciones Else")
         cadena += "label ."+salto+"\n"
 
-    def t_Declaracion(self, instancia):
+    def t_Funciones_(self, instancia):
         global t_global, cadena
+        # nombre, tipo, tam, pos, rol ,ambito
+        metodo = tipoSimbolo(instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
+        t_global.agregarSimbolo(metodo)
+
+        for param in instancia.Parametros:
+            print(param)
+
+        for decla in instancia.Declaraciones:
+            v = tipoSimbolo(decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
+            t_global.agregarSimbolo(v)
+
+        cadena += "@with_goto \n"
+        cadena += "def"+instancia.Nombre+"(): \n"
+        for decla in instancia.Declaraciones:
+            r += self.procesar_expresion(decla.expresion)
+            tempo = t_global.varTemporal
+            cadena += tempo +" = "+r + "\n"
+
+
+
+        cadena += instancia.Nombre+"()\n"
 
 
     # EXPRESIONES
