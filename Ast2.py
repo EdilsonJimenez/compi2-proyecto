@@ -3,7 +3,6 @@ from graphviz import Digraph
 from graphviz import escape
 from expresiones import *
 import interprete as Inter
-from Instruccion_pl import *
 from sentencias import *
 
 class Ast2:
@@ -131,8 +130,11 @@ class Ast2:
                 self.grafoSelectExpresion(i.listaCampos, padre)
             elif isinstance(i, Funciones_):
                 self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
+
+            elif isinstance(i,Procedimientos_):
+                self.grafoFuncion(i.Reservada, i.Nombre, i.Comand, i.Parametros, i.Instrucciones, i.Declaraciones,i.Codigo, padre)
             else:
-                print("No se grafica la instancia.")
+                print("No es droptable")
 
 
     def RecorrerTipoSelect(self, sente, padre):
@@ -2860,9 +2862,9 @@ class Ast2:
 
 #==============================================================  GRAFICAS DE LOS PROCEDIMIENTOS, FUNCIONES  OPERADORES
 
-    #Funciones_   (Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]
+    #Funciones_   (Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[])
 
-    def grafoFuncion(self,Reservada, Nombre,Retorno, Parametros, Instrucciones, Declaraciones, Codigo,padre):
+    def grafoFuncion(self,Reservada, Nombre,Retorno, Parametros, Instrucciones, Declaraciones, Codigo, padre):
         global dot
 
         self.inc()
@@ -2887,7 +2889,7 @@ class Ast2:
 
         #--------------------------------------------------------
         self.inc()
-        dot.node('Node' + str(self.i), "("+"PARAMETROS"+")")
+        dot.node('Node' + str(self.i), ""+"PARAMETROS")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer Lista de Parametros
         self.GrafoRecorridoParametros(Parametros,'Node' + str(self.i))
@@ -2943,6 +2945,67 @@ class Ast2:
 
 
 
+    #Procedimientos_ (self,Reservada, Nombre,Comand, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[])
+
+    def GrafoProcedure(self,Reservada, Nombre,Comand, Parametros, Instrucciones, Declaraciones, Codigo):
+        global dot
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "PROCEDURE_PRODUCCION")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), Reservada)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "PROCEDURE")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), Nombre)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "PARAMETROS" )
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        # Recorrer Lista de Parametros
+        self.GrafoRecorridoParametros(Parametros, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), Comand)
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+        self.inc()
+        dot.node('Node' + str(self.i), "AS")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "COMANDO_SQL")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        # Recorrer Comandos Sql
+        self.recorrerInstrucciones(Instrucciones, 'Node' + str(self.i))
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "DECLARACIONES")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        # Recorrer Lista Declaraciones
+        self.GrafoRecorridoDeclaraciones(Declaraciones, 'Node' + str(self.i))
+        # recorrer
+
+        # --------------------------------------------------------
+        self.inc()
+        dot.node('Node' + str(self.i), "CODIGO_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        self.GrafoCuerpoCodigo(Codigo, 'Node' + str(self.i))
+        # Recorrer Codigo
+        # recorrer
+
 
 
 #---------------  Recorremos los parametros
@@ -2953,14 +3016,20 @@ class Ast2:
 
             self.inc()
             nuevoPadre = self.i
-            dot.node('Node' + str(self.i), "(PARAMETROS)")
+            dot.node('Node' + str(self.i), "PARAMETROS")
             dot.edge(padre, 'Node' + str(self.i))
 
             for ele in Parametros:
-                self.inc()
-                dot.node('Node' + str(self.i), ele)
-                dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+                if(isinstance(ele,Parametros_)):
+                    self.inc()
+                    dot.node('Node' + str(self.i), ele.Tipo + " " +  ele.Nombre + " "+ ele.Valor)
+                    dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
+
+                else:
+                    self.inc()
+                    dot.node('Node' + str(self.i), ele)
+                    dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         else:
             print("Viene un Epsilon no se hace nada... ")
             self.inc()
@@ -3051,16 +3120,13 @@ class Ast2:
                     self.grafoDeclaracion(ele, 'Node' + str(self.i))
                 elif isinstance(ele, Asignacion):
                     self.grafoAsignacion(ele, 'Node' + str(self.i))
-                elif isinstance(ele, If_inst):
-                    self.grafoIf(ele, 'Node' + str(self.i))
-                    print("graficar funcion")
                 elif isinstance(ele, EjecucionFuncion):
                     dot.edge('Node' +str(nuevoPadre),str(self.i+1))
                     self.GrafoEjecucion(ele.Id, ele.Parametros)
-                elif isinstance(ele,list):
+                elif isinstance(ele, list):
                     self.recorrerInstrucciones(ele, 'Node' + str(self.i))
                 else:
-                    print("No viene ni uno ")
+                    print(" no hay objeto adecuado ")
 
         else:
             print("Viene un Epsilon no se hace nada... ")
@@ -3173,6 +3239,7 @@ class Ast2:
         dot.node('Node' + str(self.i),"FOREACH_INSTRUCCION")
         dot.edge(padre, 'Node' + str(self.i))
 
+
         self.inc()
         dot.node('Node' + str(self.i), "FOREACH")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
@@ -3220,15 +3287,6 @@ class Ast2:
         dot.node('Node' + str(self.i), Argumento)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
-    def grafoIf(self, instancia, padre):
-        #  condicion, instIf, instElse
-        p: If_inst = instancia
-
-        global dot
-        self.inc()
-        nuevoPadre = self.i
-        dot.node('Node' + str(self.i), "IF")
-        dot.edge(padre, 'Node' + str(self.i))
 
 
     #  Grafica de ejecucion de las funciones
