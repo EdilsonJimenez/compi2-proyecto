@@ -212,7 +212,10 @@ reservadas = {
     #end esta arriva
     'for'     : 'FOR',
     'loop'    : 'LOOP',
-    'reverse' :'REVERSE'
+    'reverse' :'REVERSE',
+
+    #PARA EL WHULE
+    'while'   : 'WHILE'
 
 
 
@@ -2766,9 +2769,21 @@ def p_ExpresionBy_LoopEpsilon(t):
 
 
 
+#================= PRODUCCIONES PARA EL WHILE
+def p_Codigo_While(t):
+    'CODE_  :   WHILE expresion LOOP CODEEPSILON END LOOP ARGU_N PUNTOCOMA '
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) 
 
 
 
+def p_instruccion_CODE(t):
+    '''CODE_  :      DQL_COMANDOS
+                    | DDL_COMANDOS
+                    | DML_COMANDOS
+                    | COMENTARIOMULTI
+                    | COMENTARIONORMAL '''
+    if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
+        t[0] = t[1]
 
 
 
