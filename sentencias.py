@@ -148,3 +148,4 @@ class EjecucionFuncion(Sentencia):
     def __init__(self, Id, Parametros):
         self.Id         = Id
         self.Parametros = Parametros
+

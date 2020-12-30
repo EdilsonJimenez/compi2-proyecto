@@ -2770,7 +2770,7 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS INSTRUCCIONES DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
     t[0]=Funciones_(t[1],t[3],t[7], t[5], t[10], t[11], t[12])
@@ -2934,8 +2934,11 @@ def p_CodigoFunciones(t):
                         | asignacion_variable
                         | salir
                         | continuar
-                        | EJECUTARFUNCION PUNTOCOMA'''
+                        | EJECUTARFUNCION PUNTOCOMA
+                        | INSTRUCCIONES '''
     t[0] = t[1]
+
+
 
 
 
@@ -3036,6 +3039,8 @@ def p_declaracion_variable(t):
         t[0] = Declaracion(t[1], t[2], t[3], t[4], t[5][0], t[5][1])
     else:
         t[0] = Declaracion(t[1], t[2], t[3], t[4], None, None)
+
+
 
 def p_declaracion_constante(t):
     'declaracion_constante : CONSTANT'

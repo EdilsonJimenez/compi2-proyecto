@@ -1541,7 +1541,7 @@ class Ast2:
         elif isinstance(expresiones, UnitariaAritmetica):
             self.graficarUnitariaAritmetica(expresiones, "UnitariaAritmetica")
         elif isinstance(expresiones,EjecucionFuncion):
-            self.GrafoEjecucion(expresiones.Id,expresiones.Parametros, "Node"+str(self.i-1))
+            self.GrafoEjecucion(expresiones.Id,expresiones.Parametros)
 
         # NUEVAS UNITARIAS
 
@@ -2922,7 +2922,7 @@ class Ast2:
         dot.node('Node' + str(self.i), "COMANDO_SQL")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer Comandos Sql
-        self.recorrerInstrucciones(Instrucciones, 'Node' + str(self.i))
+        self.recorrerInstrucciones(Instrucciones[0], 'Node' + str(self.i))
 
         # --------------------------------------------------------
         self.inc()
@@ -3052,8 +3052,12 @@ class Ast2:
                 elif isinstance(ele, Asignacion):
                     self.grafoAsignacion(ele, 'Node' + str(self.i))
                 elif isinstance(ele, EjecucionFuncion):
-                    self.GrafoEjecucion(ele.Id, ele.Parametros, "Node" + str(self.i))
-
+                    dot.edge('Node' +str(nuevoPadre),str(self.i+1))
+                    self.GrafoEjecucion(ele.Id, ele.Parametros)
+                elif isinstance(ele,list):
+                    self.recorrerInstrucciones(ele, 'Node' + str(self.i))
+                else:
+                    print("No viene ni uno ")
 
         else:
             print("Viene un Epsilon no se hace nada... ")
@@ -3218,22 +3222,22 @@ class Ast2:
 
     #  Grafica de ejecucion de las funciones
     #  ForeachInstruccion (self, Nombre, Slice, Expre,Argumento,Lista_Codigo=[]):
-    def GrafoEjecucion(self,Id, Lista_P, padre):
+    def GrafoEjecucion(self,Id, Lista_P):
         global dot,i
         self.inc()
         nuevoPadre = self.i
-        dot.node('Node' + str(self.i),"EJECUCION_FUNCION")
-        dot.edge(padre, 'Node' + str(self.i))
+        dot.node(str(self.i),"EJECUCION_FUNCION")
+        #dot.edge(padre, 'Node' + str(self.i))
 
 
         self.inc()
         dot.node('Node' + str(self.i), Id)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        dot.edge(str(nuevoPadre), 'Node' + str(self.i))
 
 
         #--------------------------------------------------------
 
         # Recorrer Lista de Parametros
-        self.GrafoRecorridoParametros(Lista_P,'Node' + str(nuevoPadre))
+        self.GrafoRecorridoParametros(Lista_P,str(nuevoPadre))
 
 
