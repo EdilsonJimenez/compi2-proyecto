@@ -2370,7 +2370,12 @@ def p_unitaria_negativo(t):
 def p_valor_id(t):
     '''expresion_aritmetica : ID'''
     t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL)
-    rep_gramatica('\n <TR><TD> expresion_logica → ID    </TD><TD>  t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL) </TD></TR>')
+    rep_gramatica('\n <TR><TD> expresion_aritmetica → ID    </TD><TD>  t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL) </TD></TR>')
+
+def p_valor_idParentesis(t):
+    '''expresion_aritmetica : EJECUTARFUNCION'''
+    t[0] = t[1]
+    rep_gramatica('\n <TR><TD> expresion_aritmetica → EJECUTARFUNCION    </TD><TD>  t[0] = t[1] </TD></TR>')
 
 
 def p_valor_id_2(t):
@@ -2928,8 +2933,18 @@ def p_CodigoFunciones(t):
                         | declaracion_variable
                         | asignacion_variable
                         | salir
-                        | continuar'''
+                        | continuar
+                        | EJECUTARFUNCION PUNTOCOMA'''
     t[0] = t[1]
+
+
+
+
+def p_Codigo_FuncionesLl(t):
+    'EJECUTARFUNCION  : ID PARIZQ PARAMETROSG PARDER '
+    t[0] = EjecucionFuncion(t[1],t[3])
+
+
 
 
 
