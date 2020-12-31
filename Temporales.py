@@ -1,7 +1,7 @@
 from random import *
 
 class Temporales:
-    def __init__(self, tablaSimbolos={}, variables={}, funciones={}, temp= 0, etiqueta = 0, parametro=0, funcion = 10):
+    def __init__(self, tablaSimbolos={}, variables={}, funciones={}, temp= 0, etiqueta = 0, parametro=0, funcion = 0):
         self.variables = variables.copy()
         self.parametro = parametro
         self.funciones = funciones.copy()

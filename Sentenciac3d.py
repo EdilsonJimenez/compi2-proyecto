@@ -20,7 +20,7 @@ class Codigo3d:
         cadena += "stack = []\n\n"
         cadena += "@with_goto \n"
         cadena += "def main(): \n"
-        cadena += "\tglobal heap"
+        cadena += "\tglobal heap\n"
         cadena += "\tglobal stack\n"
 
     def retorno(self):
@@ -32,8 +32,8 @@ class Codigo3d:
         i = 1
         cadena += "\n"
         while i < cantidad:
-            cadena += "if u == \"L"+str(i)+"\": \n"
-            cadena += "\tgoto .L"+str(i)+"\n"
+            cadena += "if u == \"F"+str(i)+"\": \n"
+            cadena += "\tgoto .F"+str(i)+"\n"
             i += 1
 
     def imprimir(self):
