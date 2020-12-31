@@ -212,6 +212,7 @@ class Codigo3d:
             print("Viene epsilon en la produccion")
 
 
+#--------------------------------   TRADUCCION CASE SIMPLE
     def t_TraduccionCaseSimple(self,Objeto:CaseSimple, Ambito):
         #Objetos globales para la traduccion
         global t_global, cadena
@@ -219,45 +220,120 @@ class Codigo3d:
 #-------#Viene Expresion_Busqueda  => ExpresionValor(ID)
         #Creamor un temporal con el valor que va a tener
         Variable:ExpresionValor = Objeto.busqueda
-
         tempoP = t_global.varParametro()
         cadena += str(tempoP) + "\n"
         #Se creo el objeto con sus caracteristicas
         p = tipoSimbolo(str(tempoP), Variable,"", 1, 1, 'parametro', Ambito)
         #Se almacena en el diccionario global
         t_global.agregarSimbolo(p)
+
+
+# -------#viene CElse(CodigoEpsilon) =>
+        #Objetemos el else
+        vari1:CElse = Objeto.caseelse
+        vari =vari1.sentencias
+
         #busqueda, listawhen, caseelse
-
 #-------#viene Lista_When =>Lista => CSWhen(Cs_Expresion, CodigoCuerpoEpsilon) => Cs_Expresion=> Lista => Lista de expresines
-        self.RecorrerListaWhens(Objeto.listawhen,Ambito)
-
-#-------#viene CElse(CodigoEpsilon) =>
-        self.RecorrerCuerpoCodigo(Objeto.caseelse)
+        self.RecorrerListaWhensCS(Objeto.listawhen,Ambito,Variable,vari)
 
 
-    def RecorrerListaWhens(self, lista,Ambito):
-        for element in lista:
-            ele:CSWhen = element
-            #Tenemos ListaExpresiones
-            self.Recorrido_Instrucciones(ele.expresion)
-            #Tenemos Llamado al recorrido del codigo Nuevamente
-            self.RecorrerCuerpoCodigo(ele.sentencias,Ambito)
+
+    # Recorremos la lista de Whens Case Simple
+    def RecorrerListaWhensCS(self, lista,Ambito,Variable,Else):
+            if(Else==None):
+                for element in lista:
+                    ele: CSWhen = element
+                    # Tenemos ListaExpresiones
+                    valor = self.Recorrido_InstruccionesCS(ele.expresion, Variable)
+                    valor.replace("\"", " ")
+                    # creamor un nuevo objeto tipo if para poder enviarlo con sus if
+                    Codo = If_inst(valor, ele.sentencias, None)
+                    self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
+
+            else:
+                contador = 0
+                for element in lista:
+                    if(contador+1 != len(lista)):
+                        ele:CSWhen = element
+                        #Tenemos ListaExpresiones
+                        valor = self.Recorrido_InstruccionesCS(ele.expresion,Variable)
+                        valor.replace("\""," ")
+                        #creamor un nuevo objeto tipo if para poder enviarlo con sus if
+                        Codo = If_inst(valor,ele.sentencias,None)
+                        self.t_If(Codo) #Se va a generar el if con las condiciones y el codigo
+                        contador +=1
+                    else:
+                        ele:CSWhen = element
+                        #Tenemos ListaExpresiones
+                        valor = self.Recorrido_InstruccionesCS(ele.expresion,Variable)
+                        valor.replace("\""," ")
+                        #creamor un nuevo objeto tipo if para poder enviarlo con sus if con el else
+                        Codo = If_inst(valor,ele.sentencias,Else)
+                        self.t_If(Codo) #Se va a generar el if con las condiciones y el codigo
+                        contador +=1
+
 
 
     #Recorremos la lista de instrucciones
-    def Recorrido_Instrucciones(self, listaIns,Ambito):
+    def Recorrido_InstruccionesCS(self, listaIns,Ambito,Variable):
+        expresion =""
+        contador=0
         for ele in listaIns:
             #Recorremos los tipos de instruccines
             if(isinstance(ele,ExpresionAritmetica)):
                 print("Viene un alista de instrucciones aritmeticas.. ")
-                print(str(Ambito))
+                if(contador+1!=len(listaIns)):
+                    expresion += "(" +Variable + "==" + ele + ")" + "OR"
+                else:
+                    expresion += "("+Variable + "==" + ele + ")"
+            contador+=1
+        #Retornamos nuestra condicion
+        return expresion
 
 
 
-
-    def GenerarCases(self,ObjetoCase):
-        #Generacion de Etiquetas de los posibles cases
+#--------------------------------   TRADUCCION CASE BUSCADO
+    def t_TraduccionCaseBuscado(self,Objeto:CaseBuscado, Ambito):
+        #Objetos globales para la traduccion
         global t_global, cadena
+        cadena += "--------- CASE BUSCADO --------------- \n"
+# -------#viene CElse(CodigoEpsilon) =>
+        #Obtenemos el else si este existe
+        #Objetemos el else
+        vari1:CElse = Objeto.caseelse
+        vari =vari1.sentencias 
+#-------#viene Lista_When =>Lista => CBWhen(expresion->una sola, sentencias->CodigoCuerpoEpsilon)
+        self.RecorrerListaWhensCB(Objeto.listawhen,Ambito,vari)
+
+
+
+
+    #Recorremos la lista de whens CB
+    def RecorrerListaWhensCB(self, lista,Ambito,Else):
+            if(Else==None):
+                for element in lista:
+                    ele: CBWhen = element
+                    # Tenemos una expresion
+                    Codo = If_inst(ele.expresion, ele.sentencias, None)
+                    self.t_If(Codo)
+            else:
+                contador = 0
+                for element in lista:
+                    if(contador+1 != len(lista)):
+                        ele: CBWhen = element
+                        # Tenemos una expresion
+                        Codo = If_inst(ele.expresion, ele.sentencias, None)
+                        self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
+                        contador +=1
+                    else:
+                        ele: CBWhen = element
+                        # Tenemos una expresion
+                        Codo = If_inst(ele.expresion, ele.sentencias, Else)
+                        self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
+                        contador +=1
+
+
 
 
 
