@@ -2,23 +2,48 @@ from Instruccion_pl import *
 from Temporales import *
 from expresiones import *
 from sentencias import *
+import os
 import Temporales as T
 t_global = T.Temporales()
 cadena = ""
 ambitoFuncion = ""
+
 
 class Codigo3d:
 
     def __init__(self):
         global cadena
         self.i = 0
+        cadena += "from goto import with_goto\n"
+        cadena += "import FuncionesIntermedias as F3D\n"
+        cadena += "heap = F3D.heap\n"
+        cadena += "stack = []\n\n"
         cadena += "@with_goto \n"
         cadena += "def main(): \n"
+        cadena += "\tglobal heap"
+        cadena += "\tglobal stack\n"
+
+    def retorno(self):
+        global cadena
+        cadena += "\nlabel .R\n"
+        cadena += "u = stack[-1]"
+
+        cantidad = t_global.varFuncionAnterior()
+        i = 1
+        cadena += "\n"
+        while i < cantidad:
+            cadena += "if u == \"L"+str(i)+"\": \n"
+            cadena += "\tgoto .L"+str(i)+"\n"
+            i += 1
 
     def imprimir(self):
         global cadena
-        cadena += "\n\nmain(): \n"
+        self.retorno()
+        cadena += "\n\nmain() \n"
         print(cadena)
+        self.generar()
+
+        print("----------------------------------SE LIMPIO ----------------------------------------------")
         t_global.limpiar()
         cadena = ""
 
@@ -107,9 +132,9 @@ class Codigo3d:
         codigo: Code_Funciones = instancia.Codigo
         self.Traducir(codigo.Codigo)
 
-        anterior = t_global.varFuncionAnterior()
+        anterior = "R"
         cadena += "\ngoto ."+anterior
-
+        cadena += "\n\n"
 
     def t_asignacion(self, asignacion):
         global t_global, cadena
@@ -125,7 +150,7 @@ class Codigo3d:
 
     def t_llamadaFuncion(self, llamada):
         # Id, Lista-Parametros
-        global t_global, cadena, ambitoFuncion
+        global t_global, cadena, ambitoFuncion, stack
         ambitoFuncion = llamada.Id
         listaParametros = []
         if llamada.Parametros != None:
@@ -135,20 +160,23 @@ class Codigo3d:
         print("lista")
         print(listaParametros)
 
-        contador = 0
+        '''
+        cont = 0
         for sim in t_global.tablaSimbolos:
             s: tipoSimbolo = t_global.obtenerSimbolo(sim)
-            if s.ambito == ambitoFuncion and s.rol == "parametro":
-                cadena += "\n"+str(s.temporal) +" = "+ str(listaParametros[contador])
-                contador += 1
+            #print(str(s.nombre)+str(s.ambito)+str(s.rol))
+            if s.ambito == ambitoFuncion and str(s.rol) == "parametro":
+                print(str(cont))
+                cadena += "\n"+str(s.temporal) +" = "+ str(listaParametros[cont])
+                cont += 1'''
 
+        salto = t_global.varFuncion()
+        cadena += "\nstack.append(\""+salto+"\")\n"
         # llamada goto a la funcion
         for met in t_global.tablaSimbolos:
             m: tipoSimbolo = t_global.obtenerSimbolo(met)
             if m.nombre == llamada.Id and m.rol == "Metodo":
                 cadena += "\ngoto ."+str(m.temporal)
-
-        salto = t_global.varFuncion()
         cadena += "\nlabel ."+salto
 
 
@@ -292,3 +320,9 @@ class Codigo3d:
                 r = " "
 
         return r
+
+    def generar(self):
+        global cadena
+        f = open('./intermedio.txt', 'w')
+        f.write(cadena)
+        f.close()

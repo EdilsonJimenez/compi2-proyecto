@@ -12,9 +12,7 @@ def principal():
     # a - parametros
     # v1 - retornos
 
-    t0 = 10 > 5
-    t1 = 8 == 8
-    t2 = t0 and t1
+    t2 = True
     if t2:
         goto .L0
     else:
@@ -26,6 +24,7 @@ def principal():
 
     label .L1
     print("Codigo si es Falso.")
+
 
     label .Salto
 principal()

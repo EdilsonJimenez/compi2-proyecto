@@ -31,8 +31,8 @@ class Temporales:
         return str(variable)
 
     def varFuncionAnterior(self):
-        variable = "F" + str(self.funcion-2)
-        return str(variable)
+        variable = self.funcion
+        return variable
 
     def etiquetaT(self):
         variable = "L" + str(self.etiqueta)
