@@ -109,10 +109,9 @@ class Aplicacion:
                 print("error en el reporte gramatical :(")
                 
     def reporte_AST_(self):     
-            try:
+
                Gram.reporte_AST_GLOB()
-            except:
-                print("error en el reporte gramatical :(")
+
 
 
     def graficaTabla(self):
