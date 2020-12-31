@@ -9,7 +9,7 @@ import Gramatica as Gram
 import interprete as Inter
 import Ast2 as ast
 from Instruccion import *
-from intermedio import main
+
 
 
 
@@ -63,6 +63,10 @@ class Aplicacion:
         else:
             ruta = ""
 
+    def ejecutarMain(self):
+        pass
+        #from intermedio import main
+
 
     def enviarDatos(self):
         contenido = self.entrada.get(1.0, "end-1c")
@@ -84,7 +88,7 @@ class Aplicacion:
         try:
             cadena = self.entrada.get(SEL_FIRST, SEL_LAST)
             nueva = str(cadena).upper()
-            print(nueva)
+            #print(nueva)
             Inter.inicializarEjecucionAscendente(cadena)
             if len(Lista) >0:
                 self.consola.insert('insert', Lista[0])
@@ -93,7 +97,7 @@ class Aplicacion:
         except:
             cadena2 = self.entrada.get(1.0, "end-1c")
             nuevaV = str(cadena2).upper()
-            print(nuevaV)
+            #print(nuevaV)
             Inter.inicializarEjecucionAscendente(cadena2)
 
             if len(Lista) >0:
@@ -109,10 +113,9 @@ class Aplicacion:
                 print("error en el reporte gramatical :(")
                 
     def reporte_AST_(self):     
-            try:
+
                Gram.reporte_AST_GLOB()
-            except:
-                print("error en el reporte gramatical :(")
+
 
 
     def graficaTabla(self):
@@ -153,7 +156,7 @@ class Aplicacion:
 
         self.menu3D = Menu(self.barraMenu, tearoff=0)
         # self.menu3D.add_command(label="Generar", command=self.Errores)
-        self.menu3D.add_command(label="Ejecutar", command=main)
+        self.menu3D.add_command(label="Ejecutar", command=self.ejecutarMain)
 
 
         self.barraMenu.add_cascade(menu=self.menuArchivo, label="Archivo")

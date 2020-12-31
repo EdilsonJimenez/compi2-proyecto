@@ -219,16 +219,17 @@ reservadas = {
 
     #PARA EL WHULE
     'while'   : 'WHILE',
-
-
-    'execute' :'EXECUTE',
-    'array'   :'ARRAY',
-    'slice'   :'SLICE',
-    'foreach' :'FOREACH',
+    'execute'  :'EXECUTE',
+    'array'    :'ARRAY',
+    'slice'    :'SLICE',
+    'foreach'  :'FOREACH',
     'constant' : 'CONSTANT',
+    'plpgsql'  :'PLPGSQL',
+    'procedure':'PROCEDURE',
+    'return'   :'RETURN',
 
     'index' : 'INDEX',
-    'hash' : 'HASH'
+    'hash' : 'HASH',
 
 }
 
@@ -481,6 +482,7 @@ def p_init(t):
 
     arbol = Codigo3d()
     arbol.Traducir(t[0])
+    arbol.imprimir()
 
 
 def p_instrucciones_lista(t):
@@ -501,11 +503,11 @@ def p_instruccion(t):
     '''INSTRUCCION  : DQL_COMANDOS
                     | DDL_COMANDOS
                     | DML_COMANDOS
-                    | instruccion_if
                     | COMENTARIOMULTI
                     | COMENTARIONORMAL
                     | FUNCIONESS
-                    | crear_indice'''
+                    | crear_indice
+                    | EJECUTARFUNCION PUNTOCOMA'''
 
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
@@ -2646,11 +2648,11 @@ def p_expresion_binario_n(t):
 
 # ============================================== IF THEN ELSE END IF =============================================== #
 def p_instruccion_if(t):
-    'instruccion_if : IF expresion THEN expresion END IF PUNTOCOMA'
+    'instruccion_if : IF expresion THEN CODEEPSILON END IF PUNTOCOMA'
     t[0] = If_inst(t[2], t[4], None)
 
 def p_instruccion_ifelse(t):
-    'instruccion_if : IF expresion THEN expresion ELSE expresion END IF PUNTOCOMA'
+    'instruccion_if : IF expresion THEN CODEEPSILON ELSE CODEEPSILON END IF PUNTOCOMA'
     t[0] = If_inst(t[2], t[4], t[6])
 
 def p_listas_elsif(t):
@@ -2778,11 +2780,22 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS INSTRUCCIONES DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
-    t[0]=Funciones_(t[1],t[3],t[7], t[5], t[10], t[11], t[12])
+    t[0]=Funciones_(t[1],t[3],t[8],t[9] , t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
+
+
+def p_Store_ProcedureGeneral(t):
+    'FUNCIONESS  :  FUNTIONE  PROCEDURE  ID  PARIZQ PARAMETROSG PARDER  ARGU_N_N  ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
+    #print( "Si lo acepte wey funcion " + str(t[0]))
+    t[0]=Procedimientos_(t[1],t[3],t[7],t[8], t[5], t[9], t[10], t[11])
+
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando al procedure")
+
+
 
 #----------------------------------------------------- Tipos de Create y Reservadas
 def p_Funcionee(t):
@@ -2808,6 +2821,9 @@ def p_ReservadaEpsilon(t):
 
 
 
+
+
+
 # -----------------------------------------------------  LISTA DE PARAMETROS
 
 def p_Parametros_General(t):
@@ -2828,8 +2844,11 @@ def p_Parametros_List(t):
     t[0] = [t[1]]
 
 def p_ParametrosT(t):
-    'PARAMETRO  :  ARGU_N   ARGU_N  ARGU_N'
-    t[0] = str(t[1]) +"  "+ str(t[2]) +"  "+ str(t[3])
+    'PARAMETRO  :    ARGU_N TIPO_CAMPO  ARGU_N'
+    t[0] = Parametros_(t[2],t[1],t[3])
+
+
+
 
 def p_Parametros_Argumentos(t):
     'ARGU_N  :  ID'
@@ -2874,13 +2893,32 @@ def p_Declaracion_VariablesAsignacion(t):
 
 
 
+#----------------------------------------------------------  SECCION DE RETORNO
+def p_Retorno_Cuerpo(t):
+    ' RETORNOS  :   RETURN expresion '
+    t[0] = RetornoFuncion(t[2])
+
+
+
+#------------- Alias del retorno
+def p_Alias_Retorno(t):
+    'ALIASRET  :  AS ID '
+    t[0] = str(t[2])
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  ESTOY JALANDO EL ALIAS >>>>>>>>>>>>>>>>>>>>>>"+str(t[2]))
+
+
+def p_Alias_RetornoEpsilon(t):
+    'ALIASRET  :  '
+    t[0] = ""
+
+
 
 #-----------------------------------------------------------  SECCION DE CODIGO
 
 def p_Code_Estructures(t):
     'CODE  : BEGIN CODEEPSILON END ARGU_N_N'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
-    t[0] = Code_Funciones(t[4],t[2])
+    t[0] = Code_Funciones(t[4], t[2])
 
 
 #-------------------------------------  Tipos de Argumento
@@ -2888,6 +2926,10 @@ def p_ArgumentosFunciones(t):
     'ARGU_N_N  :  LANGUAGE SQL'
     t[0] = str(t[1]) +" "+ str(t[2])
 
+
+def p_ArgumentoProcedure(t):
+    'ARGU_N_N  :  LANGUAGE PLPGSQL'
+    t[0] = str(t[1]) + " " + str(t[2])
 
 def p_ArgumentosFuncionesArg(t):
     'ARGU_N_N  :  ID'
@@ -2929,7 +2971,7 @@ def p_ListaCodigo_List(t):
 #----------------------------------------------------------  PRODUCCION A CODIGO FOR
 def p_Codigo_For(t):
     'CODE_  :   FOR ID IN TIPEE EXPRESI  BY_EXPRE  LOOP  CODEEPSILON  END LOOP ARGU_N PUNTOCOMA'
-    t[0]= ForInstruccion(t[2],t[4],t[6],t[11],t[5],t[8])
+    t[0]  = ForInstruccion(t[2],t[4],t[6],t[11],t[5],t[8])
 
 
 
@@ -2938,18 +2980,24 @@ def p_CodigoFunciones(t):
     '''CODE_  :           case_simple
                         | case_buscado
                         | loop_simple
+                        | instruccion_if
                         | declaracion_variable
                         | asignacion_variable
                         | salir
                         | continuar
-                        | EJECUTARFUNCION PUNTOCOMA'''
+                        | EJECUTARFUNCION PUNTOCOMA
+                        | INSTRUCCIONES
+                        | RETORNOS '''
+
     t[0] = t[1]
 
 
 
 
+
+
 def p_Codigo_FuncionesLl(t):
-    'EJECUTARFUNCION  : ID PARIZQ PARAMETROSG PARDER '
+    'EJECUTARFUNCION  : ID PARIZQ EXPRESI PARDER '
     t[0] = EjecucionFuncion(t[1],t[3])
 
 
@@ -2970,8 +3018,8 @@ def p_ExpressEpsilon(t):
 
 
 def p_ListExpre(t):
-    'LISTAEXPRES  :  LISTAEXPRES  LISTEXPR'
-    t[1].append(t[2])
+    'LISTAEXPRES  :  LISTAEXPRES COMA LISTEXPR'
+    t[1].append(t[3])
     t[0] = t[1]
 
 
@@ -3044,6 +3092,8 @@ def p_declaracion_variable(t):
         t[0] = Declaracion(t[1], t[2], t[3], t[4], t[5][0], t[5][1])
     else:
         t[0] = Declaracion(t[1], t[2], t[3], t[4], None, None)
+
+
 
 def p_declaracion_constante(t):
     'declaracion_constante : CONSTANT'
