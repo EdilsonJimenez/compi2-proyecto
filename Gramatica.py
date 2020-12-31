@@ -218,15 +218,17 @@ reservadas = {
     'reverse' :'REVERSE',
 
     #PARA EL WHULE
-    'while'   : 'WHILE'
+    'while'   : 'WHILE',
 
 
     'execute' :'EXECUTE',
     'array'   :'ARRAY',
     'slice'   :'SLICE',
     'foreach' :'FOREACH',
-    'constant' : 'CONSTANT'
+    'constant' : 'CONSTANT',
 
+    'index' : 'INDEX',
+    'hash' : 'HASH'
 
 }
 
@@ -502,7 +504,8 @@ def p_instruccion(t):
                     | instruccion_if
                     | COMENTARIOMULTI
                     | COMENTARIONORMAL
-                    | FUNCIONESS '''
+                    | FUNCIONESS
+                    | crear_indice'''
 
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
@@ -3109,6 +3112,77 @@ def p_asignacion(t):
 def p_asignacion_simbolo(t):
     '''signacion_simbolo : IGUAL
                          | IGUAL2'''
+
+
+
+# ====================== INDICES =============================
+
+def p_indice(t):
+    'crear_indice : CREATE unique_in INDEX ID ON ID hash_in PARIZQ columnas_indice PARDER where_in PUNTOCOMA'
+    t[0] = CrearIndice(t[4], t[6], t[9], t[2], t[7], t[11])
+
+def p_unique_in(t):
+    'unique_in : UNIQUE'
+    t[0] = True
+
+def p_unique_in_e(t):
+    'unique_in : '
+    t[0] = False
+
+def p_hash_in(t):
+    'hash_in : USING HASH'
+    t[0] = True
+
+def p_hash_in_e(t):
+    'hash_in : '
+    t[0] = False
+
+def p_columnas_indice(t):
+    'columnas_indice : columnas_indice COMA columna_indice'
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_columnas_indice2(t):
+    'columnas_indice : columna_indice'
+    t[0] = [t[1]]
+
+def p_columna_indice(t):
+    'columna_indice : ID orden_col nulable_col'
+    t[0] = ColumnaIndice(t[1], t[2], t[3])
+
+def p_orden_col(t):
+    '''orden_col : ASC
+                 | DESC'''
+    t[0]= t[1]
+
+def p_orden_col2(t):
+    'orden_col : '
+    t[0] = None
+
+def p_nulable_col(t):
+    '''nulable_col : NULLS FIRST
+                   | NULLS LAST'''
+    t[0] = t[2]
+
+
+def p_nulable_col2(t):
+    'nulable_col : '
+    t[0] = None
+
+def p_where_in(t):
+    'where_in : WHERE expresion_logica'
+    t[0] = t[1]
+def p_where_in_e(t):
+    'where_in : '
+    t[0] = None
+
+
+
+
+
+
+
+
 
 # ===================== MANEJO DE ERRORES SINTACTICOS ================================
 # ====================================================================================

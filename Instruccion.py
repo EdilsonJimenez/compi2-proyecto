@@ -1613,6 +1613,14 @@ def tabla_simbolos():
         cadena3 +='<TR><TD>'+str(fun.idBase)+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD>'+'<TD>'+'</TD></TR>'
 
 
+    cadena6 = ""
+    cadena7 = ""
+    for id_indice in ts.Indices:
+        indice = ts.obtenerIndice(id_indice)
+        cadena6 += '<TR><TD>'+str(indice.id_indice)+'</TD>'+'<TD>'+ str(indice.id_tabla) + '</TD>'+'<TD>'+str(indice.unique) + '</TD>'+'<TD>'+ str(indice.hash) + '</TD>'+'<TD>'+'</TD></TR>'
+        for columna in indice.columnas:
+            cadena7 += '<TR><TD>'+str(columna.id_columna)+'</TD>'+'<TD>'+ str(columna.orden) + '</TD>' +'<TD>'+ str(columna.nulls) + '</TD>' +'<TD>'+str(indice.id_tabla) + '</TD>'+'<TD>'+ str(indice.id_indice) + '</TD>'+'</TR>'
+
 
     SymbolT.node('table','''<<TABLE border="1" cellpadding="0" cellspacing="0"   >
                             <TR>
@@ -1700,6 +1708,45 @@ def tabla_simbolos():
                                 <TD bgcolor="#BEF781"></TD>
                             </TR>'''
                             +cadena3+
+                            '''
+                            <TR>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>INDICES</B> </TD>
+                            </TR>
+                            <TR>
+                                <TD bgcolor="#BEF781">ID INDICE</TD>
+                                <TD bgcolor="#BEF781">ID TABLA</TD>
+                                <TD bgcolor="#BEF781">UNIQUE</TD>
+                                <TD bgcolor="#BEF781">HASH</TD>
+                                <TD bgcolor="#BEF781"></TD>
+                            </TR>'''
+                            + cadena6 +
+                            '''
+                            <TR>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                                <TD></TD>
+                            </TR>
+                            <TR>
+                                <TD COLSPAN="5" bgcolor="#FA8258"> <B>COLUMNAS INDICE</B> </TD>
+                            </TR>
+                            <TR>
+                                <TD bgcolor="#BEF781">ID COLUMNA</TD>
+                                <TD bgcolor="#BEF781">ORDEN</TD>
+                                <TD bgcolor="#BEF781">NULLS</TD>
+                                <TD bgcolor="#BEF781">ID INDICE</TD>
+                                <TD bgcolor="#BEF781">ID TABLA</TD>
+                            </TR>'''
+                            + cadena7 +
+
                         '''</TABLE>>''')
 
 
@@ -7043,7 +7090,7 @@ class CreateDataBase(Instruccion):
 
     def Ejecutar(self):
         global ts_global, baseActual
-        global LisErr,Ejecucion
+        global LisErr, Ejecucion
 
         if self.replace == "":
             r = ts_global.obtenerBasesDatos(self.idBase)
@@ -8024,6 +8071,33 @@ class DatoTipo(Instruccion):
         self.valor = valor
 
 
+class ColumnaIndice():
+
+    def __init__(self, id_columna, orden, nulls):
+        self.id_columna = id_columna
+        self.orden = orden
+        self.nulls = nulls
 
 
+class CrearIndice(Instruccion):
 
+    def __init__(self, id_indice, id_tabla, columnas, unique, hash, expresion_logica):
+        self.id_indice = id_indice
+        self.id_tabla = id_tabla
+        self.columnas = columnas
+        self.unique = unique
+        self.hash = hash
+        self.expresion_logica = expresion_logica
+
+    def Ejecutar(self):
+        global ts_global, baseActual
+        global ListErr, Ejecucion
+
+        r = ts_global.obtenerIndice(self.id_indice)
+
+        if r is None:
+            ts_global.agregarIndice(self)
+        else:
+            imprir("CREATE INDEX:  El Indice No se Creo ya que existe!")
+            er = ErrorRep('Semantico', 'El indice ya existe', 0)
+            LisErr.agregar(er)

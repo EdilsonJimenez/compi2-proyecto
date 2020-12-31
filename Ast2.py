@@ -130,7 +130,8 @@ class Ast2:
                 self.grafoSelectExpresion(i.listaCampos, padre)
             elif isinstance(i, Funciones_):
                 self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
-
+            elif isinstance(i, CrearIndice):
+                self.GrafoCrearIndice(i, padre)
             else:
                 print("No es droptable")
 
@@ -3235,5 +3236,85 @@ class Ast2:
 
         # Recorrer Lista de Parametros
         self.GrafoRecorridoParametros(Lista_P,'Node' + str(nuevoPadre))
+
+
+
+    def GrafoCrearIndice(self, crearindice, padre):
+        global dot, i
+
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "CREAR INDICE")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        if crearindice.unique:
+            self.inc()
+            dot.node('Node' + str(self.i), 'UNIQUE')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'ID INDICE')
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), crearindice.id_indice)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'ID TABLA')
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), crearindice.id_tabla)
+        dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+        if crearindice.hash:
+            self.inc()
+            dot.node('Node' + str(self.i), 'USING HASH')
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), 'COLUMNAS')
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+        padreColumas = self.i
+        for columna in crearindice.columnas:
+            self.inc()
+            dot.node('Node' + str(self.i), 'ID')
+            dot.edge('Node' + str(padreColumas), 'Node' + str(self.i))
+
+            self.inc()
+            dot.node('Node' + str(self.i), columna.id_columna)
+            dot.edge('Node' + str(self.i - 1), 'Node' + str(self.i))
+
+            if columna.orden is not None:
+                self.inc()
+                dot.node('Node' + str(self.i), columna.orden)
+                dot.edge('Node' + str(padreColumas), 'Node' + str(self.i))
+
+            if columna.nulls is not None:
+                self.inc()
+                dot.node('Node' + str(self.i), 'NULLS ' + columna.nulls)
+                dot.edge('Node' + str(padreColumas), 'Node' + str(self.i))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
