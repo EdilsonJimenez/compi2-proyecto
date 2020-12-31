@@ -6,6 +6,7 @@ import os
 import Temporales as T
 t_global = T.Temporales()
 cadena = ""
+cadenaFuncion = ""
 ambitoFuncion = ""
 
 
@@ -36,6 +37,8 @@ class Codigo3d:
             cadena += "\tgoto .F"+str(i)+"\n"
             i += 1
 
+        cadena += "\nlabel .END\n"
+
     def imprimir(self):
         global cadena
         self.retorno()
@@ -48,69 +51,84 @@ class Codigo3d:
         cadena = ""
 
     def Traducir(self, instrucciones):
-        global ts_global
+        global ts_global, cadena, cadenaFuncion
         for i in instrucciones:
-            if isinstance(i, If_inst):
-                self.t_If(i)
-            elif isinstance(i, Funciones_):
-                self.t_Funciones_(i)
-            elif isinstance(i, Asignacion):
-                self.t_asignacion(i)
+            if isinstance(i, Funciones_):
+                cadenaFuncion += self.t_Funciones_(i)
             elif isinstance(i, EjecucionFuncion):
-                self.t_llamadaFuncion(i)
-            elif isinstance(i,ForInstruccion):
-                self.t_TraduccionFor(i)
+                cadena += self.t_llamadaFuncion(i)
             else:
                 print("NO TRADUCE....")
+        cadena += "\n goto .END\n"
+        cadena += cadenaFuncion
 
+
+
+    def Traducir2(self, instrucciones):
+        global ts_global, cadenaFuncion
+        cadenaT = ""
+        print("--------------------------------------traducir 2")
+        for i in instrucciones:
+            if isinstance(i, If_inst):
+                cadenaT += self.t_If(i)
+            elif isinstance(i, Asignacion):
+                cadenaT += self.t_asignacion(i)
+            elif isinstance(i, ForInstruccion):
+                cadenaT += self.t_TraduccionFor(i)
+            else:
+                print("NO TRADUCE2....")
+
+        return cadenaT
 
 
     def t_If(self, instancia):
         global t_global, cadena
-        cadena += "--------- IF --------------- \n"
-        condicion = self.procesar_expresion(instancia.condicion, t_global)
-
-
+        cadenaIf  =""
+        cadenaIf += "# --------- IF --------------- \n"
+        condicion, cad = self.procesar_expresion(instancia.condicion, t_global)
+        cadenaIf += cad
         verdadero = str(t_global.etiquetaT())
         falso = str(t_global.etiquetaT())
         salto = str(t_global.etiquetaT())
 
+        cadenaIf += "if " + str(condicion) + ": \n"
+        cadenaIf += "\tgoto ."+verdadero+"\n"
+        cadenaIf += "else : \n"
+        cadenaIf += "\tgoto ."+falso+"\n"
 
-        cadena += "if " + str(condicion) + ": \n"
-        cadena += "\tgoto ."+verdadero+"\n"
-        cadena += "else : \n"
-        cadena += "\tgoto ."+falso+"\n"
-
-        cadena += "label . " + verdadero + "\n"
-        cadena += "     ~verdadero~"+"\n"
+        cadenaIf += "label . " + verdadero + "\n"
+        cadenaIf += "# ~verdadero~"+"\n"
         # Si el if trae instruciones en IF
         if instancia.instIf != 0:
-            self.Traducir(instancia.instIf)
-        cadena += "goto ."+salto+"\n"+"\n"
-        cadena += "label ." + falso + "\n"
+            cadenaIf += self.Traducir2(instancia.instIf)
+        cadenaIf += "goto ."+salto+"\n"+"\n"
+        cadenaIf += "label ." + falso + "\n"
         # Si el if trae instruciones en ELSE
         if instancia.instElse != None:
             if instancia.instElse != 0:
-                cadena += "     ~falso~" + "\n"
-                self.Traducir(instancia.instElse)
-        cadena += "label ."+salto+"\n"
+                cadenaIf += "# ~falso~" + "\n"
+                cadenaIf += self.Traducir2(instancia.instElse)
+        cadenaIf += "label ."+salto+"\n"
+
+        return cadenaIf
 
 
     def t_Funciones_(self, instancia):
-        global t_global, cadena, ambitoFuncion
+        global t_global, cadenaFuncion, ambitoFuncion
         # temporal, nombre, tipo, tam, pos, rol ,ambito
+        cadenaF = "\n"
         fun = t_global.varFuncion()
         metodo = tipoSimbolo(str(fun),instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
         t_global.agregarSimbolo(metodo)
-        cadena += "label ."+fun+"\n"
+        cadenaF += "label ."+fun+"\n"
         ambitoFuncion = str(instancia.Nombre)
 
-        cadena+="\n# Parametros \n"
+        cadenaF +="\n# Parametros \n"
         for param in instancia.Parametros:
             print(str(param.Nombre)+"---"+str(param.Tipo))
 
             tempoP = t_global.varParametro()
-            cadena += str(tempoP)+ "\n"
+            cadenaF += str(tempoP)+ "\n"
 
             p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'parametro', instancia.Nombre)
             t_global.agregarSimbolo(p)
@@ -118,58 +136,69 @@ class Codigo3d:
 
 
         # Temporal de retorno
-        cadena+="\n# Retorno \n"
+        cadenaF +="\n# Retorno \n"
         tempoP = t_global.varParametro()
-        cadena += str(tempoP) + "\n"
+        cadenaF += str(tempoP) + "\n"
 
         p = tipoSimbolo(str(tempoP), "return", "return", 1, 1, 'local', instancia.Nombre)
         t_global.agregarSimbolo(p)
 
-        cadena += "\n# declaraciones \n"
+        cadenaF += "\n# declaraciones \n"
         for decla in instancia.Declaraciones:
             if decla != None:
-                r = self.procesar_expresion(decla.expresion, t_global)
+                cadenaexp = ""
+                r,cadenaexp = self.procesar_expresion(decla.expresion, t_global)
+                cadenaF += cadenaexp
                 tempo = t_global.varTemporal()
-                cadena += str(tempo) + "=" + str(r) + "\n"
+                cadenaF += str(tempo) + " = " + str(r) + "\n"
                 v = tipoSimbolo(str(tempo), decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
                 t_global.agregarSimbolo(v)
 
         #instrucciones
         codigo: Code_Funciones = instancia.Codigo
-        self.Traducir(codigo.Codigo)
-
+        cadenaF += self.Traducir2(codigo.Codigo)
 
         #llamamos al Recorrido del cuerpo
-        self.RecorrerCuerpoCodigo(codigo.Codigo,instancia.Nombre)
-
+        #cadenaF += self.RecorrerCuerpoCodigo(codigo.Codigo,instancia.Nombre)
 
         anterior = "R"
-        cadena += "\ngoto ."+anterior
-        cadena += "\n\n"
+        cadenaF += "\ngoto ."+anterior
+        cadenaF += "\n\n"
 
-        #Codigo
+        return cadenaF
 
 
     def t_asignacion(self, asignacion):
         global t_global, cadena
         # id, expresion
+        cadenaAsi = ""
         etiR = ""
         for sim in t_global.tablaSimbolos:
             s: tipoSimbolo = t_global.obtenerSimbolo(sim)
             if s.nombre == asignacion.id and s.ambito == ambitoFuncion:
                 etiR = s.temporal
 
-        exp = self.procesar_expresion(asignacion.expresion, t_global)
-        cadena += "\n" + str(etiR) + "=" + str(exp) + "\n"
+        cadenaexp = ""
+        exp,cadenaexp = self.procesar_expresion(asignacion.expresion, t_global)
+        cadenaAsi += cadenaexp
+        cadenaAsi += "\n" + str(etiR) + "=" + str(exp) + "\n"
+
+        return cadenaAsi
 
     def t_llamadaFuncion(self, llamada):
         # Id, Lista-Parametros
         global t_global, cadena, ambitoFuncion, stack
+        cadenallamada  = ""
+
         ambitoFuncion = llamada.Id
         listaParametros = []
         if llamada.Parametros != None:
             for param in llamada.Parametros:
-                exp = self.procesar_expresion(param, t_global)
+                c = ""
+                #a,b = self.procesar_aritmetica(2+2, t_global)
+                #print(a)
+                #print(b)
+                exp,c = self.procesar_expresion(param, t_global)
                 listaParametros.append(str(exp))
         print("lista")
         print(listaParametros)
@@ -180,18 +209,19 @@ class Codigo3d:
             s: tipoSimbolo = t_global.obtenerSimbolo(sim)
             if s.ambito == ambitoFuncion and str(s.rol) == "parametro":
                 print(str(cont))
-                cadena += "\n"+str(s.temporal) +"="+ str(listaParametros[cont])
+                cadenallamada += "\n"+str(s.temporal) +"="+ str(listaParametros[cont])
                 cont += 1
 
         salto = t_global.varFuncion()
-        cadena += "\nstack.append(\""+salto+"\")\n"
+        cadenallamada += "\nstack.append(\""+salto+"\")\n"
         # llamada goto a la funcion
         for met in t_global.tablaSimbolos:
             m: tipoSimbolo = t_global.obtenerSimbolo(met)
             if m.nombre == llamada.Id and m.rol == "Metodo":
-                cadena += "\ngoto ."+str(m.temporal)
-        cadena += "\nlabel ."+salto
+                cadenallamada += "\ngoto ."+str(m.temporal)
+        cadenallamada += "\nlabel ."+salto
 
+        return  cadenallamada
 
 
 #--------------------------------  TRADUCCION CUERPO DE LA FUNCION
@@ -358,10 +388,10 @@ class Codigo3d:
         elif isinstance(expresiones, ExpresionValor):
             c = str(expresiones.val)
             if c.isdigit():
-                return expresiones.val
+                return expresiones.val, " "
             else:
                 q = "\""+expresiones.val+"\""
-                return q
+                return q, " "
         elif isinstance(expresiones, Variable):
             return self.procesar_variable(expresiones, ts)
         elif isinstance(expresiones, UnitariaAritmetica):
@@ -387,95 +417,94 @@ class Codigo3d:
             print('Error:Expresion no reconocida')
 
     def procesar_aritmetica(self, expresion, ts):
-        global cadena
-        val = self.procesar_expresion(expresion.exp1, ts)
-        val2 = self.procesar_expresion(expresion.exp2, ts)
+        cadena = ""
+        val, cad1 = self.procesar_expresion(expresion.exp1, ts)
+        val2, cad2 = self.procesar_expresion(expresion.exp2, ts)
 
         if expresion.operador == OPERACION_ARITMETICA.MAS:
             v = t_global.varTemporal()
             cadena += v + "= "+str(val)+" + "+str(val2) + "\n"
-            return v
+            return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.MENOS:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " - " + str(val2) + "\n"
-            return v
+            return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.MULTI:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " * " + str(val2) + "\n"
-            return v
+            return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.DIVIDIDO:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " / " + str(val2) + "\n"
-            return v
+            return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.RESIDUO:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " / " + str(val2) + "\n"
-            return v
+            return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.POTENCIA:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " ** " + str(val2) + "\n"
-            return v
+            return v, cadena
 
     def procesar_relacional(self, expresion, ts):
         # OPTIMIZACION - AHORRO DE 2 LINEAS........................................................
-        global cadena
-        val = self.procesar_expresion(expresion.exp1, ts)
-        val2 = self.procesar_expresion(expresion.exp2, ts)
+        cadena = ""
+        val, cad1 = self.procesar_expresion(expresion.exp1, ts)
+        val2, cad2 = self.procesar_expresion(expresion.exp2, ts)
         print("valores"+str(val)+str(val2))
         if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
             v = t_global.varTemporal()
-            cadena += v + "= " + str(val) + " == " + str(val2) + "\n"
-            return v
+            cadena = v + "= " + str(val) + " == " + str(val2) + "\n"
+            return v, cadena
         elif expresion.operador == OPERACION_RELACIONAL.DISTINTO:
             v = t_global.varTemporal()
-            cadena += v + "= " + str(val) + " != " + str(val2) + "\n"
-            return v
+            cadena = v + "= " + str(val) + " != " + str(val2) + "\n"
+            return v, cadena
         elif expresion.operador == OPERACION_RELACIONAL.MAYORIGUAL:
             v = t_global.varTemporal()
-            cadena += v + "= " + str(val) + " >= " + str(val2) + "\n"
-            return v
+            cadena = v + "= " + str(val) + " >= " + str(val2) + "\n"
+            return v, cadena
         elif expresion.operador == OPERACION_RELACIONAL.MENORIGUAL:
             v = t_global.varTemporal()
-            cadena += v + "= " + str(val) + " <= " + str(val2) + "\n"
-            return v
+            cadena = v + "= " + str(val) + " <= " + str(val2) + "\n"
+            return v, cadena
         elif expresion.operador == OPERACION_RELACIONAL.MAYORQUE:
             v = t_global.varTemporal()
-            cadena += v + "= " + str(val) + " > " + str(val2) + "\n"
-            return v
+            cadena = v + "= " + str(val) + " > " + str(val2) + "\n"
+            return v, cadena
         elif expresion.operador == OPERACION_RELACIONAL.MENORQUE:
             v = t_global.varTemporal()
-            cadena += v + "= " + str(val) + " < " + str(val2) + "\n"
-            return v
+            cadena = v + "= " + str(val) + " < " + str(val2) + "\n"
+            return v, cadena
         else:
             return 1
 
     def procesar_logica(self, expresion, ts):
-        global cadena
-        val = self.procesar_expresion(expresion.exp1, ts)
-        val2 = self.procesar_expresion(expresion.exp2, ts)
+        cadena = ""
+        val, cad1 = self.procesar_expresion(expresion.exp1, ts)
+        val2, cad2 = self.procesar_expresion(expresion.exp2, ts)
 
         if expresion.operador == OPERACION_LOGICA.AND:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " and " + str(val2) + "\n"
-            return v
+            return v, cadena
         elif expresion.operador == OPERACION_LOGICA.OR:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " or " + str(val2) + "\n"
-            return v
+            return v, cadena
 
     def procesar_variable(self, tV, ts):
         global t_global, ambitoFuncion
         print("procesar variable")
         r = ""
-        print(t_global.tablaSimbolos)
         for item in t_global.tablaSimbolos:
             v: tipoSimbolo = t_global.obtenerSimbolo(item)
             print(str(v.nombre)+"<>"+str(tV.id)+"-"+str(v.ambito)+"<>"+ambitoFuncion)
             if v.nombre == tV.id and v.ambito == ambitoFuncion:
                 print(str(v.temporal))
                 r = str(v.temporal)
-                return r
-        return r
+                return r,""
+        return r,""
 
 
     def generar(self):
