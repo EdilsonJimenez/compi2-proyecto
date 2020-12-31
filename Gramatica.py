@@ -2969,7 +2969,7 @@ def p_CodigoFunciones(t):
 
 
 def p_Codigo_FuncionesLl(t):
-    'EJECUTARFUNCION  : ID PARIZQ PARAMETROSG PARDER '
+    'EJECUTARFUNCION  : ID PARIZQ EXPRESI PARDER '
     t[0] = EjecucionFuncion(t[1],t[3])
 
 

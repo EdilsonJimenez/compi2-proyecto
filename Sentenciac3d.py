@@ -5,15 +5,19 @@ from sentencias import *
 import Temporales as T
 t_global = T.Temporales()
 cadena = ""
-ambitoFuncion = "cocoa"
+ambitoFuncion = ""
 
 class Codigo3d:
 
     def __init__(self):
+        global cadena
         self.i = 0
+        cadena += "@with_goto \n"
+        cadena += "def main(): \n"
 
     def imprimir(self):
         global cadena
+        cadena += "\n\nmain(): \n"
         print(cadena)
         t_global.limpiar()
         cadena = ""
@@ -64,15 +68,12 @@ class Codigo3d:
 
 
     def t_Funciones_(self, instancia):
-        global t_global, cadena
-
+        global t_global, cadena, ambitoFuncion
         # temporal, nombre, tipo, tam, pos, rol ,ambito
-        metodo = tipoSimbolo(None,instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
-
-
+        fun = t_global.varFuncion()
+        metodo = tipoSimbolo(str(fun),instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
         t_global.agregarSimbolo(metodo)
-        cadena += "@with_goto\n"
-        cadena += "def "+instancia.Nombre+"(): \n"
+        cadena += "label ."+fun+"\n"
         ambitoFuncion = str(instancia.Nombre)
 
         cadena+="\n# Parametros \n"
@@ -81,7 +82,7 @@ class Codigo3d:
             tempoP = t_global.varParametro()
             cadena += str(tempoP)+ "\n"
 
-            p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'local', instancia.Nombre)
+            p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'parametro', instancia.Nombre)
             t_global.agregarSimbolo(p)
 
         # Temporal de retorno
@@ -106,12 +107,9 @@ class Codigo3d:
         codigo: Code_Funciones = instancia.Codigo
         self.Traducir(codigo.Codigo)
 
-        #for inst in codigo.Codigo:
-        #    if inst != None:
-        #        self.TraducirInstruccion(inst)
+        anterior = t_global.varFuncionAnterior()
+        cadena += "\ngoto ."+anterior
 
-
-        cadena += instancia.Nombre+"()\n\n"
 
     def t_asignacion(self, asignacion):
         global t_global, cadena
@@ -126,25 +124,32 @@ class Codigo3d:
         cadena += "\n" + str(etiR) + "=" + str(exp) + "\n"
 
     def t_llamadaFuncion(self, llamada):
-        global t_global, cadena
         # Id, Lista-Parametros
-
-        listaEtiquetas = []
+        global t_global, cadena, ambitoFuncion
+        ambitoFuncion = llamada.Id
+        listaParametros = []
         if llamada.Parametros != None:
-            for param in llama.Parametros:
-                listaEtiquetas.append(str(param))
+            for param in llamada.Parametros:
+                exp = self.procesar_expresion(param, t_global)
+                listaParametros.append(str(exp))
+        print("lista")
+        print(listaParametros)
 
-        print(listaEtiquetas)
-
-
-        etiR = ""
+        contador = 0
         for sim in t_global.tablaSimbolos:
             s: tipoSimbolo = t_global.obtenerSimbolo(sim)
-            if s.nombre == asignacion.id and s.ambito == ambitoFuncion:
-                etiR = s.temporal
+            if s.ambito == ambitoFuncion and s.rol == "parametro":
+                cadena += "\n"+str(s.temporal) +" = "+ str(listaParametros[contador])
+                contador += 1
 
-        exp = self.procesar_expresion(asignacion.expresion, t_global)
-        cadena += "\n" + str(etiR) + "=" + str(exp) + "\n"
+        # llamada goto a la funcion
+        for met in t_global.tablaSimbolos:
+            m: tipoSimbolo = t_global.obtenerSimbolo(met)
+            if m.nombre == llamada.Id and m.rol == "Metodo":
+                cadena += "\ngoto ."+str(m.temporal)
+
+        salto = t_global.varFuncion()
+        cadena += "\nlabel ."+salto
 
 
 
@@ -281,7 +286,6 @@ class Codigo3d:
         print(t_global.tablaSimbolos)
         for item in t_global.tablaSimbolos:
             v: tipoSimbolo = t_global.obtenerSimbolo(item)
-            print(v.nombre+"<>"+tV.id+" "+v.ambito+"<>"+ambitoFuncion)
             if v.nombre == tV.id and v.ambito == ambitoFuncion:
                 r = str(v.temporal)
             else:
