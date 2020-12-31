@@ -131,6 +131,12 @@ class Variables_Name(Sentencia):
         self.Valor         = Valor
 
 
+#-------------------------------------- Valor de retorno
+class RetornoFuncion(Sentencia):
+    def __init__(self,Expresion):
+        self.Expresion = Expresion
+
+
 #-------------------------------------- Objeto Parametros
 class Parametros_(Sentencia):
     def __init__(self,Tipo,Nombre,Valor):

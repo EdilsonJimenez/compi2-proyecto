@@ -225,7 +225,8 @@ reservadas = {
     'foreach'  :'FOREACH',
     'constant' : 'CONSTANT',
     'plpgsql'  :'PLPGSQL',
-    'procedure':'PROCEDURE'
+    'procedure':'PROCEDURE',
+    'return'   :'RETURN'
 
 
 }
@@ -502,7 +503,8 @@ def p_instruccion(t):
                     | DML_COMANDOS
                     | COMENTARIOMULTI
                     | COMENTARIONORMAL
-                    | FUNCIONESS '''
+                    | FUNCIONESS
+                    | EJECUTARFUNCION PUNTOCOMA'''
 
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
@@ -2775,7 +2777,7 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNCI  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion AS CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
     t[0]=Funciones_(t[1],t[3],t[8], t[5], t[10], t[11], t[12])
@@ -2783,7 +2785,7 @@ def p_Funciones_General(t):
 
 
 def p_Store_ProcedureGeneral(t):
-    'FUNCIONESS  :  FUNTIONE  PROCEDURE  ID  PARIZQ PARAMETROSG PARDER  ARGU_N_N  AS CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  PROCEDURE  ID  PARIZQ PARAMETROSG PARDER  ARGU_N_N  ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
     t[0]=Procedimientos_(t[1],t[3],t[7], t[5], t[9], t[10], t[11])
@@ -2813,6 +2815,9 @@ def p_ReservadaFunc(t):
 def p_ReservadaEpsilon(t):
     'FUNCI  :  '
     t[0] = ""
+
+
+
 
 
 
@@ -2883,6 +2888,25 @@ def p_Declaracion_VariablesAsignacion(t):
     'VARIABLES_S  : asignacion_variable'
     t[0] = t[1]
 
+
+
+#----------------------------------------------------------  SECCION DE RETORNO
+def p_Retorno_Cuerpo(t):
+    ' RETORNOS  :   RETURN expresion '
+    t[0] = RetornoFuncion(t[2])
+
+
+
+#------------- Alias del retorno
+def p_Alias_Retorno(t):
+    'ALIASRET  :  AS ID '
+    t[0] = str(t[2])
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  ESTOY JALANDO EL ALIAS >>>>>>>>>>>>>>>>>>>>>>"+str(t[2]))
+
+
+def p_Alias_RetornoEpsilon(t):
+    'ALIASRET  :  '
+    t[0] = ""
 
 
 
@@ -2959,7 +2983,8 @@ def p_CodigoFunciones(t):
                         | salir
                         | continuar
                         | EJECUTARFUNCION PUNTOCOMA
-                        | INSTRUCCIONES '''
+                        | INSTRUCCIONES
+                        | RETORNOS '''
 
     t[0] = t[1]
 

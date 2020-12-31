@@ -100,7 +100,7 @@ class Codigo3d:
 
 
 #--------------------------------  TRADUCCION FOR
-    def t_TraduccionFor(self,Objeto):
+    def t_TraduccionSwitch(self,Objeto):
         #Objetos globales para la traduccion
         global t_global, cadena
         cadena += "--------- For --------------- \n"

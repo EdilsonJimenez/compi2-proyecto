@@ -27,6 +27,7 @@ class Ast2:
         print('Hecho')
 
     def recorrerInstrucciones(self, sente, padre):
+        global dot
         for i in sente:
             # VIENE UN DROP TABLE
             if isinstance(i, DropTable):
@@ -132,7 +133,11 @@ class Ast2:
                 self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
 
             elif isinstance(i,Procedimientos_):
-                self.grafoFuncion(i.Reservada, i.Nombre, i.Comand, i.Parametros, i.Instrucciones, i.Declaraciones,i.Codigo, padre)
+                self.GrafoProcedure(i.Reservada, i.Nombre, i.Comand, i.Parametros, i.Instrucciones, i.Declaraciones,i.Codigo, padre)
+
+            elif isinstance(i,EjecucionFuncion):
+                dot.edge(padre, str(self.i + 1))
+                self.GrafoEjecucion(i.Id, i.Parametros)
             else:
                 print("No es droptable")
 
@@ -2947,7 +2952,7 @@ class Ast2:
 
     #Procedimientos_ (self,Reservada, Nombre,Comand, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[])
 
-    def GrafoProcedure(self,Reservada, Nombre,Comand, Parametros, Instrucciones, Declaraciones, Codigo):
+    def GrafoProcedure(self,Reservada, Nombre,Comand, Parametros, Instrucciones, Declaraciones, Codigo, padre):
         global dot
 
         self.inc()
@@ -2974,10 +2979,6 @@ class Ast2:
         # Recorrer Lista de Parametros
         self.GrafoRecorridoParametros(Parametros, 'Node' + str(self.i))
 
-        self.inc()
-        dot.node('Node' + str(self.i), Comand)
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
-
 
         self.inc()
         dot.node('Node' + str(self.i), "AS")
@@ -2988,14 +2989,20 @@ class Ast2:
         dot.node('Node' + str(self.i), "COMANDO_SQL")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer Comandos Sql
-        self.recorrerInstrucciones(Instrucciones, 'Node' + str(self.i))
+        if(Instrucciones is not None):
+            self.recorrerInstrucciones(Instrucciones, 'Node' + str(self.i))
+        else:
+            print("No hay ")
 
         # --------------------------------------------------------
         self.inc()
         dot.node('Node' + str(self.i), "DECLARACIONES")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer Lista Declaraciones
-        self.GrafoRecorridoDeclaraciones(Declaraciones, 'Node' + str(self.i))
+        if (Declaraciones is not None):
+            self.GrafoRecorridoDeclaraciones(Declaraciones, 'Node' + str(self.i))
+        else:
+            print("No hay ")
         # recorrer
 
         # --------------------------------------------------------
@@ -3105,6 +3112,10 @@ class Ast2:
                 elif isinstance(ele,ForeachInstruccion):
                      # Mandamos a Graficar la instruccion  foreach
                     self.grafoForEach(ele.Nombre, ele.Slice, ele.Expre, ele.Argumento, ele.Lista_Codigo, 'Node' + str(self.i))
+
+                elif isinstance(ele, RetornoFuncion):
+                     # Mandamos a Graficar el Retorno
+                    self.GrafoRetorno(ele.Expresion,'Node' + str(self.i))
 
                 elif isinstance(ele, CaseSimple):
                     self.grafoCaseSimple(ele, 'Node' + str(self.i))
@@ -3310,3 +3321,17 @@ class Ast2:
         self.GrafoRecorridoParametros(Lista_P,str(nuevoPadre))
 
 
+
+
+    def GrafoRetorno(self, Retorn, padre):
+        global dot
+        self.inc()
+        nuevoPadre = self.i
+        dot.node('Node' + str(self.i), "RETORNO__")
+        dot.edge(padre, 'Node' + str(self.i))
+
+        self.inc()
+        dot.node('Node' + str(self.i), "EXPRESION_")
+        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        #--------- Recorremos retorno
+        self.Recorrer_Condiciones(Retorn, 'Node' + str(self.i))
