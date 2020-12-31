@@ -13,13 +13,13 @@ class CaseSimple(Sentencia):
         self.caseelse = caseelse
 
 
-class CSWhen():
+class CSWhen(Sentencia):
 
     def __init__(self, expresiones, sentencias):
         self.expresiones = expresiones
         self.sentencias = sentencias
 
-class CElse():
+class CElse(Sentencia):
 
     def __init__(self, sentencias):
         self.sentencias = sentencias
@@ -31,7 +31,7 @@ class CaseBuscado(Sentencia):
         self.listawhen = listawhen
         self.caseelse = caseelse
 
-class CBWhen():
+class CBWhen(Sentencia):
 
     def __init__(self, expresion, sentencias):
         self.expresion = expresion
@@ -58,7 +58,7 @@ class Continue(Sentencia):
         self.when = when
 
 
-class WhenAuxilar():
+class WhenAuxilar(Sentencia):
 
     def __init__(self, expresion):
         self.expresion = expresion
