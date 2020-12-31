@@ -1,25 +1,40 @@
-CREATE INDEX index1 ON tabla2 (col1);
-
-
 -- funcion 
 
 create or replace funtion cocoa (nombre integer, apellido integer) returns 90 
 DECLARE
 x integer = 24; 
+y integer = 25;
 
 begin
 
-CASE nombre
+CASE 
+WHEN nombre = 1 THEN
+CASE x
 
-WHEN 24, 12 THEN
-x = 2;
+WHEN 12 THEN
 
-WHEN 21, 2 THEN
-x = 6;
+y = 12;
+ELSE
+
+y = 24;
+
+END CASE;
+
+WHEN nombre = 2 THEN
+
+
+CASE x 
+
+WHEN 4 THEN
+
+y = 32;
+
+END CASE;
 
 ELSE 
 
-x = 12;
+x = 100;
+
 END CASE;
 
 end language sql; 
@@ -28,6 +43,16 @@ end language sql;
 cocoa(1,1);
 
   
+
+
+
+
+
+
+
+
+
+
 
 
 

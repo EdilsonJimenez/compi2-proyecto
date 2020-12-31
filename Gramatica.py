@@ -2721,7 +2721,7 @@ def p_cs_expresione2(t):
 
 
 def p_case_buscado(t):
-    'case_buscado : CASE cb_lista_when case_else END CASE'
+    'case_buscado : CASE cb_lista_when case_else END CASE PUNTOCOMA'
     t[0] = CaseBuscado(t[2], t[3])
 
 def p_cb_lista_when(t):
