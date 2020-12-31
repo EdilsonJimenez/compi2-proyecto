@@ -2692,13 +2692,17 @@ def p_cs_lista_when2(t):
     'lista_when : cs_when'
     t[0] = [t[1]]
 
+
+
 def p_cs_when(t):
     'cs_when : WHEN cs_expresiones THEN CODEEPSILON'
     t[0] = CSWhen(t[2], t[4])
 
+
 def p_cs_else(t):
     'case_else : ELSE CODEEPSILON'
     t[0] = CElse(t[2])
+
 
 def p_cs_else_e(t):
     'case_else : '
@@ -2712,6 +2716,7 @@ def p_cs_expresiones(t):
 def p_cs_expresione2(t):
     'cs_expresiones : expresion_aritmetica'
     t[0] = [t[1]]
+
 
 
 
@@ -2781,16 +2786,12 @@ def p_when_auxiliar_e(t):
 
 def p_Funciones_General(t):
     'FUNCIONESS  :  FUNTIONE  FUNTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
-    #print( "Si lo acepte wey funcion " + str(t[0]))
     t[0]=Funciones_(t[1],t[3],t[8],t[9] , t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
 
 
 def p_Store_ProcedureGeneral(t):
     'FUNCIONESS  :  FUNTIONE  PROCEDURE  ID  PARIZQ PARAMETROSG PARDER  ARGU_N_N  ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
-    #print( "Si lo acepte wey funcion " + str(t[0]))
     t[0]=Procedimientos_(t[1],t[3],t[7],t[8], t[5], t[9], t[10], t[11])
 
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando al procedure")
@@ -2917,7 +2918,6 @@ def p_Alias_RetornoEpsilon(t):
 
 def p_Code_Estructures(t):
     'CODE  : BEGIN CODEEPSILON END ARGU_N_N'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4])
     t[0] = Code_Funciones(t[4], t[2])
 
 
@@ -2942,6 +2942,8 @@ def p_ArgumentosFuncionesArgEpsilon(t):
 
 
 #-------------------------------------  epsilon
+
+
 def p_Code_Epsilon_(t):
     'CODEEPSILON  :  CODE_S '
     t[0] = t[1]
@@ -3061,7 +3063,6 @@ def p_TipeOrEpsilon(t):
 
 def p_ExpresionBy_Loop(t):
     'BY_EXPRE  :  BY expresion'
-    #t[0] = str(t[1]) + str(t[2])
     t[0] = Name_Expresion(t[1],t[2])
 
 
@@ -3079,7 +3080,6 @@ def p_ExpresionBy_LoopEpsilon(t):
 #----------------------------------------------------------  PRODUCCION A CODIGO FOREACH
 def p_Codigo_Foreach(t):
     'CODE_  :   FOREACH ID SLICEC IN ARRAY expresion  LOOP  CODEEPSILON  END LOOP ARGU_N PUNTOCOMA'
-    #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12])
     t[0] = ForeachInstruccion(t[2],t[3],t[6],t[11],t[8] )
 
 # ===================== Declaracion de Variable =====================
@@ -3250,8 +3250,6 @@ def p_error(t):
         print(str(tok.type))
         if not tok or tok.type == 'PUNTOCOMA':
             break
-
-
 
 def rep_gramatica(cad):
     global cadena

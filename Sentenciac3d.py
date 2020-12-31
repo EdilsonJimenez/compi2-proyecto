@@ -66,10 +66,14 @@ class Codigo3d:
                 print(i)
                 print("NO TRADUCE....")
 
+
+
     def t_If(self, instancia):
         global t_global, cadena
         cadena += "--------- IF --------------- \n"
         condicion = self.procesar_expresion(instancia.condicion, t_global)
+
+
         verdadero = str(t_global.etiquetaT())
         falso = str(t_global.etiquetaT())
         salto = str(t_global.etiquetaT())
@@ -107,11 +111,14 @@ class Codigo3d:
         cadena+="\n# Parametros \n"
         for param in instancia.Parametros:
             print(str(param.Nombre)+"---"+str(param.Tipo))
+
             tempoP = t_global.varParametro()
             cadena += str(tempoP)+ "\n"
 
             p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'parametro', instancia.Nombre)
             t_global.agregarSimbolo(p)
+
+
 
         # Temporal de retorno
         cadena+="\n# Retorno \n"
@@ -135,9 +142,17 @@ class Codigo3d:
         codigo: Code_Funciones = instancia.Codigo
         self.Traducir(codigo.Codigo)
 
+
+        #llamamos al Recorrido del cuerpo
+        self.RecorrerCuerpoCodigo(codigo.Codigo,instancia.Nombre)
+
+
         anterior = "R"
         cadena += "\ngoto ."+anterior
         cadena += "\n\n"
+
+        #Codigo
+
 
     def t_asignacion(self, asignacion):
         global t_global, cadena
@@ -184,11 +199,71 @@ class Codigo3d:
 
 
 
-#--------------------------------  TRADUCCION FOR
-    def t_TraduccionSwitch(self,Objeto):
+#--------------------------------  TRADUCCION CUERPO DE LA FUNCION
+    def RecorrerCuerpoCodigo(self,Instrucciones,Ambito):
+        #Objetos para diferenciar
+        if(isinstance(Instrucciones,list)):
+            print("Viene una lista de codigo..")
+            #Recorremos la lista
+            #Miramos las instancias que trae
+            for elemento in Instrucciones:
+                if(isinstance(elemento,CaseSimple)):
+                    #Nos bamos a la Generacion del codigo del case
+                    print("Encontre el Case Simple")
+                    self.t_TraduccionCaseSimple(elemento,Ambito)
+                elif(isinstance(elemento,CaseBuscado)):
+                    print("Encontre el Case Buscado")
+        else:
+            print("Viene epsilon en la produccion")
+
+
+    def t_TraduccionCaseSimple(self,Objeto:CaseSimple, Ambito):
         #Objetos globales para la traduccion
         global t_global, cadena
-        cadena += "--------- For --------------- \n"
+        cadena += "--------- CASE SIMPLE --------------- \n"
+#-------#Viene Expresion_Busqueda  => ExpresionValor(ID)
+        #Creamor un temporal con el valor que va a tener
+        Variable:ExpresionValor = Objeto.busqueda
+
+        tempoP = t_global.varParametro()
+        cadena += str(tempoP) + "\n"
+        #Se creo el objeto con sus caracteristicas
+        p = tipoSimbolo(str(tempoP), Variable,"", 1, 1, 'parametro', Ambito)
+        #Se almacena en el diccionario global
+        t_global.agregarSimbolo(p)
+        #busqueda, listawhen, caseelse
+
+#-------#viene Lista_When =>Lista => CSWhen(Cs_Expresion, CodigoCuerpoEpsilon) => Cs_Expresion=> Lista => Lista de expresines
+        self.RecorrerListaWhens(Objeto.listawhen,Ambito)
+
+#-------#viene CElse(CodigoEpsilon) =>
+        self.RecorrerCuerpoCodigo(Objeto.caseelse)
+
+
+    def RecorrerListaWhens(self, lista,Ambito):
+        for element in lista:
+            ele:CSWhen = element
+            #Tenemos ListaExpresiones
+            self.Recorrido_Instrucciones(ele.expresion)
+            #Tenemos Llamado al recorrido del codigo Nuevamente
+            self.RecorrerCuerpoCodigo(ele.sentencias,Ambito)
+
+
+    #Recorremos la lista de instrucciones
+    def Recorrido_Instrucciones(self, listaIns,Ambito):
+        for ele in listaIns:
+            #Recorremos los tipos de instruccines
+            if(isinstance(ele,ExpresionAritmetica)):
+                print("Viene un alista de instrucciones aritmeticas.. ")
+                print(str(Ambito))
+
+
+
+
+    def GenerarCases(self,ObjetoCase):
+        #Generacion de Etiquetas de los posibles cases
+        global t_global, cadena
+
 
     def t_CrearIndice(self, objeto):
         global t_global, cadena
@@ -223,6 +298,7 @@ class Codigo3d:
         cadena += "heap.append(" + str(v) + ")\n"
         cadena += "ejecutarSQL()\n"
 
+# --------------------------------  TRADUCCION CUERPO DE LA FUNCION
     # EXPRESIONES
     def procesar_expresion(self, expresiones, ts):
         if isinstance(expresiones, ExpresionAritmetica):
