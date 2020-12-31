@@ -13,8 +13,13 @@ p1="mazariegos"
 stack.append("F2")
 
 goto .F1
-label .F2goto .END
+label .F2
+
+ goto .END
+
 label .F1
+
+#**** Funcion *****
 
 # Parametros 
 p0
@@ -23,12 +28,15 @@ p1
 # Retorno 
 p2
 
-# declaraciones 
-t0= 963 + 1
-t1 = t0
+# Declaraciones 
+t0= 1 / 6
+t1= 963 + t0
+t2 = t1
 # --------- IF --------------- 
-t2= p0 == p1
-if t2: 
+t3= p0 == p1
+t4= p0 == "abc"
+t5= t3 and t4
+if t5: 
 	goto .L0
 else : 
 	goto .L1
@@ -39,6 +47,13 @@ goto .L2
 label .L1
 label .L2
 
+t6= 9 + 6
+
+p0=t6
+ # return 
+
+p2 = p0
+
 goto .R
 
 
@@ -48,6 +63,8 @@ if u == "F1":
 	goto .F1
 if u == "F2": 
 	goto .F2
+
 label .END
+
 
 main() 
