@@ -88,21 +88,25 @@ class Asignacion(Sentencia):
 
 #----------------------------   FUNCIONES
 class Funciones_(Sentencia):
-    def __init__(self,Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
+    def __init__(self,Reservada, Nombre,Retorno,Alias, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
         self.Reservada     = Reservada #create or repacle
         self.Nombre        = Nombre #
         self.Retorno       = Retorno #que retorna, expresion
         self.Parametros    = Parametros #lista de ID's ( nombre tipo )
+        self.Alias         = Alias
         self.Instrucciones = Instrucciones # sql
         self.Declaraciones = Declaraciones #
         self.Codigo        = Codigo # sentencias
 
+
+
 #----------------------------   PROCEDURES
 class Procedimientos_(Sentencia):
-    def __init__(self,Reservada, Nombre,Comand, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
+    def __init__(self,Reservada, Nombre,Comand,Alias, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
         self.Reservada     = Reservada
         self.Nombre        = Nombre
         self.Comand        = Comand
+        self.Alias         = Alias
         self.Parametros    = Parametros
         self.Instrucciones = Instrucciones
         self.Declaraciones = Declaraciones

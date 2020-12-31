@@ -2780,7 +2780,7 @@ def p_Funciones_General(t):
     'FUNCIONESS  :  FUNTIONE  FUNTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
-    t[0]=Funciones_(t[1],t[3],t[8], t[5], t[10], t[11], t[12])
+    t[0]=Funciones_(t[1],t[3],t[8],t[9] , t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
 
 
@@ -2788,7 +2788,7 @@ def p_Store_ProcedureGeneral(t):
     'FUNCIONESS  :  FUNTIONE  PROCEDURE  ID  PARIZQ PARAMETROSG PARDER  ARGU_N_N  ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     #t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) + str(t[9]) + str(t[10]) + str(t[11]) + str(t[12]) + str(t[13])
     #print( "Si lo acepte wey funcion " + str(t[0]))
-    t[0]=Procedimientos_(t[1],t[3],t[7], t[5], t[9], t[10], t[11])
+    t[0]=Procedimientos_(t[1],t[3],t[7],t[8], t[5], t[9], t[10], t[11])
 
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando al procedure")
 
@@ -2841,7 +2841,7 @@ def p_Parametros_List(t):
     t[0] = [t[1]]
 
 def p_ParametrosT(t):
-    'PARAMETRO  :   ARGU_N TIPO_CAMPO ARGU_N'
+    'PARAMETRO  :    ARGU_N TIPO_CAMPO  ARGU_N'
     t[0] = Parametros_(t[2],t[1],t[3])
 
 

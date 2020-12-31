@@ -130,10 +130,10 @@ class Ast2:
             elif isinstance(i, SelectExpresion):
                 self.grafoSelectExpresion(i.listaCampos, padre)
             elif isinstance(i, Funciones_):
-                self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
+                self.grafoFuncion(i.Reservada, i.Nombre, i.Retorno,i.Alias, i.Parametros , i.Instrucciones, i.Declaraciones , i.Codigo, padre)
 
             elif isinstance(i,Procedimientos_):
-                self.GrafoProcedure(i.Reservada, i.Nombre, i.Comand, i.Parametros, i.Instrucciones, i.Declaraciones,i.Codigo, padre)
+                self.GrafoProcedure(i.Reservada, i.Nombre, i.Comand,i.Alias, i.Parametros, i.Instrucciones, i.Declaraciones,i.Codigo, padre)
 
             elif isinstance(i,EjecucionFuncion):
                 dot.edge(padre, str(self.i + 1))
@@ -2869,7 +2869,7 @@ class Ast2:
 
     #Funciones_   (Reservada, Nombre,Retorno, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[])
 
-    def grafoFuncion(self,Reservada, Nombre,Retorno, Parametros, Instrucciones, Declaraciones, Codigo, padre):
+    def grafoFuncion(self,Reservada, Nombre,Retorno,Alias, Parametros, Instrucciones, Declaraciones, Codigo, padre):
         global dot
 
         self.inc()
@@ -2917,10 +2917,10 @@ class Ast2:
         # recorrer
 
 
-
-        self.inc()
-        dot.node('Node' + str(self.i), "AS")
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        if (Alias !=""):
+            self.inc()
+            dot.node('Node' + str(self.i), "AS" + " "+str(Alias))
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
 
 
 
@@ -2929,7 +2929,15 @@ class Ast2:
         dot.node('Node' + str(self.i), "COMANDO_SQL")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer Comandos Sql
-        self.recorrerInstrucciones(Instrucciones[0], 'Node' + str(self.i))
+        if(isinstance(Instrucciones ,list)):
+            if(Instrucciones != False):
+                self.recorrerInstrucciones(Instrucciones[0], 'Node' + str(self.i))
+            else:
+                print("No hay ")
+        else:
+            print("No hay ")
+
+
 
         # --------------------------------------------------------
         self.inc()
@@ -2950,9 +2958,9 @@ class Ast2:
 
 
 
-    #Procedimientos_ (self,Reservada, Nombre,Comand, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[])
+    #Procedimientos_ (self,Reservada, Nombre,Comand,Alias, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[])
 
-    def GrafoProcedure(self,Reservada, Nombre,Comand, Parametros, Instrucciones, Declaraciones, Codigo, padre):
+    def GrafoProcedure(self,Reservada, Nombre,Comand,Alias, Parametros, Instrucciones, Declaraciones, Codigo, padre):
         global dot
 
         self.inc()
@@ -2980,19 +2988,27 @@ class Ast2:
         self.GrafoRecorridoParametros(Parametros, 'Node' + str(self.i))
 
 
-        self.inc()
-        dot.node('Node' + str(self.i), "AS")
-        dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+        if (Alias !=""):
+            self.inc()
+            dot.node('Node' + str(self.i), "AS" + " "+str(Alias))
+            dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
 
         # --------------------------------------------------------
         self.inc()
         dot.node('Node' + str(self.i), "COMANDO_SQL")
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer Comandos Sql
-        if(Instrucciones is not None):
-            self.recorrerInstrucciones(Instrucciones, 'Node' + str(self.i))
+        if(isinstance(Instrucciones ,list)):
+            if(Instrucciones != False):
+                self.recorrerInstrucciones(Instrucciones[0], 'Node' + str(self.i))
+            else:
+                print("No hay ")
         else:
             print("No hay ")
+
+
+
 
         # --------------------------------------------------------
         self.inc()
@@ -3034,9 +3050,13 @@ class Ast2:
 
 
                 else:
+                    # --------------------------------------------------------
                     self.inc()
-                    dot.node('Node' + str(self.i), ele)
+                    dot.node('Node' + str(self.i), "_EXPRESION_")
                     dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+                    self.Recorrer_Condiciones(ele, 'Node' + str(self.i))
+
+
         else:
             print("Viene un Epsilon no se hace nada... ")
             self.inc()
@@ -3235,9 +3255,6 @@ class Ast2:
 
         else:
             print("Es Otro Tipo de Expresion")
-
-
-
 
 
 
