@@ -2681,7 +2681,7 @@ def p_casesimple(t):
 
 def p_cs_expresion_busqueda(t):
     'expresion_busqueda : ID'
-    t[0] = ExpresionValor(t[1])
+    t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL)
 
 def p_cs_lista_when(t):
     'lista_when : lista_when cs_when'
