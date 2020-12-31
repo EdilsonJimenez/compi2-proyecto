@@ -9,7 +9,7 @@ import Gramatica as Gram
 import interprete as Inter
 import Ast2 as ast
 from Instruccion import *
-
+from intermedio import main
 
 
 
@@ -64,8 +64,7 @@ class Aplicacion:
             ruta = ""
 
     def ejecutarMain(self):
-        pass
-        #from intermedio import main
+        main()
 
 
     def enviarDatos(self):

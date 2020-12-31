@@ -8097,6 +8097,7 @@ class CrearIndice(Instruccion):
 
         if r is None:
             ts_global.agregarIndice(self)
+            imprir("CREATE INDEX:  Indice " + str(self.id_indice) + " creado con exito!")
         else:
             imprir("CREATE INDEX:  El Indice No se Creo ya que existe!")
             er = ErrorRep('Semantico', 'El indice ya existe', 0)

@@ -60,7 +60,10 @@ class Codigo3d:
                 self.t_llamadaFuncion(i)
             elif isinstance(i,ForInstruccion):
                 self.t_TraduccionFor(i)
+            elif isinstance(i, CrearIndice):
+                self.t_CrearIndice(i)
             else:
+                print(i)
                 print("NO TRADUCE....")
 
     def t_If(self, instancia):
@@ -187,9 +190,38 @@ class Codigo3d:
         global t_global, cadena
         cadena += "--------- For --------------- \n"
 
+    def t_CrearIndice(self, objeto):
+        global t_global, cadena
 
+        crearindice: CrearIndice = objeto
+        # Generando Sentencia SQL
 
+        sentencia = "CREATE "
 
+        if crearindice.unique:
+            sentencia += "UNIQUE "
+
+        sentencia += "INDEX " + str(crearindice.id_indice)
+
+        sentencia += " ON " + str(crearindice.id_tabla) + " ("
+
+        for c in crearindice.columnas:
+            col: ColumnaIndice = c
+            sentencia += str(col.id_columna)
+            if col.orden is not None:
+                sentencia += " " + str(col.orden)
+            if col.nulls is not None:
+                sentencia += " " + str(col.nulls)
+            sentencia += ", "
+
+        sentencia = sentencia[0: len(sentencia) - 2 ]
+        sentencia += ");"
+
+        # Generando codigo de tres direcciones
+        v = t_global.varTemporal()
+        cadena += str(v) + " = \"" + sentencia + "\"\n"
+        cadena += "heap.append(" + str(v) + ")\n"
+        cadena += "ejecutarSQL()\n"
 
     # EXPRESIONES
     def procesar_expresion(self, expresiones, ts):

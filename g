@@ -93,7 +93,7 @@ graph g {
                                 <TD bgcolor="#BEF781">UNIQUE</TD>
                                 <TD bgcolor="#BEF781">HASH</TD>
                                 <TD bgcolor="#BEF781"></TD>
-                            </TR><TR><TD>test1_id_index</TD><TD>test1</TD><TD>False</TD><TD>False</TD><TD></TD></TR><TR><TD>name</TD><TD>table2</TD><TD>False</TD><TD>True</TD><TD></TD></TR><TR><TD>test2_mm_idx</TD><TD>test2</TD><TD>False</TD><TD>False</TD><TD></TD></TR><TR><TD>test2_info_nulls_low</TD><TD>test2</TD><TD>False</TD><TD>False</TD><TD></TD></TR><TR><TD>test3_desc_index</TD><TD>test3</TD><TD>False</TD><TD>False</TD><TD></TD></TR><TR><TD>mytable_cat_1</TD><TD>mytable</TD><TD>False</TD><TD>False</TD><TD></TD></TR><TR><TD>mytable_cat_2</TD><TD>mytable</TD><TD>False</TD><TD>False</TD><TD></TD></TR>
+                            </TR><TR><TD>index1</TD><TD>tabla2</TD><TD>False</TD><TD>False</TD><TD></TD></TR>
                             <TR>
                                 <TD></TD>
                                 <TD></TD>
@@ -110,5 +110,5 @@ graph g {
                                 <TD bgcolor="#BEF781">NULLS</TD>
                                 <TD bgcolor="#BEF781">ID INDICE</TD>
                                 <TD bgcolor="#BEF781">ID TABLA</TD>
-                            </TR><TR><TD>id</TD><TD>None</TD><TD>None</TD><TD>test1</TD><TD>test1_id_index</TD></TR><TR><TD>column2</TD><TD>None</TD><TD>None</TD><TD>table2</TD><TD>name</TD></TR><TR><TD>major</TD><TD>None</TD><TD>None</TD><TD>test2</TD><TD>test2_mm_idx</TD></TR><TR><TD>minor</TD><TD>None</TD><TD>None</TD><TD>test2</TD><TD>test2_mm_idx</TD></TR><TR><TD>info</TD><TD>None</TD><TD>FIRST</TD><TD>test2</TD><TD>test2_info_nulls_low</TD></TR><TR><TD>id</TD><TD>DESC</TD><TD>LAST</TD><TD>test3</TD><TD>test3_desc_index</TD></TR><TR><TD>data</TD><TD>None</TD><TD>None</TD><TD>mytable</TD><TD>mytable_cat_1</TD></TR><TR><TD>data</TD><TD>None</TD><TD>None</TD><TD>mytable</TD><TD>mytable_cat_2</TD></TR></TABLE>>]
+                            </TR><TR><TD>col1</TD><TD>None</TD><TD>None</TD><TD>tabla2</TD><TD>index1</TD></TR></TABLE>>]
 }

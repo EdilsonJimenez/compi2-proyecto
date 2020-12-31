@@ -476,7 +476,7 @@ def p_init(t):
     arbolito2 = interprete2(t[0])
     arbolito2.ejecucion()
     codigo3d = '========================= CODIGO 3D =================================\n' + codigo3d
-    codigo3d = "from Instruccion import * \n" + codigo3d
+    codigo3d = codigo3d + "from Instruccion import * \n"
 
     print(codigo3d)
 
