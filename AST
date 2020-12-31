@@ -2,272 +2,42 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=PROCEDURE_PRODUCCION]
-	Node0 -> Node1
-	Node2 [label="create or replace"]
-	Node1 -> Node2
-	Node3 [label=PROCEDURE]
-	Node1 -> Node3
-	Node4 [label=cocoa]
-	Node1 -> Node4
-	Node5 [label=PARAMETROS]
-	Node1 -> Node5
-	Node6 [label="()"]
-	Node5 -> Node6
-	Node7 [label=AS]
-	Node1 -> Node7
-	Node8 [label=COMANDO_SQL]
-	Node1 -> Node8
-	Node9 [label=DECLARACIONES]
-	Node1 -> Node9
-	Node10 [label=DECLARACIONES]
+	Node0 -> 1
+	1 [label=EJECUCION_FUNCION]
+	Node2 [label=Ejecucion]
+	1 -> Node2
+	Node3 [label=PARAMETROS]
+	1 -> Node3
+	Node4 [label=_EXPRESION_]
+	Node3 -> Node4
+	Node5 [label=CONDICION]
+	Node4 -> Node5
+	6 [label=Variable]
+	6 -> 7
+	7 [label=parametro1]
+	Node5 -> 6
+	Node9 [label=_EXPRESION_]
+	Node3 -> Node9
+	Node10 [label=CONDICION]
 	Node9 -> Node10
-	Node11 [label=CODIGO_GENERADO]
-	Node10 -> Node11
-	Node12 [label=DECLARACION]
-	Node11 -> Node12
-	Node13 [label=ID]
-	Node12 -> Node13
-	Node14 [label=x]
-	Node13 -> Node14
-	Node15 [label=TIPO]
-	Node12 -> Node15
-	Node16 [label=integer]
-	Node15 -> Node16
-	Node17 [label="="]
-	Node12 -> Node17
-	Node12 -> 18
-	18 [label=ExpresionValor]
-	18 -> 19
-	19 [label=24]
-	Node20 [label=CODIGO_]
-	Node1 -> Node20
-	Node21 [label=CUERPO_CODE]
-	Node20 -> Node21
-	Node22 [label=BEGIN]
-	Node21 -> Node22
-	Node23 [label=_CODIGO_]
-	Node21 -> Node23
-	Node24 [label=CODIGO_GENERADO]
-	Node23 -> Node24
-	Node25 [label=FOR_INSTRUCCION]
-	Node24 -> Node25
-	Node26 [label=FOR]
-	Node25 -> Node26
-	Node27 [label="noonos   IN"]
-	Node25 -> Node27
-	Node28 [label=""]
-	Node25 -> Node28
-	Node29 [label=_EXPRESIONES_]
-	Node25 -> Node29
-	Node30 [label=VALORES]
-	Node29 -> Node30
-	31 [label=ExpresionValor]
-	31 -> 32
-	32 [label=67]
-	Node30 -> 31
-	Node34 [label=_BY_EXP_]
-	Node25 -> Node34
-	Node35 [label=EXPRESION_TIPOB]
-	Node34 -> Node35
-	Node36 [label=LOOP]
-	Node25 -> Node36
-	Node37 [label=_CODIGO_]
-	Node25 -> Node37
-	Node38 [label=CODIGO_GENERADO]
-	Node37 -> Node38
-	Node39 [label=INSTRUCCION_SELECT]
-	Node38 -> Node39
-	Node40 [label=SELECT]
-	Node39 -> Node40
-	Node41 [label=LISTA_CAMPOS]
-	Node39 -> Node41
-	Node42 [label=ACCESO_CAMPO]
-	Node41 -> Node42
-	Node43 [label="*"]
-	Node42 -> Node43
-	Node44 [label=FROM]
-	Node39 -> Node44
-	Node45 [label=LISTA_TABLAS]
-	Node39 -> Node45
-	Node46 [label=Nombre_Tabla]
-	Node45 -> Node46
-	Node47 [label=tabla1]
-	Node46 -> Node47
-	Node48 [label=Uniones]
-	Node39 -> Node48
-	Node49 [label=Final_Instruccion]
-	Node48 -> Node49
-	Node50 [label=""]
-	Node49 -> Node50
-	Node51 [label="END  LOOP"]
-	Node25 -> Node51
-	Node52 [label=";"]
-	Node25 -> Node52
-	Node53 [label=CODIGO_GENERADO]
-	Node23 -> Node53
-	Node54 [label="CASE SIMPLE"]
-	Node53 -> Node54
-	Node54 -> 55
-	55 [label=ExpresionValor]
-	55 -> 56
-	56 [label=x]
-	Node57 [label=WHEN]
-	Node54 -> Node57
-	Node57 -> 58
-	58 [label=ExpresionValor]
-	58 -> 59
-	59 [label=10]
-	Node60 [label=THEN]
-	Node57 -> Node60
-	Node61 [label=CODIGO_GENERADO]
-	Node60 -> Node61
-	Node62 [label=ASIGNACION]
-	Node61 -> Node62
-	Node63 [label=ID]
-	Node62 -> Node63
-	Node64 [label=x]
-	Node63 -> Node64
-	Node62 -> 65
-	65 [label=ExpresionValor]
-	65 -> 66
-	66 [label=20]
-	Node67 [label=CODIGO_GENERADO]
-	Node23 -> Node67
-	Node68 [label=EXIT]
-	Node67 -> Node68
-	Node69 [label=CODIGO_GENERADO]
-	Node23 -> Node69
-	Node70 [label=EXIT]
-	Node69 -> Node70
-	Node71 [label=LABEL]
-	Node70 -> Node71
-	Node72 [label=cola]
-	Node71 -> Node72
-	Node73 [label=CODIGO_GENERADO]
-	Node23 -> Node73
-	Node74 [label=EXIT]
-	Node73 -> Node74
-	Node75 [label=LABEL]
-	Node74 -> Node75
-	Node76 [label=fifo]
-	Node75 -> Node76
-	Node77 [label=WHEN]
-	Node74 -> Node77
-	Node77 -> 78
-	78 [label=ExpresionRelacional]
-	79 [label=exp1]
-	78 -> 79
-	79 -> 80
-	80 [label=Variable]
-	80 -> 81
-	81 [label=id]
-	82 [label="=="]
-	78 -> 82
-	83 [label=exp2]
-	78 -> 83
-	83 -> 84
-	84 [label=ExpresionValor]
-	84 -> 85
-	85 [label=10]
-	Node86 [label=CODIGO_GENERADO]
-	Node23 -> Node86
-	Node87 [label=CONTINUE]
-	Node86 -> Node87
-	Node88 [label=CODIGO_GENERADO]
-	Node23 -> Node88
-	Node89 [label=CONTINUE]
-	Node88 -> Node89
-	Node90 [label=LABEL]
-	Node89 -> Node90
-	Node91 [label=cola]
-	Node90 -> Node91
-	Node92 [label=CODIGO_GENERADO]
-	Node23 -> Node92
-	Node93 [label=CONTINUE]
-	Node92 -> Node93
-	Node94 [label=LABEL]
-	Node93 -> Node94
-	Node95 [label=fifo]
-	Node94 -> Node95
-	Node96 [label=WHEN]
-	Node93 -> Node96
-	Node96 -> 97
-	97 [label=ExpresionRelacional]
-	98 [label=exp1]
-	97 -> 98
-	98 -> 99
-	99 [label=Variable]
-	99 -> 100
-	100 [label=id]
-	101 [label="=="]
-	97 -> 101
-	102 [label=exp2]
-	97 -> 102
-	102 -> 103
-	103 [label=ExpresionValor]
-	103 -> 104
-	104 [label=10]
-	Node105 [label=CODIGO_GENERADO]
-	Node23 -> Node105
-	Node106 [label="LOOP SIMPLE"]
-	Node105 -> Node106
-	Node107 [label=SENTENCIAS]
-	Node106 -> Node107
-	Node108 [label=CODIGO_GENERADO]
-	Node107 -> Node108
-	Node109 [label=DECLARACION]
-	Node108 -> Node109
-	Node110 [label=ID]
-	Node109 -> Node110
-	Node111 [label=x]
-	Node110 -> Node111
-	Node112 [label=TIPO]
-	Node109 -> Node112
-	Node113 [label=integer]
-	Node112 -> Node113
-	Node114 [label="="]
-	Node109 -> Node114
-	Node109 -> 115
-	115 [label=ExpresionValor]
-	115 -> 116
-	116 [label=24]
-	Node117 [label=CODIGO_GENERADO]
-	Node23 -> Node117
-	Node118 [label=ASIGNACION]
-	Node117 -> Node118
-	Node119 [label=ID]
-	Node118 -> Node119
-	Node120 [label=ID]
-	Node119 -> Node120
-	Node118 -> 121
-	121 [label=EJECUCION_FUNCION]
-	Node122 [label=D]
-	121 -> Node122
-	Node123 [label=PARAMETROS]
-	121 -> Node123
-	Node124 [label="integer parametro1 "]
-	Node123 -> Node124
-	Node125 [label="integer parametro2 "]
-	Node123 -> Node125
-	Node126 [label=CODIGO_GENERADO]
-	Node23 -> Node126
-	Node126 -> 127
-	127 [label=EJECUCION_FUNCION]
-	Node128 [label=Ejecucion]
-	127 -> Node128
-	Node129 [label=PARAMETROS]
-	127 -> Node129
-	Node130 [label="integer parametro1 "]
-	Node129 -> Node130
-	Node131 [label="integer parametro2 "]
-	Node129 -> Node131
-	Node132 [label="integer parametro3 "]
-	Node129 -> Node132
-	Node133 [label="integer parametro4 "]
-	Node129 -> Node133
-	Node134 [label=END]
-	Node21 -> Node134
-	Node135 [label="language sql;"]
-	Node21 -> Node135
+	11 [label=Variable]
+	11 -> 12
+	12 [label=parametro2]
+	Node10 -> 11
+	Node14 [label=_EXPRESION_]
+	Node3 -> Node14
+	Node15 [label=CONDICION]
+	Node14 -> Node15
+	16 [label=Variable]
+	16 -> 17
+	17 [label=parametro3]
+	Node15 -> 16
+	Node19 [label=_EXPRESION_]
+	Node3 -> Node19
+	Node20 [label=CONDICION]
+	Node19 -> Node20
+	21 [label=Variable]
+	21 -> 22
+	22 [label=parametro4]
+	Node20 -> 21
 }
