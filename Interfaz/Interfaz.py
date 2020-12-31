@@ -9,7 +9,8 @@ import Gramatica as Gram
 import interprete as Inter
 import Ast2 as ast
 from Instruccion import *
-from intermedio import main
+
+#from intermedio import main
 
 
 
@@ -152,7 +153,7 @@ class Aplicacion:
 
         self.menu3D = Menu(self.barraMenu, tearoff=0)
         # self.menu3D.add_command(label="Generar", command=self.Errores)
-        self.menu3D.add_command(label="Ejecutar", command=main)
+        #self.menu3D.add_command(label="Ejecutar", command=main)
 
 
         self.barraMenu.add_cascade(menu=self.menuArchivo, label="Archivo")
