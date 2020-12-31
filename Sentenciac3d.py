@@ -124,7 +124,6 @@ class Codigo3d:
                 r = self.procesar_expresion(decla.expresion, t_global)
                 tempo = t_global.varTemporal()
                 cadena += str(tempo) + "=" + str(r) + "\n"
-
                 v = tipoSimbolo(str(tempo), decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
                 t_global.agregarSimbolo(v)
 
@@ -160,15 +159,14 @@ class Codigo3d:
         print("lista")
         print(listaParametros)
 
-        '''
+
         cont = 0
         for sim in t_global.tablaSimbolos:
             s: tipoSimbolo = t_global.obtenerSimbolo(sim)
-            #print(str(s.nombre)+str(s.ambito)+str(s.rol))
             if s.ambito == ambitoFuncion and str(s.rol) == "parametro":
                 print(str(cont))
-                cadena += "\n"+str(s.temporal) +" = "+ str(listaParametros[cont])
-                cont += 1'''
+                cadena += "\n"+str(s.temporal) +"="+ str(listaParametros[cont])
+                cont += 1
 
         salto = t_global.varFuncion()
         cadena += "\nstack.append(\""+salto+"\")\n"
@@ -206,7 +204,12 @@ class Codigo3d:
         elif isinstance(expresiones, UnitariaNotBB):
             return procesar_NotBB(expresiones, ts)
         elif isinstance(expresiones, ExpresionValor):
-            return expresiones.val
+            c = str(expresiones.val)
+            if c.isdigit():
+                return expresiones.val
+            else:
+                q = "\""+expresiones.val+"\""
+                return q
         elif isinstance(expresiones, Variable):
             return self.procesar_variable(expresiones, ts)
         elif isinstance(expresiones, UnitariaAritmetica):
@@ -266,6 +269,7 @@ class Codigo3d:
         global cadena
         val = self.procesar_expresion(expresion.exp1, ts)
         val2 = self.procesar_expresion(expresion.exp2, ts)
+        print("valores"+str(val)+str(val2))
         if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
             v = t_global.varTemporal()
             cadena += v + "= " + str(val) + " == " + str(val2) + "\n"
@@ -314,12 +318,13 @@ class Codigo3d:
         print(t_global.tablaSimbolos)
         for item in t_global.tablaSimbolos:
             v: tipoSimbolo = t_global.obtenerSimbolo(item)
+            print(str(v.nombre)+"<>"+str(tV.id)+"-"+str(v.ambito)+"<>"+ambitoFuncion)
             if v.nombre == tV.id and v.ambito == ambitoFuncion:
+                print(str(v.temporal))
                 r = str(v.temporal)
-            else:
-                r = " "
-
+                return r
         return r
+
 
     def generar(self):
         global cadena
