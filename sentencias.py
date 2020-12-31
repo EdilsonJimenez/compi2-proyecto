@@ -182,3 +182,9 @@ class EjecucionFuncion(Sentencia):
         self.Id         = Id
         self.Parametros = Parametros
 
+
+#------------------------  Sentencias SQL
+class SentenciasSQL(Sentencia):
+    def __init__(self,CadenaSQL):
+        self.CadenaSQL = CadenaSQL
+

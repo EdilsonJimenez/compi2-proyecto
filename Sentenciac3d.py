@@ -177,7 +177,6 @@ class Codigo3d:
 
         return cadenaF
 
-
     def t_asignacion(self, asignacion):
         global t_global, cadena, cadenaFuncion
         # id, expresion
@@ -278,39 +277,17 @@ class Codigo3d:
 #-------#Viene Expresion_Busqueda  => ExpresionValor(ID)
         #Creamor un temporal con el valor que va a tener
         Variable:ExpresionValor = Objeto.busqueda
-        # tempoP = t_global.varParametro()
-        # cadena += str(tempoP) + "\n"
-        #Se creo el objeto con sus caracteristicas
-        # p = tipoSimbolo(str(tempoP), Variable,"", 1, 1, 'parametro', Ambito)
-        #Se almacena en el diccionario global
-        # t_global.agregarSimbolo(p)
-
-
 # -------#viene CElse(CodigoEpsilon) =>
         #Objetemos el else
         vari1: CElse = Objeto.caseelse
-        # vari = vari1.sentencias
-
         #busqueda, listawhen, caseelse
 #-------#viene Lista_When =>Lista => CSWhen(Cs_Expresion, CodigoCuerpoEpsilon) => Cs_Expresion=> Lista => Lista de expresines
         cadena += self.RecorrerListaWhensCS(Objeto.listawhen,Ambito,Variable,vari1)
         return cadena
 
-
     # Recorremos la lista de Whens Case Simple
     def RecorrerListaWhensCS(self, lista,Ambito,Variable,Else):
         cadena = ""
-        # if Else == None:
-        #     for element in lista:
-        #         ele: CSWhen = element
-        #         # Tenemos ListaExpresiones
-        #         explogica = self.Recorrido_InstruccionesCS(ele.expresiones,Ambito, Variable)
-        #
-        #         # creamor un nuevo objeto tipo if para poder enviarlo con sus if
-        #         Codo = If_inst(explogica, ele.sentencias, None)
-        #         cadena += self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
-        #
-        # else:
         contador = len(lista)
         ifaux = None
         while contador > 0:
@@ -326,34 +303,11 @@ class Codigo3d:
             else:
                 explogica = self.Recorrido_InstruccionesCS(ele.expresiones, Ambito, Variable)
                 ifaux = If_inst(explogica, element.sentencias, [ifaux])
-
             contador = contador - 1
-
         if ifaux is not None:
             cadena += self.t_If(ifaux)
 
-
-            # for element in lista:
-            #     if(contador+1 != len(lista)):
-            #         ele:CSWhen = element
-            #         #Tenemos ListaExpresiones
-            #         explogica = self.Recorrido_InstruccionesCS(ele.expresiones, Ambito, Variable)
-            #
-            #         #creamor un nuevo objeto tipo if para poder enviarlo con sus if
-            #         Codo = If_inst(explogica, ele.sentencias, None)
-            #         cadena += self.t_If(Codo) #Se va a generar el if con las condiciones y el codigo
-            #         contador += 1
-            #     else:
-            #         ele:CSWhen = element
-            #         #Tenemos ListaExpresiones
-            #         explogica = self.Recorrido_InstruccionesCS(ele.expresiones, Ambito, Variable)
-            #
-            #         #creamor un nuevo objeto tipo if para poder enviarlo con sus if con el else
-            #         Codo = If_inst(explogica,ele.sentencias,Else.sentencias)
-            #         cadena += self.t_If(Codo) #Se va a generar el if con las condiciones y el codigo
-            #         contador +=1
         return cadena
-
 
     #Recorremos la lista de instrucciones
     def Recorrido_InstruccionesCS(self, listaIns, Ambito, Variable):
@@ -389,24 +343,14 @@ class Codigo3d:
         #Obtenemos el else si este existe
         #Objetemos el else
         vari1:CElse = Objeto.caseelse
-
 #-------#viene Lista_When =>Lista => CBWhen(expresion->una sola, sentencias->CodigoCuerpoEpsilon)
         cadena += self.RecorrerListaWhensCB(Objeto.listawhen,Ambito,vari1)
 
         return cadena
 
-
-
     #Recorremos la lista de whens CB
     def RecorrerListaWhensCB(self, lista, Ambito, Else):
         cadena = ""
-        # if(Else==None):
-        #     for element in lista:
-        #         ele: CBWhen = element
-        #         # Tenemos una expresion
-        #         Codo = If_inst(ele.expresion, ele.sentencias, None)
-        #         cadena += self.t_If(Codo)
-        # else:
         contador = len(lista)
         ifaux = None
         while contador > 0:
@@ -420,26 +364,9 @@ class Codigo3d:
                 ifaux = If_inst(ele.expresion, element.sentencias, elseaux)
             else:
                 ifaux = If_inst(ele.expresion, element.sentencias, [ifaux])
-
             contador = contador - 1
-
         if ifaux is not None:
             cadena += self.t_If(ifaux)
-
-            # for element in lista:
-                # if(contador+1 != len(lista)):
-                #     ele: CBWhen = element
-                #     # Tenemos una expresion
-                #     Codo = If_inst(ele.expresion, ele.sentencias, None)
-                #     cadena += self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
-                #     contador += 1
-                # else:
-                #     ele: CBWhen = element
-                #     # Tenemos una expresion
-                #     Codo = If_inst(ele.expresion, ele.sentencias, Else.sentencias)
-                #     cadena += self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
-                #     contador +=1
-
         return cadena
 
 
@@ -476,6 +403,11 @@ class Codigo3d:
         cadena += str(v) + " = \"" + sentencia + "\"\n"
         cadena += "heap.append(" + str(v) + ")\n"
         cadena += "ejecutarSQL()\n"
+
+
+
+
+
 
 # --------------------------------  TRADUCCION CUERPO DE LA FUNCION
     # EXPRESIONES
