@@ -1629,6 +1629,8 @@ class interprete2:
                 i.Ejecutar()
             elif isinstance(i, useClase):
                 i.Ejecutar()
+            elif isinstance(i, CrearIndice):
+                i.Ejecutar()
             else:
                 print("NO ejecuta")
 

@@ -60,6 +60,7 @@ class Codigo3d:
                 print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
             else:
+                print(i)
                 print("NO TRADUCE....")
         cadena += "\n\ngoto .END\n"
         cadena += cadenaFuncion
@@ -79,8 +80,12 @@ class Codigo3d:
                 cadenaT += self.t_asignacion(i)
             elif isinstance(i, ForInstruccion):
                 cadenaT += self.t_TraduccionFor(i)
+            elif isinstance(i, CaseSimple):
+                cadenaT += self.t_TraduccionCaseSimple(i, "")
             elif isinstance(i, RetornoFuncion):
                 cadenaT += self.t_retornoFuncion(i)
+            elif isinstance(i, CaseBuscado):
+                cadenaT += self.t_TraduccionCaseBuscado(i, "")
             else:
                 print(i)
                 print("NO TRADUCE2....")
@@ -93,6 +98,7 @@ class Codigo3d:
         global t_global, cadena, cadenaExpresion
         cadenaIf  =""
         cadenaIf += "# --------- IF --------------- \n"
+        print(instancia.condicion)
         condicion, cad = self.procesar_expresion(instancia.condicion, t_global)
         cadenaExpresion = ""
         cadenaIf += cad
@@ -105,7 +111,7 @@ class Codigo3d:
         cadenaIf += "else : \n"
         cadenaIf += "\tgoto ."+falso+"\n"
 
-        cadenaIf += "label . " + verdadero + "\n"
+        cadenaIf += "label ." + verdadero + "\n"
         cadenaIf += "# ~verdadero~"+"\n"
         # Si el if trae instruciones en IF
         if instancia.instIf != 0:
@@ -173,7 +179,6 @@ class Codigo3d:
         cadenaF += "\n\n"
 
         return cadenaF
-
 
     def t_asignacion(self, asignacion):
         # id, expresion, llamarFuncion
@@ -288,125 +293,137 @@ class Codigo3d:
 #--------------------------------   TRADUCCION CASE SIMPLE
     def t_TraduccionCaseSimple(self,Objeto:CaseSimple, Ambito):
         #Objetos globales para la traduccion
-        global t_global, cadena
-        cadena += "--------- CASE SIMPLE --------------- \n"
+        global t_global
+        cadena = "#--------- CASE SIMPLE --------------- \n"
 #-------#Viene Expresion_Busqueda  => ExpresionValor(ID)
         #Creamor un temporal con el valor que va a tener
         Variable:ExpresionValor = Objeto.busqueda
-        tempoP = t_global.varParametro()
-        cadena += str(tempoP) + "\n"
-        #Se creo el objeto con sus caracteristicas
-        p = tipoSimbolo(str(tempoP), Variable,"", 1, 1, 'parametro', Ambito)
-        #Se almacena en el diccionario global
-        t_global.agregarSimbolo(p)
-
-
 # -------#viene CElse(CodigoEpsilon) =>
         #Objetemos el else
-        vari1:CElse = Objeto.caseelse
-        vari =vari1.sentencias
-
+        vari1: CElse = Objeto.caseelse
         #busqueda, listawhen, caseelse
 #-------#viene Lista_When =>Lista => CSWhen(Cs_Expresion, CodigoCuerpoEpsilon) => Cs_Expresion=> Lista => Lista de expresines
-        self.RecorrerListaWhensCS(Objeto.listawhen,Ambito,Variable,vari)
-
-
+        cadena += self.RecorrerListaWhensCS(Objeto.listawhen,Ambito,Variable,vari1)
+        return cadena
 
     # Recorremos la lista de Whens Case Simple
     def RecorrerListaWhensCS(self, lista,Ambito,Variable,Else):
-            if(Else==None):
-                for element in lista:
-                    ele: CSWhen = element
-                    # Tenemos ListaExpresiones
-                    valor = self.Recorrido_InstruccionesCS(ele.expresion, Variable)
-                    valor.replace("\"", " ")
-                    # creamor un nuevo objeto tipo if para poder enviarlo con sus if
-                    Codo = If_inst(valor, ele.sentencias, None)
-                    self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
-
+        cadena = ""
+        contador = len(lista)
+        ifaux = None
+        while contador > 0:
+            element = lista[contador - 1]
+            ele: CSWhen = element
+            print(ele)
+            if contador == len(lista):
+                explogica = self.Recorrido_InstruccionesCS(ele.expresiones, Ambito, Variable)
+                elseaux = None
+                if Else is not None:
+                    elseaux = Else.sentencias
+                ifaux = If_inst(explogica, element.sentencias, elseaux)
             else:
-                contador = 0
-                for element in lista:
-                    if(contador+1 != len(lista)):
-                        ele:CSWhen = element
-                        #Tenemos ListaExpresiones
-                        valor = self.Recorrido_InstruccionesCS(ele.expresion,Variable)
-                        valor.replace("\""," ")
-                        #creamor un nuevo objeto tipo if para poder enviarlo con sus if
-                        Codo = If_inst(valor,ele.sentencias,None)
-                        self.t_If(Codo) #Se va a generar el if con las condiciones y el codigo
-                        contador +=1
-                    else:
-                        ele:CSWhen = element
-                        #Tenemos ListaExpresiones
-                        valor = self.Recorrido_InstruccionesCS(ele.expresion,Variable)
-                        valor.replace("\""," ")
-                        #creamor un nuevo objeto tipo if para poder enviarlo con sus if con el else
-                        Codo = If_inst(valor,ele.sentencias,Else)
-                        self.t_If(Codo) #Se va a generar el if con las condiciones y el codigo
-                        contador +=1
+                explogica = self.Recorrido_InstruccionesCS(ele.expresiones, Ambito, Variable)
+                ifaux = If_inst(explogica, element.sentencias, [ifaux])
+            contador = contador - 1
+        if ifaux is not None:
+            cadena += self.t_If(ifaux)
 
-
+        return cadena
 
     #Recorremos la lista de instrucciones
-    def Recorrido_InstruccionesCS(self, listaIns,Ambito,Variable):
-        expresion =""
+    def Recorrido_InstruccionesCS(self, listaIns, Ambito, Variable):
+
         contador=0
+        exp1 = None
+        exp2 = None
+        explogica = None
         for ele in listaIns:
+
             #Recorremos los tipos de instruccines
-            if(isinstance(ele,ExpresionAritmetica)):
+            if isinstance(ele,ExpresionAritmetica) or isinstance(ele, ExpresionValor):
                 print("Viene un alista de instrucciones aritmeticas.. ")
-                if(contador+1!=len(listaIns)):
-                    expresion += "(" +Variable + "==" + ele + ")" + "OR"
+                if contador == 0:
+                    exp1 = ExpresionRelacional(Variable, ele, OPERACION_RELACIONAL.IGUALQUE)
                 else:
-                    expresion += "("+Variable + "==" + ele + ")"
+                    exp2 = ExpresionRelacional(Variable, ele, OPERACION_RELACIONAL.IGUALQUE)
+                    explogica = ExpresionLogica(exp1, exp2, OPERACION_LOGICA.OR)
+                    exp1 = explogica
+
             contador+=1
-        #Retornamos nuestra condicion
-        return expresion
+
+        return exp1
 
 
 
 #--------------------------------   TRADUCCION CASE BUSCADO
     def t_TraduccionCaseBuscado(self,Objeto:CaseBuscado, Ambito):
         #Objetos globales para la traduccion
-        global t_global, cadena
-        cadena += "--------- CASE BUSCADO --------------- \n"
+        global t_global
+        cadena = "#--------- CASE BUSCADO --------------- \n"
 # -------#viene CElse(CodigoEpsilon) =>
         #Obtenemos el else si este existe
         #Objetemos el else
         vari1:CElse = Objeto.caseelse
-        vari =vari1.sentencias 
 #-------#viene Lista_When =>Lista => CBWhen(expresion->una sola, sentencias->CodigoCuerpoEpsilon)
-        self.RecorrerListaWhensCB(Objeto.listawhen,Ambito,vari)
+        cadena += self.RecorrerListaWhensCB(Objeto.listawhen,Ambito,vari1)
 
-
-
+        return cadena
 
     #Recorremos la lista de whens CB
-    def RecorrerListaWhensCB(self, lista,Ambito,Else):
-            if(Else==None):
-                for element in lista:
-                    ele: CBWhen = element
-                    # Tenemos una expresion
-                    Codo = If_inst(ele.expresion, ele.sentencias, None)
-                    self.t_If(Codo)
+    def RecorrerListaWhensCB(self, lista, Ambito, Else):
+        cadena = ""
+        contador = len(lista)
+        ifaux = None
+        while contador > 0:
+            element = lista[contador - 1]
+            ele: CBWhen = element
+            print(ele)
+            if contador == len(lista):
+                elseaux = None
+                if Else is not None:
+                    elseaux = Else.sentencias
+                ifaux = If_inst(ele.expresion, element.sentencias, elseaux)
             else:
-                contador = 0
-                for element in lista:
-                    if(contador+1 != len(lista)):
-                        ele: CBWhen = element
-                        # Tenemos una expresion
-                        Codo = If_inst(ele.expresion, ele.sentencias, None)
-                        self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
-                        contador +=1
-                    else:
-                        ele: CBWhen = element
-                        # Tenemos una expresion
-                        Codo = If_inst(ele.expresion, ele.sentencias, Else)
-                        self.t_If(Codo)  # Se va a generar el if con las condiciones y el codigo
-                        contador +=1
+                ifaux = If_inst(ele.expresion, element.sentencias, [ifaux])
+            contador = contador - 1
+        if ifaux is not None:
+            cadena += self.t_If(ifaux)
+        return cadena
 
 
+
+    def t_CrearIndice(self, objeto):
+        global t_global, cadena
+
+        crearindice: CrearIndice = objeto
+        # Generando Sentencia SQL
+
+        sentencia = "CREATE "
+
+        if crearindice.unique:
+            sentencia += "UNIQUE "
+
+        sentencia += "INDEX " + str(crearindice.id_indice)
+
+        sentencia += " ON " + str(crearindice.id_tabla) + " ("
+
+        for c in crearindice.columnas:
+            col: ColumnaIndice = c
+            sentencia += str(col.id_columna)
+            if col.orden is not None:
+                sentencia += " " + str(col.orden)
+            if col.nulls is not None:
+                sentencia += " " + str(col.nulls)
+            sentencia += ", "
+
+        sentencia = sentencia[0: len(sentencia) - 2 ]
+        sentencia += ");"
+
+        # Generando codigo de tres direcciones
+        v = t_global.varTemporal()
+        cadena += str(v) + " = \"" + sentencia + "\"\n"
+        cadena += "heap.append(" + str(v) + ")\n"
+        cadena += "ejecutarSQL()\n"
 
 
 
@@ -436,10 +453,10 @@ class Codigo3d:
         elif isinstance(expresiones, ExpresionValor):
             c = str(expresiones.val)
             if c.isdigit():
-                return expresiones.val, " "
+                return expresiones.val, ""
             else:
                 q = "\""+expresiones.val+"\""
-                return q, " "
+                return q, ""
         elif isinstance(expresiones, Variable):
             return self.procesar_variable(expresiones, ts)
         elif isinstance(expresiones, UnitariaAritmetica):

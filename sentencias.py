@@ -181,3 +181,10 @@ class EjecucionFuncion(Sentencia):
     def __init__(self, Id, Parametros):
         self.Id         = Id
         self.Parametros = Parametros
+
+
+#------------------------  Sentencias SQL
+class SentenciasSQL(Sentencia):
+    def __init__(self,CadenaSQL):
+        self.CadenaSQL = CadenaSQL
+

@@ -487,7 +487,6 @@ def p_init(t):
 
 def p_instrucciones_lista(t):
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
-    
     t[1].append(t[2])
     t[0] = t[1]
     rep_gramatica('<TR><TD> INSTRUCCIONES → INSTRUCCIONES INSTRUCCION </TD><TD> INSTRUCCIONES=t[1].append(t[2]) <BR/> INSTRUCCIONES=t[1] </TD></TR>')
@@ -520,12 +519,18 @@ def p_instruccion_Use_database(t):
     'DQL_COMANDOS       : USE ID PUNTOCOMA'
     global baseActual, codigo3d
     baseActual = str(t[2])
-    t[0] = useClase(t[2])
+
+    t[0] =SentenciasSQL("USE "+str(t[2])+";")
+
+
 
     codigo3d = codigo3d + 't0 = useClase("' + t[2] + '")\n'
     codigo3d = codigo3d + 't0.Ejecutar()\n'
 
     rep_gramatica('\n <TR><TD> DQL_COMANDOS → USE ID PUNTOCOMA </TD><TD> DQL_COMANDOS=t[2] </TD></TR>')
+
+
+
 
 # ===================  DEFINICIONES DE LOS TIPOS DE SELECT
 
@@ -552,7 +557,6 @@ def p_instruccion_dql_comandos3(t):
     rep_gramatica('\n <TR><TD> DQL_COMANDOS → SELECT LISTA_CAMPOS FROM  NOMBRES_TABLAS     </TD><TD> t[0]= Select(t[5],t[2],t[4]) </TD></TR>')
 
 # ------------------------------------------------------------------------------------------------------------------
-
 # Lista de Campos
 def p_ListaCampos_ListaCamposs(t):
     'LISTA_CAMPOS       : LISTA_CAMPOS COMA LISTAA'
@@ -653,6 +657,7 @@ def p_Alias_id(t):
 def p_S_AsAlias(t):
     """LISTALIASS  : AS ID
                   |  ID """
+
     if(str(t[1]).upper()=="AS"):
        t[0] = Alias_Campos_ListaCamposSinLista(t[2])
        rep_gramatica('\n <TR><TD> LISTALIASS →  AS ID    </TD><TD>  t[0] = Alias_Campos_ListaCamposSinLista(t[2]) </TD></TR>')
@@ -2656,11 +2661,6 @@ def p_instruccion_ifelse(t):
     'instruccion_if : IF expresion THEN CODEEPSILON ELSE CODEEPSILON END IF PUNTOCOMA'
     t[0] = If_inst(t[2], t[4], t[6])
 
-def p_instruccion_elsif1(t):
-    'instruccion_if : IF expresion THEN listas_elsif ELSE CODEEPSILON END IF PUNTOCOMA'
-    t[0] = If_inst(t[2], t[4], t[6])
-    print("****** LISTAS ELSIF")
-
 def p_listas_elsif(t):
     'listas_elsif : listas_elsif elsif'
     t[1].append(t[2])
@@ -2671,7 +2671,7 @@ def p_lista_elsif(t):
     t[0] = [t[1]]
 
 def p_elsif(t):
-    'elsif : ELSIF expresion THEN CODEEPSILON'
+    'elsif : ELSIF expresion THEN expresion'
     t[0] = t[1]
 
 
@@ -2902,7 +2902,7 @@ def p_Declaracion_VariablesAsignacion(t):
 
 #----------------------------------------------------------  SECCION DE RETORNO
 def p_Retorno_Cuerpo(t):
-    ' RETORNOS  :   RETURN expresion PUNTOCOMA'
+    ' RETORNOS  :   RETURN expresion '
     t[0] = RetornoFuncion(t[2])
 
 

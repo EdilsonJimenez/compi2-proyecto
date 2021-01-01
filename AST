@@ -2,42 +2,130 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node0 -> 1
-	1 [label=EJECUCION_FUNCION]
-	Node2 [label=Ejecucion]
-	1 -> Node2
-	Node3 [label=PARAMETROS]
-	1 -> Node3
-	Node4 [label=_EXPRESION_]
-	Node3 -> Node4
-	Node5 [label=CONDICION]
+	Node1 [label="CREAR INDICE"]
+	Node0 -> Node1
+	Node2 [label="ID INDICE"]
+	Node1 -> Node2
+	Node3 [label=test1_id_index]
+	Node2 -> Node3
+	Node4 [label="ID TABLA"]
+	Node1 -> Node4
+	Node5 [label=test1]
 	Node4 -> Node5
-	6 [label=Variable]
-	6 -> 7
-	7 [label=parametro1]
-	Node5 -> 6
-	Node9 [label=_EXPRESION_]
-	Node3 -> Node9
-	Node10 [label=CONDICION]
+	Node6 [label=COLUMNAS]
+	Node1 -> Node6
+	Node7 [label=ID]
+	Node6 -> Node7
+	Node8 [label=id]
+	Node7 -> Node8
+	Node9 [label="CREAR INDICE"]
+	Node0 -> Node9
+	Node10 [label=UNIQUE]
 	Node9 -> Node10
-	11 [label=Variable]
-	11 -> 12
-	12 [label=parametro2]
-	Node10 -> 11
-	Node14 [label=_EXPRESION_]
-	Node3 -> Node14
-	Node15 [label=CONDICION]
-	Node14 -> Node15
-	16 [label=Variable]
-	16 -> 17
-	17 [label=parametro3]
-	Node15 -> 16
-	Node19 [label=_EXPRESION_]
-	Node3 -> Node19
-	Node20 [label=CONDICION]
+	Node11 [label="ID INDICE"]
+	Node9 -> Node11
+	Node12 [label=name]
+	Node11 -> Node12
+	Node13 [label="ID TABLA"]
+	Node9 -> Node13
+	Node14 [label=table2]
+	Node13 -> Node14
+	Node15 [label="USING HASH"]
+	Node9 -> Node15
+	Node16 [label=COLUMNAS]
+	Node9 -> Node16
+	Node17 [label=ID]
+	Node16 -> Node17
+	Node18 [label=column2]
+	Node17 -> Node18
+	Node19 [label="CREAR INDICE"]
+	Node0 -> Node19
+	Node20 [label="ID INDICE"]
 	Node19 -> Node20
-	21 [label=Variable]
-	21 -> 22
-	22 [label=parametro4]
-	Node20 -> 21
+	Node21 [label=test2_mm_idx]
+	Node20 -> Node21
+	Node22 [label="ID TABLA"]
+	Node19 -> Node22
+	Node23 [label=test2]
+	Node22 -> Node23
+	Node24 [label=COLUMNAS]
+	Node19 -> Node24
+	Node25 [label=ID]
+	Node24 -> Node25
+	Node26 [label=major]
+	Node25 -> Node26
+	Node27 [label=ID]
+	Node24 -> Node27
+	Node28 [label=minor]
+	Node27 -> Node28
+	Node29 [label="CREAR INDICE"]
+	Node0 -> Node29
+	Node30 [label="ID INDICE"]
+	Node29 -> Node30
+	Node31 [label=test2_info_nulls_low]
+	Node30 -> Node31
+	Node32 [label="ID TABLA"]
+	Node29 -> Node32
+	Node33 [label=test2]
+	Node32 -> Node33
+	Node34 [label=COLUMNAS]
+	Node29 -> Node34
+	Node35 [label=ID]
+	Node34 -> Node35
+	Node36 [label=info]
+	Node35 -> Node36
+	Node37 [label=NULLSFIRST]
+	Node34 -> Node37
+	Node38 [label="CREAR INDICE"]
+	Node0 -> Node38
+	Node39 [label="ID INDICE"]
+	Node38 -> Node39
+	Node40 [label=test3_desc_index]
+	Node39 -> Node40
+	Node41 [label="ID TABLA"]
+	Node38 -> Node41
+	Node42 [label=test3]
+	Node41 -> Node42
+	Node43 [label=COLUMNAS]
+	Node38 -> Node43
+	Node44 [label=ID]
+	Node43 -> Node44
+	Node45 [label=id]
+	Node44 -> Node45
+	Node46 [label=DESC]
+	Node43 -> Node46
+	Node47 [label=NULLSLAST]
+	Node43 -> Node47
+	Node48 [label="CREAR INDICE"]
+	Node0 -> Node48
+	Node49 [label="ID INDICE"]
+	Node48 -> Node49
+	Node50 [label=mytable_cat_1]
+	Node49 -> Node50
+	Node51 [label="ID TABLA"]
+	Node48 -> Node51
+	Node52 [label=mytable]
+	Node51 -> Node52
+	Node53 [label=COLUMNAS]
+	Node48 -> Node53
+	Node54 [label=ID]
+	Node53 -> Node54
+	Node55 [label=data]
+	Node54 -> Node55
+	Node56 [label="CREAR INDICE"]
+	Node0 -> Node56
+	Node57 [label="ID INDICE"]
+	Node56 -> Node57
+	Node58 [label=mytable_cat_2]
+	Node57 -> Node58
+	Node59 [label="ID TABLA"]
+	Node56 -> Node59
+	Node60 [label=mytable]
+	Node59 -> Node60
+	Node61 [label=COLUMNAS]
+	Node56 -> Node61
+	Node62 [label=ID]
+	Node61 -> Node62
+	Node63 [label=data]
+	Node62 -> Node63
 }
