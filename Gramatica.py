@@ -2994,10 +2994,10 @@ def p_CodigoFunciones(t):
                         | salir
                         | continuar
                         | EJECUTARFUNCION PUNTOCOMA
-                        | INSTRUCCIONES
                         | RETORNOS '''
 
     t[0] = t[1]
+
 
 
 
@@ -3145,7 +3145,7 @@ def p_declaracion_asignacion_e(t):
     t[0] = None
 
 def p_instruccion_CODE(t):
-    '''CODE_  :      DQL_COMANDOS
+    '''CODE_  :       DQL_COMANDOS
                     | DDL_COMANDOS
                     | DML_COMANDOS
                     | COMENTARIOMULTI

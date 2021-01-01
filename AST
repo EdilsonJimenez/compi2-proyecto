@@ -2,130 +2,102 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label="CREAR INDICE"]
+	Node1 [label=FUNCION_PRODUCCION]
 	Node0 -> Node1
-	Node2 [label="ID INDICE"]
+	Node2 [label="create or replace"]
 	Node1 -> Node2
-	Node3 [label=test1_id_index]
-	Node2 -> Node3
-	Node4 [label="ID TABLA"]
+	Node3 [label=FUNTION]
+	Node1 -> Node3
+	Node4 [label=miFuncion2]
 	Node1 -> Node4
-	Node5 [label=test1]
-	Node4 -> Node5
-	Node6 [label=COLUMNAS]
-	Node1 -> Node6
-	Node7 [label=ID]
+	Node5 [label=PARAMETROS]
+	Node1 -> Node5
+	Node6 [label=PARAMETROS]
+	Node5 -> Node6
+	Node7 [label="integer entrada "]
 	Node6 -> Node7
-	Node8 [label=id]
-	Node7 -> Node8
-	Node9 [label="CREAR INDICE"]
-	Node0 -> Node9
-	Node10 [label=UNIQUE]
+	Node8 [label=RETURNS]
+	Node1 -> Node8
+	Node9 [label=EXPRESION_]
+	Node1 -> Node9
+	Node10 [label=CONDICION]
 	Node9 -> Node10
-	Node11 [label="ID INDICE"]
-	Node9 -> Node11
-	Node12 [label=name]
-	Node11 -> Node12
-	Node13 [label="ID TABLA"]
-	Node9 -> Node13
-	Node14 [label=table2]
-	Node13 -> Node14
-	Node15 [label="USING HASH"]
-	Node9 -> Node15
-	Node16 [label=COLUMNAS]
-	Node9 -> Node16
-	Node17 [label=ID]
+	11 [label=ExpresionValor]
+	11 -> 12
+	12 [label=90]
+	Node10 -> 11
+	Node14 [label=COMANDO_SQL]
+	Node1 -> Node14
+	Node15 [label=DECLARACIONES]
+	Node1 -> Node15
+	Node16 [label=DECLARACIONES]
+	Node15 -> Node16
+	Node17 [label=CODIGO_GENERADO]
 	Node16 -> Node17
-	Node18 [label=column2]
+	Node18 [label=DECLARACION]
 	Node17 -> Node18
-	Node19 [label="CREAR INDICE"]
-	Node0 -> Node19
-	Node20 [label="ID INDICE"]
+	Node19 [label=ID]
+	Node18 -> Node19
+	Node20 [label=p]
 	Node19 -> Node20
-	Node21 [label=test2_mm_idx]
-	Node20 -> Node21
-	Node22 [label="ID TABLA"]
-	Node19 -> Node22
-	Node23 [label=test2]
-	Node22 -> Node23
-	Node24 [label=COLUMNAS]
-	Node19 -> Node24
-	Node25 [label=ID]
-	Node24 -> Node25
-	Node26 [label=major]
-	Node25 -> Node26
-	Node27 [label=ID]
-	Node24 -> Node27
-	Node28 [label=minor]
+	Node21 [label=TIPO]
+	Node18 -> Node21
+	Node22 [label=integer]
+	Node21 -> Node22
+	Node23 [label="="]
+	Node18 -> Node23
+	Node18 -> 24
+	24 [label=ExpresionValor]
+	24 -> 25
+	25 [label=15]
+	Node26 [label=CODIGO_]
+	Node1 -> Node26
+	Node27 [label=CUERPO_CODE]
+	Node26 -> Node27
+	Node28 [label=BEGIN]
 	Node27 -> Node28
-	Node29 [label="CREAR INDICE"]
-	Node0 -> Node29
-	Node30 [label="ID INDICE"]
+	Node29 [label=_CODIGO_]
+	Node27 -> Node29
+	Node30 [label=CODIGO_GENERADO]
 	Node29 -> Node30
-	Node31 [label=test2_info_nulls_low]
-	Node30 -> Node31
-	Node32 [label="ID TABLA"]
-	Node29 -> Node32
-	Node33 [label=test2]
+	Node31 [label=CODIGO_GENERADO]
+	Node29 -> Node31
+	Node32 [label=RETORNO__]
+	Node31 -> Node32
+	Node33 [label=EXPRESION_]
 	Node32 -> Node33
-	Node34 [label=COLUMNAS]
-	Node29 -> Node34
-	Node35 [label=ID]
-	Node34 -> Node35
-	Node36 [label=info]
-	Node35 -> Node36
-	Node37 [label=NULLSFIRST]
-	Node34 -> Node37
-	Node38 [label="CREAR INDICE"]
-	Node0 -> Node38
-	Node39 [label="ID INDICE"]
-	Node38 -> Node39
-	Node40 [label=test3_desc_index]
-	Node39 -> Node40
-	Node41 [label="ID TABLA"]
-	Node38 -> Node41
-	Node42 [label=test3]
+	Node34 [label=CONDICION]
+	Node33 -> Node34
+	35 [label=Variable]
+	35 -> 36
+	36 [label=p]
+	Node34 -> 35
+	Node38 [label=CODIGO_GENERADO]
+	Node29 -> Node38
+	Node38 -> 39
+	39 [label=EJECUCION_FUNCION]
+	Node40 [label=cocoa]
+	39 -> Node40
+	Node41 [label=PARAMETROS]
+	39 -> Node41
+	Node42 [label=_EXPRESION_]
 	Node41 -> Node42
-	Node43 [label=COLUMNAS]
-	Node38 -> Node43
-	Node44 [label=ID]
-	Node43 -> Node44
-	Node45 [label=id]
-	Node44 -> Node45
-	Node46 [label=DESC]
-	Node43 -> Node46
-	Node47 [label=NULLSLAST]
-	Node43 -> Node47
-	Node48 [label="CREAR INDICE"]
-	Node0 -> Node48
-	Node49 [label="ID INDICE"]
-	Node48 -> Node49
-	Node50 [label=mytable_cat_1]
-	Node49 -> Node50
-	Node51 [label="ID TABLA"]
-	Node48 -> Node51
-	Node52 [label=mytable]
-	Node51 -> Node52
-	Node53 [label=COLUMNAS]
-	Node48 -> Node53
-	Node54 [label=ID]
-	Node53 -> Node54
-	Node55 [label=data]
-	Node54 -> Node55
-	Node56 [label="CREAR INDICE"]
-	Node0 -> Node56
-	Node57 [label="ID INDICE"]
-	Node56 -> Node57
-	Node58 [label=mytable_cat_2]
-	Node57 -> Node58
-	Node59 [label="ID TABLA"]
-	Node56 -> Node59
-	Node60 [label=mytable]
-	Node59 -> Node60
-	Node61 [label=COLUMNAS]
-	Node56 -> Node61
-	Node62 [label=ID]
-	Node61 -> Node62
-	Node63 [label=data]
-	Node62 -> Node63
+	Node43 [label=CONDICION]
+	Node42 -> Node43
+	44 [label=ExpresionValor]
+	44 -> 45
+	45 [label=a]
+	Node43 -> 44
+	Node47 [label=_EXPRESION_]
+	Node41 -> Node47
+	Node48 [label=CONDICION]
+	Node47 -> Node48
+	49 [label=ExpresionValor]
+	49 -> 50
+	50 [label=b]
+	Node48 -> 49
+	Node52 [label=END]
+	Node27 -> Node52
+	Node53 [label="language sql;"]
+	Node27 -> Node53
 }

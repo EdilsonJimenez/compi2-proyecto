@@ -4,6 +4,8 @@ from expresiones import *
 from sentencias import *
 import os
 import Temporales as T
+import sentencias as ss
+
 t_global = T.Temporales()
 cadena = ""
 cadenaFuncion = ""
@@ -56,6 +58,7 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i, Funciones_):
                 cadenaFuncion += self.t_Funciones_(i)
+
             elif isinstance(i, EjecucionFuncion):
                 print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
@@ -66,7 +69,6 @@ class Codigo3d:
         cadena += cadenaFuncion
 
 
-
     def Traducir2(self, instrucciones):
         global ts_global, cadenaFuncion
         cadenaT = ""
@@ -74,7 +76,7 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i, If_inst):
                 cadenaT += self.t_If(i)
-            elif isinstance(i,sentencias.EjecucionFuncion):
+            elif isinstance(i, ss.EjecucionFuncion):
                 cadenaT += self.t_llamadaFuncion(i)
             elif isinstance(i, Asignacion):
                 cadenaT += self.t_asignacion(i)
@@ -87,11 +89,16 @@ class Codigo3d:
             elif isinstance(i, CaseBuscado):
                 cadenaT += self.t_TraduccionCaseBuscado(i, "")
             else:
+                # try:
+                #     cadenaT += self.t_llamadaFuncion(i)
+                # except:
+                #     print("Esta mal algo ")
                 print(i)
                 print("NO TRADUCE2....")
 
             contador += 1
         return cadenaT
+
 
 
     def t_If(self, instancia):
