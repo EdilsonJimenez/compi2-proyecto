@@ -26,6 +26,7 @@ class Ast2:
         dot.render('AST', format='png', view=True)
         print('Hecho')
 
+
     def recorrerInstrucciones(self, sente, padre):
         global dot
         for i in sente:
