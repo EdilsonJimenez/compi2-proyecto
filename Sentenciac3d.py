@@ -58,7 +58,6 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i, Funciones_):
                 cadenaFuncion += self.t_Funciones_(i)
-
             elif isinstance(i, EjecucionFuncion):
                 print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
