@@ -58,6 +58,8 @@ class Codigo3d:
                 cadenaFuncion += self.t_Funciones_(i)
             elif isinstance(i, EjecucionFuncion):
                 cadena += self.t_llamadaFuncion(i)
+            elif isinstance(i, SentenciasSQL):
+                cadena += self.t_sentenciaSQL(i)
             else:
                 print(i)
                 print("NO TRADUCE....")
@@ -405,7 +407,15 @@ class Codigo3d:
         cadena += "ejecutarSQL()\n"
 
 
+    def t_sentenciaSQL(self, sentencia: SentenciasSQL):
+        global t_global
+        cadena = ""
+        v = t_global.varTemporal()
+        cadena += str(v) + " = \"" + sentencia.CadenaSQL + "\"\n"
+        cadena += "heap.append(" + str(v) + ")\n"
+        cadena += "F3D.ejecutarSQL()\n"
 
+        return cadena
 
 
 

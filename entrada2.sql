@@ -1,3 +1,10 @@
+CREATE DATABASE IF NOT EXISTS test
+    OWNER = root
+    MODE = 1;
+
+USE test;
+
+
 -- funcion 
 
 create or replace funtion cocoa (nombre integer, apellido integer) returns 90 
@@ -108,6 +115,7 @@ end language sql;
 cocoa(4,1);
 
   
+
 
 
 
