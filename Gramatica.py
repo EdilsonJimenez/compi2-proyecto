@@ -2673,6 +2673,11 @@ def p_instruccion_ifelse(t):
     'instruccion_if : IF expresion THEN CODEEPSILON ELSE CODEEPSILON END IF PUNTOCOMA'
     t[0] = If_inst(t[2], t[4], t[6])
 
+def p_instruccion_elsif1(t):
+    'instruccion_if : IF expresion THEN listas_elsif ELSE CODEEPSILON END IF PUNTOCOMA'
+    t[0] = If_inst(t[2], t[4], t[6])
+    print("****** LISTAS ELSIF")
+
 def p_listas_elsif(t):
     'listas_elsif : listas_elsif elsif'
     t[1].append(t[2])
@@ -2683,7 +2688,7 @@ def p_lista_elsif(t):
     t[0] = [t[1]]
 
 def p_elsif(t):
-    'elsif : ELSIF expresion THEN expresion'
+    'elsif : ELSIF expresion THEN CODEEPSILON'
     t[0] = t[1]
 
 
@@ -2914,7 +2919,7 @@ def p_Declaracion_VariablesAsignacion(t):
 
 #----------------------------------------------------------  SECCION DE RETORNO
 def p_Retorno_Cuerpo(t):
-    ' RETORNOS  :   RETURN expresion '
+    ' RETORNOS  :   RETURN expresion PUNTOCOMA'
     t[0] = RetornoFuncion(t[2])
 
 
@@ -3006,10 +3011,10 @@ def p_CodigoFunciones(t):
                         | salir
                         | continuar
                         | EJECUTARFUNCION PUNTOCOMA
-                        | INSTRUCCIONES
                         | RETORNOS '''
 
     t[0] = t[1]
+
 
 
 
@@ -3157,7 +3162,7 @@ def p_declaracion_asignacion_e(t):
     t[0] = None
 
 def p_instruccion_CODE(t):
-    '''CODE_  :      DQL_COMANDOS
+    '''CODE_  :       DQL_COMANDOS
                     | DDL_COMANDOS
                     | DML_COMANDOS
                     | COMENTARIOMULTI

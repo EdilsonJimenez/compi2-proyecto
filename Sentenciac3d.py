@@ -4,6 +4,8 @@ from expresiones import *
 from sentencias import *
 import os
 import Temporales as T
+import sentencias as ss
+
 t_global = T.Temporales()
 cadena = ""
 cadenaFuncion = ""
@@ -56,7 +58,9 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i, Funciones_):
                 cadenaFuncion += self.t_Funciones_(i)
+
             elif isinstance(i, EjecucionFuncion):
+                print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
             elif isinstance(i, SentenciasSQL):
                 cadena += self.t_sentenciaSQL(i)
@@ -67,13 +71,15 @@ class Codigo3d:
         cadena += cadenaFuncion
 
 
-
     def Traducir2(self, instrucciones):
         global ts_global, cadenaFuncion
         cadenaT = ""
+        contador = 0
         for i in instrucciones:
             if isinstance(i, If_inst):
                 cadenaT += self.t_If(i)
+            elif isinstance(i, ss.EjecucionFuncion):
+                cadenaT += self.t_llamadaFuncion(i)
             elif isinstance(i, Asignacion):
                 cadenaT += self.t_asignacion(i)
             elif isinstance(i, ForInstruccion):
@@ -85,9 +91,16 @@ class Codigo3d:
             elif isinstance(i, CaseBuscado):
                 cadenaT += self.t_TraduccionCaseBuscado(i, "")
             else:
+                # try:
+                #     cadenaT += self.t_llamadaFuncion(i)
+                # except:
+                #     print("Esta mal algo ")
+                print(i)
                 print("NO TRADUCE2....")
 
+            contador += 1
         return cadenaT
+
 
 
     def t_If(self, instancia):
@@ -144,13 +157,10 @@ class Codigo3d:
             p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'parametro', instancia.Nombre)
             t_global.agregarSimbolo(p)
 
-
-
         # Temporal de retorno
         cadenaF +="\n# Retorno \n"
         tempoP = t_global.varParametro()
-        cadenaF += str(tempoP) + "\n"
-
+        cadenaF +="global "+str(tempoP) + "\n"
         p = tipoSimbolo(str(tempoP), "return", "return", 1, 1, 'local', instancia.Nombre)
         t_global.agregarSimbolo(p)
 
@@ -162,7 +172,7 @@ class Codigo3d:
                 cadenaExpresion = ""
                 cadenaF += cadenaexp
                 tempo = t_global.varTemporal()
-                cadenaF += str(tempo) + " = " + str(r) + "\n"
+                cadenaF +=str(tempo) + " = " + str(r) + "\n"
                 v = tipoSimbolo(str(tempo), decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
                 t_global.agregarSimbolo(v)
 
@@ -180,22 +190,39 @@ class Codigo3d:
         return cadenaF
 
     def t_asignacion(self, asignacion):
-        global t_global, cadena, cadenaFuncion
-        # id, expresion
+        # id, expresion, llamarFuncion
+        global t_global, cadena, cadenaFuncion, ambitoFuncion
         cadenaAsi = ""
-        etiR = ""
-        for sim in t_global.tablaSimbolos:
-            s: tipoSimbolo = t_global.obtenerSimbolo(sim)
-            if s.nombre == asignacion.id and s.ambito == ambitoFuncion:
-                etiR = s.temporal
+        if isinstance(asignacion.expresion,EjecucionFuncion):
+            ambitoFuncion = asignacion.expresion.Id
 
-        cadenaexp = ""
-        exp,cadenaexp = self.procesar_expresion(asignacion.expresion, t_global)
-        cadenaExpresion = ""
-        cadenaAsi += cadenaexp
-        cadenaAsi += "\n" + str(etiR) + "=" + str(exp) + "\n"
+            for fun in t_global.tablaSimbolos:
+                f: tipoSimbolo = t_global.obtenerSimbolo(fun)
+                if f.ambito == asignacion.expresion.Id and f.rol == "local" and f.nombre == "return":
+                    etiR = f.temporal
 
-        return cadenaAsi
+            # buscamos temporal de la variable.
+            for var in t_global.tablaSimbolos:
+                t: tipoSimbolo = t_global.obtenerSimbolo(var)
+                if t.nombre == asignacion.id and t.ambito == ambitoFuncion:
+                    temp = t.temporal
+
+            cadenaAsi += "\n" + str(temp) + "=" + str(etiR) + "\n"
+            return cadenaAsi
+        else:
+            etiR = ""
+            for sim in t_global.tablaSimbolos:
+                s: tipoSimbolo = t_global.obtenerSimbolo(sim)
+                if s.nombre == asignacion.id and s.ambito == ambitoFuncion:
+                    etiR = s.temporal
+
+            cadenaexp = ""
+            exp,cadenaexp = self.procesar_expresion(asignacion.expresion, t_global)
+            cadenaExpresion = ""
+            cadenaAsi += cadenaexp
+            cadenaAsi += "\n" + str(etiR) + "=" + str(exp) + "\n"
+
+            return cadenaAsi
 
     def t_llamadaFuncion(self, llamada):
         # Id, Lista-Parametros
@@ -207,9 +234,6 @@ class Codigo3d:
         if llamada.Parametros != None:
             for param in llamada.Parametros:
                 c = ""
-                #a,b = self.procesar_aritmetica(2+2, t_global)
-                #print(a)
-                #print(b)
                 exp,c = self.procesar_expresion(param, t_global)
                 cadenaExpresion = ""
                 listaParametros.append(str(exp))
@@ -248,6 +272,10 @@ class Codigo3d:
         cadenaExpresion = ""
         cadenaRetorno += c
         cadenaRetorno += "\n"+str(r)+" = "+str(exp)+"\n"
+
+        anterior = "R"
+        cadenaRetorno += "\ngoto ."+anterior
+        cadenaRetorno += "\n\n"
 
         return cadenaRetorno
 

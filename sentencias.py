@@ -179,9 +179,15 @@ class ForeachInstruccion(Sentencia):
 #-------------------------  Ejecucion de una Funcion
 class EjecucionFuncion(Sentencia):
     def __init__(self, Id, Parametros):
+        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   FFFFFFFFFFFFFFFFFFFFFFFFFFf")
         self.Id         = Id
         self.Parametros = Parametros
 
+
+class Eje():
+    def __init__(self,id,param):
+        self.id = id
+        self.param = param
 
 #------------------------  Sentencias SQL
 class SentenciasSQL(Sentencia):
