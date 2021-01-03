@@ -1,7 +1,10 @@
 from Instruccion_pl import *
+import Instruccion_pl as OAs
 from Temporales import *
 from expresiones import *
 from sentencias import *
+from graphviz import Graph
+from graphviz import escape
 import os
 import Temporales as T
 import sentencias as ss
@@ -12,6 +15,9 @@ cadenaFuncion = ""
 cadenaExpresion = ""
 ambitoFuncion = ""
 
+# lista optimizacion
+listaOpt = []
+listaAsignaciones = []
 
 class Codigo3d:
 
@@ -30,7 +36,7 @@ class Codigo3d:
     def retorno(self):
         global cadena
         cadena += "\nlabel .R\n"
-        cadena += "u = stack[-1]"
+        cadena += "u = stack.pop()"
 
         cantidad = t_global.varFuncionAnterior()
         i = 1
@@ -58,12 +64,11 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i, Funciones_):
                 cadenaFuncion += self.t_Funciones_(i)
-
             elif isinstance(i, EjecucionFuncion):
-                print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
+            elif isinstance(i, Procedimientos_):
+                cadenaFuncion += self.t_Procedimientos_(i)
             else:
-                print(i)
                 print("NO TRADUCE....")
         cadena += "\n\ngoto .END\n"
         cadena += cadenaFuncion
@@ -76,6 +81,8 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i, If_inst):
                 cadenaT += self.t_If(i)
+            elif isinstance(i, Elsif_inst):
+                cadenaT += self.t_ELSIF(i)
             elif isinstance(i, ss.EjecucionFuncion):
                 cadenaT += self.t_llamadaFuncion(i)
             elif isinstance(i, Asignacion):
@@ -93,7 +100,6 @@ class Codigo3d:
                 #     cadenaT += self.t_llamadaFuncion(i)
                 # except:
                 #     print("Esta mal algo ")
-                print(i)
                 print("NO TRADUCE2....")
 
             contador += 1
@@ -105,7 +111,7 @@ class Codigo3d:
         global t_global, cadena, cadenaExpresion
         cadenaIf  =""
         cadenaIf += "# --------- IF --------------- \n"
-        print(instancia.condicion)
+        #print(instancia.condicion)
         condicion, cad = self.procesar_expresion(instancia.condicion, t_global)
         cadenaExpresion = ""
         cadenaIf += cad
@@ -119,7 +125,7 @@ class Codigo3d:
         cadenaIf += "\tgoto ."+falso+"\n"
 
         cadenaIf += "label ." + verdadero + "\n"
-        cadenaIf += "# ~verdadero~"+"\n"
+        cadenaIf += "print(\"verdadero\")"+"\n"
         # Si el if trae instruciones en IF
         if instancia.instIf != 0:
             cadenaIf += self.Traducir2(instancia.instIf)
@@ -128,12 +134,113 @@ class Codigo3d:
         # Si el if trae instruciones en ELSE
         if instancia.instElse != None:
             if instancia.instElse != 0:
-                cadenaIf += "# ~falso~" + "\n"
+                cadenaIf += "print(\"falso\")"+"\n"
                 cadenaIf += self.Traducir2(instancia.instElse)
         cadenaIf += "label ."+salto+"\n"
 
+        original = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
+        # OPTIMIZACION REGLA 4 y 5
+        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+            if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
+                co = "goto ."+verdadero
+                o = Optimizacion(original, co)
+                listaOpt.append(o)
+
+        original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
+        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+            if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
+                co = "goto ."+falso
+                o = Optimizacion(original2, co)
+                listaOpt.append(o)
+
         return cadenaIf
 
+    def t_ELSIF(self, instancia):
+        # condicion, instIf, listaElsif,instElse
+        global t_global, cadena, cadenaExpresion
+        cadenaIf  =""
+        cadenaIf += "# ---- IF-ELSIF ----\n"
+
+        # condicion if
+        #print(instancia.condicion)
+        condicion, cad = self.procesar_expresion(instancia.condicion, t_global)
+        cadenaExpresion = ""
+        cadenaIf += cad
+
+        # condiciones elsif
+        etiquetasCondiciones = []
+        for c in instancia.listaElsif:
+            # condicion, inst
+            condi, ca = self.procesar_expresion(c.condicion, t_global)
+            cadenaIf += ca
+            etiquetasCondiciones.append(condi)
+
+        # etiqueta verdadero, falso y salto
+        verdadero = str(t_global.etiquetaT())
+        falso = str(t_global.etiquetaT())
+        salto = str(t_global.etiquetaT())
+
+        cadenaIf += "if " + str(condicion) + ": \n"
+        cadenaIf += "\tgoto ."+verdadero+"\n"
+
+        # por cada elsif
+        listaEtiquetas = []
+        contador = 0
+        for e in instancia.listaElsif:
+            # condicion, inst
+            v = str(t_global.etiquetaT())
+            cadenaIf += "elif " + str(etiquetasCondiciones[contador]) + ": \n"
+            cadenaIf += "\tgoto ."+str(v)+"\n"
+            listaEtiquetas.append(v)
+            contador += 1
+
+        cadenaIf += "else : \n"
+        cadenaIf += "\tgoto ."+falso+"\n"
+
+        #Etiqueta e instruccion IF
+        cadenaIf += "\nlabel ." + verdadero + "\n"
+        cadenaIf += "print(\"verdadero\")"
+        # Si el if trae instruciones en IF
+        if instancia.instIf != 0:
+            cadenaIf += self.Traducir2(instancia.instIf)
+        cadenaIf += "goto ."+salto+"\n"+"\n"
+
+        #Etiquetas e instrucciones ELSIF
+        contador2 = 0
+        for e in instancia.listaElsif:
+            # condicion, inst
+            cadenaIf += "label ." + str(listaEtiquetas[contador2]) + " \n"
+            if e.inst != 0:
+                cadenaIf += "print(\"elsif\")"
+                cadenaIf += self.Traducir2(e.inst)
+            cadenaIf += "goto ." + salto+ "\n" + "\n"
+            contador2 += 1
+
+        #Etiqueta e instrucciones ELSE
+        cadenaIf += "label ." + falso + "\n"
+        # Si el if trae instruciones en ELSE
+        if instancia.instElse != None:
+            if instancia.instElse != 0:
+                cadenaIf += "print(\"falso\")"+"\n"
+                cadenaIf += self.Traducir2(instancia.instElse)
+        cadenaIf += "label ."+salto+"\n"
+
+        original = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
+        # OPTIMIZACION REGLA 4 y 5
+        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+            if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
+                co = "goto ."+verdadero
+                o = Optimizacion(original, co)
+                listaOpt.append(o)
+
+        original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
+        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+            if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
+                co = "goto ."+falso
+                o = Optimizacion(original2, co)
+                listaOpt.append(o)
+
+        return cadenaIf
 
     def t_Funciones_(self, instancia):
         global t_global, cadenaFuncion, ambitoFuncion, cadenaExpresion
@@ -144,10 +251,10 @@ class Codigo3d:
         t_global.agregarSimbolo(metodo)
         cadenaF += "label ."+fun+"\n"
         ambitoFuncion = str(instancia.Nombre)
-        cadenaF += "\n#**** Funcion *****\n"
+        cadenaF += "#**** Funcion *****\n"
         cadenaF +="\n# Parametros \n"
         for param in instancia.Parametros:
-            print(str(param.Nombre)+"---"+str(param.Tipo))
+            #print(str(param.Nombre)+"---"+str(param.Tipo))
 
             tempoP = t_global.varParametro()
             cadenaF += str(tempoP)+ "\n"
@@ -157,7 +264,7 @@ class Codigo3d:
 
         # Temporal de retorno
         cadenaF +="\n# Retorno \n"
-        tempoP = t_global.varParametro()
+        tempoP = t_global.varRetorno()
         cadenaF +="global "+str(tempoP) + "\n"
         p = tipoSimbolo(str(tempoP), "return", "return", 1, 1, 'local', instancia.Nombre)
         t_global.agregarSimbolo(p)
@@ -187,23 +294,83 @@ class Codigo3d:
 
         return cadenaF
 
+    def t_Procedimientos_(self, instancia):
+        global t_global, cadenaFuncion, ambitoFuncion, cadenaExpresion
+        # temporal, nombre, tipo, tam, pos, rol ,ambito
+        cadenaF = "\n"
+        fun = t_global.varFuncion()
+        metodo = tipoSimbolo(str(fun),instancia.Nombre, 'Integer', 0, 0, 'Metodo','')
+        t_global.agregarSimbolo(metodo)
+        cadenaF += "label ."+fun+"\n"
+        ambitoFuncion = str(instancia.Nombre)
+        cadenaF += "#**** Procedimiento *****\n"
+        cadenaF +="\n# Parametros \n"
+        for param in instancia.Parametros:
+            #print(str(param.Nombre)+"---"+str(param.Tipo))
+
+            tempoP = t_global.varParametro()
+            cadenaF += str(tempoP)+ "\n"
+
+            p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'parametro', instancia.Nombre)
+            t_global.agregarSimbolo(p)
+
+        # Temporal de retorno
+        cadenaF +="\n# Retorno \n"
+        tempoP = t_global.varRetorno()
+        cadenaF +="global "+str(tempoP) + "\n"
+        p = tipoSimbolo(str(tempoP), "return", "return", 1, 1, 'local', instancia.Nombre)
+        t_global.agregarSimbolo(p)
+
+        cadenaF += "\n# Declaraciones \n"
+        for decla in instancia.Declaraciones:
+            if decla != None:
+                cadenaexp = ""
+                r,cadenaexp = self.procesar_expresion(decla.expresion, t_global)
+                cadenaExpresion = ""
+                cadenaF += cadenaexp
+                tempo = t_global.varTemporal()
+                cadenaF +=str(tempo) + " = " + str(r) + "\n"
+                v = tipoSimbolo(str(tempo), decla.id, decla.tipo, 1, 1, 'local', instancia.Nombre)
+                t_global.agregarSimbolo(v)
+
+        #instrucciones
+        codigo: Code_Funciones = instancia.Codigo
+        cadenaF += self.Traducir2(codigo.Codigo)
+
+        #llamamos al Recorrido del cuerpo
+        #cadenaF += self.RecorrerCuerpoCodigo(codigo.Codigo,instancia.Nombre)
+
+        anterior = "R"
+        cadenaF += "\ngoto ."+anterior
+        cadenaF += "\n\n"
+
+        return cadenaF
+
+
     def t_asignacion(self, asignacion):
         # id, expresion, llamarFuncion
-        global t_global, cadena, cadenaFuncion, ambitoFuncion
+        global t_global, cadena, cadenaFuncion, ambitoFuncion, cadenaExpresion, listaAsignaciones, listaOpt
         cadenaAsi = ""
         if isinstance(asignacion.expresion,EjecucionFuncion):
+            local = ambitoFuncion
             ambitoFuncion = asignacion.expresion.Id
 
+            etiR = "-"
             for fun in t_global.tablaSimbolos:
                 f: tipoSimbolo = t_global.obtenerSimbolo(fun)
                 if f.ambito == asignacion.expresion.Id and f.rol == "local" and f.nombre == "return":
                     etiR = f.temporal
 
+
+            ambitoFuncion = local
             # buscamos temporal de la variable.
+            temp = "-"
             for var in t_global.tablaSimbolos:
                 t: tipoSimbolo = t_global.obtenerSimbolo(var)
                 if t.nombre == asignacion.id and t.ambito == ambitoFuncion:
                     temp = t.temporal
+
+            cadenaAsi += self.t_llamadaFuncion(asignacion.expresion)
 
             cadenaAsi += "\n" + str(temp) + "=" + str(etiR) + "\n"
             return cadenaAsi
@@ -214,19 +381,23 @@ class Codigo3d:
                 if s.nombre == asignacion.id and s.ambito == ambitoFuncion:
                     etiR = s.temporal
 
-            cadenaexp = ""
             exp,cadenaexp = self.procesar_expresion(asignacion.expresion, t_global)
-            cadenaExpresion = ""
             cadenaAsi += cadenaexp
             cadenaAsi += "\n" + str(etiR) + "=" + str(exp) + "\n"
 
+            #insertando asignaciones
+            objeto = OAs.OptAsignacion(str(etiR), str(exp))
+            listaAsignaciones.append(objeto)
+
+            cadenaExpresion = ""
             return cadenaAsi
 
     def t_llamadaFuncion(self, llamada):
         # Id, Lista-Parametros
         global t_global, cadena, ambitoFuncion, stack, cadenaExpresion
         cadenallamada  = ""
-
+        cadenallamada += "#Llamada a funcion o procedimiento."
+        temp = ambitoFuncion
         ambitoFuncion = llamada.Id
         listaParametros = []
         if llamada.Parametros != None:
@@ -235,15 +406,15 @@ class Codigo3d:
                 exp,c = self.procesar_expresion(param, t_global)
                 cadenaExpresion = ""
                 listaParametros.append(str(exp))
-        print("lista")
-        print(listaParametros)
+        #print("lista")
+        #print(listaParametros)
 
 
         cont = 0
         for sim in t_global.tablaSimbolos:
             s: tipoSimbolo = t_global.obtenerSimbolo(sim)
             if s.ambito == ambitoFuncion and str(s.rol) == "parametro":
-                print(str(cont))
+                #print("cccccccccccccccccccccccccccccccccccccccccccccccccc"+str(cont))
                 cadenallamada += "\n"+str(s.temporal) +"="+ str(listaParametros[cont])
                 cont += 1
 
@@ -256,11 +427,13 @@ class Codigo3d:
                 cadenallamada += "\ngoto ."+str(m.temporal)
         cadenallamada += "\nlabel ."+salto
 
+        ambitoFuncion = temp
+        del listaParametros[:]
         return cadenallamada
 
     def t_retornoFuncion(self, instancia):
         global ambitoFuncion, t_global, cadenaExpresion
-        cadenaRetorno = " # return \n"
+        cadenaRetorno = "\n\n# Return"
         for item in t_global.tablaSimbolos:
             v: tipoSimbolo = t_global.obtenerSimbolo(item)
             if v.nombre == "return" and v.ambito == ambitoFuncion:
@@ -272,7 +445,7 @@ class Codigo3d:
         cadenaRetorno += "\n"+str(r)+" = "+str(exp)+"\n"
 
         anterior = "R"
-        cadenaRetorno += "\ngoto ."+anterior
+        cadenaRetorno += "goto ."+anterior
         cadenaRetorno += "\n\n"
 
         return cadenaRetorno
@@ -477,7 +650,7 @@ class Codigo3d:
         elif isinstance(expresiones, Absoluto):
             try:
                 return procesar_expresion(expresiones.variable, ts)
-            # return abs(procesar_expresion(expresiones.variable,ts))
+                # return abs(procesar_expresion(expresiones.variable,ts))
             except:
                 print('Error no se puede aplicar abs() por el tipo de dato')
                 # consola.insert('end','>>Error: No se puede aplicar abs() al tipo de dato\n>>')
@@ -488,25 +661,87 @@ class Codigo3d:
             print(expresiones)
             print('Error:Expresion no reconocida')
 
+
     def procesar_aritmetica(self, expresion, ts):
+        global listaOpt
         val, cad1 = self.procesar_expresion(expresion.exp1, ts)
         val2, cad2 = self.procesar_expresion(expresion.exp2, ts)
+
+        sval1 = str(val2)
+        sval2 = str(val)
 
         if expresion.operador == OPERACION_ARITMETICA.MAS:
             v = t_global.varTemporal()
             cadena = v + "= "+str(val)+" + "+str(val2) + "\n"
+
+            op = ""
+            if sval1 == "0" or sval2 == "0":
+                if v == sval1 or v == sval2:
+                    op = "# Se elimina la instruccion."
+                else:
+                    if sval1 == "0":
+                        op = v + "= "+sval2
+                    else:
+                        op = v + "= " + sval2
+            o = Optimizacion(cadena, op)
+            listaOpt.append(o)
+
             return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.MENOS:
             v = t_global.varTemporal()
             cadena = v + "= " + str(val) + " - " + str(val2) + "\n"
+
+            op = ""
+            if sval1 == "0" or sval2 == "0":
+                if v == sval1 or v == sval2:
+                    op = "# Se elimina la instruccion."
+                else:
+                    if sval1 == "0":
+                        op = v + "= "+sval2
+                    else:
+                        op = v + "= " + sval2
+            o = Optimizacion(cadena, op)
+            listaOpt.append(o)
+
             return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.MULTI:
             v = t_global.varTemporal()
             cadena = v + "= " + str(val) + " * " + str(val2) + "\n"
+
+            op = ""
+            if sval1 == "1" or sval2 == "1":
+                if v == sval1 or v == sval2:
+                    op = "# Se elimina la instruccion."
+                else:
+                    if sval1 == "1":
+                        op = v + "= "+sval2
+                    else:
+                        op = v + "= " + sval2
+            elif sval1 == "0" or sval2 == "0":
+                op = v + "= 0"
+            o = Optimizacion(cadena, op)
+            listaOpt.append(o)
+
+
             return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.DIVIDIDO:
             v = t_global.varTemporal()
             cadena = v + "= " + str(val) + " / " + str(val2) + "\n"
+
+            op = ""
+            if sval1 == "1" or sval2 == "1":
+                if v == sval1 or v == sval2:
+                    op = "# Se elimina la instruccion."
+                else:
+                    if sval1 == "1":
+                        op = v + "= "+sval2
+                    else:
+                        op = v + "= " + sval2
+            elif sval2 == "0":
+                op = v + "= 0"
+            o = Optimizacion(cadena, op)
+            listaOpt.append(o)
+
             return v, cadena
         elif expresion.operador == OPERACION_ARITMETICA.RESIDUO:
             v = t_global.varTemporal()
@@ -521,7 +756,7 @@ class Codigo3d:
         # OPTIMIZACION - AHORRO DE 2 LINEAS........................................................
         val, cad1 = self.procesar_expresion(expresion.exp1, ts)
         val2, cad2 = self.procesar_expresion(expresion.exp2, ts)
-        print("valores"+str(val)+str(val2))
+        #print("valores"+str(val)+str(val2))
         if expresion.operador == OPERACION_RELACIONAL.IGUALQUE:
             v = t_global.varTemporal()
             cadena = v + "= " + str(val) + " == " + str(val2) + "\n"
@@ -564,13 +799,12 @@ class Codigo3d:
 
     def procesar_variable(self, tV, ts):
         global t_global, ambitoFuncion
-        print("procesar variable")
         r = ""
         for item in t_global.tablaSimbolos:
             v: tipoSimbolo = t_global.obtenerSimbolo(item)
-            print(str(v.nombre)+"<>"+str(tV.id)+"-"+str(v.ambito)+"<>"+ambitoFuncion)
+            #print(str(v.nombre)+"<>"+str(tV.id)+"-"+str(v.ambito)+"<>"+ambitoFuncion)
             if v.nombre == tV.id and v.ambito == ambitoFuncion:
-                print(str(v.temporal))
+                #print(str(v.temporal))
                 r = str(v.temporal)
                 return r,""
         return r,""
@@ -581,3 +815,36 @@ class Codigo3d:
         f = open('./intermedio.py', 'w')
         f.write(cadena)
         f.close()
+
+
+
+# ========== REPORTE OPTIMIZACION =================== #
+def reporte_optimizacion():
+    global listaOpt, listaAsignaciones
+    cadena = ""
+    print("------------REPORTE OPTIMIZACION---------------")
+    SymbolT2 = Graph('g', filename='reporteOptimizacion.gv', format='png',
+                     node_attr={'shape': 'plaintext', 'height': '.1'})
+
+    print("ASIGNACIONES -- ")
+    for i in listaAsignaciones:
+        print(str(i.izq)+" = "+str(i.der))
+
+
+    for item in listaAsignaciones:
+        for asi in listaAsignaciones:
+            if str(item.der) == str(asi.izq) and str(item.izq) == str(asi.der):
+                print("optimiza 1")
+                op = str(item.der) + "=" + str(asi.der) + "-"
+                op += str(item.izq) + "=" + str(asi.izq)
+                opt = str(item.der) + "=" + str(asi.der)
+                o = Optimizacion(op, opt)
+                listaOpt.append(o)
+                break;
+
+
+    for o in listaOpt:
+        cadena += '\n <TR><TD>'+o.original+'</TD><TD>'+o.optimizado+'</TD></TR>'
+
+    SymbolT2.node('table', '<<TABLE><TR><TD>CODIGO</TD><TD>OPTIMIZACION</TD></TR>' + cadena + '</TABLE>>')
+    SymbolT2.render('g', format='png', view=True)
