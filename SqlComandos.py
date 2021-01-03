@@ -16,6 +16,8 @@ class SqlComandos:
         i = self.sentencia
         if isinstance(i, DropTable):
             print("Si es un drop table *")
+            self.CadenaSQL = self.grafoDropTable(i.id)
+
 
 
         elif isinstance(i, Select):
@@ -36,7 +38,7 @@ class SqlComandos:
 
         elif isinstance(i, Insert_Datos):
             print("Si es un drop Insert *")
-
+            self.CadenaSQL = self.grafoInsert_Data(i.id_table, i.valores)
             #self.grafoInsert_Data(i.id_table, i.valores)
         # -----------------------------------
 
@@ -65,6 +67,8 @@ class SqlComandos:
 
         elif isinstance(i, ShowDatabases):
             print("Es Una Instruccion Showdatabases")
+            self.CadenaSQL = self.grafoShowDatabases(i.cadenaLike)
+
             #self.grafoShowDatabases(i.cadenaLike)
 
         elif isinstance(i, AlterDataBase):
@@ -797,7 +801,6 @@ class SqlComandos:
             else:
                 Cadenita += " " + str(campo.tipo.valor)+ " "
                 Cadenita +=  " " +self.cadena_expresion(campo.tipo.expresion)+" "
-
         else:
             Cadenita += " " + str(campo.tipo)+" "
 
@@ -813,10 +816,7 @@ class SqlComandos:
             contador+=1
 
         Cadenita += " \n"
-
         return  Cadenita
-
-
 
 
     def grafoConstraintTabla(self, contraint: constraintTabla):
@@ -837,8 +837,6 @@ class SqlComandos:
             Cadenita += " " + self.grafoListaIDs(contraint.referencia)+" "
 
         return Cadenita
-
-
 
 
     def grafoInhertis(self, id):
@@ -878,17 +876,75 @@ class SqlComandos:
 
 
 
+# ===========================================================================   GENERACION CONDIGO INSERT TABLE
+
+    def grafoInsert_Data(self, id, valores):
+        Cadenita = " INSERT INTO  "
+        Contador  = 0
+
+        Contador1 = 0
+
+        for i in id:
+            if(Contador+1 != len(id)):
+                Cadenita += " " + i.val + ", "
+            else:
+                Cadenita += " " + i.val + " "
+            Contador+=1
+
+        Cadenita += " values( "
+
+        # GRAFICANDO EXPRESION===========================
+
+        for i in valores:
+
+            if(Contador1+1 != len(valores)):
+                Cadenita += " " +str(self.cadena_expresion(i))+", "
+            else:
+                Cadenita += " " + str(self.cadena_expresion(i)) + " "
+
+            Contador1+=1
+
+        Cadenita += "  ); \n"
+
+        return  Cadenita
 
 
 
+# ===========================================================================   GENERACION CONDIGO DROP TABLE
+
+    def grafoDropTable(self, id):
+
+        Cadenita = "Drop table "
+        Contador = 0
+
+        for i in id:
+            if(Contador+1!=len(id)):
+                Cadenita += " " + i.val +", "
+            else:
+                Cadenita += " " + i.val + "  "
+
+            Contador+=1
+
+
+        Cadenita+=";"
+        return Cadenita
+
+
+# ===========================================================================   GENERACION CONDIGO SHOW DATABASE
 
 
 
+    def grafoShowDatabases(self, cadenaLike):
+        bandera = False
+        Cadenita = "SHOW DATABASES "
+        if cadenaLike != 0:
+            Cadenita += " " +str(cadenaLike) + "; "
+            bandera = True
 
+        if(bandera != True):
+            Cadenita+= "; "
 
-
-
-
+        return Cadenita
 
 
 

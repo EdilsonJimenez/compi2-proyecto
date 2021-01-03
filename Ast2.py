@@ -1049,7 +1049,6 @@ class Ast2:
     # Recorrido de la lista de de Los Posibles Cuerpos
     # ----------------------------------------------------------------------------------------------------------
 
-
     def RecorrerListaCuerpos(self, Groups, padre):
         for i in Groups:
             if isinstance(i, Cuerpo_TipoWhere):
@@ -1509,6 +1508,8 @@ class Ast2:
             self.inc()
             dot.node('Node' + str(self.i), i.val)
             dot.edge('Node' + str(nuevoPadre2), 'Node' + str(self.i))
+
+
 
     # ----------------------------------------------------------------------------------------------------------
     # -----------------------GRAFICAR INSERTAR-------------------------------------------------------------------
@@ -2089,6 +2090,7 @@ class Ast2:
             self.inc()
             dot.node('Node' + str(self.i), 'LIKE: ' + str(cadenaLike))
             dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
 
     def grafoAlterDataBase(self, idBD, opcion, padre):
         global dot, i
