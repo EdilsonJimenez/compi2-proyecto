@@ -1854,7 +1854,7 @@ def p_instruccion_dml_comandos_ALTER_TABLE5(t):
 def p_instruccion_dml_comandos_ALTER_TABLE6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD CONSTRAINT ID FOREIGN KEY PARIZQ ID PARDER REFERENCES ID PARIZQ ID PARDER PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
-    t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[10]), ExpresionValor(t[13]), t[6])
+    t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[10]), ExpresionValor(t[13]), t[6], ExpresionValor(t[15]))
     rep_gramatica('\n <TR><TD> DML_COMANDOS →    ALTER TABLE ID  ADD CONSTRAINT ID FOREIGN KEY PARIZQ ID PARDER REFERENCES ID PARIZQ ID PARDER PUNTOCOMA  </TD><TD> t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[10]), ExpresionValor(t[13])) </TD></TR>')
 
 
@@ -1862,7 +1862,7 @@ def p_instruccion_dml_comandos_ALTER_TABLE6(t):
 def p_instruccion_dml_comandos_ALTER_TABLEF6(t):
     'DML_COMANDOS       : ALTER TABLE ID  ADD  FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA'
     print('\n' + str(t[0]) + '\n')
-    t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]), None)
+    t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11]), None, None)
     rep_gramatica('\n <TR><TD> DML_COMANDOS →    ALTER TABLE ID  ADD  FOREIGN KEY PARIZQ ID PARDER REFERENCES ID   PUNTOCOMA  </TD><TD>t[0] = Alter_table_Add_Foreign_Key(t[3], ExpresionValor(t[8]), ExpresionValor(t[11])) </TD></TR>')
 
 
@@ -2653,9 +2653,12 @@ def p_instruccion_ifelse(t):
     t[0] = If_inst(t[2], t[4], t[6])
 
 def p_instruccion_elsif1(t):
-    'instruccion_if : IF expresion THEN listas_elsif ELSE CODEEPSILON END IF PUNTOCOMA'
-    t[0] = If_inst(t[2], t[4], t[6])
-    print("****** LISTAS ELSIF")
+    'instruccion_if : IF expresion THEN CODEEPSILON listas_elsif END IF PUNTOCOMA'
+    t[0] = Elsif_inst(t[2], t[4], t[5], None)
+
+def p_instruccion_elsif2(t):
+    'instruccion_if : IF expresion THEN CODEEPSILON listas_elsif ELSE CODEEPSILON END IF PUNTOCOMA'
+    t[0] = Elsif_inst(t[2], t[4], t[5], t[6])
 
 def p_listas_elsif(t):
     'listas_elsif : listas_elsif elsif'
@@ -2668,7 +2671,7 @@ def p_lista_elsif(t):
 
 def p_elsif(t):
     'elsif : ELSIF expresion THEN CODEEPSILON'
-    t[0] = t[1]
+    t[0] = elsif_obj(t[2], t[4])
 
 
 # def p_expresion_subquery(t):
