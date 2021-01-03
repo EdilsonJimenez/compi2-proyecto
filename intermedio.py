@@ -314,3 +314,88 @@ def main():
 
 
 
+	#Llamada a funcion o procedimiento.
+	stack.append("F2")
+
+	label .F2
+
+	goto .END
+
+	label .F1
+	#**** Funcion *****
+
+	# Parametros 
+	p0
+
+	# Retorno 
+	global r0
+
+	# Declaraciones 
+	t0 = 15
+	t1 = 0
+	t2 = 15
+	t3 = 0
+	t4 = 15
+	t5 = 0
+	t6 = 15
+	t7 = 0
+	t8 = 15
+	t9 = 0
+	#Fin declaraciones
+
+	t10 = t1 + 0
+	t1 = t10
+
+	t11 = t2 - 0
+	t2 = t11
+
+	t12 = t3 * 1
+	t3 = t12
+
+	t13 = t4 / 1
+	t4 = t13
+
+	t14 = t9 + 0
+	t5 = t14
+
+	t15 = t9 - 0
+	t6 = t15
+
+	t16 = t9 * 1
+	t7 = t16
+
+	t17 = t9 / 1
+	t8 = t17
+
+	# ------ If ------- 
+	t18 = 100 == 100
+	if t18: 
+		goto .L0
+	else: 
+		goto .L1
+	label .L0
+	print("verdadero")
+	t0 = 111
+
+	goto .L2
+
+	label .L1
+	label .L2
+
+
+	# Return
+	r0 = t0
+	goto .R
+
+
+	goto .R
+
+
+	label .R
+	u = stack.pop()
+	if u == "F1": 
+		goto .F1
+	if u == "F2": 
+		goto .F2
+
+	label .END
