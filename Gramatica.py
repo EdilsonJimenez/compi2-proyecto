@@ -466,7 +466,7 @@ codigo3d = ''
 
 def p_init(t):
     'INICIO     : INSTRUCCIONES'
-    global listaglobalAST, codigo3d
+    global listaglobalAST
     t[0] = t[1]
     listaglobalAST = t[0]
     #PRIMERA PASADA
@@ -475,10 +475,7 @@ def p_init(t):
     #SEGUNDA PASADA
     arbolito2 = interprete2(t[0])
     arbolito2.ejecucion()
-    codigo3d = '========================= CODIGO 3D =================================\n' + codigo3d
-    codigo3d = codigo3d + "from Instruccion import * \n"
 
-    print(codigo3d)
 
     arbol = Codigo3d()
     arbol.Traducir(t[0])
@@ -487,16 +484,19 @@ def p_init(t):
 
 def p_instrucciones_lista(t):
     'INSTRUCCIONES     : INSTRUCCIONES INSTRUCCION'
-    
+    global codigo3d
     t[1].append(t[2])
     t[0] = t[1]
+
     rep_gramatica('<TR><TD> INSTRUCCIONES → INSTRUCCIONES INSTRUCCION </TD><TD> INSTRUCCIONES=t[1].append(t[2]) <BR/> INSTRUCCIONES=t[1] </TD></TR>')
 
 
 
 def p_instrucciones_instruccion(t) :
     'INSTRUCCIONES    : INSTRUCCION'
+    global codigo3d
     t[0] = [t[1]]
+
     rep_gramatica('\n <TR><TD> INSTRUCCIONES → INSTRUCCION </TD><TD> INSTRUCCIONES=t[1] </TD></TR>')
 
 
@@ -518,12 +518,9 @@ def p_instruccion(t):
 # ==================== USE DATABASE =====================================
 def p_instruccion_Use_database(t):
     'DQL_COMANDOS       : USE ID PUNTOCOMA'
-    global baseActual, codigo3d
+    global baseActual
     baseActual = str(t[2])
     t[0] = useClase(t[2])
-
-    codigo3d = codigo3d + 't0 = useClase("' + t[2] + '")\n'
-    codigo3d = codigo3d + 't0.Ejecutar()\n'
 
     rep_gramatica('\n <TR><TD> DQL_COMANDOS → USE ID PUNTOCOMA </TD><TD> DQL_COMANDOS=t[2] </TD></TR>')
 
@@ -531,6 +528,7 @@ def p_instruccion_Use_database(t):
 
 def p_instruccion_dql_comandos(t):
     'DQL_COMANDOS       : SELECT LISTA_CAMPOS FROM NOMBRES_TABLAS CUERPOS UNIONS'
+    global cadena
     t[0]= Select2(t[6],t[5],t[2],t[4])
     rep_gramatica('\n <TR><TD> DQL_COMANDOS → SELECT LISTA_CAMPOS from  NOMBRES_TABLAS  CUERPOS   </TD><TD> t[0] = Select2(t[6],t[5],t[2],t[4])) </TD></TR>')
 
@@ -1934,10 +1932,8 @@ def p_comando_ddl(t):
 
 def p_create_database(t):
     'CREATE_DATABASE : CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE PUNTOCOMA'
-    global codigo3d
     t[0] = CreateDataBase(t[2], t[4], t[5], t[6], t[7])
-    codigo3d = codigo3d +  't1 = CreateDataBase()\n'
-    codigo3d = codigo3d + 't1.Ejecutar()\n'
+
     rep_gramatica('\n <TR><TD> CREATE_DATABASE → CREATE REPLACE_OP DATABASE IF_NOT_EXISTIS ID OWNER_DATABASE MODE_DATABASE PUNTOCOMA  </TD><TD> t[0] = CreateDataBase(t[2], t[4], t[5], t[6], t[7])  </TD></TR>')
 
 

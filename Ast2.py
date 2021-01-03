@@ -26,6 +26,7 @@ class Ast2:
         dot.render('AST', format='png', view=True)
         print('Hecho')
 
+
     def recorrerInstrucciones(self, sente, padre):
         global dot
         for i in sente:
@@ -148,6 +149,7 @@ class Ast2:
         if isinstance(i, Select):
             print("Es Una Instruccion Select ")
             self.GrafoSelect(i.Lista_Campos, i.Nombres_Tablas, i.unionn, padre)
+
         elif isinstance(i, Select2):
             print("Es Una Instruccion Select 2")
             self.GrafoSelect2(i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn, padre)
@@ -224,6 +226,7 @@ class Ast2:
             dot.edge(padre, 'Node' + str(self.i))
             dot.edge('Node' + str(self.i), str(nuevoPadre + 1))
             self.graficar_expresion(Columna)
+
 
         elif ((NombreT != "") and (Columna != "")):
             self.inc()
@@ -449,6 +452,8 @@ class Ast2:
     # Objeto Que accede "AccesoSubConsultas"  AnteQuery=[], Query=[], Lista_Alias=[]
     # Nombres Lista Accedidos  Con Las Subconsultas
 
+
+
     def GrafoAccesoSubConsultas(self, AnteQuery, Query, Lista_Alias, padre):
         print(AnteQuery, Query, Lista_Alias)
         # AnteQuery ( query )
@@ -540,7 +545,7 @@ class Ast2:
     def GrafoAccesoUniones(self, Reservada, Comportamiento, Consulta, padre):
 
         # Comportamiento Reservada Consulta
-        if ((Comportamiento != "") and (Reservada != "") and (Consulta == False)):
+        if ((Comportamiento != "") and (Reservada != "") and (Consulta != False)):
             self.inc()
             nuevoPadre = self.i
             dot.node('Node' + str(self.i), "Acceso_UNION")
@@ -632,9 +637,10 @@ class Ast2:
         # Recorrer la de Expresiones
         self.Recorrer_CondicioneSLista(ListaExpresiones, 'Node' + str(self.i))
 
+
+
     # Recorriendo tipos de when : Objeto al que Accesa "TiposWhen"  : Campos: Reservada,Reservada2,Reservada3,ListaExpresiones1=[],ListaExpresiones2=[],ListaExpresiones3=[])
-    def GrafoTiposWhen(self, Reservada, ListaExpresiones1, Reservada2, ListaExpresiones2, Reservada3, ListaExpresiones3,
-                       padre):
+    def GrafoTiposWhen(self, Reservada, ListaExpresiones1, Reservada2, ListaExpresiones2, Reservada3, ListaExpresiones3,padre):
 
         self.inc()
         nuevoPadre = self.i
@@ -869,6 +875,9 @@ class Ast2:
 
         self.Recorrer_Condiciones(Lista, 'Node' + str(nuevoPadre))
 
+
+
+
     # Recorremos Expresion y mandamos el nodo aumentando el padre
     def Recorrer_Condiciones(self, Lista, padre):
 
@@ -1033,8 +1042,14 @@ class Ast2:
         else:
             print("No Ningun Tipo")
 
+
+
+
+
     # Recorrido de la lista de de Los Posibles Cuerpos
     # ----------------------------------------------------------------------------------------------------------
+
+
     def RecorrerListaCuerpos(self, Groups, padre):
         for i in Groups:
             if isinstance(i, Cuerpo_TipoWhere):
@@ -1061,6 +1076,9 @@ class Ast2:
                 self.GrafoCuerpo_Condiciones(i.Cuerpo, padre)
             else:
                 print("No Ningun Tipo")
+
+
+
 
     def RecorrerListaWhens(self, Lista, padre):
         for i in Lista:
@@ -1106,6 +1124,8 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         # Recorrer lista de uniones
         self.RecorrerListaUniones(Uniones, 'Node' + str(self.i))
+
+
 
     def GrafoSelect2(self, ListaCampos, NombresTablas, cuerpo, Uniones, padre):
         global dot
@@ -1352,6 +1372,8 @@ class Ast2:
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
         self.RecorrerListaCuerpos(cuerpo, 'Node' + str(self.i))
 
+
+
     def GrafoGroupBy(self, Lista_Campos, Condiciones, padre):
         global dot
         # Group by ListaCampos Having Condiciones
@@ -1458,6 +1480,9 @@ class Ast2:
         self.inc()
         dot.node('Node' + str(self.i), Expresion_Numerica)
         dot.edge('Node' + str(nuevoPadre), 'Node' + str(self.i))
+
+
+
 
     # ----------------------------------------------------------------------------------------------------------
     # ----------------------------------------------------------------------------------------------------------
@@ -2015,6 +2040,10 @@ class Ast2:
         dot.node('Node' + str(self.i), 'Id: ' + id)
         dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
+
+
+
+#------------------  Crear Data Base
     def grafoCreateDataBase(self, replace, exists, idBase, idOwner, Modo, padre):
         global dot, i
 
@@ -2636,7 +2665,6 @@ class Ast2:
         self.RecorrerListadeCampos(listaCampos, 'Node' + str(self.i))
 
 
-
     def grafoCaseSimple(self, casesimple, padre):
         global dot, i
 
@@ -2932,7 +2960,7 @@ class Ast2:
         # Recorrer Comandos Sql
         if(isinstance(Instrucciones ,list)):
             if(Instrucciones != False):
-                self.recorrerInstrucciones(Instrucciones[0], 'Node' + str(self.i))
+                self.recorrerInstrucciones(Instrucciones, 'Node' + str(self.i))
             else:
                 print("No hay ")
         else:

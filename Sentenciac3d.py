@@ -5,9 +5,13 @@ from expresiones import *
 from sentencias import *
 from graphviz import Graph
 from graphviz import escape
+
 import os
 import Temporales as T
 import sentencias as ss
+from SqlComandos import SqlComandos as SQL
+
+
 
 t_global = T.Temporales()
 cadena = ""
@@ -62,14 +66,25 @@ class Codigo3d:
     def Traducir(self, instrucciones):
         global ts_global, cadena, cadenaFuncion
         for i in instrucciones:
-            if isinstance(i, Funciones_):
+            if isinstance(i,Funciones_):
                 cadenaFuncion += self.t_Funciones_(i)
+            elif isinstance(i,Procedimientos_):
+                print("Procedimientos... ")
+
             elif isinstance(i, EjecucionFuncion):
                 cadena += self.t_llamadaFuncion(i)
             elif isinstance(i, Procedimientos_):
                 cadenaFuncion += self.t_Procedimientos_(i)
-            else:
-                print("NO TRADUCE....")
+            else:        
+                aux = SQL(i)
+                aux.generarCadenaSQL()
+                if aux.CadenaSQL is not None:
+                    print("<<<<<<<<<<<<<<><<<<><><><><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>><,,Aqui estamos esto es >>>>>>>>>>>>>>")
+                    print(str(aux.CadenaSQL))
+                    cadena += "\n" + self.t_sentenciaSQL(aux)
+
+                else:
+                    print("NO TRADUCE....")
         cadena += "\n\ngoto .END\n"
         cadena += cadenaFuncion
 
@@ -339,6 +354,8 @@ class Codigo3d:
 
         #llamamos al Recorrido del cuerpo
         #cadenaF += self.RecorrerCuerpoCodigo(codigo.Codigo,instancia.Nombre)
+        self.Traducir(instancia.Instrucciones)
+
 
         anterior = "R"
         cadenaF += "\ngoto ."+anterior
@@ -606,7 +623,15 @@ class Codigo3d:
         cadena += "ejecutarSQL()\n"
 
 
+    def t_sentenciaSQL(self, sentencia: SQL):
+        global t_global
+        cadena = ""
+        v = t_global.varTemporal()
+        cadena += str(v) + " = \"" + sentencia.CadenaSQL + "\"\n"
+        cadena += "heap.append(" + str(v) + ")\n"
+        cadena += "F3D.ejecutarSQL()\n"
 
+        return cadena
 
 
 
