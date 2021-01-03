@@ -2040,6 +2040,10 @@ class Ast2:
         dot.node('Node' + str(self.i), 'Id: ' + id)
         dot.edge('Node' + str(nuevop), 'Node' + str(self.i))
 
+
+
+
+#------------------  Crear Data Base
     def grafoCreateDataBase(self, replace, exists, idBase, idOwner, Modo, padre):
         global dot, i
 
@@ -2659,7 +2663,6 @@ class Ast2:
 
         # dot.edge('Node' + str(nuevoPadre), str(self.i + 1))
         self.RecorrerListadeCampos(listaCampos, 'Node' + str(self.i))
-
 
 
     def grafoCaseSimple(self, casesimple, padre):

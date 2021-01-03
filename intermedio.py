@@ -7,4 +7,3 @@ stack = []
 def main(): 
 	global heap
 	global stack
-

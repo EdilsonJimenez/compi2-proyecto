@@ -3,8 +3,6 @@ from Temporales import *
 from expresiones import *
 from sentencias import *
 
-from SqlComandos import SqlComandos as ff
-
 import os
 import Temporales as T
 import sentencias as ss
@@ -62,8 +60,11 @@ class Codigo3d:
     def Traducir(self, instrucciones):
         global ts_global, cadena, cadenaFuncion
         for i in instrucciones:
-            if isinstance(i, Funciones_):
+            if isinstance(i,Funciones_):
                 cadenaFuncion += self.t_Funciones_(i)
+            elif isinstance(i,Procedimientos_):
+                print("Procedimientos... ")
+
             elif isinstance(i, EjecucionFuncion):
                 print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
@@ -71,6 +72,8 @@ class Codigo3d:
                 aux = SQL(i)
                 aux.generarCadenaSQL()
                 if aux.CadenaSQL is not None:
+                    print("<<<<<<<<<<<<<<><<<<><><><><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>><,,Aqui estamos esto es >>>>>>>>>>>>>>")
+                    print(str(aux.CadenaSQL))
                     cadena += "\n" + self.t_sentenciaSQL(aux)
 
                 else:
@@ -110,6 +113,7 @@ class Codigo3d:
         return cadenaT
 
 
+
     def t_If(self, instancia):
         global t_global, cadena, cadenaExpresion
         cadenaIf  =""
@@ -142,7 +146,6 @@ class Codigo3d:
         cadenaIf += "label ."+salto+"\n"
 
         return cadenaIf
-
 
     def t_Funciones_(self, instancia):
         global t_global, cadenaFuncion, ambitoFuncion, cadenaExpresion
