@@ -5,6 +5,7 @@ from sentencias import *
 import os
 import Temporales as T
 import sentencias as ss
+from SqlComandos import SqlComandos as SQL
 
 t_global = T.Temporales()
 cadena = ""
@@ -61,11 +62,14 @@ class Codigo3d:
             elif isinstance(i, EjecucionFuncion):
                 print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
-            elif isinstance(i, SentenciasSQL):
-                cadena += self.t_sentenciaSQL(i)
             else:
-                print(i)
-                print("NO TRADUCE....")
+                aux = SQL(i)
+                aux.generarCadenaSQL()
+                if aux.CadenaSQL is not None:
+                    cadena += "\n" + self.t_sentenciaSQL(aux)
+
+                else:
+                    print("NO TRADUCE....")
         cadena += "\n\ngoto .END\n"
         cadena += cadenaFuncion
 
@@ -434,7 +438,7 @@ class Codigo3d:
         cadena += "ejecutarSQL()\n"
 
 
-    def t_sentenciaSQL(self, sentencia: SentenciasSQL):
+    def t_sentenciaSQL(self, sentencia: SQL):
         global t_global
         cadena = ""
         v = t_global.varTemporal()
