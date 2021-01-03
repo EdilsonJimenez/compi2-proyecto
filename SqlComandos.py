@@ -64,11 +64,8 @@ class SqlComandos:
 
         elif isinstance(i, Alter_COLUMN):
             print("Es Una Instruccion Alter  Column")
-            #self.grafoAlter_Column(i.idtabla, i.columnas)
-
-        elif isinstance(i, Alter_Table_AddColumn):
-            print("Es Una Instruccion Alter Add Column")
-            #self.grafoAlter_AddColumn(i.id_table, i.id_columnas)
+            # self.CadenaSQL = self.cadena_alter_column(i)
+            self.CadenaSQL = self.cadena_alter_column(i)
 
         elif isinstance(i, ShowDatabases):
             print("Es Una Instruccion Showdatabases")
@@ -109,31 +106,36 @@ class SqlComandos:
 
         elif isinstance(i, Alter_Table_AddColumn):
             print("Es Una Instruccion SelectCurrentType")
-            #self.grafoAlter_AddColumn(i.id_table, i.id_columnas)
+            self.CadenaSQL = self.cadena_alter_add_column(i)
 
         elif isinstance(i, Alter_Table_Drop_Column):
             print("Es Una Instruccion SelectCurrentType")
-            #self.grafoAlter_DropColumn(i.id_table, i.columnas)
+            self.CadenaSQL = self.cadena_alter_drop_column(i)
 
         elif isinstance(i, Alter_Table_Rename_Column):
             print("Es Una Instruccion SelectCurrentType")
             #self.grafoAlter_RenameColumn(i.id_table, i.old_column, i.new_column)
+            self.CadenaSQL = self.cadena_alter_rename(i)
 
         elif isinstance(i, Alter_Table_Drop_Constraint):
             print("Es Una Instruccion SelectCurrentType")
             #self.grafoAlter_DropConstraint(i.id_tabla, i.id_constraint)
+            self.CadenaSQL = self.cadena_alter_drop_constraint(i)
 
         elif isinstance(i, Alter_table_Alter_Column_Set):
             print("Es Una Instruccion SelectCurrentType")
             #self.grafoAlter_AlterColumnSet(i.id_tabla, i.id_column)
+            self.CadenaSQL = self.cadena_alter_column_set_not_null(i)
 
         elif isinstance(i, Alter_table_Add_Foreign_Key):
             print("Es Una Instruccion SelectCurrentType")
             #self.grafoAlter_AddForeignKey(i.id_table, i.id_column, i.id_column_references)
+            self.CadenaSQL = self.cadena_alter_add_foreign(i)
 
         elif isinstance(i, Alter_Table_Add_Constraint):
             print("Es Una Instruccion SelectCurrentType")
             #self.grafoAlter_AddConstraint(i.id_table, i.id_constraint, i.id_column)
+            self.CadenaSQL = self.cadena_alter_add_constraint(i)
 
         elif isinstance(i, SelectExpresion):
             print("Es Una Instruccion SelectCurrentType")
@@ -1087,3 +1089,92 @@ class SqlComandos:
             return 'RANDOM'
         else:
             return 'op'
+
+
+
+
+
+#============================= ALTER TABLE ============================================
+    def cadena_alter_column_set_not_null(self, alterColumn: Alter_table_Alter_Column_Set):
+        cadena = "ALTER TABLE " + alterColumn.id_tabla + " ALTER COLUMN " + alterColumn.id_column.val
+        cadena += " SET NOT NULL;"
+
+        return cadena
+
+    def cadena_alter_add_column(self, alterTable: Alter_Table_AddColumn):
+        cadena = 'ALTER TABLE ' + alterTable.id_table + " ADD COLUMN "
+
+        for index, columna in enumerate(alterTable.id_columnas):
+            exp: ExpresionValor2 = columna
+            if index == 0:
+                cadena += exp.val + " " + exp.tipo
+            else:
+                cadena += ", " + exp.val + " " + exp.tipo
+
+        cadena += ";"
+
+        return cadena
+
+    def cadena_alter_drop_column(self, alterTable: Alter_Table_Drop_Column):
+        cadena = "ALTER TABLE " + alterTable.id_table + " DROP COLUMN "
+
+        for index, id in enumerate(alterTable.columnas):
+            if index == 0:
+                cadena += id.val
+            else:
+                cadena += ", " + id.val
+
+        return cadena
+
+    def cadena_alter_rename(self, alterTable: Alter_Table_Rename_Column):
+        cadena = 'ALTER TABLE ' + alterTable.id_table + ' RENAME COLUMN ' + alterTable.old_column.val
+        cadena += ' TO ' + alterTable.new_column.val + ';'
+
+        return cadena
+
+    def cadena_alter_drop_constraint(self, alterTable: Alter_Table_Drop_Constraint):
+        cadena = 'ALTER TABLE ' + alterTable.id_tabla + ' DROP CONSTRAINT ' + alterTable.id_constraint.val + ";"
+        return cadena
+
+    def cadena_alter_add_foreign(self, alterTable: Alter_table_Add_Foreign_Key):
+        cadena = 'ALTER TABLE ' + alterTable.id_table
+
+        if alterTable.idforeign is not None:
+            cadena += ' ADD CONSTRAINT ' + alterTable.idforeign
+
+        cadena += ' FOREIGN KEY (' + alterTable.id_column.val + ')'
+
+        cadena += ' REFERENCES ' + alterTable.id_column_references.val
+
+        if alterTable.id_table_references is not None:
+            cadena += ' (' + alterTable.id_table_references.val + ')'
+
+        cadena += ';'
+
+        return cadena
+
+    def cadena_alter_add_constraint(self, alterTable: Alter_Table_Add_Constraint):
+        cadena = "ALTER TABLE " + alterTable.id_table + " ADD CONSTRAINT " + alterTable.id_constraint.val
+        cadena += ' UNIQUE (' + alterTable.id_column.val + ');'
+
+
+    def cadena_alter_column(self, alterTable: Alter_COLUMN):
+        cadena = "ALTER TABLE " + alterTable.idtabla
+
+        for index, columna in enumerate(alterTable.columnas):
+            col: ExpresionValor2
+
+            if index == 0:
+                cadena += " ALTER COLUMN " + col.val + " TYPE " + col.tipo
+            else:
+                cadena += ", ALTER COLUMN " + col.val + " TYPE " + col.tipo
+
+        cadena += ";"
+
+        return cadena
+
+
+
+
+
+

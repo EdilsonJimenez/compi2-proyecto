@@ -7892,11 +7892,12 @@ class Alter_table_Alter_Column_Set(Instruccion):
             # colocar error semantico
 
 class Alter_table_Add_Foreign_Key(Instruccion):
-    def __init__(self, id_table, id_column, id_column_references, idforeign):
+    def __init__(self, id_table, id_column, id_column_references, idforeign, id_table_references = None):
         self.id_table = id_table
         self.id_column = id_column
         self.idforeign = idforeign
         self.id_column_references = id_column_references
+        self.id_table_references = id_table_references
 
 
     def Ejecutar(self):

@@ -2,6 +2,8 @@ CREATE DATABASE IF NOT EXISTS test
     OWNER = root
     MODE = 1;
 
+DROP DATABASE test;
+
 USE test;
 
 
@@ -115,6 +117,7 @@ end language sql;
 cocoa(4,1);
 
   
+
 
 
 
