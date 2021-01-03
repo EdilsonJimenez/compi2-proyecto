@@ -2,9 +2,14 @@ from Instruccion_pl import *
 from Temporales import *
 from expresiones import *
 from sentencias import *
+
+from SqlComandos import SqlComandos as ff
+
 import os
 import Temporales as T
 import sentencias as ss
+
+
 
 t_global = T.Temporales()
 cadena = ""
@@ -64,6 +69,15 @@ class Codigo3d:
             elif isinstance(i, SentenciasSQL):
                 cadena += self.t_sentenciaSQL(i)
             else:
+                Cadena = ff(i)
+
+                if Cadena!=None:
+                    print("<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>    INICIO DE LA CADENA GENERADA WEBON ")
+                    print(Cadena)
+                    print("<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>    FIN  DE LA CADENA GENERADA WEBON ")
+                else:
+                    print("ESTA ENTRANDO OTRO TIPO DE ACCION... ")
+
                 print(i)
                 print("NO TRADUCE....")
         cadena += "\n\ngoto .END\n"
@@ -99,7 +113,6 @@ class Codigo3d:
 
             contador += 1
         return cadenaT
-
 
 
     def t_If(self, instancia):
@@ -181,6 +194,8 @@ class Codigo3d:
 
         #llamamos al Recorrido del cuerpo
         #cadenaF += self.RecorrerCuerpoCodigo(codigo.Codigo,instancia.Nombre)
+        self.Traducir(instancia.Instrucciones)
+
 
         anterior = "R"
         cadenaF += "\ngoto ."+anterior

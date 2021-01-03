@@ -477,9 +477,9 @@ def p_init(t):
     arbolito2.ejecucion()
 
 
-    # arbol = Codigo3d()
-    # arbol.Traducir(t[0])
-    # arbol.imprimir()
+    arbol = Codigo3d()
+    arbol.Traducir(t[0])
+    arbol.imprimir()
 
 
 def p_instrucciones_lista(t):
