@@ -10,46 +10,39 @@ class SqlComandos:
         self.CadenaSQL = None
 
 
-        # self.Cadena = self.generarCadenaSQL(sentencia)
-        # print("============================================================  este essssss        ")
-        # print(self.Cadena)
-
-
-
 
 
     def generarCadenaSQL(self):
-        Cadenita = ""
         i = self.sentencia
-
         if isinstance(i, DropTable):
             print("Si es un drop table *")
-            #self.grafoDropTable(i.id)
+
 
         elif isinstance(i, Select):
             print("Es Una Instruccion Select")
-            Cadenita += self.GrafoSelect(i.Lista_Campos, i.Nombres_Tablas, i.unionn)
+            self.CadenaSQL = self.GrafoSelect(i.Lista_Campos, i.Nombres_Tablas, i.unionn)
 
         elif isinstance(i, Select2):
             print("Es Una Instruccion Select2")
-            Cadenita += self.GrafoSelect2(i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn)
+            self.CadenaSQL = self.GrafoSelect2(i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn)
 
         elif isinstance(i, Select3):
             print("Es Una Instruccion Select 3 ")
-            Cadenita += self.GrafoSelect3(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.unionn)
+            self.CadenaSQL = self.GrafoSelect3(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.unionn)
 
         elif isinstance(i, Select4):
             print("Es Una Instruccion Select 4")
-            Cadenita += self.GrafoSelect4(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn)
+            self.CadenaSQL = self.GrafoSelect4(i.distinct, i.Lista_Campos, i.Nombres_Tablas, i.Cuerpo, i.unionn)
 
         elif isinstance(i, Insert_Datos):
             print("Si es un drop Insert *")
+
             #self.grafoInsert_Data(i.id_table, i.valores)
         # -----------------------------------
+
         elif isinstance(i, CreateTable):
             print("Si es CreateTable *")
-            #self.grafoCreateTable(i.id, i.cuerpo, i.inhe)
-            pass
+            self.CadenaSQL = self.grafoCreateTable(i.id, i.cuerpo, i.inhe)
 
         elif isinstance(i, CreateDataBase):
              self.CadenaSQL = self.cadena_create_database(i)
@@ -164,7 +157,7 @@ class SqlComandos:
             print("Es Una Instruccion SelectCurrentType")
             return ""
 
-        return  Cadenita
+
 
 
 
@@ -234,7 +227,7 @@ class SqlComandos:
     def GrafoCampo_AccedidoSinLista(self, NombreT, Columna):
         Cadenita = ""
         if not isinstance(Columna, string_types):
-            Cadenita += "" # self.graficar_expresion(Columna)
+            Cadenita += " " +self.cadena_expresion(Columna)+" "  # self.graficar_expresion(Columna)
 
         elif ((NombreT != "") and (Columna != "")):
             Cadenita +=  NombreT + '.' + Columna
@@ -252,7 +245,7 @@ class SqlComandos:
         # AnteQuery ( query )
         if (AnteQuery != False) and (Query != False) and (Lista_Alias == False):
             #Recorre Condiciones
-            Cadenita += "" # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(AnteQuery)+" "  # self.graficar_expresion(AnteQuery)
             #Se sustituyo ya que recorre solo expresiones
             #self.Recorrer_Condiciones(AnteQuery)
 
@@ -262,7 +255,7 @@ class SqlComandos:
         # AnteQuery ( query ) Alias
         elif (AnteQuery != False) and (Query != False) and (Lista_Alias != False):
             #Recorre Condiciones
-            Cadenita += "" # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(AnteQuery)+" "  # self.graficar_expresion(AnteQuery)
             #Se sustituyo ya que recorre solo expresiones
             #self.Recorrer_Condiciones(AnteQuery)
 
@@ -346,6 +339,7 @@ class SqlComandos:
             else:
                 print("No Ningun Tipo")
 
+
     def GrafoTiposWhen(self, Reservada, ListaExpresiones1, Reservada2, ListaExpresiones2, Reservada3, ListaExpresiones3):
         Cadenita = ""
 
@@ -354,12 +348,14 @@ class SqlComandos:
            (ListaExpresiones2 == False) and (Reservada3 != "") and (ListaExpresiones3 != False)):
 
             Cadenita += Reservada
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita +=" " +self.cadena_expresion(ListaExpresiones1)+" "   # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             #self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
 
+
+
             Cadenita += Reservada3
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(ListaExpresiones3)+" "  # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             #self.Recorrer_Condiciones(ListaExpresiones3, 'Node' + str(self.i))
 
@@ -368,18 +364,18 @@ class SqlComandos:
         if ((Reservada != "") and (ListaExpresiones1 != False) and (Reservada2 != "") and
             (ListaExpresiones2 != False) and (Reservada3 != "") and (ListaExpresiones3 != False)):
             Cadenita += Reservada
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(ListaExpresiones1)+" "   # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             #self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
 
 
             Cadenita += Reservada2
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(ListaExpresiones2)+" "   # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             #self.Recorrer_Condiciones(ListaExpresiones2, 'Node' + str(self.i))
 
             Cadenita += Reservada3
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(ListaExpresiones3)+" "  # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             #self.Recorrer_Condiciones(ListaExpresiones3, 'Node' + str(self.i))
 
@@ -388,7 +384,7 @@ class SqlComandos:
            (ListaExpresiones2 == False) and (Reservada3 == "") and (ListaExpresiones3 == False)):
 
             Cadenita += Reservada
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(ListaExpresiones1)+" "   # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             # self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
 
@@ -398,12 +394,12 @@ class SqlComandos:
            (ListaExpresiones2 != False) and (Reservada3 == "") and (ListaExpresiones3 == False)):
 
             Cadenita += Reservada
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(ListaExpresiones1)+" "   # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             # self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
 
             Cadenita += Reservada2
-            Cadenita += ""  # self.graficar_expresion(AnteQuery)
+            Cadenita += " " +self.cadena_expresion(ListaExpresiones2)+" "   # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             # self.Recorrer_Condiciones(ListaExpresiones2, 'Node' + str(self.i))
 
@@ -414,7 +410,7 @@ class SqlComandos:
         for i in Lista:
             # LLAMAMOS A GRAFICAR EXPRESION
             if(str(i)!=","):
-                Cadenita += "" # self.graficar_expresion(i)
+                Cadenita +=" " +self.cadena_expresion(Lista)+" "   # self.graficar_expresion(i)
             else:
                 print("Es una Coma")
         return Cadenita
@@ -452,7 +448,7 @@ class SqlComandos:
 
         return Cadenita
 
-    def GrafoAlias_SubQuerysSinLista(self, Alias, padre):
+    def GrafoAlias_SubQuerysSinLista(self, Alias):
         Cadenita = ""
         # as Alias
         if ((Alias != "")):
@@ -559,6 +555,8 @@ class SqlComandos:
         return  Cadenita
 
 
+
+
 #tipos de select
     def RecorrerTipoSelect(self, i):
         Cadenita = ""
@@ -621,7 +619,7 @@ class SqlComandos:
 
 
     def GrafoCuerpo_Condiciones(self, Lista):
-        Cadenita = " Where " + "" #self.Recorrer_Condiciones(Lista)
+        Cadenita = " Where "  + " " + self.cadena_expresion(Lista) + " " #self.Recorrer_Condiciones(Lista)
         return  Cadenita
 
 
@@ -631,7 +629,7 @@ class SqlComandos:
         if ((Lista_Campos != False) and (Condiciones != False)):
 
             Cadenita += " GROUP BY " +  self.RecorrerListaCamposGroupBy(Lista_Campos)
-            Cadenita += " HAVING  " + ""  # self.Recorrer_Condiciones(Condiciones)
+            Cadenita += " HAVING  " + " " +self.cadena_expresion(Condiciones)+" " # self.Recorrer_Condiciones(Condiciones)
 
         # Group by ListaCampos
         elif ((Lista_Campos != False) and (Condiciones == False)):
@@ -647,7 +645,7 @@ class SqlComandos:
         # Group by ListaCampos Having Condiciones
         if ((Lista_Campos != False) and (Condiciones != False)):
             Cadenita += " ORDER BY " +  self.RecorrerListaCamposGroupBy(Lista_Campos)
-            Cadenita += " HAVING  " + self.Recorrer_Condiciones(Condiciones)
+            Cadenita += " HAVING  " + " " +self.cadena_expresion(Condiciones)+" "
 
         # Group by ListaCampos
         elif ((Lista_Campos != False) and (Condiciones == False)):
@@ -661,7 +659,7 @@ class SqlComandos:
 
 
 
-    def RecorrerListaCamposGroupBy(self, Lista_Campos, padre):
+    def RecorrerListaCamposGroupBy(self, Lista_Campos):
         Cadenita = ""
         for i in Lista_Campos:
             if isinstance(i, AccesoGroupBy):
@@ -728,14 +726,12 @@ class SqlComandos:
         return  Cadenita
 
 
-
     # Grafo Sub Select Con Cuerpo
     def GrafoSubSelect2(self, ListaCampos, NombresTablas, cuerpo):
         Cadenita = "Select " + self.RecorrerListadeCampos(ListaCampos) + "From  " + self.RecorrerListadeNombres(NombresTablas)
         Cadenita += self.RecorrerListaCuerpos(cuerpo)
 
         return Cadenita
-
 
 
 
@@ -752,6 +748,152 @@ class SqlComandos:
         Cadenita += self.RecorrerListaCuerpos(cuerpo)
 
         return Cadenita
+
+
+
+
+# ===========================================================================   GENERACION CONDIGO CREATE TABLE
+
+    def grafoCreateTable(self, id, cuerpo, inher):
+        Cadenita = "\n CREATE TABLE " + id + " (\n"
+        contador = 0
+
+        for k in cuerpo:
+            if(contador+1 != len(cuerpo)):
+                if isinstance(k, CampoTabla):
+                    Cadenita +=  " "+self.grafoCampoTabla(k)+ ", "
+
+                elif isinstance(k, constraintTabla):
+                    Cadenita +=  " "+self.grafoConstraintTabla(k)+ ", "
+            else:
+                if isinstance(k, CampoTabla):
+                    Cadenita += " "+self.grafoCampoTabla(k) + " "
+                elif isinstance(k, constraintTabla):
+                    Cadenita +=  " "+self.grafoConstraintTabla(k)+ " "
+
+            contador +=1
+
+        # Graficar INHERITS DE CREATE TABLE
+        if inher is not None:
+            # print("Si tiene un inher")
+            Cadenita += self.grafoInhertis(inher.id) + " \n "
+        else:
+            print("No tiene inherits")
+
+
+        Cadenita+=  " );"+ "\n"
+
+        return Cadenita
+
+
+    def grafoCampoTabla(self, campo):
+        Cadenita = ""
+        contador = 0
+        Cadenita +=" \n " + str(campo.id) +" "
+
+        if isinstance(campo.tipo, valorTipo):
+
+            if(str(campo.tipo.valor).upper() == "VARCHAR"):
+                Cadenita += " " + str(campo.tipo.valor)+ "(50) "
+                Cadenita +=  " " +self.cadena_expresion(campo.tipo.expresion)+" "    # self.graficar_expresion(campo.tipo.expresion)
+            else:
+                Cadenita += " " + str(campo.tipo.valor)+ " "
+                Cadenita +=  " " +self.cadena_expresion(campo.tipo.expresion)+" "
+
+        else:
+            Cadenita += " " + str(campo.tipo)+" "
+
+
+        for k in campo.validaciones:
+
+            if isinstance(k, CampoValidacion):
+                if k.id != None and k.valor != None:
+                    Cadenita += " " + self.grafoCampoValidaciones(k) + "  "
+
+                elif k.id != None and k.valor == None:
+                    Cadenita += " " + self.grafoCampoValidaciones(k) + "  "
+            contador+=1
+
+        Cadenita += " \n"
+
+        return  Cadenita
+
+
+
+
+    def grafoConstraintTabla(self, contraint: constraintTabla):
+        Cadenita = ""
+        '''CONSTRAINTS OPTIONS: '''
+        if contraint.valor != None:
+            Cadenita += " " + str(contraint.valor)+" "
+        if contraint.id != None:
+            Cadenita += " " + str(contraint.id)+" "
+        if contraint.condiciones != None:
+            for i in contraint.condiciones:
+                Cadenita +=  " " +self.cadena_expresion(i)+" "  # self.graficar_expresion(i)
+        if contraint.listas_id != None:
+            Cadenita += " " +self.grafoListaIDs(contraint.listas_id)+" "
+        if contraint.idRef != None:
+            Cadenita += " " + str(contraint.idRef)+" "
+        if contraint.referencia != None:
+            Cadenita += " " + self.grafoListaIDs(contraint.referencia)+" "
+
+        return Cadenita
+
+
+
+
+    def grafoInhertis(self, id):
+        Cadenita = ""
+        Cadenita += "INHERITS" + id
+
+        return Cadenita
+
+
+
+    def grafoCampoValidaciones(self, validacion):
+        Cadenita = ""
+
+        if (validacion.valor == None):
+            Cadenita +=' ' + str(validacion.id)+ ' '
+        else:
+            Cadenita += ' ' + str(validacion.id) + ' ' + str(validacion.valor)+ ' '
+
+
+        return Cadenita
+
+
+
+    def grafoListaIDs(self, lista: ExpresionValor):
+        Cadenita = ""
+        Contador = 0
+
+        for v in lista:
+            if(Contador+1 != len(lista)):
+                Cadenita += "  "+str(v.val)+", "
+            else:
+                Cadenita += "  "+str(v.val)+"  "
+            Contador+=1
+
+
+        return Cadenita
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     def cadena_create_database(self, createDataBase: CreateDataBase):
