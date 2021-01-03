@@ -10,6 +10,7 @@ import interprete as Inter
 import Ast2 as ast
 from Instruccion import *
 from intermedio import main
+import Sentenciac3d as Op
 
 
 
@@ -110,6 +111,13 @@ class Aplicacion:
                Gram.reporte_gramatical()
             except:
                 print("error en el reporte gramatical :(")
+
+
+    def reporte_optimizacion_(self):
+            #try:
+                Op.reporte_optimizacion()
+            #except:
+            #    print("error en el reporte optimizacion :(")
                 
     def reporte_AST_(self):     
 
@@ -150,8 +158,9 @@ class Aplicacion:
 
         self.menuReportes = Menu(self.barraMenu, tearoff=0)
         self.menuReportes.add_command(label="Reporte Errores", command=self.Errores)
-        self.menuReportes.add_command(label="Tabla de simbolos", command=self.graficaTabla)
-        self.menuReportes.add_command(label="Reporte gramatical", command=self.reporte_gramatical_)
+        self.menuReportes.add_command(label="Tabla de Simbolos", command=self.graficaTabla)
+        self.menuReportes.add_command(label="Reporte Gramatical", command=self.reporte_gramatical_)
+        self.menuReportes.add_command(label="Reporte Optimizacion", command=self.reporte_optimizacion_)
 
         self.menu3D = Menu(self.barraMenu, tearoff=0)
         # self.menu3D.add_command(label="Generar", command=self.Errores)

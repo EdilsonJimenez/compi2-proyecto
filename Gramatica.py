@@ -2653,9 +2653,12 @@ def p_instruccion_ifelse(t):
     t[0] = If_inst(t[2], t[4], t[6])
 
 def p_instruccion_elsif1(t):
-    'instruccion_if : IF expresion THEN listas_elsif ELSE CODEEPSILON END IF PUNTOCOMA'
-    t[0] = If_inst(t[2], t[4], t[6])
-    print("****** LISTAS ELSIF")
+    'instruccion_if : IF expresion THEN CODEEPSILON listas_elsif END IF PUNTOCOMA'
+    t[0] = Elsif_inst(t[2], t[4], t[5], None)
+
+def p_instruccion_elsif2(t):
+    'instruccion_if : IF expresion THEN CODEEPSILON listas_elsif ELSE CODEEPSILON END IF PUNTOCOMA'
+    t[0] = Elsif_inst(t[2], t[4], t[5], t[6])
 
 def p_listas_elsif(t):
     'listas_elsif : listas_elsif elsif'
@@ -2668,7 +2671,7 @@ def p_lista_elsif(t):
 
 def p_elsif(t):
     'elsif : ELSIF expresion THEN CODEEPSILON'
-    t[0] = t[1]
+    t[0] = elsif_obj(t[2], t[4])
 
 
 # def p_expresion_subquery(t):

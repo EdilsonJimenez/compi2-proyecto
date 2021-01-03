@@ -89,7 +89,7 @@ class Asignacion(Sentencia):
 #----------------------------   FUNCIONES
 class Funciones_(Sentencia):
     def __init__(self,Reservada, Nombre,Retorno,Alias, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
-        self.Reservada     = Reservada #create or repacle
+        self.Reservada     = Reservada #create or replace
         self.Nombre        = Nombre #
         self.Retorno       = Retorno #que retorna, expresion
         self.Parametros    = Parametros #lista de ID's ( nombre tipo )
@@ -103,7 +103,7 @@ class Funciones_(Sentencia):
 #----------------------------   PROCEDURES
 class Procedimientos_(Sentencia):
     def __init__(self,Reservada, Nombre,Comand,Alias, Parametros=[], Instrucciones=[], Declaraciones=[], Codigo=[]):
-        self.Reservada     = Reservada
+        self.Reservada     = Reservada  #create or replace
         self.Nombre        = Nombre
         self.Comand        = Comand
         self.Alias         = Alias
