@@ -8,6 +8,7 @@ from SqlComandos import SqlComandos as ff
 import os
 import Temporales as T
 import sentencias as ss
+from SqlComandos import SqlComandos as SQL
 
 
 
@@ -66,20 +67,14 @@ class Codigo3d:
             elif isinstance(i, EjecucionFuncion):
                 print("6666666666666666666666666666666666666 ejecucion funcion 1")
                 cadena += self.t_llamadaFuncion(i)
-            elif isinstance(i, SentenciasSQL):
-                cadena += self.t_sentenciaSQL(i)
-            else:
-                Cadena = ff(i)
+            else:        
+                aux = SQL(i)
+                aux.generarCadenaSQL()
+                if aux.CadenaSQL is not None:
+                    cadena += "\n" + self.t_sentenciaSQL(aux)
 
-                if Cadena!=None:
-                    print("<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>    INICIO DE LA CADENA GENERADA WEBON ")
-                    print(Cadena)
-                    print("<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>    FIN  DE LA CADENA GENERADA WEBON ")
                 else:
-                    print("ESTA ENTRANDO OTRO TIPO DE ACCION... ")
-
-                print(i)
-                print("NO TRADUCE....")
+                    print("NO TRADUCE....")
         cadena += "\n\ngoto .END\n"
         cadena += cadenaFuncion
 
@@ -449,7 +444,7 @@ class Codigo3d:
         cadena += "ejecutarSQL()\n"
 
 
-    def t_sentenciaSQL(self, sentencia: SentenciasSQL):
+    def t_sentenciaSQL(self, sentencia: SQL):
         global t_global
         cadena = ""
         v = t_global.varTemporal()
