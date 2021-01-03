@@ -781,7 +781,7 @@ class SqlComandos:
             print("No tiene inherits")
 
 
-        Cadenita+=  " );"+ "\n"
+        Cadenita +=  " );"+ "\n"
 
         return Cadenita
 
@@ -794,26 +794,32 @@ class SqlComandos:
         if isinstance(campo.tipo, valorTipo):
 
             if(str(campo.tipo.valor).upper() == "VARCHAR"):
-                Cadenita += " " + str(campo.tipo.valor)+ "(50) "
-                Cadenita +=  " " +self.cadena_expresion(campo.tipo.expresion)+" "    # self.graficar_expresion(campo.tipo.expresion)
+                Cadenita += " " + str(campo.tipo.valor)+ "("
+                Cadenita +=  " " + str(self.cadena_expresion(campo.tipo.expresion)) +") "    # self.graficar_expresion(campo.tipo.expresion)
             else:
                 Cadenita += " " + str(campo.tipo.valor)+ " "
-                Cadenita +=  " " +self.cadena_expresion(campo.tipo.expresion)+" "
+                Cadenita +=  " " + str(self.cadena_expresion(campo.tipo.expresion)) +" "
 
         else:
             Cadenita += " " + str(campo.tipo)+" "
 
+        if isinstance(campo.validaciones, list):
+            for k in campo.validaciones:
 
-        for k in campo.validaciones:
+                if isinstance(k, CampoValidacion):
+                    if k.id != None and k.valor != None:
+                        Cadenita += " " + self.grafoCampoValidaciones(k) + "  "
 
-            if isinstance(k, CampoValidacion):
-                if k.id != None and k.valor != None:
-                    Cadenita += " " + self.grafoCampoValidaciones(k) + "  "
+                    elif k.id != None and k.valor == None:
+                        Cadenita += " " + self.grafoCampoValidaciones(k) + "  "
+                contador+=1
+        else :
+            if isinstance(campo.validaciones, CampoValidacion):
+                if campo.validaciones.id != None and campo.validaciones.valor != None:
+                    Cadenita += " " + self.grafoCampoValidaciones(campo.validaciones) + "  "
 
-                elif k.id != None and k.valor == None:
-                    Cadenita += " " + self.grafoCampoValidaciones(k) + "  "
-            contador+=1
-
+                elif campo.validaciones.id != None and campo.validaciones.valor == None:
+                    Cadenita += " " + self.grafoCampoValidaciones(campo.validaciones) + "  "
         Cadenita += " \n"
 
         return  Cadenita
@@ -940,7 +946,7 @@ class SqlComandos:
         elif isinstance(expresiones, ExpresionValor):
             if isinstance(expresiones.val, string_types):
                 return '"' + str(expresiones.val) + '"'
-            return expresiones.val
+            return str(expresiones.val)
 
         elif isinstance(expresiones, Variable):
             return expresiones.id
@@ -1304,12 +1310,18 @@ class SqlComandos:
         cadena = "ALTER TABLE " + alterTable.idtabla
 
         for index, columna in enumerate(alterTable.columnas):
-            col: ExpresionValor2
+            col: ExpresionValor2 = columna
 
             if index == 0:
-                cadena += " ALTER COLUMN " + col.val + " TYPE " + col.tipo
+                cadena += " ALTER COLUMN " + col.val + " TYPE " + col.tipo.valor
+                if col.tipo.valor == "varchar":
+                    cadena += "(" + self.cadena_expresion(col.tipo.expresion) + ")"
+
             else:
-                cadena += ", ALTER COLUMN " + col.val + " TYPE " + col.tipo
+                cadena += ", ALTER COLUMN " + col.val + " TYPE " + col.tipo.valor
+                if col.tipo.valor == "varchar":
+                    cadena += "(" + self.cadena_expresion(col.tipo.expresion) + ")"
+
 
         cadena += ";"
 

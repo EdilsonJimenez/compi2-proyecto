@@ -7460,8 +7460,8 @@ class Alter_Table_AddColumn(Instruccion):
                                     if y.id != elemento.val:
                                         print("BANDERA ES TRUE")
                                         bandera = True
-                            else:
-                                print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+                                    else:
+                                        print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
 
 
                         if bandera == True:
