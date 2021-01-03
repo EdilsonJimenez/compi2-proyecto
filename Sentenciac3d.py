@@ -626,7 +626,7 @@ class Codigo3d:
         global t_global
         cadena = ""
         v = t_global.varTemporal()
-        cadena += str(v) + " = \"" + sentencia.CadenaSQL + "\"\n"
+        cadena += str(v) + " = \"\"\"" + sentencia.CadenaSQL + "\"\"\"\n"
         cadena += "heap.append(" + str(v) + ")\n"
         cadena += "F3D.ejecutarSQL()\n"
 
