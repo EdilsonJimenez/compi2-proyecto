@@ -913,7 +913,7 @@ class SqlComandos:
 
             Contador1+=1
 
-        Cadenita += "  ); \n"
+        Cadenita += "  );"
 
         return  Cadenita
 
