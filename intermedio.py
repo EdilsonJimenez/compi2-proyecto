@@ -102,8 +102,9 @@ def main():
 	#Fin declaraciones
 
 
-	print(p0) 
-
+	#Llamada a funcion o procedimiento.
+	stack.append("F2")
+	label .F2
 
 	# Return
 	r0 = p0
