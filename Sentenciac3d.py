@@ -872,5 +872,5 @@ def reporte_optimizacion():
     for o in listaOpt:
         cadena += '\n <TR><TD>'+o.original+'</TD><TD>'+o.optimizado+'</TD></TR>'
 
-    SymbolT2.node('table', '<<TABLE><TR><TD>CODIGO</TD><TD>OPTIMIZACION</TD></TR>' + cadena + '</TABLE>>')
+    SymbolT2.node('table', '<<TABLE><TR><TD>CODIGO</TD><TD>OPTIMIZACION</TD><TD>REGLA</TD></TR>' + cadena + '</TABLE>>')
     SymbolT2.render('g', format='png', view=True)
