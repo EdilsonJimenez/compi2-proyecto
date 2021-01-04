@@ -667,7 +667,7 @@ class Codigo3d:
         elif isinstance(expresiones, UnitariaAritmetica):
             return procesar_unitaria_aritmetica(expresiones, ts)
         elif isinstance(expresiones, ExpresionFuncion):
-            return procesar_funcion(expresiones, ts)
+            return self.procesar_funcion(expresiones, ts)
         elif isinstance(expresiones, ExpresionTiempo):
             return procesar_unidad_tiempo(expresiones, ts)
         elif isinstance(expresiones, ExpresionConstante):
@@ -834,6 +834,27 @@ class Codigo3d:
                 return r,""
         return r,""
 
+
+    def procesar_funcion(self, expresion:ExpresionFuncion, ts):
+        aux = ""
+        cadena = ""
+        if expresion.exp1 is not None:
+            v, cad = self.procesar_expresion(expresion.exp1, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+        if expresion.exp2 is not None:
+            v, cad = self.procesar_expresion(expresion.exp2, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+        if expresion.exp3 is not None:
+            v, cad = self.procesar_expresion(expresion.exp3, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+
+        v = t_global.varTemporal()
+        cadena += aux + "\n" + "heap.append(" + str(expresion.id_funcion.value) + ")" + "\n" + str(v) + " = F3D.funcionNativa()" + "\n"
+
+        return v, cadena
 
     def generar(self):
         global cadena
