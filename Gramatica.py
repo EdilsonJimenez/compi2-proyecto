@@ -207,7 +207,7 @@ reservadas = {
 
     #Funciones
     'returns' :'RETURNS',
-    'funtion' :'FUNTION',
+    'function' :'FUNCTION',
     'language':'LANGUAGE',
     'sql'     :'SQL',
     'declare' :'DECLARE',
@@ -244,6 +244,7 @@ tokens = [
              'PARIZQ',
              'PARDER',
              'PUNTOCOMA',
+             'DOLAR',
              # NOT
              # AND
              # OR
@@ -313,6 +314,8 @@ t_LEFTSHIFT = r'<<'
 t_RIGHTSHIFT = r'>>'
 t_POTENCIA = r'\^'
 t_IGUAL2= r':='
+t_DOLAR = r'\$'
+
 
 # Importacion de Objetos Del Analisis
 
@@ -2787,7 +2790,7 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNCTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     t[0]=Funciones_(t[1],t[3],t[8],t[9] , t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
 
@@ -2814,7 +2817,7 @@ def p_FuncioneeR(t):
 
 
 def p_ReservadaFunc(t):
-    'FUNCI  :  FUNTION'
+    'FUNCI  :  FUNCTION'
     t[0] = str(t[1])
 
 
@@ -2905,9 +2908,20 @@ def p_Retorno_Cuerpo(t):
 
 #------------- Alias del retorno
 def p_Alias_Retorno(t):
-    'ALIASRET  :  AS ID '
+    'ALIASRET  :  AS ALI '
     t[0] = str(t[2])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  ESTOY JALANDO EL ALIAS >>>>>>>>>>>>>>>>>>>>>>"+str(t[2]))
+
+
+def p_Alias_RetornoID(t):
+    'ALI  :  ID '
+    t[0] = str(t[1])
+
+def p_Alias_Retorno_DOLAR(t):
+    'ALI  :  DOLAR DOLAR '
+    t[0] = str(t[1])+str(t[2])
+
+
 
 
 def p_Alias_RetornoEpsilon(t):
@@ -2919,8 +2933,20 @@ def p_Alias_RetornoEpsilon(t):
 #-----------------------------------------------------------  SECCION DE CODIGO
 
 def p_Code_Estructures(t):
-    'CODE  : BEGIN CODEEPSILON END ARGU_N_N'
+    'CODE  : BEGIN CODEEPSILON END DOL ARGU_N_N'
     t[0] = Code_Funciones(t[4], t[2])
+
+
+
+def p_Code_Dolarcito(t):
+    'DOL  :  DOLAR DOLAR '
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_Code_DolarEpsilon(t):
+    'DOL  :  '
+    t[0] = ""
+
 
 
 #-------------------------------------  Tipos de Argumento
