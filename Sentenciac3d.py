@@ -71,7 +71,7 @@ class Codigo3d:
                 cadena += self.t_llamadaFuncion(i)
             elif isinstance(i, Procedimientos_):
                 cadenaFuncion += self.t_Procedimientos_(i)
-            else:        
+            else:
                 aux = SQL(i)
                 aux.generarCadenaSQL()
                 if aux.CadenaSQL is not None:
@@ -255,6 +255,8 @@ class Codigo3d:
                 listaOpt.append(o)
 
         return cadenaIf
+
+
 
     def t_Funciones_(self, instancia):
         global t_global, cadenaFuncion, ambitoFuncion, cadenaExpresion

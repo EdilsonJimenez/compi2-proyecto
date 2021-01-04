@@ -1746,6 +1746,7 @@ def procesar_expresion_select(expresiones, ts):
 
     elif isinstance(expresiones, AccesoSubConsultas):
         print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ENtre sub where")
+
         return ProcesoSub(expresiones,ts_global)
 
 

@@ -1484,6 +1484,8 @@ def ProcesoSub(Cuerpo,ts):
 
     return  listaGeneralSubQuery
 
+
+
 #Proceso Limit
 def Limites(listaGeneral,tiposCuerpo):
 
