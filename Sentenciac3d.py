@@ -11,10 +11,13 @@ import Temporales as T
 import sentencias as ss
 from SqlComandos import SqlComandos as SQL
 
-
+c3d = []
 
 t_global = T.Temporales()
 cadena = ""
+
+
+
 cadenaFuncion = ""
 cadenaExpresion = ""
 ambitoFuncion = ""
@@ -51,11 +54,16 @@ class Codigo3d:
 
         cadena += "\n\tlabel .END\n"
 
+
+
     def imprimir(self):
         global cadena
         self.retorno()
         #cadena += "\n\nmain() \n"
         print(cadena)
+
+        c3d.append(cadena)
+
         self.generar()
 
         print("----------------------------------SE LIMPIO ----------------------------------------------")
@@ -78,7 +86,6 @@ class Codigo3d:
                     print("PRODUCE SENTENCIA SQL-----------------------------------===")
                     print(str(aux.CadenaSQL))
                     cadena += "\n" + self.t_sentenciaSQL(aux)
-
                 else:
                     print("NO TRADUCE....")
         cadena += "\n\n\tgoto .END\n"
@@ -115,9 +122,9 @@ class Codigo3d:
                     print("PRODUCE SENTENCIA SQL-----------------------------------===2")
                     print(str(aux.CadenaSQL))
                     cadenaT += "\n" + self.t_sentenciaSQL(aux)
-
                 else:
                     print("NO TRADUCE....")
+
             contador += 1
         return cadenaT
 
@@ -132,7 +139,6 @@ class Codigo3d:
 
         cadena += "\n\tprint("+str(resultado)+") \n"
         return cadena
-
 
     def t_If(self, instancia):
         global t_global, cadena, cadenaExpresion
