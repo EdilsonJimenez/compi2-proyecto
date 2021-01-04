@@ -94,6 +94,8 @@ reservadas = {
     'to': 'TO',
     'drop': 'DROP',
     'add': 'ADD',
+    'print': 'PRINT',
+    'execute': 'EXECUTE',
 
     # Date/Time Types
     'timestamp': 'TIMESTAMP',
@@ -512,6 +514,12 @@ def p_instruccion(t):
 
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
+
+
+def p_print(t) :
+    'CODE_    : PRINT PARIZQ ID PARDER PUNTOCOMA'
+    t[0] = Print_I(t[3])
+
 
 
 
@@ -3021,19 +3029,13 @@ def p_CodigoFunciones(t):
     t[0] = t[1]
 
 
-
-
-
-
-
 def p_Codigo_FuncionesLl(t):
-    'EJECUTARFUNCION  : ID PARIZQ EXPRESI PARDER '
-    t[0] = EjecucionFuncion(t[1],t[3])
+    'EJECUTARFUNCION  : EXECUTE ID PARIZQ EXPRESI PARDER '
+    t[0] = EjecucionFuncion(t[2],t[4])
 
-
-
-
-
+def p_Codigo_FuncionesLl2(t):
+    'EJECUTARFUNCION  : SELECT ID PARIZQ EXPRESI PARDER '
+    t[0] = EjecucionFuncion(t[2],t[4])
 
 #------------ Lista Expresiones
 def p_ExpressEs(t):
