@@ -462,8 +462,6 @@ precedence = (
 codigo3d = ''
 
 
-
-
 def p_init(t):
     'INICIO     : INSTRUCCIONES'
     global listaglobalAST
@@ -476,10 +474,9 @@ def p_init(t):
     arbolito2 = interprete2(t[0])
     arbolito2.ejecucion()
 
-
-    arbol = Codigo3d()
-    arbol.Traducir(t[0])
-    arbol.imprimir()
+    #arbol = Codigo3d()
+    #arbol.Traducir(t[0])
+    #arbol.imprimir()
 
 
 def p_instrucciones_lista(t):
@@ -3283,6 +3280,12 @@ def reporte_AST_GLOB():
     global listaglobalAST
     arbolito = Ast2(listaglobalAST)
     arbolito.crearReporte()
+
+def traducir_AST_GLOB():
+    global listaglobalAST
+    arbol = Codigo3d()
+    arbol.Traducir(listaglobalAST)
+    arbol.imprimir()
 
 def parse(Entrada,Errores):
     # Variables Utilizadas

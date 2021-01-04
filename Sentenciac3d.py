@@ -41,7 +41,6 @@ class Codigo3d:
         global cadena
         cadena += "\n\tlabel .R\n"
         cadena += "\tu = stack.pop()"
-
         cantidad = t_global.varFuncionAnterior()
         i = 1
         cadena += "\n"
@@ -68,7 +67,7 @@ class Codigo3d:
         for i in instrucciones:
             if isinstance(i,Funciones_):
                 cadenaFuncion += self.t_Funciones_(i)
-            elif isinstance(i, EjecucionFuncion):
+            elif isinstance(i, ss.EjecucionFuncion):
                 cadena += self.t_llamadaFuncion(i)
             elif isinstance(i, Procedimientos_):
                 cadenaFuncion += self.t_Procedimientos_(i)
@@ -76,6 +75,7 @@ class Codigo3d:
                 aux = SQL(i)
                 aux.generarCadenaSQL()
                 if aux.CadenaSQL is not None:
+                    print("PRODUCE SENTENCIA SQL-----------------------------------===")
                     print(str(aux.CadenaSQL))
                     cadena += "\n" + self.t_sentenciaSQL(aux)
 
@@ -107,13 +107,13 @@ class Codigo3d:
             elif isinstance(i, CaseBuscado):
                 cadenaT += self.t_TraduccionCaseBuscado(i, "")
             else:
-
-
                 aux = SQL(i)
                 aux.generarCadenaSQL()
                 if aux.CadenaSQL is not None:
+                    print("PRODUCE SENTENCIA SQL-----------------------------------===2")
                     print(str(aux.CadenaSQL))
                     cadenaT += "\n" + self.t_sentenciaSQL(aux)
+
                 else:
                     print("NO TRADUCE....")
             contador += 1
@@ -325,7 +325,7 @@ class Codigo3d:
             #print(str(param.Nombre)+"---"+str(param.Tipo))
 
             tempoP = t_global.varParametro()
-            cadenaF += str(tempoP)+ "\n"
+            cadenaF +="\t"+str(tempoP)+ "\n"
 
             p = tipoSimbolo(str(tempoP), param.Nombre, param.Tipo, 1, 1, 'parametro', instancia.Nombre)
             t_global.agregarSimbolo(p)
@@ -355,7 +355,7 @@ class Codigo3d:
 
         #llamamos al Recorrido del cuerpo
         #cadenaF += self.RecorrerCuerpoCodigo(codigo.Codigo,instancia.Nombre)
-        self.Traducir(instancia.Instrucciones)
+        #self.Traducir2(instancia.Instrucciones)
 
 
         anterior = "R"
@@ -414,7 +414,7 @@ class Codigo3d:
         # Id, Lista-Parametros
         global t_global, cadena, ambitoFuncion, stack, cadenaExpresion
         cadenallamada  = ""
-        cadenallamada += "\t#Llamada a funcion o procedimiento."
+        cadenallamada += "\n\t#Llamada a funcion o procedimiento."
         temp = ambitoFuncion
         ambitoFuncion = llamada.Id
         listaParametros = []
@@ -437,7 +437,7 @@ class Codigo3d:
                 cont += 1
 
         salto = t_global.varFuncion()
-        cadenallamada += "\n\tstack.append(\""+salto+"\")\n"
+        cadenallamada += "\n\tstack.append(\""+salto+"\")"
         # llamada goto a la funcion
         for met in t_global.tablaSimbolos:
             m: tipoSimbolo = t_global.obtenerSimbolo(met)
@@ -628,9 +628,9 @@ class Codigo3d:
         global t_global
         cadena = ""
         v = t_global.varTemporal()
-        cadena += str(v) + " = \"\"\"" + sentencia.CadenaSQL + "\"\"\"\n"
-        cadena += "heap.append(" + str(v) + ")\n"
-        cadena += "F3D.ejecutarSQL()\n"
+        cadena += "\t"+str(v) + " = \"\"\"" + sentencia.CadenaSQL + "\"\"\"\n"
+        cadena += "\theap.append(" + str(v) + ")\n"
+        cadena += "\tF3D.ejecutarSQL()\n"
 
         return cadena
 
@@ -668,7 +668,7 @@ class Codigo3d:
         elif isinstance(expresiones, UnitariaAritmetica):
             return procesar_unitaria_aritmetica(expresiones, ts)
         elif isinstance(expresiones, ExpresionFuncion):
-            return procesar_funcion(expresiones, ts)
+            return self.procesar_funcion(expresiones, ts)
         elif isinstance(expresiones, ExpresionTiempo):
             return procesar_unidad_tiempo(expresiones, ts)
         elif isinstance(expresiones, ExpresionConstante):
@@ -839,12 +839,32 @@ class Codigo3d:
         return r,""
 
 
+    def procesar_funcion(self, expresion:ExpresionFuncion, ts):
+        aux = ""
+        cadena = ""
+        if expresion.exp1 is not None:
+            v, cad = self.procesar_expresion(expresion.exp1, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+        if expresion.exp2 is not None:
+            v, cad = self.procesar_expresion(expresion.exp2, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+        if expresion.exp3 is not None:
+            v, cad = self.procesar_expresion(expresion.exp3, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+
+        v = t_global.varTemporal()
+        cadena += aux + "\n" + "heap.append(" + str(expresion.id_funcion.value) + ")" + "\n" + str(v) + " = F3D.funcionNativa()" + "\n"
+
+        return v, cadena
+
     def generar(self):
         global cadena
         f = open('./intermedio.py', 'w')
         f.write(cadena)
         f.close()
-
 
 
 # ========== REPORTE OPTIMIZACION =================== #
