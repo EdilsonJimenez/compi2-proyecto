@@ -842,7 +842,6 @@ class Codigo3d:
         f = open('./intermedio.py', 'w')
         f.write(cadena)
         f.close()
-        self.generar2()
 
 
 # ========== REPORTE OPTIMIZACION =================== #

@@ -123,7 +123,9 @@ class Aplicacion:
 
                Gram.reporte_AST_GLOB()
 
+    def Traducir_Codigo_(self):
 
+               Gram.traducir_AST_GLOB()
 
     def graficaTabla(self):
         INST.tabla_simbolos()
@@ -155,6 +157,7 @@ class Aplicacion:
         #self.menuAnalizar.add_command(label="Run", command=self.enviarDatos)
         self.menuAnalizar.add_command(label="Ejecucion", command=self.Seleccionar)
         self.menuAnalizar.add_command(label="Graficar Arbol", command=self.reporte_AST_)
+        self.menuAnalizar.add_command(label="Traducir", command=self.Traducir_Codigo_)
 
         self.menuReportes = Menu(self.barraMenu, tearoff=0)
         self.menuReportes.add_command(label="Reporte Errores", command=self.Errores)

@@ -11,7 +11,7 @@ graph g {
                                 <TD bgcolor="#BEF781">VALOR </TD>
                                 <TD bgcolor="#BEF781">FILA</TD>
                             </TR>
-                            <TR><TD>califica</TD><TD>tbcalifica</TD><TD>iditem</TD><TD>2</TD><TD>498</TD></TR><TR><TD>califica</TD><TD>tbcalifica</TD><TD>item</TD><TD>Funciones ELSEEEE</TD><TD>498</TD></TR><TR><TD>califica</TD><TD>tbcalifica</TD><TD>puntos</TD><TD>2.0</TD><TD>498</TD></TR> <TR>
+                            <TR><TD>califica</TD><TD>tbcalifica</TD><TD>iditem</TD><TD>2</TD><TD>210</TD></TR><TR><TD>califica</TD><TD>tbcalifica</TD><TD>item</TD><TD>Funciones ELSEEEE</TD><TD>210</TD></TR><TR><TD>califica</TD><TD>tbcalifica</TD><TD>puntos</TD><TD>2.0</TD><TD>210</TD></TR> <TR>
                                 <TD></TD>
                                 <TD></TD>
                                 <TD></TD>
