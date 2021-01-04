@@ -71,7 +71,7 @@ class Codigo3d:
                 cadena += self.t_llamadaFuncion(i)
             elif isinstance(i, Procedimientos_):
                 cadenaFuncion += self.t_Procedimientos_(i)
-            else:        
+            else:
                 aux = SQL(i)
                 aux.generarCadenaSQL()
                 if aux.CadenaSQL is not None:
@@ -255,6 +255,8 @@ class Codigo3d:
                 listaOpt.append(o)
 
         return cadenaIf
+
+
 
     def t_Funciones_(self, instancia):
         global t_global, cadenaFuncion, ambitoFuncion, cadenaExpresion
@@ -666,7 +668,7 @@ class Codigo3d:
         elif isinstance(expresiones, UnitariaAritmetica):
             return procesar_unitaria_aritmetica(expresiones, ts)
         elif isinstance(expresiones, ExpresionFuncion):
-            return procesar_funcion(expresiones, ts)
+            return self.procesar_funcion(expresiones, ts)
         elif isinstance(expresiones, ExpresionTiempo):
             return procesar_unidad_tiempo(expresiones, ts)
         elif isinstance(expresiones, ExpresionConstante):
@@ -837,6 +839,27 @@ class Codigo3d:
         return r,""
 
 
+    def procesar_funcion(self, expresion:ExpresionFuncion, ts):
+        aux = ""
+        cadena = ""
+        if expresion.exp1 is not None:
+            v, cad = self.procesar_expresion(expresion.exp1, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+        if expresion.exp2 is not None:
+            v, cad = self.procesar_expresion(expresion.exp2, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+        if expresion.exp3 is not None:
+            v, cad = self.procesar_expresion(expresion.exp3, ts)
+            cadena += cad + "\n"
+            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+
+        v = t_global.varTemporal()
+        cadena += aux + "\n" + "heap.append(" + str(expresion.id_funcion.value) + ")" + "\n" + str(v) + " = F3D.funcionNativa()" + "\n"
+
+        return v, cadena
+
     def generar(self):
         global cadena
         f = open('./intermedio.py', 'w')
@@ -872,5 +895,5 @@ def reporte_optimizacion():
     for o in listaOpt:
         cadena += '\n <TR><TD>'+o.original+'</TD><TD>'+o.optimizado+'</TD></TR>'
 
-    SymbolT2.node('table', '<<TABLE><TR><TD>CODIGO</TD><TD>OPTIMIZACION</TD><TD>REGLA</TD></TR>' + cadena + '</TABLE>>')
+    SymbolT2.node('table', '<<TABLE><TR><TD>CODIGO</TD><TD>OPTIMIZACION</TD></TR>' + cadena + '</TABLE>>')
     SymbolT2.render('g', format='png', view=True)
