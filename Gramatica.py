@@ -1366,7 +1366,7 @@ def p_Cuerpo_WhenElse(t):
 def p_instruccion_dml_comandos_CREATE_TABLE(t):
     'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
     t[0] = CreateTable(t[3], t[5], None)
-    print("Estoy en create")
+    #print("Estoy en create")
     rep_gramatica('\n <TR><TD> DML_COMANDOS →   CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA </TD><TD> t[0] = CreateTable(t[3], t[5], None)  </TD></TR>')
 
 
@@ -1598,7 +1598,7 @@ def p_Create_TABLE_TIPO_CAMPO2_2(t):
                                 | DEFAULT ENTERO
                                 | DEFAULT ID'''
     t[0] = CampoValidacion(t[1], t[2])
-    print("VALIDACION DEFAULT CASI")
+    #print("VALIDACION DEFAULT CASI")
     rep_gramatica('\n <TR><TD> VALIDACION_CAMPO_CREATE →   '+str(t[1]) + str(t[2]) + '   </TD><TD>  t[0] = CampoValidacion(t[1], t[2]) </TD></TR>')
 
 
