@@ -106,6 +106,8 @@ class Codigo3d:
                 cadenaT += self.t_retornoFuncion(i)
             elif isinstance(i, CaseBuscado):
                 cadenaT += self.t_TraduccionCaseBuscado(i, "")
+            elif isinstance(i, Print_I):
+                cadenaT += self.t_print(i)
             else:
                 aux = SQL(i)
                 aux.generarCadenaSQL()
@@ -119,6 +121,17 @@ class Codigo3d:
             contador += 1
         return cadenaT
 
+    def t_print(self, id):
+        global  t_global
+        resultado = ""
+        cadena = ""
+        for item in t_global.tablaSimbolos:
+            v: tipoSimbolo = t_global.obtenerSimbolo(item)
+            if v.nombre == id.id and v.ambito == ambitoFuncion:
+                resultado = v.temporal
+
+        cadena += "\n\tprint("+str(resultado)+") \n"
+        return cadena
 
 
     def t_If(self, instancia):
@@ -156,14 +169,14 @@ class Codigo3d:
         # OPTIMIZACION REGLA 4 y 5
         if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
             if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
-                co = "goto ."+verdadero
+                co = "goto ."+verdadero + "- Regla: 4"
                 o = Optimizacion(original, co)
                 listaOpt.append(o)
 
         original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
         if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
             if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
-                co = "goto ."+falso
+                co = "goto ."+falso + "- Regla: 5"
                 o = Optimizacion(original2, co)
                 listaOpt.append(o)
 
@@ -243,14 +256,14 @@ class Codigo3d:
         # OPTIMIZACION REGLA 4 y 5
         if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
             if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
-                co = "\tgoto ."+verdadero
+                co = "\tgoto ."+verdadero + "- Regla: 4"
                 o = Optimizacion(original, co)
                 listaOpt.append(o)
 
         original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
         if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
             if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
-                co = "goto ."+falso
+                co = "goto ."+falso + "- Regla: 5"
                 o = Optimizacion(original2, co)
                 listaOpt.append(o)
 
@@ -703,12 +716,12 @@ class Codigo3d:
             op = ""
             if sval1 == "0" or sval2 == "0":
                 if v == sval1 or v == sval2:
-                    op = "# Se elimina la instruccion."
+                    op = "# Se elimina la instruccion." + "- Regla: 8"
                 else:
                     if sval1 == "0":
-                        op = v + "= "+sval2
+                        op = v + "= "+sval2 + "- Regla: 12"
                     else:
-                        op = v + "= " + sval1
+                        op = v + "= " + sval1 + "- Regla: 12"
             o = Optimizacion(cadena, op)
             listaOpt.append(o)
 
@@ -720,12 +733,12 @@ class Codigo3d:
             op = ""
             if sval1 == "0" or sval2 == "0":
                 if v == sval1 or v == sval2:
-                    op = "# Se elimina la instruccion."
+                    op = "# Se elimina la instruccion." + "- Regla: 9"
                 else:
                     if sval1 == "0":
-                        op = v + " = "+sval2
+                        op = v + " = "+sval2 + "- Regla: 13"
                     else:
-                        op = v + " = " + sval1
+                        op = v + " = " + sval1 + "- Regla: 13"
             o = Optimizacion(cadena, op)
             listaOpt.append(o)
 
@@ -737,19 +750,19 @@ class Codigo3d:
             op = ""
             if sval1 == "1" or sval2 == "1":
                 if v == sval1 or v == sval2:
-                    op = "# Se elimina la instruccion."
+                    op = "# Se elimina la instruccion." + "- Regla: 10"
                 else:
                     if sval1 == "1":
-                        op = v + " = "+sval2
+                        op = v + " = "+sval2 + "- Regla: 14"
                     else:
                         op = v + " = " + sval1
             elif sval1 == "0" or sval2 == "0":
-                op = v + "= 0"
+                op = v + "= 0" + "- Regla: 17"
             elif sval1 == "2" or sval2 == "2":
                 if sval1 == "2":
-                    op = v + " = " + sval2 + "+" + sval2
+                    op = v + " = " + sval2 + "+" + sval2 + "- Regla: 16"
                 else:
-                    op = v + " = " + sval1 + "+" + sval1
+                    op = v + " = " + sval1 + "+" + sval1 + "- Regla: 16"
             o = Optimizacion(cadena, op)
             listaOpt.append(o)
             return v, cadena
@@ -760,14 +773,14 @@ class Codigo3d:
             op = ""
             if sval1 == "1" or sval2 == "1":
                 if v == sval1 or v == sval2:
-                    op = "# Se elimina la instruccion."
+                    op = "# Se elimina la instruccion." + "- Regla: 11"
                 else:
                     if sval1 == "1":
-                        op = v + " = "+sval2
+                        op = v + " = "+sval2 + "- Regla: 15"
                     else:
                         op = v + " = " + sval2
             elif sval2 == "0":
-                op = v + "= 0"
+                op = v + "= 0" + "- Regla: 18"
             o = Optimizacion(cadena, op)
             listaOpt.append(o)
 
@@ -845,18 +858,18 @@ class Codigo3d:
         if expresion.exp1 is not None:
             v, cad = self.procesar_expresion(expresion.exp1, ts)
             cadena += cad + "\n"
-            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+            aux = "\theap.append(" + str(v) + ")" + "\n" + aux
         if expresion.exp2 is not None:
             v, cad = self.procesar_expresion(expresion.exp2, ts)
             cadena += cad + "\n"
-            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+            aux = "\theap.append(" + str(v) + ")" + "\n" + aux
         if expresion.exp3 is not None:
             v, cad = self.procesar_expresion(expresion.exp3, ts)
             cadena += cad + "\n"
-            aux = "heap.append(" + str(v) + ")" + "\n" + aux
+            aux = "\theap.append(" + str(v) + ")" + "\n" + aux
 
         v = t_global.varTemporal()
-        cadena += aux + "\n" + "heap.append(" + str(expresion.id_funcion.value) + ")" + "\n" + str(v) + " = F3D.funcionNativa()" + "\n"
+        cadena += aux + "\n" + "\theap.append(" + str(expresion.id_funcion.value) + ")" + "\n\t" + str(v) + " = F3D.funcionNativa()" + "\n"
 
         return v, cadena
 
@@ -886,7 +899,7 @@ def reporte_optimizacion():
                 print("optimiza 1")
                 op = str(item.der) + "=" + str(asi.der) + "-"
                 op += str(item.izq) + "=" + str(asi.izq)
-                opt = str(item.der) + "=" + str(asi.der)
+                opt = str(item.der) + "=" + str(asi.der) + "- Regla: 1"
                 o = Optimizacion(op, opt)
                 listaOpt.append(o)
                 break;

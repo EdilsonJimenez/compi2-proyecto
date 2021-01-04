@@ -30,4 +30,8 @@ class OptAsignacion():
         self.izq = izq
         self.der = der
 
+class Print_I(Instruccion):
+    def __init__(self, id):
+        self.id = id
+
 
