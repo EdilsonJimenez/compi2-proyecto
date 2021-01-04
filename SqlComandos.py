@@ -182,13 +182,13 @@ class SqlComandos:
 
 
     def GrafoSelect3(self, Distict, ListaCampos, NombresTablas, Uniones):
-        Cadenita = "Select "+ Distict + self.RecorrerListadeCampos(ListaCampos) + " from " + self.RecorrerListadeNombres(NombresTablas)
+        Cadenita = "Select "+ Distict +" "+ self.RecorrerListadeCampos(ListaCampos) + " from " + self.RecorrerListadeNombres(NombresTablas)
         Cadenita +=  self.RecorrerListaUniones(Uniones)
         return Cadenita
 
 
     def GrafoSelect4(self, Distict, ListaCampos, NombresTablas, cuerpo, Uniones, padre):
-        Cadenita = "Select "+ Distict + self.RecorrerListadeCampos(ListaCampos) + " from " + self.RecorrerListadeNombres(NombresTablas)
+        Cadenita = "Select "+ Distict  +"  "+ self.RecorrerListadeCampos(ListaCampos) + " from " + self.RecorrerListadeNombres(NombresTablas)
         Cadenita += self.RecorrerListaCuerpos(cuerpo) + self.RecorrerListaUniones(Uniones)
         return Cadenita
 
@@ -272,12 +272,12 @@ class SqlComandos:
         # ( query )
         elif (AnteQuery == False) and (Query != False) and (Lista_Alias == False):
             #Recorre la lista Querys
-            Cadenita += self.self.RecorrerListaSubconsultas(Query)
+            Cadenita += self.RecorrerListaSubconsultas(Query)
 
         # ( query ) Alias
         elif (AnteQuery == False) and (Query != False) and (Lista_Alias != False):
             #Recorre la lista Querys
-            Cadenita += self.self.RecorrerListaSubconsultas(Query)
+            Cadenita += self.RecorrerListaSubconsultas(Query)
             #Recorre los tipos de alias
             Cadenita += self.RecorrerTiposAlias(Lista_Alias)
 
@@ -285,7 +285,7 @@ class SqlComandos:
 
     def GrafoCampoCasePuro(self, Lista_When, Cuerpo):
         Cadenita = ""
-        Cadenita += " Case " + self.RecorrerListaWhens(Lista_When) + str(Cuerpo)
+        Cadenita += " Case " + str(self.RecorrerListaWhens(Lista_When)) + str(Cuerpo)
         return Cadenita
 
     def GrafoExpresionCase(self, Reservada, ListaExpresiones):
@@ -342,6 +342,7 @@ class SqlComandos:
                 Cadenita +=  self.GrafoTiposWhen(i.Reservada, i.ListaExpresiones1, i.Reservada2, i.ListaExpresiones2, i.Reservada3,i.ListaExpresiones3)
             else:
                 print("No Ningun Tipo")
+        return Cadenita
 
 
     def GrafoTiposWhen(self, Reservada, ListaExpresiones1, Reservada2, ListaExpresiones2, Reservada3, ListaExpresiones3):
@@ -388,7 +389,7 @@ class SqlComandos:
            (ListaExpresiones2 == False) and (Reservada3 == "") and (ListaExpresiones3 == False)):
 
             Cadenita += Reservada
-            Cadenita += " " +self.cadena_expresion(ListaExpresiones1)+" "   # self.graficar_expresion(AnteQuery)
+            Cadenita += " " + self.cadena_expresion(ListaExpresiones1) +" "   # self.graficar_expresion(AnteQuery)
             # Se sustituyo ya que recorre solo expresiones
             # self.Recorrer_Condiciones(ListaExpresiones1, 'Node' + str(self.i))
 
@@ -425,7 +426,7 @@ class SqlComandos:
         Cadenita = ""
         # as Alias
         if ((Alias != "")):
-            Cadenita += "As" + str(Alias)
+            Cadenita += "  As  " + str(Alias) + "  "
         else:
             print("Verificar Errores Sintacticos")
 
@@ -436,7 +437,7 @@ class SqlComandos:
         Cadenita = ""
         # as Alias
         if ((Alias != "")):
-            Cadenita += "As" + str(Alias)
+            Cadenita += "  As  " + str(Alias) + "  "
         else:
             print("Verificar Errores Sintacticos")
 
@@ -446,7 +447,7 @@ class SqlComandos:
         Cadenita = ""
         # as Alias
         if ((Alias != "")):
-            Cadenita += "As" + str(Alias)
+            Cadenita += " As " + str(Alias)  + "  "
         else:
             print("Verificar Errores Sintacticos")
 
@@ -456,7 +457,7 @@ class SqlComandos:
         Cadenita = ""
         # as Alias
         if ((Alias != "")):
-            Cadenita += "As" + str(Alias)
+            Cadenita += " As " + str(Alias) + "  "
         else:
             print("Verificar Errores Sintacticos")
 
@@ -665,12 +666,23 @@ class SqlComandos:
 
     def RecorrerListaCamposGroupBy(self, Lista_Campos):
         Cadenita = ""
+        Contador = 0
+
         for i in Lista_Campos:
-            if isinstance(i, AccesoGroupBy):
-                # print("Es un Campo Accedido Por la Cuerpo ")
-                Cadenita += self.GrafoAccesoGroupBy(i.NombreT, i.Columna, i.Lista_Alias, i.Estado)
+            if(Contador+1 != len(Lista_Campos)):
+                if isinstance(i, AccesoGroupBy):
+                    # print("Es un Campo Accedido Por la Cuerpo ")
+                    Cadenita +=  " "+ self.GrafoAccesoGroupBy(i.NombreT, i.Columna, i.Lista_Alias, i.Estado)+ ",  "
+
+                else:
+                    print("No hay Ningun Tipo")
             else:
-                print("No hay Ningun Tipo")
+                if isinstance(i, AccesoGroupBy):
+                    # print("Es un Campo Accedido Por la Cuerpo ")
+                    Cadenita += " "+ self.GrafoAccesoGroupBy(i.NombreT, i.Columna, i.Lista_Alias, i.Estado)+ "  "
+                else:
+                    print("No hay Ningun Tipo")
+            Contador+=1
         return Cadenita
 
 
@@ -679,7 +691,7 @@ class SqlComandos:
         # Tabla.Columna Alias
         if ((NombreT != "") and (Columna != "") and (Lista_Alias != False) and (Estado == "")):
 
-            Cadenita += NombreT + '.' + Columna + "AS "+ self.RecorrerTiposAlias(Lista_Alias)
+            Cadenita += NombreT + '.' + Columna + " AS "+ self.RecorrerTiposAlias(Lista_Alias)
 
         # Tabla.Columna
         elif ((NombreT != "") and (Columna != "") and (Lista_Alias == False) and (Estado == "")):
@@ -697,7 +709,7 @@ class SqlComandos:
 
         # Tabla.Columna Alias Estado
         elif ((NombreT != "") and (Columna != "") and (Lista_Alias != False) and (Estado != "")):
-            Cadenita += NombreT + '.' + Columna + "AS " + self.RecorrerTiposAlias(Lista_Alias) + str(Estado)
+            Cadenita += NombreT + '.' + Columna + " AS " + self.RecorrerTiposAlias(Lista_Alias) + str(Estado)
 
 
         # Tabla.Columna  Estado
@@ -725,31 +737,30 @@ class SqlComandos:
 
     # GRAFO DEL SUB SELECT
     def GrafoSubSelect(self, ListaCampos, NombresTablas):
-        Cadenita = "Select " + self.RecorrerListadeCampos(ListaCampos) +  "From  "+ self.RecorrerListadeNombres(NombresTablas)
+        Cadenita = "( Select " + self.RecorrerListadeCampos(ListaCampos) +  "From  "+ self.RecorrerListadeNombres(NombresTablas) + ") "
 
         return  Cadenita
 
 
     # Grafo Sub Select Con Cuerpo
     def GrafoSubSelect2(self, ListaCampos, NombresTablas, cuerpo):
-        Cadenita = "Select " + self.RecorrerListadeCampos(ListaCampos) + "From  " + self.RecorrerListadeNombres(NombresTablas)
-        Cadenita += self.RecorrerListaCuerpos(cuerpo)
+        Cadenita = "( Select " + self.RecorrerListadeCampos(ListaCampos) + "From  " + self.RecorrerListadeNombres(NombresTablas)
+        Cadenita += self.RecorrerListaCuerpos(cuerpo)+ ") "
 
         return Cadenita
 
 
 
     def GrafoSubSelect3(self, Distinct, ListaCampos, NombresTablas):
-        Cadenita = "Select " + Distinct +  self.RecorrerListadeCampos(ListaCampos) + "From  " + self.RecorrerListadeNombres(NombresTablas)
+        Cadenita = "( Select " + Distinct +"  "+  self.RecorrerListadeCampos(ListaCampos) + "From  " + self.RecorrerListadeNombres(NombresTablas)+ ") "
 
         return Cadenita
 
     # Grafo Sub Select Con Cuerpo
     def GrafoSubSelect4(self, Distinct, ListaCampos, NombresTablas, cuerpo):
 
-        Cadenita = "Select "  + Distinct + self.RecorrerListadeCampos(ListaCampos) + "From  " + self.RecorrerListadeNombres(
-            NombresTablas)
-        Cadenita += self.RecorrerListaCuerpos(cuerpo)
+        Cadenita = "( Select "  + Distinct+"  " + self.RecorrerListadeCampos(ListaCampos) + "From  " + self.RecorrerListadeNombres(NombresTablas)
+        Cadenita += self.RecorrerListaCuerpos(cuerpo)+ ") "
 
         return Cadenita
 
@@ -990,8 +1001,10 @@ class SqlComandos:
         cadena = ""
         if isinstance(expresiones, ExpresionAritmetica):
             return self.cadena_aritmetica(expresiones)
+
         elif isinstance(expresiones, ExpresionRelacional):
             return self.cadena_relacional(expresiones)
+
         elif isinstance(expresiones, ExpresionLogica):
             return self.cadena_logica(expresiones)
         elif isinstance(expresiones, UnitariaNegAritmetica):
@@ -1004,7 +1017,6 @@ class SqlComandos:
             if isinstance(expresiones.val, string_types):
                 return '"' + str(expresiones.val) + '"'
             return str(expresiones.val)
-
         elif isinstance(expresiones, Variable):
             return expresiones.id
         elif isinstance(expresiones, UnitariaAritmetica):
@@ -1015,6 +1027,12 @@ class SqlComandos:
             return expresiones.nombre
         elif isinstance(expresiones, ExpresionConstante):
             return expresiones.nombre
+
+        #vienen los tipos de subquerys
+        elif isinstance(expresiones,AccesoSubConsultas):
+            return  self.ProcesoSub(expresiones)
+
+
         elif isinstance(expresiones, Absoluto):
             try:
                 cadena = "(" + self.cadena_expresion(expresiones.variable) + ")"
@@ -1026,10 +1044,62 @@ class SqlComandos:
                 # newErr=ErrorRep('Semantico','No se puede aplicar abs() al tipo de dato ',indice)
                 # LisErr.agregar(newErr)
                 return None
+
+        elif isinstance(expresiones, CAMPO_TABLA_ID_PUNTO_ID):
+            return expresiones.tablaid + "." + expresiones.campoid
+
+
         else:
             print(expresiones)
             print('Error:Expresion no reconocida')
         return None
+
+
+#llamada alas subconsultas
+    def ProcesoSub(self,ii):
+        if (isinstance(ii, AccesoSubConsultas)):
+            if (ii.Lista_Alias != False):
+                sub = ii.Query
+                if isinstance(sub, SubSelect):
+                    return self.GrafoSubSelect(sub.Lista_Campos, sub.Nombres_Tablas)
+
+                elif isinstance(sub, SubSelect2):
+                    return self.GrafoSubSelect2(sub.Lista_Campos, sub.Nombres_Tablas, sub.Cuerpo)
+
+                elif isinstance(sub, SubSelect3):
+                    return self.GrafoSubSelect3(sub.Lista_Campos, sub.Nombres_Tablas)
+
+                elif isinstance(sub, SubSelect4):
+                    return self.GrafoSubSelect4(sub.Lista_Campos, sub.Nombres_Tablas, sub.Cuerpo)
+                else:
+                    return ""
+
+            else:
+                sub = ii.Query
+                if isinstance(sub, SubSelect):
+                    return self.GrafoSubSelect(sub.Lista_Campos, sub.Nombres_Tablas)
+
+                elif isinstance(sub, SubSelect2):
+                    return self.GrafoSubSelect2(sub.Lista_Campos, sub.Nombres_Tablas, sub.Cuerpo)
+
+                elif isinstance(sub, SubSelect3):
+                    return self.GrafoSubSelect3(sub.Lista_Campos, sub.Nombres_Tablas)
+
+                elif isinstance(sub, SubSelect4):
+                    return self.GrafoSubSelect4(sub.Lista_Campos, sub.Nombres_Tablas, sub.Cuerpo)
+                else:
+                    print("F")
+                    return ""
+        else:
+            print("No Genero")
+            return ""
+
+
+
+
+
+
+
 
     def cadena_logica(self, expresion: ExpresionLogica):
         cadena = ""
@@ -1056,6 +1126,8 @@ class SqlComandos:
         cadena += str(exp1) + " " + self.getVar(expresion.operador) + " " + str(exp2)
 
         return cadena
+
+
 
     def cadena_aritmetica(self, expresion:ExpresionAritmetica):
         cadena = ""
@@ -1157,11 +1229,11 @@ class SqlComandos:
         elif padreID == OPERACION_LOGICA.EXISTS:
             return 'EXISTS'
         elif padreID == OPERACION_LOGICA.NOT_EXISTS:
-            return 'NOT_EXISTS'
+            return 'NOTEXISTS'
         elif padreID == OPERACION_LOGICA.IN:
             return 'IN'
         elif padreID == OPERACION_LOGICA.NOT_IN:
-            return 'NOT_IN'
+            return 'NOTIN'
         elif padreID == FUNCION_NATIVA.ABS:
             return 'ABS'
         elif padreID == FUNCION_NATIVA.CBRT:
