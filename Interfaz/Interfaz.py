@@ -72,6 +72,10 @@ class Aplicacion:
 
     def ejecutarMain(self):
         main()
+        if len(Lista) > 0:
+            self.consola.insert('insert', Lista[0])
+        else:
+            return
 
 
     def enviarDatos(self):
@@ -86,6 +90,8 @@ class Aplicacion:
             print("<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ESTE SOY")
             print(contenido)
             self.consola2.insert('insert', contenido)
+
+
 
 
     def Seleccionar(self):
@@ -104,6 +110,7 @@ class Aplicacion:
             nueva = str(cadena).upper()
             #print(nueva)
             Inter.inicializarEjecucionAscendente(cadena)
+
             if len(Lista) >0:
                 self.consola.insert('insert', Lista[0])
             else:
@@ -118,6 +125,8 @@ class Aplicacion:
                 self.consola.insert('insert', Lista[0])
             else:
                 return
+
+
 
 
     def reporte_gramatical_(self):     
@@ -192,19 +201,19 @@ class Aplicacion:
 
         # Consola salida c3d
 
-        self.consola2 = scrolledtext.ScrolledText(self.miVentana,height=26, selectbackground="white",
+        self.consola2 = scrolledtext.ScrolledText(self.miVentana,width=88,height=26, selectbackground="white",
                       selectforeground="black", undo=True, foreground="white",background="black")
 
         # fill desde la raiz y se expande = True/1
         self.consola2.pack(side=RIGHT, fill=Y)
-        self.consola2.place(x=810, y=0)
+        self.consola2.place(x=750, y=0)
         # Borde de 0px, padding X = 10px, padding Y = 5 y fuente
         self.consola2.config(bd=0, padx=10, pady=5, font=("Consolas", 11))
 
 
 
         # Area de texto
-        self.entrada = scrolledtext.ScrolledText(self.miVentana,height=26,selectbackground="black")
+        self.entrada = scrolledtext.ScrolledText(self.miVentana,width=88,height=26,selectbackground="black")
         # fill desde la raiz y se expande = True/1
         self.entrada.pack(side=RIGHT, fill=Y)
         self.entrada.place(x=0, y=0)
@@ -216,9 +225,9 @@ class Aplicacion:
 
 
         # Consola salida
-        self.consola = scrolledtext.ScrolledText(self.miVentana,width=183, height=12,selectbackground="black",background="yellow")
+        self.consola = scrolledtext.ScrolledText(self.miVentana,width=183, height=15,selectbackground="black",background="yellow")
         self.consola.pack( fill=X)
-        self.consola.place(x=0, y=530)
+        self.consola.place(x=0, y=510)
         # Borde de 0px, padding X = 10px, padding Y = 5 y fuente
         self.consola.config(bd=0, padx=10, pady=5, font=("Consolas", 11))
 
