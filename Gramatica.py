@@ -2932,7 +2932,6 @@ def p_Alias_Retorno_DOLAR(t):
 
 
 
-
 def p_Alias_RetornoEpsilon(t):
     'ALIASRET  :  '
     t[0] = ""
@@ -3174,6 +3173,8 @@ def p_instruccion_CODE(t):
                     | COMENTARIONORMAL '''
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
+
+
 
 def p_declaracion_simbolo(t):
     '''declaracion_simbolo : IGUAL
