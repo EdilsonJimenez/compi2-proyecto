@@ -1,11 +1,5 @@
-from Instruccion import * 
+from expresiones import UNIDAD_TIEMPO
 
 #========================= CODIGO 3D =================================
 
-def main():
-
-    t1 = CreateDataBase()
-    t1.Ejecutar()
-
-    t0 = useClase("test")
-    t0.Ejecutar()
+print(UNIDAD_TIEMPO.HOUR)

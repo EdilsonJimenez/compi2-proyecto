@@ -44,8 +44,23 @@ def limpiarValores():
 def inicializarEjecucionAscendente(contenido):
     global LisErr, instrucciones, ts_global
     ts_global = TS.TablaDeSimbolos()
+
     instrucciones = g.parse(contenido, LisErr)
+    g.Ejecucion()
    # reporte_errores()
+
+
+def inicializarEjecucionAscendenteSel(contenido):
+    global LisErr, instrucciones, ts_global
+    ts_global = TS.TablaDeSimbolos()
+
+    instrucciones = g.parse(contenido, LisErr)
+
+
+
+# reporte_errores()
+
+
 
 
 def inicializarTS():

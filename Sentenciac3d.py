@@ -17,6 +17,10 @@ t_global = T.Temporales()
 cadena = ""
 
 
+GotoList = []
+
+
+
 
 cadenaFuncion = ""
 cadenaExpresion = ""
@@ -54,8 +58,6 @@ class Codigo3d:
 
         cadena += "\n\tlabel .END\n"
 
-
-
     def imprimir(self):
         global cadena
         self.retorno()
@@ -92,7 +94,6 @@ class Codigo3d:
                     print("NO TRADUCE....")
         cadena += "\n\n\tgoto .END\n"
         cadena += cadenaFuncion
-
 
     def Traducir2(self, instrucciones):
         global ts_global, cadenaFuncion
@@ -279,8 +280,6 @@ class Codigo3d:
 
         return cadenaIf
 
-
-
     def t_Funciones_(self, instancia):
         global t_global, cadenaFuncion, ambitoFuncion, cadenaExpresion
         # temporal, nombre, tipo, tam, pos, rol ,ambito
@@ -386,7 +385,6 @@ class Codigo3d:
         cadenaF += "\n\n"
 
         return cadenaF
-
 
     def t_asignacion(self, asignacion):
         # id, expresion, llamarFuncion
@@ -678,29 +676,45 @@ class Codigo3d:
             cadenaExpresion += c
             return v, cadenaExpresion
         elif isinstance(expresiones, UnitariaNegAritmetica):
-            v,c = procesar_negAritmetica(expresiones, ts)
+            v, c = self.procesar_expresion(expresiones.exp, ts)
             cadenaExpresion += c
+            if isinstance(v, int) or isinstance(v, float):
+                v = v * -1
+            else:
+                if v.isnumeric() or v.isdecimal:
+                    v = "- " + str(v)
+                else:
+                    cadenaExpresion += str(v) + " = " + str(v) + " * -1"
+
             return v, cadenaExpresion
         elif isinstance(expresiones, ExpresionValor):
-            c = str(expresiones.val)
-            if c.isdigit():
+            # c = str(expresiones.val)
+            if isinstance(expresiones.val, int) or isinstance(expresiones.val, float):
                 return expresiones.val, ""
+            # if c.isdigit():
+            #     return expresiones.val, ""
             else:
-                q = "\""+expresiones.val+"\""
+                q = "\""+str(expresiones.val)+"\""
                 return q, ""
         elif isinstance(expresiones, Variable):
             return self.procesar_variable(expresiones, ts)
         elif isinstance(expresiones, UnitariaAritmetica):
             return procesar_unitaria_aritmetica(expresiones, ts)
         elif isinstance(expresiones, ExpresionFuncion):
-            return self.procesar_funcion(expresiones, ts)
+            v, c =  self.procesar_funcion(expresiones, ts)
+            cadenaExpresion += c
+            return v, cadenaExpresion
         elif isinstance(expresiones, ExpresionTiempo):
-            return procesar_unidad_tiempo(expresiones, ts)
+            return '"' + expresiones.nombre + '"', ""
         elif isinstance(expresiones, ExpresionConstante):
             return procesar_constante(expresiones, ts)
+        elif isinstance(expresiones, SelectExpresion):
+            return self.procesar_select_expresion(expresiones, ts)
+        elif isinstance(expresiones, AccesoSubConsultas):
+            return self.procesar_expresion(expresiones.Query, ts)
         elif isinstance(expresiones, Absoluto):
             try:
-                return procesar_expresion(expresiones.variable, ts)
+                return self.procesar_expresion(expresiones.variable, ts)
                 # return abs(procesar_expresion(expresiones.variable,ts))
             except:
                 print('Error no se puede aplicar abs() por el tipo de dato')
@@ -891,6 +905,11 @@ class Codigo3d:
         cadena += aux + "\n" + "\theap.append(" + str(expresion.id_funcion.value) + ")" + "\n\t" + str(v) + " = F3D.funcionNativa()" + "\n"
 
         return v, cadena
+
+    def procesar_select_expresion(self, expresion: SelectExpresion, ts):
+        print(expresion)
+        exp = expresion.listaCampos[0].Columna
+        return self.procesar_expresion(exp, ts)
 
     def generar(self):
         global cadena
