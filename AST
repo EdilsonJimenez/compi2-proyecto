@@ -2,108 +2,143 @@ digraph AST {
 	edge [arrowhead=none]
 	node [color="#31CEF0" shape=box]
 	Node0 [label="\"AST\""]
-	Node1 [label=FUNCION_PRODUCCION]
+	Node1 [label="CREATE DATABASE"]
 	Node0 -> Node1
-	Node2 [label="create or replace"]
+	Node2 [label="Id: DBFase2"]
 	Node1 -> Node2
-	Node3 [label=FUNTION]
-	Node1 -> Node3
-	Node4 [label=cocoa]
-	Node1 -> Node4
-	Node5 [label=PARAMETROS]
-	Node1 -> Node5
-	Node6 [label=PARAMETROS]
-	Node5 -> Node6
-	Node7 [label="integer nombre "]
-	Node6 -> Node7
-	Node8 [label="integer apellido "]
-	Node6 -> Node8
-	Node9 [label=RETURNS]
-	Node1 -> Node9
-	Node10 [label=EXPRESION_]
-	Node1 -> Node10
-	Node11 [label=CONDICION]
-	Node10 -> Node11
-	12 [label=ExpresionValor]
-	12 -> 13
-	13 [label=90]
-	Node11 -> 12
+	Node3 [label=FUNCION_PRODUCCION]
+	Node0 -> Node3
+	Node4 [label=CREATE]
+	Node3 -> Node4
+	Node5 [label=FUNTION]
+	Node3 -> Node5
+	Node6 [label=myFuncion]
+	Node3 -> Node6
+	Node7 [label=PARAMETROS]
+	Node3 -> Node7
+	Node8 [label=PARAMETROS]
+	Node7 -> Node8
+	Node9 [label="text texto "]
+	Node8 -> Node9
+	Node10 [label=RETURNS]
+	Node3 -> Node10
+	Node11 [label=EXPRESION_]
+	Node3 -> Node11
+	Node12 [label=CONDICION]
+	Node11 -> Node12
+	Node12 -> 13
+	Node14 [label="AS $$"]
+	Node3 -> Node14
 	Node15 [label=COMANDO_SQL]
-	Node1 -> Node15
+	Node3 -> Node15
 	Node16 [label=DECLARACIONES]
-	Node1 -> Node16
-	Node17 [label=DECLARACIONES]
-	Node16 -> Node17
-	Node18 [label=CODIGO_GENERADO]
+	Node3 -> Node16
+	Node17 [label=CODIGO_]
+	Node3 -> Node17
+	Node18 [label=CUERPO_CODE]
 	Node17 -> Node18
-	Node19 [label=DECLARACION]
+	Node19 [label=BEGIN]
 	Node18 -> Node19
-	Node20 [label=ID]
-	Node19 -> Node20
-	Node21 [label=x]
+	Node20 [label=_CODIGO_]
+	Node18 -> Node20
+	Node21 [label=CODIGO_GENERADO]
 	Node20 -> Node21
-	Node22 [label=TIPO]
-	Node19 -> Node22
-	Node23 [label=integer]
+	Node22 [label=CODIGO_GENERADO]
+	Node20 -> Node22
+	Node23 [label=RETORNO__]
 	Node22 -> Node23
-	Node24 [label="="]
-	Node19 -> Node24
-	Node19 -> 25
-	25 [label=ExpresionValor]
-	25 -> 26
-	26 [label=24]
-	Node27 [label=CODIGO_GENERADO]
-	Node17 -> Node27
-	Node28 [label=DECLARACION]
-	Node27 -> Node28
-	Node29 [label=ID]
-	Node28 -> Node29
-	Node30 [label=y]
-	Node29 -> Node30
-	Node31 [label=TIPO]
-	Node28 -> Node31
-	Node32 [label=integer]
-	Node31 -> Node32
-	Node33 [label="="]
-	Node28 -> Node33
-	Node28 -> 34
-	34 [label=ExpresionValor]
-	34 -> 35
-	35 [label=25]
-	Node36 [label=CODIGO_]
-	Node1 -> Node36
-	Node37 [label=CUERPO_CODE]
-	Node36 -> Node37
-	Node38 [label=BEGIN]
-	Node37 -> Node38
-	Node39 [label=_CODIGO_]
-	Node37 -> Node39
-	Node40 [label=END]
-	Node37 -> Node40
-	Node41 [label="language sql;"]
-	Node37 -> Node41
-	Node42 [label=INSTRUCCION_SELECT]
-	Node0 -> Node42
-	Node43 [label=SELECT]
-	Node42 -> Node43
-	Node44 [label=LISTA_CAMPOS]
-	Node42 -> Node44
-	Node45 [label=ACCESO_CAMPO]
+	Node24 [label=EXPRESION_]
+	Node23 -> Node24
+	Node25 [label=CONDICION]
+	Node24 -> Node25
+	26 [label=Variable]
+	26 -> 27
+	27 [label=texto]
+	Node25 -> 26
+	Node29 [label=END]
+	Node18 -> Node29
+	Node30 [label=";"]
+	Node18 -> Node30
+	Node0 -> 31
+	31 [label=EJECUCION_FUNCION]
+	Node32 [label=myFuncion]
+	31 -> Node32
+	Node33 [label=PARAMETROS]
+	31 -> Node33
+	Node34 [label=_EXPRESION_]
+	Node33 -> Node34
+	Node35 [label=CONDICION]
+	Node34 -> Node35
+	36 [label=ExpresionValor]
+	36 -> 37
+	37 [label="INICIO CALIFICACION FASE 2"]
+	Node35 -> 36
+	Node39 [label="CREATE TABLE"]
+	Node0 -> Node39
+	Node40 [label="Id: tbProducto"]
+	Node39 -> Node40
+	Node41 [label=CAMPO]
+	Node39 -> Node41
+	Node42 [label="Id: idproducto"]
+	Node41 -> Node42
+	Node43 [label="Tipo: integer"]
+	Node41 -> Node43
+	Node44 [label=VALIDACION]
+	Node41 -> Node44
+	Node45 [label="not null"]
 	Node44 -> Node45
-	Node46 [label="*"]
-	Node45 -> Node46
-	Node47 [label=FROM]
-	Node42 -> Node47
-	Node48 [label=LISTA_TABLAS]
-	Node42 -> Node48
-	Node49 [label=Nombre_Tabla]
+	Node46 [label=VALIDACION]
+	Node41 -> Node46
+	Node47 [label="primary key"]
+	Node46 -> Node47
+	Node48 [label=CAMPO]
+	Node39 -> Node48
+	Node49 [label="Id: producto"]
 	Node48 -> Node49
-	Node50 [label=tabla2]
-	Node49 -> Node50
-	Node51 [label=Uniones]
-	Node42 -> Node51
-	Node52 [label=Final_Instruccion]
-	Node51 -> Node52
-	Node53 [label=""]
-	Node52 -> Node53
+	Node50 [label="Tipo: varchar"]
+	Node48 -> Node50
+	Node51 [label=EXPRESION]
+	Node50 -> Node51
+	52 [label=ExpresionValor]
+	52 -> 53
+	53 [label=150]
+	Node51 -> 52
+	Node54 [label=VALIDACION]
+	Node48 -> Node54
+	Node55 [label="not null"]
+	Node54 -> Node55
+	Node56 [label=CAMPO]
+	Node39 -> Node56
+	Node57 [label="Id: fechacreacion"]
+	Node56 -> Node57
+	Node58 [label="Tipo: date"]
+	Node56 -> Node58
+	Node59 [label=VALIDACION]
+	Node56 -> Node59
+	Node60 [label="not null"]
+	Node59 -> Node60
+	Node61 [label=CAMPO]
+	Node39 -> Node61
+	Node62 [label="Id: estado"]
+	Node61 -> Node62
+	Node63 [label="Tipo: integer"]
+	Node61 -> Node63
+	Node64 [label="CREAR INDICE"]
+	Node0 -> Node64
+	Node65 [label=UNIQUE]
+	Node64 -> Node65
+	Node66 [label="ID INDICE"]
+	Node64 -> Node66
+	Node67 [label=idx_producto]
+	Node66 -> Node67
+	Node68 [label="ID TABLA"]
+	Node64 -> Node68
+	Node69 [label=tbProducto]
+	Node68 -> Node69
+	Node70 [label=COLUMNAS]
+	Node64 -> Node70
+	Node71 [label=ID]
+	Node70 -> Node71
+	Node72 [label=idproducto]
+	Node71 -> Node72
 }

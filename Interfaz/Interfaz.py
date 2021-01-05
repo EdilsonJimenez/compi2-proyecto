@@ -84,6 +84,8 @@ class Aplicacion:
         self.consola.insert('insert', contenido)
         Inter.inicializarEjecucionAscendente(contenido)
 
+
+
     def enviarC3d(self):
         if Op.c3d !=False:
             contenido = Op.c3d.pop()
@@ -99,6 +101,7 @@ class Aplicacion:
         cadena2=""
         self.consola.delete(1.0, "end")
         self.miVentana.title("TytusDB G16")
+
         Lista.clear()
         listaGeneral.clear()
         Modificaciones.clear()
@@ -109,7 +112,7 @@ class Aplicacion:
             cadena = self.entrada.get(SEL_FIRST, SEL_LAST)
             nueva = str(cadena).upper()
             #print(nueva)
-            Inter.inicializarEjecucionAscendente(cadena)
+            Inter.inicializarEjecucionAscendenteSel(cadena)
 
             if len(Lista) >0:
                 self.consola.insert('insert', Lista[0])
@@ -119,7 +122,7 @@ class Aplicacion:
             cadena2 = self.entrada.get(1.0, "end-1c")
             nuevaV = str(cadena2).upper()
             #print(nuevaV)
-            Inter.inicializarEjecucionAscendente(cadena2)
+            Inter.inicializarEjecucionAscendenteSel(cadena2)
 
             if len(Lista) >0:
                 self.consola.insert('insert', Lista[0])
@@ -130,25 +133,31 @@ class Aplicacion:
 
 
     def reporte_gramatical_(self):     
-            try:
-               Gram.reporte_gramatical()
-            except:
-                print("error en el reporte gramatical :(")
+        try:
+           Gram.reporte_gramatical()
+        except:
+            print("error en el reporte gramatical :(")
 
 
     def reporte_optimizacion_(self):
-            #try:
-                Op.reporte_optimizacion()
-            #except:
-            #    print("error en el reporte optimizacion :(")
-                
-    def reporte_AST_(self):     
+        Op.reporte_optimizacion()
 
-               Gram.reporte_AST_GLOB()
+
+
+    def reporte_AST_(self):
+        Gram.reporte_AST_GLOB()
+
+
 
     def Traducir_Codigo_(self):
-               Gram.traducir_AST_GLOB()
-               self.enviarC3d()
+        Gram.traducir_AST_GLOB()
+        self.enviarC3d()
+
+
+    def Ejecucion(self):
+        Gram.Ejecucion()
+
+
 
     def graficaTabla(self):
         INST.tabla_simbolos()
@@ -178,7 +187,9 @@ class Aplicacion:
 
         self.menuAnalizar = Menu(self.barraMenu, tearoff=0)
         #self.menuAnalizar.add_command(label="Run", command=self.enviarDatos)
-        self.menuAnalizar.add_command(label="Ejecucion", command=self.Seleccionar)
+
+        self.menuAnalizar.add_command(label="Interpretar", command=self.Seleccionar)
+        self.menuAnalizar.add_command(label="Ejecucion", command=self.Ejecucion)
         self.menuAnalizar.add_command(label="Graficar Arbol", command=self.reporte_AST_)
         self.menuAnalizar.add_command(label="Traducir", command=self.Traducir_Codigo_)
 

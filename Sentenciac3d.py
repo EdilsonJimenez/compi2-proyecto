@@ -17,6 +17,10 @@ t_global = T.Temporales()
 cadena = ""
 
 
+GotoList = []
+
+
+
 
 cadenaFuncion = ""
 cadenaExpresion = ""
@@ -54,8 +58,6 @@ class Codigo3d:
 
         cadena += "\n\tlabel .END\n"
 
-
-
     def imprimir(self):
         global cadena
         self.retorno()
@@ -92,7 +94,6 @@ class Codigo3d:
                     print("NO TRADUCE....")
         cadena += "\n\n\tgoto .END\n"
         cadena += cadenaFuncion
-
 
     def Traducir2(self, instrucciones):
         global ts_global, cadenaFuncion
@@ -279,8 +280,6 @@ class Codigo3d:
 
         return cadenaIf
 
-
-
     def t_Funciones_(self, instancia):
         global t_global, cadenaFuncion, ambitoFuncion, cadenaExpresion
         # temporal, nombre, tipo, tam, pos, rol ,ambito
@@ -386,7 +385,6 @@ class Codigo3d:
         cadenaF += "\n\n"
 
         return cadenaF
-
 
     def t_asignacion(self, asignacion):
         # id, expresion, llamarFuncion

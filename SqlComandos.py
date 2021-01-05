@@ -1250,7 +1250,7 @@ class SqlComandos:
         elif padreID == OPERACION_LOGICA.OR:
             return 'OR'
         elif padreID == OPERACION_RELACIONAL.IGUALQUE:
-            return '=='
+            return '='
         elif padreID == OPERACION_RELACIONAL.DISTINTO:
             return '!='
         elif padreID == OPERACION_RELACIONAL.MAYORIGUAL:
