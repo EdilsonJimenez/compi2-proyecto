@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import scrolledtext
 from tkinter import filedialog as FiledDialog
 from tkinter import ttk
+from tkinter import messagebox
+
 import Instruccion as INST
 from io import open
 import Gramatica as Gram
@@ -14,6 +16,7 @@ import Sentenciac3d as Op
 
 
 
+
 # ------------------------------------------- VENTANA PRINCIPAL ------------------------------------------------------ #
 class Aplicacion:
 
@@ -21,11 +24,14 @@ class Aplicacion:
     ruta = ""
 # ----------------------------------------- FUNCIONES MENU ARCHIVO --------------------------------------------------- #
     def nuevo(self):
+
         global ruta
         ruta = ""
         # Borra desde el primer caracter hasta el final del texto.
         self.entrada.delete(1.0, "end")
         self.consola.delete(1.0, "end")
+        self.consola2.delete(1.0,"end")
+
         Lista.clear()
         self.miVentana.title("TytusDB G16")
 
@@ -66,12 +72,26 @@ class Aplicacion:
 
     def ejecutarMain(self):
         main()
+        if len(Lista) > 0:
+            self.consola.insert('insert', Lista[0])
+        else:
+            return
 
 
     def enviarDatos(self):
         contenido = self.entrada.get(1.0, "end-1c")
+
         self.consola.insert('insert', contenido)
         Inter.inicializarEjecucionAscendente(contenido)
+
+    def enviarC3d(self):
+        if Op.c3d !=False:
+            contenido = Op.c3d.pop()
+            print("<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ESTE SOY")
+            print(contenido)
+            self.consola2.insert('insert', contenido)
+
+
 
 
     def Seleccionar(self):
@@ -90,6 +110,7 @@ class Aplicacion:
             nueva = str(cadena).upper()
             #print(nueva)
             Inter.inicializarEjecucionAscendente(cadena)
+
             if len(Lista) >0:
                 self.consola.insert('insert', Lista[0])
             else:
@@ -104,6 +125,8 @@ class Aplicacion:
                 self.consola.insert('insert', Lista[0])
             else:
                 return
+
+
 
 
     def reporte_gramatical_(self):     
@@ -124,8 +147,8 @@ class Aplicacion:
                Gram.reporte_AST_GLOB()
 
     def Traducir_Codigo_(self):
-
                Gram.traducir_AST_GLOB()
+               self.enviarC3d()
 
     def graficaTabla(self):
         INST.tabla_simbolos()
@@ -175,24 +198,45 @@ class Aplicacion:
         self.barraMenu.add_cascade(menu=self.menuReportes, label="Reportes")
         self.barraMenu.add_cascade(menu=self.menu3D, label="Codigo Intermedio")
 
-        # Area de texto
-        self.entrada = scrolledtext.ScrolledText(self.miVentana)
+
+        # Consola salida c3d
+
+        self.consola2 = scrolledtext.ScrolledText(self.miVentana,width=88,height=26, selectbackground="white",
+                      selectforeground="black", undo=True, foreground="white",background="black")
 
         # fill desde la raiz y se expande = True/1
-        self.entrada.pack(fill="both", expand=1)
+        self.consola2.pack(side=RIGHT, fill=Y)
+        self.consola2.place(x=750, y=0)
+        # Borde de 0px, padding X = 10px, padding Y = 5 y fuente
+        self.consola2.config(bd=0, padx=10, pady=5, font=("Consolas", 11))
+
+
+
+        # Area de texto
+        self.entrada = scrolledtext.ScrolledText(self.miVentana,width=88,height=26,selectbackground="black")
+        # fill desde la raiz y se expande = True/1
+        self.entrada.pack(side=RIGHT, fill=Y)
+        self.entrada.place(x=0, y=0)
         # Borde de 0px, padding X = 10px, padding Y = 5 y fuente
         self.entrada.config(bd=0, padx=10, pady=5, font=("Consolas", 11))
 
-        self.sepa = ttk.Separator(self.miVentana, orient=HORIZONTAL)
-        self.sepa.pack(fill="x", expand=1)
+
+
+
 
         # Consola salida
-        mensaje = StringVar()
-        mensaje.set("Consola: ")
-        self.labelConsola = Label(self.miVentana, textvar=mensaje, justify='left')
-        self.labelConsola.pack(side="left")
-        self.consola = scrolledtext.ScrolledText(self.miVentana, width=50, height=10)
-        self.consola.pack(fill="both", expand=0)
+        self.consola = scrolledtext.ScrolledText(self.miVentana,width=183, height=15,selectbackground="black",background="yellow")
+        self.consola.pack( fill=X)
+        self.consola.place(x=0, y=510)
+        # Borde de 0px, padding X = 10px, padding Y = 5 y fuente
+        self.consola.config(bd=0, padx=10, pady=5, font=("Consolas", 11))
+
+
+
+
+
+
+
 
         # Loop ventana
         self.miVentana.config(menu=self.barraMenu)

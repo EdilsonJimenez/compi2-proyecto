@@ -94,6 +94,8 @@ reservadas = {
     'to': 'TO',
     'drop': 'DROP',
     'add': 'ADD',
+    'print': 'PRINT',
+    'execute': 'EXECUTE',
 
     # Date/Time Types
     'timestamp': 'TIMESTAMP',
@@ -207,7 +209,7 @@ reservadas = {
 
     #Funciones
     'returns' :'RETURNS',
-    'funtion' :'FUNTION',
+    'function' :'FUNCTION',
     'language':'LANGUAGE',
     'sql'     :'SQL',
     'declare' :'DECLARE',
@@ -244,6 +246,7 @@ tokens = [
              'PARIZQ',
              'PARDER',
              'PUNTOCOMA',
+             'DOLAR',
              # NOT
              # AND
              # OR
@@ -313,6 +316,8 @@ t_LEFTSHIFT = r'<<'
 t_RIGHTSHIFT = r'>>'
 t_POTENCIA = r'\^'
 t_IGUAL2= r':='
+t_DOLAR = r'\$'
+
 
 # Importacion de Objetos Del Analisis
 
@@ -509,6 +514,12 @@ def p_instruccion(t):
 
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
+
+
+def p_print(t) :
+    'CODE_    : PRINT PARIZQ ID PARDER PUNTOCOMA'
+    t[0] = Print_I(t[3])
+
 
 
 
@@ -1358,7 +1369,7 @@ def p_Cuerpo_WhenElse(t):
 def p_instruccion_dml_comandos_CREATE_TABLE(t):
     'DML_COMANDOS       : CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA'
     t[0] = CreateTable(t[3], t[5], None)
-    print("Estoy en create")
+    #print("Estoy en create")
     rep_gramatica('\n <TR><TD> DML_COMANDOS →   CREATE TABLE ID PARIZQ  CUERPO_CREATE_TABLE PARDER PUNTOCOMA </TD><TD> t[0] = CreateTable(t[3], t[5], None)  </TD></TR>')
 
 
@@ -1590,7 +1601,7 @@ def p_Create_TABLE_TIPO_CAMPO2_2(t):
                                 | DEFAULT ENTERO
                                 | DEFAULT ID'''
     t[0] = CampoValidacion(t[1], t[2])
-    print("VALIDACION DEFAULT CASI")
+    #print("VALIDACION DEFAULT CASI")
     rep_gramatica('\n <TR><TD> VALIDACION_CAMPO_CREATE →   '+str(t[1]) + str(t[2]) + '   </TD><TD>  t[0] = CampoValidacion(t[1], t[2]) </TD></TR>')
 
 
@@ -2790,7 +2801,7 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNCTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     t[0]=Funciones_(t[1],t[3],t[8],t[9] , t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
 
@@ -2817,7 +2828,7 @@ def p_FuncioneeR(t):
 
 
 def p_ReservadaFunc(t):
-    'FUNCI  :  FUNTION'
+    'FUNCI  :  FUNCTION'
     t[0] = str(t[1])
 
 
@@ -2908,9 +2919,20 @@ def p_Retorno_Cuerpo(t):
 
 #------------- Alias del retorno
 def p_Alias_Retorno(t):
-    'ALIASRET  :  AS ID '
+    'ALIASRET  :  AS ALI '
     t[0] = str(t[2])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  ESTOY JALANDO EL ALIAS >>>>>>>>>>>>>>>>>>>>>>"+str(t[2]))
+
+
+def p_Alias_RetornoID(t):
+    'ALI  :  ID '
+    t[0] = str(t[1])
+
+def p_Alias_Retorno_DOLAR(t):
+    'ALI  :  DOLAR DOLAR '
+    t[0] = str(t[1])+str(t[2])
+
+
 
 
 def p_Alias_RetornoEpsilon(t):
@@ -2922,8 +2944,20 @@ def p_Alias_RetornoEpsilon(t):
 #-----------------------------------------------------------  SECCION DE CODIGO
 
 def p_Code_Estructures(t):
-    'CODE  : BEGIN CODEEPSILON END ARGU_N_N'
+    'CODE  : BEGIN CODEEPSILON END DOL ARGU_N_N'
     t[0] = Code_Funciones(t[4], t[2])
+
+
+
+def p_Code_Dolarcito(t):
+    'DOL  :  DOLAR DOLAR '
+    t[0] = str(t[1]) + str(t[2])
+
+
+def p_Code_DolarEpsilon(t):
+    'DOL  :  '
+    t[0] = ""
+
 
 
 #-------------------------------------  Tipos de Argumento
@@ -2998,19 +3032,13 @@ def p_CodigoFunciones(t):
     t[0] = t[1]
 
 
-
-
-
-
-
 def p_Codigo_FuncionesLl(t):
-    'EJECUTARFUNCION  : ID PARIZQ EXPRESI PARDER '
-    t[0] = EjecucionFuncion(t[1],t[3])
+    'EJECUTARFUNCION  : EXECUTE ID PARIZQ EXPRESI PARDER '
+    t[0] = EjecucionFuncion(t[2],t[4])
 
-
-
-
-
+def p_Codigo_FuncionesLl2(t):
+    'EJECUTARFUNCION  : SELECT ID PARIZQ EXPRESI PARDER '
+    t[0] = EjecucionFuncion(t[2],t[4])
 
 #------------ Lista Expresiones
 def p_ExpressEs(t):

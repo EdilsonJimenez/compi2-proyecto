@@ -6818,9 +6818,9 @@ class Insert_Datos(Instruccion):
         self.valores = valores
 
     def Ejecutar(self):
-        print("ENTRA AL INSERT -----------------------------------------------------------------------")
+        #print("ENTRA AL INSERT -----------------------------------------------------------------------")
         FilaG = randint(1,500)
-        print("Ejecucion")
+        #print("Ejecucion")
         global ts_global, baseActual
         global LisErr
         r = ts_global.obtenerBasesDatos(baseActual)
@@ -6837,7 +6837,7 @@ class Insert_Datos(Instruccion):
                 #print(">>>>>>>"+str(rT.id))
 
                 temporal:CampoTabla = rT.cuerpo
-                print("ENTRA AL INSERT 2-----------------------------------------------------------------------")
+                #print("ENTRA AL INSERT 2-----------------------------------------------------------------------")
                 # borre un for incesesario de impresion
 
                 cC = 0
@@ -6852,7 +6852,7 @@ class Insert_Datos(Instruccion):
                     cV += 1
 
                 if cC == cV:
-                    print(" >> Parametros exactos. +++++++++++++++++++++++++++++++++++++++++++")
+                    #print(" >> Parametros exactos. +++++++++++++++++++++++++++++++++++++++++++")
                     index = 0
                     banderaInsert = False
 
@@ -6863,26 +6863,26 @@ class Insert_Datos(Instruccion):
                             if isinstance(temporal[index].tipo, valorTipo):
 
                                 resultado = Inter.procesar_expresion(cc, None)
-                                print(" Mi proceso: "+str(resultado))
+                                #print(" Mi proceso: "+str(resultado))
 
                                 if isinstance(resultado, string_types) and (str(temporal[index].tipo.valor).upper() == 'VARCHAR' or str(temporal[index].tipo.valor).upper() == 'CHARACTER' or str(temporal[index].tipo.valor).upper() == 'CHAR'):
-                                    print(" >>> Parametros correctos, insertar, Validar la exprecion.")
+                                    #print(" >>> Parametros correctos, insertar, Validar la exprecion.")
                                     banderaInsert = True
                                 else:
                                     imprir("INSERT BD: Parametros incorrectos. ")
                                     banderaInsert = False
                             else:
                                 resultado = Inter.procesar_expresion(cc, None)
-                                print(" Mi proceso: "+str(resultado))
+                                #print(" Mi proceso: "+str(resultado))
                                 #print(" Valor: >>>" + str(cc.val))
                                 if isinstance(resultado, string_types) and  str(temporal[index].tipo).upper() == 'TEXT' or str(temporal[index].tipo).upper() == 'DATE':
-                                    print(" >>> Parametros correctos, insertar")
+                                    #print(" >>> Parametros correctos, insertar")
                                     banderaInsert = True
                                 elif str(temporal[index].tipo).upper() == 'BOOLEAN'and (str(cc.val).upper() == 'TRUE' or str(cc.val).upper() == 'FALSE'):
                                     imprir("INSERT BD: Parametros correctos, insertar")
                                     banderaInsert = True
                                 elif int(resultado) > 0 and (str(temporal[index].tipo).upper() == 'SMALLINT' or str(temporal[index].tipo).upper() == 'INTEGER' or str(temporal[index].tipo).upper() == 'INT' or str(temporal[index].tipo).upper() == 'BIGINT' or str(temporal[index].tipo).upper() == 'DECIMAL' or str(temporal[index].tipo).upper() == 'REAL' or str(temporal[index].tipo).upper() == 'FLOAT' or str(temporal[index].tipo).upper() == 'MONEY'):
-                                    print(" >>> Parametros correctos, insertar")
+                                    #print(" >>> Parametros correctos, insertar")
                                     banderaInsert = True
                                 else:
                                     imprir("INSERT BD: Parametros incorrectos. ")
@@ -6958,10 +6958,10 @@ class CreateTable(Instruccion):
                         if isinstance(vali, CampoValidacion):
                             val: CampoValidacion = vali
                             if vali.id is None:
-                                print("nada")
+                                #print( "nada")
                                 pass
                             else:
-                                print(str(val.id) + str(val.valor))
+                                #print(str(val.id) + str(val.valor))
                                 temporal2 = constraintTabla(str(val.id), "auto", None, x.id, None, self.id)
                                 ts_global.agregarValidacion(temporal2)
 
@@ -6972,27 +6972,27 @@ class CreateTable(Instruccion):
                             else:
                                 print(val.valor+val.id+val.listas_id+val.idRef)
                 else:
-                    print(">>> ES OTRO TIPO DE CAMPO")
+                    #print(">>> ES OTRO TIPO DE CAMPO")
                     vv: constraintTabla = v
                     Vcion = ObjetoValidacion(self.id, vv.id, vv.valor, vv.id)
                     ts_global.agregarValidacion(Vcion)
 
             if rM == 0:
                 ts_global.agregarTabla(self)
-                print(" > Se creo la tabla en la base de datos.")
+                #print(" > Se creo la tabla en la base de datos.")
 
             elif rM == 1:
-                print("> 1")
+                #print("> 1")
                 er =  ErrorRep('Semantico', 'No se encontro el archivo data.',0)
                 LisErr.agregar(er)
 
             elif rM == 2:
-                print("> 2")
+                #print("> 2")
                 er =  ErrorRep('Semantico', 'No existe la base de datos actual.',0)
                 LisErr.agregar(er)
 
             elif rM == 3:
-                print( "> 3")
+                #print( "> 3")
                 er =  ErrorRep('Semantico', 'La tabla ya existe en la base de datos.',0)
                 LisErr.agregar(er)
         else:
@@ -7101,13 +7101,13 @@ class CreateDataBase(Instruccion):
                 imprir("CREATE DB:  Base de datos creada con exito!")
                 if rM == 0:
                     ts_global.agregarBasesDatos(self)
-                    print(" > Base de datos creada con exito!")
+                    #print(" > Base de datos creada con exito!")
                 elif rM == 1 or rM == 2:
-                    print("> Base de datos ya existe.")
+                    #print("> Base de datos ya existe.")
                     er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
                     LisErr.agregar(er)
             else:
-                print("Si encontre la BD. ")
+                #print("Si encontre la BD. ")
                 imprir("CREATE DB:  La Base de Datos No se Creo ya que existe!")
                 er = ErrorRep('Semantico', 'La Base de datos ya existe', 0)
                 LisErr.agregar(er)
@@ -7121,14 +7121,14 @@ class CreateDataBase(Instruccion):
                 baseN.append(self.idBase)
                 if rM == 0:
                     ts_global.agregarBasesDatos(self)
-                    print(" > Base de datos creada con exito!")
+                    #print(" > Base de datos creada con exito!")
                 elif rM == 1 or rM == 2:
                     print("> Base de datos ya existe Se va a Reemplazar ")
             else:
                 imprir("CREATE DB:  Se encontro la BD Bamos a Reemplazar!")
                 Lista.clear();
                 Lista.append(Ejecucion)
-                print("Si encontre la BD. Bamos a Reemplazar la Misma! ")
+                #print("Si encontre la BD. Bamos a Reemplazar la Misma! ")
 
 class ShowDatabases(Instruccion):
     def __init__(self, cadenaLike):
@@ -7142,7 +7142,7 @@ class ShowDatabases(Instruccion):
         r  = Master.showDatabases()
         if r  is not None:  #si lo encuentra
             for element in r:
-                print(str(element))
+                #print(str(element))
                 imprir("SHOW DB:>"+ str(element))
         else:
             imprir("SHOW DB: No se encontro la BD")
@@ -7180,7 +7180,7 @@ class AlterDataBase(Instruccion):
             error += "  Se encontro el Valor a Setear"
 
         if (c1 and c2):
-            print("Excelente se puede editar")
+            #print("Excelente se puede editar")
             #Editamos nuestro diccionario
             ts_global.actualizarCreateDataBase(str(self.idDB),str(self.opcion))
             imprir("ALTER DB: Edicion base de Datos Exitosa!")
@@ -7286,10 +7286,10 @@ class CreacionEnum(Instruccion):
             er = ErrorRep('Semantico', 'Se necesitan cadenas para crearlos..', 0)
             LisErr.agregar(er)
 
-        print("AQUI ESTAN")
+        #print("AQUI ESTAN")
         for ca in ts_global.Tipos:
             a = ts_global.Tipos.get(ca)
-            print(str(a.tipo))
+            #print(str(a.tipo))
 
 # Crear funciones de ejecucion ----------------------------------
 #Prueba clase errores
@@ -7454,16 +7454,16 @@ class Alter_Table_AddColumn(Instruccion):
                         bandera = False
                         for elemento2 in ts_global.Tablas:
                             x: CreateTable = ts_global.obtenerTabla(elemento2)
-                            print(str(x.id) + " ÑÑÑ " +str(self.id_table))
+                            #print(str(x.id) + " ÑÑÑ " +str(self.id_table))
                             if (x.id == self.id_table):
                                 for ele in x.cuerpo:
                                     y: CampoTabla = ele
                                     print(str(y.id) + str(elemento.val))
                                     if y.id != elemento.val:
-                                        print("BANDERA ES TRUE")
+                                        #print("BANDERA ES TRUE")
                                         bandera = True
                                     else:
-                                        print(y.id + "<<<<<<<<<<<<<<<<<<<<<<")
+                                        print(y.id + "<")
 
 
                         if bandera == True:
