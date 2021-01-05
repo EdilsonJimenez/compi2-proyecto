@@ -56,7 +56,27 @@ def main():
 	heap.append(t2)
 	F3D.ejecutarSQL()
 
+<<<<<<< Updated upstream
 	goto .R
+=======
+	#Llamada a funcion o procedimiento.
+	stack.append("F9")
+	goto .F8
+	label .F9
+	#Llamada a funcion o procedimiento.
+	stack.append("F11")
+	goto .F10
+	label .F11
+	t41 = """ INSERT INTO   tbCalificacion  values(  5,  "Valida Delete",  5   );"""
+	heap.append(t41)
+	F3D.ejecutarSQL()
+
+	t42 = """Select  * from tbbodega; 
+"""
+	heap.append(t42)
+	F3D.ejecutarSQL()
+
+>>>>>>> Stashed changes
 
 
 	label .F3
@@ -290,11 +310,11 @@ def main():
 	heap.append(t35)
 	F3D.ejecutarSQL()
 
-	t36 = """ INSERT INTO   tbbodega  values(  2,  "BODEGA ZONA 12",  1   );"""
+	t36 = """ INSERT INTO   tbbodega  values(  4,  "BODEGA ZONA 12",  1   );"""
 	heap.append(t36)
 	F3D.ejecutarSQL()
 
-	t37 = """ INSERT INTO   tbbodega  values(  3,  "BODEGA ZONA 11",  1   );"""
+	t37 = """ INSERT INTO   tbbodega  values(  4,  "BODEGA ZONA 11",  1   );"""
 	heap.append(t37)
 	F3D.ejecutarSQL()
 
@@ -309,6 +329,24 @@ def main():
 	goto .R
 
 
+	label .F10
+	#**** Procedimiento *****
+
+	# Parametros 
+
+	# Retorno 
+	global r4
+
+	# Declaraciones 
+	t40 = 0
+	#Fin declaraciones
+
+
+	print(" |>> " + str(t40)) 
+
+	goto .R
+
+
 	label .R
 	u = stack.pop()
 	if u == "F1":
@@ -317,5 +355,24 @@ def main():
 		goto .F2
 	if u == "F3":
 		goto .F3
+<<<<<<< Updated upstream
+=======
+	if u == "F4": 
+		goto .F4
+	if u == "F5": 
+		goto .F5
+	if u == "F6": 
+		goto .F6
+	if u == "F7": 
+		goto .F7
+	if u == "F8": 
+		goto .F8
+	if u == "F9": 
+		goto .F9
+	if u == "F10": 
+		goto .F10
+	if u == "F11": 
+		goto .F11
+>>>>>>> Stashed changes
 
 	label .END
