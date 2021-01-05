@@ -943,6 +943,12 @@ def reporte_optimizacion():
                 break;
 
 
+    ope  = "goto .R" + "-"+ "Label .R"
+    opet = "Label .R" + "- Regla: 2"
+    regla2 = Optimizacion(ope, opet)
+
+    listaOpt.append(regla2)
+
     for o in listaOpt:
         cadena += '\n <TR><TD>'+o.original+'</TD><TD>'+o.optimizado+'</TD></TR>'
 
