@@ -37,13 +37,22 @@ def main():
 	stack.append("F2")
 	goto .F1
 	label .F2
-	t9 = """ DELETE  From tbbodega WHERE idbodega = 4;  """
+	t9 = """Select  idbodega,bodega from tbbodega; 
+"""
 	heap.append(t9)
 	F3D.ejecutarSQL()
 
-	t10 = """Select  idbodega,bodega from tbbodega; 
+	#Llamada a funcion o procedimiento.
+	stack.append("F4")
+	goto .F3
+	label .F4
+	t12 = """ DELETE  From tbbodega WHERE idbodega = 4;  """
+	heap.append(t12)
+	F3D.ejecutarSQL()
+
+	t13 = """Select  * from tbbodega; 
 """
-	heap.append(t10)
+	heap.append(t13)
 	F3D.ejecutarSQL()
 
 
@@ -73,7 +82,7 @@ def main():
 	heap.append(t6)
 	F3D.ejecutarSQL()
 
-	t7 = """ INSERT INTO   tbbodega  values(  4,  "BODEGA ZONA 1",  1   );"""
+	t7 = """ INSERT INTO   tbbodega  values(  3,  "BODEGA ZONA 1",  1   );"""
 	heap.append(t7)
 	F3D.ejecutarSQL()
 
@@ -84,11 +93,37 @@ def main():
 	goto .R
 
 
+	label .F3
+	#**** Procedimiento *****
+
+	# Parametros 
+
+	# Retorno 
+	global r1
+
+	# Declaraciones 
+	t10 = 0
+	#Fin declaraciones
+
+
+	t11 = """ UPDATE  tbbodega  SET   bodega = "bodega zona 9"  WHERE  idbodega = 3; """
+	heap.append(t11)
+	F3D.ejecutarSQL()
+
+	print(" |>> " + str(t10)) 
+
+	goto .R
+
+
 	label .R
 	u = stack.pop()
 	if u == "F1": 
 		goto .F1
 	if u == "F2": 
 		goto .F2
+	if u == "F3": 
+		goto .F3
+	if u == "F4": 
+		goto .F4
 
 	label .END
