@@ -87,8 +87,8 @@ class Aplicacion:
     def enviarC3d(self):
         if Op.c3d !=False:
             contenido = Op.c3d.pop()
-            print("<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ESTE SOY")
-            print(contenido)
+            #print("<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ESTE SOY")
+            #print(contenido)
             self.consola2.insert('insert', contenido)
 
 

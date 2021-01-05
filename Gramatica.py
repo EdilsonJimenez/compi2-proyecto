@@ -1612,7 +1612,7 @@ def p_Create_TABLE_TIPO_CAMPO4_2(t):
 def p_Create_TABLE_TIPO_CAMPO3_2(t):
     'VALIDACION_CAMPO_CREATE_VACIO  :  '
     t[0] = CampoValidacion(None, None)
-    print("VALIDACION VACIA")
+    #print("VALIDACION VACIA")
 
 
 # ***************************************************************************************************************
@@ -1689,7 +1689,7 @@ def p_instruccion_dml_comandos_INSERT_COLUMNA2(t):
 
 def p_instruccion_dml_comandos_INSERT_VALORES(t):
     'VALORES       : VALORES VALOR'
-    print("SI ENTRO VALORES")
+    #print("SI ENTRO VALORES")
     t[1].append(t[2])
     t[0] = t[1]
     rep_gramatica('\n <TR><TD> VALORES →     VALORES VALOR   </TD><TD> t[1].append(t[2])    t[0] = t[1] </TD></TR>')
@@ -2798,7 +2798,7 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNCTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNCTION  ID  PARIZQ PARAMETROSG PARDER RETURNS TIPO_CAMPO ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     t[0]=Funciones_(t[1],t[3],t[8],t[9] , t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
 
@@ -2911,8 +2911,6 @@ def p_Declaracion_VariablesAsignacion(t):
 def p_Retorno_Cuerpo(t):
     ' RETORNOS  :   RETURN expresion PUNTOCOMA'
     t[0] = RetornoFuncion(t[2])
-
-
 
 #------------- Alias del retorno
 def p_Alias_Retorno(t):
@@ -3124,15 +3122,12 @@ def p_declaracion_variable(t):
         t[0] = Declaracion(t[1], t[2], t[3], t[4], None, None)
 
 
-
 def p_declaracion_constante(t):
     'declaracion_constante : CONSTANT'
-
     t[0] = True
 
 def p_declaracion_constatne_e(t):
     'declaracion_constante : '
-
     t[0] = False
 
 def p_declaracion_not_null(t):

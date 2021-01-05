@@ -79,12 +79,14 @@ class Codigo3d:
                 cadena += self.t_llamadaFuncion(i)
             elif isinstance(i, Procedimientos_):
                 cadenaFuncion += self.t_Procedimientos_(i)
+            elif isinstance(i, CrearIndice):
+                cadena += self.t_CrearIndice(i)
             else:
                 aux = SQL(i)
                 aux.generarCadenaSQL()
                 if aux.CadenaSQL is not None:
                     print("PRODUCE SENTENCIA SQL-----------------------------------===")
-                    print(str(aux.CadenaSQL))
+                    #print(str(aux.CadenaSQL))
                     cadena += "\n" + self.t_sentenciaSQL(aux)
                 else:
                     print("NO TRADUCE....")
@@ -120,7 +122,7 @@ class Codigo3d:
                 aux.generarCadenaSQL()
                 if aux.CadenaSQL is not None:
                     print("PRODUCE SENTENCIA SQL-----------------------------------===2")
-                    print(str(aux.CadenaSQL))
+                    #print(str(aux.CadenaSQL))
                     cadenaT += "\n" + self.t_sentenciaSQL(aux)
                 else:
                     print("NO TRADUCE....")
@@ -137,7 +139,7 @@ class Codigo3d:
             if v.nombre == id.id and v.ambito == ambitoFuncion:
                 resultado = v.temporal
 
-        cadena += "\n\tprint("+str(resultado)+") \n"
+        cadena += "\n\tprint(\" |>> \" + str("+str(resultado)+")) \n"
         return cadena
 
     def t_If(self, instancia):
@@ -173,18 +175,19 @@ class Codigo3d:
 
         original = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
         # OPTIMIZACION REGLA 4 y 5
-        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
-            if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
-                co = "goto ."+verdadero + "- Regla: 4"
-                o = Optimizacion(original, co)
-                listaOpt.append(o)
+        if isinstance(instancia.condicion.exp1, ExpresionValor) and instancia(instancia.condicion.exp2, ExpresionValor):
+            if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+                if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
+                    co = "goto ."+verdadero + "- Regla: 4"
+                    o = Optimizacion(original, co)
+                    listaOpt.append(o)
 
-        original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
-        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
-            if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
-                co = "goto ."+falso + "- Regla: 5"
-                o = Optimizacion(original2, co)
-                listaOpt.append(o)
+            original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
+            if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+                if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
+                    co = "goto ."+falso + "- Regla: 5"
+                    o = Optimizacion(original2, co)
+                    listaOpt.append(o)
 
         return cadenaIf
 
@@ -258,20 +261,21 @@ class Codigo3d:
                 cadenaIf += self.Traducir2(instancia.instElse)
         cadenaIf += "\tlabel ."+salto+"\n"
 
-        original = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
-        # OPTIMIZACION REGLA 4 y 5
-        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
-            if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
-                co = "\tgoto ."+verdadero + "- Regla: 4"
-                o = Optimizacion(original, co)
-                listaOpt.append(o)
+        if isinstance(instancia.condicion.exp1, ExpresionValor) and instancia(instancia.condicion.exp2, ExpresionValor):
+            original = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
+            # OPTIMIZACION REGLA 4 y 5
+            if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+                if instancia.condicion.exp1.val == instancia.condicion.exp2.val:
+                    co = "\tgoto ."+verdadero + "- Regla: 4"
+                    o = Optimizacion(original, co)
+                    listaOpt.append(o)
 
-        original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
-        if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
-            if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
-                co = "goto ."+falso + "- Regla: 5"
-                o = Optimizacion(original2, co)
-                listaOpt.append(o)
+            original2 = "if " + str(condicion) + ": goto ."+verdadero+" else: goto."+falso
+            if instancia.condicion.operador == OPERACION_RELACIONAL.IGUALQUE:
+                if instancia.condicion.exp1.val != instancia.condicion.exp2.val:
+                    co = "goto ."+falso + "- Regla: 5"
+                    o = Optimizacion(original2, co)
+                    listaOpt.append(o)
 
         return cadenaIf
 
@@ -610,8 +614,8 @@ class Codigo3d:
 
 
     def t_CrearIndice(self, objeto):
-        global t_global, cadena
-
+        global t_global
+        cadena = ""
         crearindice: CrearIndice = objeto
         # Generando Sentencia SQL
 
@@ -638,9 +642,11 @@ class Codigo3d:
 
         # Generando codigo de tres direcciones
         v = t_global.varTemporal()
-        cadena += str(v) + " = \"" + sentencia + "\"\n"
-        cadena += "heap.append(" + str(v) + ")\n"
-        cadena += "ejecutarSQL()\n"
+        cadena += "\n\t"+str(v) + " = \"" + sentencia + "\"\n"
+        cadena += "\theap.append(" + str(v) + ")\n"
+        cadena += "\tF3D.ejecutarSQL()\n"
+
+        return cadena
 
 
     def t_sentenciaSQL(self, sentencia: SQL):
