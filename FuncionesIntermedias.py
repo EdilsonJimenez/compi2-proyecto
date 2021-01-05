@@ -197,7 +197,7 @@ def funcionNativa():
         return Inter.procesar_expresion(ExpresionFuncion(exp1, exp2, exp3, None, FUNCION_NATIVA.SUBSTRING), None)
 
 def insert():
-    id_tabla = ExpresionValor(heap[-1])
+    id_tabla = [ExpresionValor(heap[-1])]
     nval = heap[-2]
     inval = 1
     valores = []

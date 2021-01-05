@@ -665,10 +665,11 @@ class Codigo3d:
         cadaux = ""
         for valor in insert.valores:
             v, c = self.procesar_expresion(valor, None)
-            cadena += c
+            cadena += c + "\n"
             cadaux = "\theap.append(" + str(v) + ")" + "\n" + cadaux
 
-        cadaux = "\theap.append('" + str(insert.id_table[0].val) + "')" + "\n" + cadaux
+        cadaux = cadaux + "\theap.append(" + str(len(insert.valores)) + ")" + "\n"
+        cadaux = cadaux + "\theap.append('" + str(insert.id_table[0].val) + "')" + "\n"
         cadena += cadaux
         cadena += "\tF3D.insert()"
 
@@ -944,13 +945,9 @@ class Codigo3d:
                 etiR = f.temporal
 
         ambitoFuncion = local
-        # buscamos temporal de la variable.
-        temp = "-"
-        for var in t_global.tablaSimbolos:
-            t: tipoSimbolo = t_global.obtenerSimbolo(var)
-            if t.nombre == id and t.ambito == ambitoFuncion:
-                temp = t.temporal
 
+        v = t_global.varTemporal()
+        temp = v
         cadenaAsi += self.t_llamadaFuncion(expresion)
 
         cadenaAsi += "\n\t" + str(temp) + " = " + str(etiR) + "\n"

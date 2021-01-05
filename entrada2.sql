@@ -2,14 +2,6 @@ CREATE DATABASE DBFase2;
 
 USE DBFase2;
 
-CREATE FUNCTION myFuncion(texto text) returns integer AS $$
-BEGIN	
-	print(texto);
-	RETURN texto;
-END;
-
-select myFuncion('INICIO CALIFICACION FASE 2');
-
 CREATE TABLE tbProducto (idproducto integer not null primary key,
   						 producto varchar(150) not null,
   						 fechacreacion date not null,
@@ -156,6 +148,7 @@ delete from tbbodega where idbodega = 4;
 
 insert into tbCalificacion values(5,'Valida Delete',ValidaRegistros('tbbodega',4));
 select * from tbbodega;
+
 
 
 
