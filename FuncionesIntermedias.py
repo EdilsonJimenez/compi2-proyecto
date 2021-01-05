@@ -11,6 +11,7 @@ def ejecutarSQL():
     nueva = str(cadena).upper()
     #print(nueva)
     Inter.inicializarEjecucionAscendente(cadena)
+    #Inter.Ejecucion():
     # if len(Lista) > 0:
     #     self.consola.insert('insert', Lista[0])
     # else:

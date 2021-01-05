@@ -432,6 +432,9 @@ ListaProduccionesG[:] = []  # ListaProduccionesG
 aux = []  # Aux
 Input2 = ''  # Input2
 listaglobalAST = []
+
+arbolito2=None
+
 # ASOCIACION DE OPERADORES CON PRESEDENCIA
 
 
@@ -469,7 +472,7 @@ codigo3d = ''
 
 def p_init(t):
     'INICIO     : INSTRUCCIONES'
-    global listaglobalAST
+    global listaglobalAST,arbolito2
     t[0] = t[1]
     listaglobalAST = t[0]
     #PRIMERA PASADA
@@ -477,7 +480,8 @@ def p_init(t):
     #arbolito.crearReporte()
     #SEGUNDA PASADA
     arbolito2 = interprete2(t[0])
-    arbolito2.ejecucion()
+
+
 
     #arbol = Codigo3d()
     #arbol.Traducir(t[0])
@@ -3314,6 +3318,17 @@ def traducir_AST_GLOB():
     arbol.Traducir(listaglobalAST)
     arbol.imprimir()
 
+
+def Ejecucion():
+    global arbolito2
+
+    if arbolito2 is not None:
+        arbolito2.ejecucion()
+
+
+
+
+
 def parse(Entrada,Errores):
     # Variables Utilizadas
     global LErroresSintacticos, LErroresLexicos, lexer, parser
@@ -3321,9 +3336,6 @@ def parse(Entrada,Errores):
     global lisErr
     # Errores
     lisErr=Errores
-
-
-
 
   #  f = open("./entrada.txt", "r")
   #  input = f.read()

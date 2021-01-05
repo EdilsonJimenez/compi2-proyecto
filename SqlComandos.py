@@ -1150,13 +1150,6 @@ class SqlComandos:
             print("No Genero")
             return ""
 
-
-
-
-
-
-
-
     def cadena_logica(self, expresion: ExpresionLogica):
         cadena = ""
         exp1 = self.cadena_expresion(expresion.exp1)
@@ -1250,7 +1243,7 @@ class SqlComandos:
         elif padreID == OPERACION_LOGICA.OR:
             return 'OR'
         elif padreID == OPERACION_RELACIONAL.IGUALQUE:
-            return '=='
+            return '='
         elif padreID == OPERACION_RELACIONAL.DISTINTO:
             return '!='
         elif padreID == OPERACION_RELACIONAL.MAYORIGUAL:
