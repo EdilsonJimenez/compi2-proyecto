@@ -166,8 +166,22 @@ def funcionNativa():
         return Inter.procesar_expresion(ExpresionFuncion(exp1, exp2, None, None, FUNCION_NATIVA.ATAN2D), None)
 
     elif idfuncion == FUNCION_NATIVA.EXTRACT.value:
-        val2 = heap[-4]
-        exp2 = ExpresionTiempo(val, val2)
+        val2 = heap[-3]
+        time = None
+        if val2 == "HOUR":
+            time = UNIDAD_TIEMPO.HOUR
+        elif val2 == "MINUTE":
+            time = UNIDAD_TIEMPO.MINUTE
+        elif val2 == "SECOND":
+            time = UNIDAD_TIEMPO.SECOND
+        elif val2 == "YEAR":
+            time = UNIDAD_TIEMPO.YEAR
+        elif val2 == "MONTH":
+            time = UNIDAD_TIEMPO.MONTH
+        elif val2 == "DAY":
+            time = UNIDAD_TIEMPO.DAY
+
+        exp2 = ExpresionTiempo(val, time)
         return Inter.procesar_expresion(ExpresionFuncion(exp1, exp2, None, None, FUNCION_NATIVA.EXTRACT), None)
 
     elif idfuncion == FUNCION_NATIVA.DATE_PART.value:
