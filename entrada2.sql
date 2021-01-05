@@ -2,14 +2,6 @@ CREATE DATABASE DBFase2;
 
 USE DBFase2;
 
-CREATE FUNCTION myFuncion(texto text) returns integer AS $$
-BEGIN	
-	print(texto);
-	RETURN texto;
-END;
-
-select myFuncion('INICIO CALIFICACION FASE 2');
-
 CREATE TABLE tbProducto (idproducto integer not null primary key,
   						 producto varchar(150) not null,
   						 fechacreacion date not null,
@@ -36,7 +28,6 @@ INSERT INTO tbProducto values(8,'Laptop Samsung','2021-01-02',1);
 
 
 CREATE FUNCTION ValidaRegistros(tabla varchar(50),cantidad integer) RETURNS integer AS $$
-
 DECLARE 
 	resultado integer = 0; 
 	retorna   integer = 0;
@@ -77,9 +68,11 @@ BEGIN
 		end if;
 	end if;
 RETURN retorna;
-END;
+END
+$$ LANGUAGE plpgsql;
 
-execute ValidaRegistros('tbProducto',8);
+
+insert into tbCalificacion values(1,'Create Table and Insert',ValidaRegistros('tbProducto',8));
 
 
 insert into tbCalificacion values(1,'Create Table and Insert',1);
@@ -155,6 +148,9 @@ delete from tbbodega where idbodega = 4;
 
 insert into tbCalificacion values(5,'Valida Delete',ValidaRegistros('tbbodega',4));
 select * from tbbodega;
+
+
+
 
 
 

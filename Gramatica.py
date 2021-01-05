@@ -2395,8 +2395,8 @@ def p_valor_id(t):
     rep_gramatica('\n <TR><TD> expresion_aritmetica → ID    </TD><TD>  t[0] = Variable(t[1], TIPO_VARIABLE.TEMPORAL) </TD></TR>')
 
 def p_valor_idParentesis(t):
-    '''expresion_aritmetica : EJECUTARFUNCION'''
-    t[0] = t[1]
+    '''expresion_aritmetica : ID PARIZQ EXPRESI PARDER'''
+    t[0] = EjecucionFuncion(t[1], t[3])
     rep_gramatica('\n <TR><TD> expresion_aritmetica → EJECUTARFUNCION    </TD><TD>  t[0] = t[1] </TD></TR>')
 
 
