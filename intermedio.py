@@ -19,11 +19,11 @@ def main():
 	t2 = """USE test;"""
 	heap.append(t2)
 	F3D.ejecutarSQL()
+
 	#Llamada a funcion o procedimiento.
 	p0=4
 	p1=1
 	stack.append("F2")
-
 	goto .F1
 	label .F2
 
@@ -32,41 +32,30 @@ def main():
 	label .F1
 	#**** Funcion *****
 
-	# Parametros
+	# Parametros 
 	p0
 	p1
 
-	# Retorno
+	# Retorno 
 	global r0
 
-	# Declaraciones
+	# Declaraciones 
 
-	heap.append(2)
-
-	heap.append(7)
+	heap.append(14)
 	t3 = F3D.funcionNativa()
-	print(t3)
+	t4 = t3
+	t5 = 25
+	#Fin declaraciones
 
-	heap.append(2)
-	heap.append(t3)
-
-	heap.append(6)
-	t4 = F3D.funcionNativa()
-	t5 = t4
-	print(t5)
-	t6 = 25
 
 	goto .R
 
 
 	label .R
 	u = stack.pop()
-	if u == "F1":
+	if u == "F1": 
 		goto .F1
-	if u == "F2":
+	if u == "F2": 
 		goto .F2
 
 	label .END
-
-
-

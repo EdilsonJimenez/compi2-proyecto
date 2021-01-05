@@ -673,6 +673,10 @@ class Codigo3d:
             return procesar_unidad_tiempo(expresiones, ts)
         elif isinstance(expresiones, ExpresionConstante):
             return procesar_constante(expresiones, ts)
+        elif isinstance(expresiones, SelectExpresion):
+            return self.procesar_select_expresion(expresiones, ts)
+        elif isinstance(expresiones, AccesoSubConsultas):
+            return self.procesar_expresion(expresiones.Query, ts)
         elif isinstance(expresiones, Absoluto):
             try:
                 return procesar_expresion(expresiones.variable, ts)
@@ -859,6 +863,11 @@ class Codigo3d:
         cadena += aux + "\n" + "heap.append(" + str(expresion.id_funcion.value) + ")" + "\n" + str(v) + " = F3D.funcionNativa()" + "\n"
 
         return v, cadena
+
+    def procesar_select_expresion(self, expresion: SelectExpresion, ts):
+        print(expresion)
+        exp = expresion.listaCampos[0].Columna
+        return self.procesar_expresion(exp, ts)
 
     def generar(self):
         global cadena

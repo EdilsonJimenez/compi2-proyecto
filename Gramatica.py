@@ -1168,6 +1168,9 @@ def p_SubConsultas_comandosS2(t):
     t[0] = SubSelect3(t[2],t[3],t[5])
     rep_gramatica('\n <TR><TD> QUE_SUBS →  SELECT DISTINCT LISTA_CAMPOS FROM NOMBRES_TABLAS   </TD><TD> t[0] = SubSelect3(t[2],t[3],t[5]) </TD></TR>')
 
+def p_subconsultas_select_expresion(t):
+    'QUE_SUBS       : SELECT LISTA_CAMPOS'
+    t[0] = SelectExpresion(t[2])
 
 
 

@@ -11,7 +11,7 @@ USE test;
 
 create or replace funtion cocoa (nombre integer, apellido integer) returns 90 
 DECLARE
-x integer = DIV(EXP(2), 2);
+x integer = (SELECT PI());
 y integer = 25;
 
 begin
@@ -24,6 +24,8 @@ end language sql;
 cocoa(4,1);
 
   
+
+
 
 
 
