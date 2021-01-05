@@ -4,106 +4,350 @@ digraph AST {
 	Node0 [label="\"AST\""]
 	Node1 [label=FUNCION_PRODUCCION]
 	Node0 -> Node1
-	Node2 [label="create or replace"]
+	Node2 [label=CREATE]
 	Node1 -> Node2
 	Node3 [label=FUNTION]
 	Node1 -> Node3
-	Node4 [label=cocoa]
+	Node4 [label=CALCULOS]
 	Node1 -> Node4
 	Node5 [label=PARAMETROS]
 	Node1 -> Node5
-	Node6 [label=PARAMETROS]
+	Node6 [label="()"]
 	Node5 -> Node6
-	Node7 [label="integer nombre "]
-	Node6 -> Node7
-	Node8 [label="integer apellido "]
-	Node6 -> Node8
-	Node9 [label=RETURNS]
-	Node1 -> Node9
-	Node10 [label=EXPRESION_]
-	Node1 -> Node10
-	Node11 [label=CONDICION]
-	Node10 -> Node11
-	12 [label=ExpresionValor]
-	12 -> 13
-	13 [label=90]
-	Node11 -> 12
-	Node15 [label=COMANDO_SQL]
-	Node1 -> Node15
-	Node16 [label=DECLARACIONES]
-	Node1 -> Node16
-	Node17 [label=DECLARACIONES]
+	Node7 [label=RETURNS]
+	Node1 -> Node7
+	Node8 [label=EXPRESION_]
+	Node1 -> Node8
+	Node9 [label=CONDICION]
+	Node8 -> Node9
+	Node9 -> 10
+	Node11 [label="AS $$"]
+	Node1 -> Node11
+	Node12 [label=COMANDO_SQL]
+	Node1 -> Node12
+	Node13 [label=DECLARACIONES]
+	Node1 -> Node13
+	Node14 [label=DECLARACIONES]
+	Node13 -> Node14
+	Node15 [label=CODIGO_GENERADO]
+	Node14 -> Node15
+	Node16 [label=DECLARACION]
+	Node15 -> Node16
+	Node17 [label=ID]
 	Node16 -> Node17
-	Node18 [label=CODIGO_GENERADO]
+	Node18 [label=hora]
 	Node17 -> Node18
-	Node19 [label=DECLARACION]
-	Node18 -> Node19
-	Node20 [label=ID]
+	Node19 [label=TIPO]
+	Node16 -> Node19
+	Node20 [label=integer]
 	Node19 -> Node20
-	Node21 [label=x]
-	Node20 -> Node21
-	Node22 [label=TIPO]
-	Node19 -> Node22
-	Node23 [label=integer]
-	Node22 -> Node23
-	Node24 [label="="]
-	Node19 -> Node24
-	Node19 -> 25
-	25 [label=ExpresionValor]
-	25 -> 26
-	26 [label=24]
-	Node27 [label=CODIGO_GENERADO]
-	Node17 -> Node27
-	Node28 [label=DECLARACION]
-	Node27 -> Node28
-	Node29 [label=ID]
+	Node21 [label="="]
+	Node16 -> Node21
+	Node16 -> 22
+	22 [label=ExpresionValor]
+	22 -> 23
+	23 [label=0]
+	Node24 [label=CODIGO_GENERADO]
+	Node14 -> Node24
+	Node25 [label=DECLARACION]
+	Node24 -> Node25
+	Node26 [label=ID]
+	Node25 -> Node26
+	Node27 [label=SENO]
+	Node26 -> Node27
+	Node28 [label=TIPO]
+	Node25 -> Node28
+	Node29 [label=integer]
 	Node28 -> Node29
-	Node30 [label=y]
-	Node29 -> Node30
-	Node31 [label=TIPO]
-	Node28 -> Node31
-	Node32 [label=integer]
-	Node31 -> Node32
-	Node33 [label="="]
-	Node28 -> Node33
-	Node28 -> 34
-	34 [label=ExpresionValor]
-	34 -> 35
-	35 [label=25]
-	Node36 [label=CODIGO_]
-	Node1 -> Node36
-	Node37 [label=CUERPO_CODE]
-	Node36 -> Node37
-	Node38 [label=BEGIN]
+	Node30 [label="="]
+	Node25 -> Node30
+	Node25 -> 31
+	31 [label=ExpresionValor]
+	31 -> 32
+	32 [label=0]
+	Node33 [label=CODIGO_GENERADO]
+	Node14 -> Node33
+	Node34 [label=DECLARACION]
+	Node33 -> Node34
+	Node35 [label=ID]
+	Node34 -> Node35
+	Node36 [label=VALOR]
+	Node35 -> Node36
+	Node37 [label=TIPO]
+	Node34 -> Node37
+	Node38 [label=integer]
 	Node37 -> Node38
-	Node39 [label=_CODIGO_]
-	Node37 -> Node39
-	Node40 [label=END]
-	Node37 -> Node40
-	Node41 [label="language sql;"]
-	Node37 -> Node41
-	Node42 [label=INSTRUCCION_SELECT]
-	Node0 -> Node42
-	Node43 [label=SELECT]
+	Node39 [label="="]
+	Node34 -> Node39
+	Node34 -> 40
+	40 [label=ExpresionValor]
+	40 -> 41
+	41 [label=0]
+	Node42 [label=CODIGO_GENERADO]
+	Node14 -> Node42
+	Node43 [label=DECLARACION]
 	Node42 -> Node43
-	Node44 [label=LISTA_CAMPOS]
-	Node42 -> Node44
-	Node45 [label=ACCESO_CAMPO]
+	Node44 [label=ID]
+	Node43 -> Node44
+	Node45 [label=ABSOLUTO]
 	Node44 -> Node45
-	Node46 [label="*"]
-	Node45 -> Node46
-	Node47 [label=FROM]
-	Node42 -> Node47
-	Node48 [label=LISTA_TABLAS]
-	Node42 -> Node48
-	Node49 [label=Nombre_Tabla]
-	Node48 -> Node49
-	Node50 [label=tabla2]
-	Node49 -> Node50
-	Node51 [label=Uniones]
-	Node42 -> Node51
-	Node52 [label=Final_Instruccion]
+	Node46 [label=TIPO]
+	Node43 -> Node46
+	Node47 [label=integer]
+	Node46 -> Node47
+	Node48 [label="="]
+	Node43 -> Node48
+	Node43 -> 49
+	49 [label=ExpresionValor]
+	49 -> 50
+	50 [label=0]
+	Node51 [label=CODIGO_]
+	Node1 -> Node51
+	Node52 [label=CUERPO_CODE]
 	Node51 -> Node52
-	Node53 [label=""]
+	Node53 [label=BEGIN]
 	Node52 -> Node53
+	Node54 [label=_CODIGO_]
+	Node52 -> Node54
+	Node55 [label=CODIGO_GENERADO]
+	Node54 -> Node55
+	Node56 [label=ASIGNACION]
+	Node55 -> Node56
+	Node57 [label=ID]
+	Node56 -> Node57
+	Node58 [label=hora]
+	Node57 -> Node58
+	Node56 -> 59
+	59 [label=Subconsulta]
+	Node60 [label="Acceso_Subconsulta "]
+	59 -> Node60
+	Node61 [label="(  SubQuery  )"]
+	Node60 -> Node61
+	Node62 [label=CODIGO_GENERADO]
+	Node54 -> Node62
+	Node63 [label=ASIGNACION]
+	Node62 -> Node63
+	Node64 [label=ID]
+	Node63 -> Node64
+	Node65 [label=SENO]
+	Node64 -> Node65
+	Node63 -> 66
+	66 [label=Subconsulta]
+	Node67 [label="Acceso_Subconsulta "]
+	66 -> Node67
+	Node68 [label="(  SubQuery  )"]
+	Node67 -> Node68
+	Node69 [label=CODIGO_GENERADO]
+	Node54 -> Node69
+	Node70 [label=ASIGNACION]
+	Node69 -> Node70
+	Node71 [label=ID]
+	Node70 -> Node71
+	Node72 [label=VALOR]
+	Node71 -> Node72
+	Node70 -> 73
+	73 [label="ExpresionFUNCION NATIVA"]
+	74 [label=TRUNC]
+	73 -> 74
+	75 [label=exp1]
+	73 -> 75
+	75 -> 76
+	76 [label=ExpresionAritmetica]
+	77 [label=exp1]
+	76 -> 77
+	77 -> 78
+	78 [label=Variable]
+	78 -> 79
+	79 [label=SENO]
+	80 [label="*"]
+	76 -> 80
+	81 [label=exp2]
+	76 -> 81
+	81 -> 82
+	82 [label=Variable]
+	82 -> 83
+	83 [label=hora]
+	84 [label=exp2]
+	73 -> 84
+	84 -> 85
+	85 [label=ExpresionValor]
+	85 -> 86
+	86 [label=0]
+	Node87 [label=CODIGO_GENERADO]
+	Node54 -> Node87
+	Node88 [label=ASIGNACION]
+	Node87 -> Node88
+	Node89 [label=ID]
+	Node88 -> Node89
+	Node90 [label=VALOR]
+	Node89 -> Node90
+	Node88 -> 91
+	91 [label=ExpresionAritmetica]
+	92 [label=exp1]
+	91 -> 92
+	92 -> 93
+	93 [label=Variable]
+	93 -> 94
+	94 [label=VALOR]
+	95 [label="+"]
+	91 -> 95
+	96 [label=exp2]
+	91 -> 96
+	96 -> 97
+	97 [label="ExpresionFUNCION NATIVA"]
+	98 [label=LENGTH]
+	97 -> 98
+	99 [label=exp1]
+	97 -> 99
+	99 -> 100
+	100 [label="ExpresionFUNCION NATIVA"]
+	101 [label=SUBSTRING]
+	100 -> 101
+	102 [label=exp1]
+	100 -> 102
+	102 -> 103
+	103 [label=ExpresionValor]
+	103 -> 104
+	104 [label=FASE2]
+	105 [label=exp2]
+	100 -> 105
+	105 -> 106
+	106 [label=ExpresionValor]
+	106 -> 107
+	107 [label=1]
+	108 [label=exp3]
+	100 -> 108
+	108 -> 109
+	109 [label=ExpresionValor]
+	109 -> 110
+	110 [label=4]
+	111 [label=exp4]
+	100 -> 111
+	111 -> 112
+	Node112 [label=CODIGO_GENERADO]
+	Node54 -> Node112
+	Node113 [label=ASIGNACION]
+	Node112 -> Node113
+	Node114 [label=ID]
+	Node113 -> Node114
+	Node115 [label=ABSOLUTO]
+	Node114 -> Node115
+	Node113 -> 116
+	116 [label="ExpresionFUNCION NATIVA"]
+	117 [label=ABS]
+	116 -> 117
+	118 [label=exp1]
+	116 -> 118
+	118 -> 119
+	119 [label="ExpresionFUNCION NATIVA"]
+	120 [label=SINH]
+	119 -> 120
+	121 [label=exp1]
+	119 -> 121
+	121 -> 122
+	122 [label=ExpresionNegAritmetica]
+	122 -> 123
+	123 [label=ExpresionValor]
+	123 -> 124
+	124 [label=1]
+	Node125 [label=CODIGO_GENERADO]
+	Node54 -> Node125
+	Node126 [label=ASIGNACION]
+	Node125 -> Node126
+	Node127 [label=ID]
+	Node126 -> Node127
+	Node128 [label=ABSOLUTO]
+	Node127 -> Node128
+	Node126 -> 129
+	129 [label=" ( Expresion )"]
+	129 -> 130
+	130 [label=ExpresionAritmetica]
+	131 [label=exp1]
+	130 -> 131
+	131 -> 132
+	132 [label=Variable]
+	132 -> 133
+	133 [label=ABSOLUTO]
+	134 [label="*"]
+	130 -> 134
+	135 [label=exp2]
+	130 -> 135
+	135 -> 136
+	136 [label="ExpresionFUNCION NATIVA"]
+	137 [label=SQRT]
+	136 -> 137
+	138 [label=exp1]
+	136 -> 138
+	138 -> 139
+	139 [label=ExpresionValor]
+	139 -> 140
+	140 [label=225]
+	Node141 [label=CODIGO_GENERADO]
+	Node54 -> Node141
+	Node142 [label=ASIGNACION]
+	Node141 -> Node142
+	Node143 [label=ID]
+	Node142 -> Node143
+	Node144 [label=VALOR]
+	Node143 -> Node144
+	Node142 -> 145
+	145 [label=ExpresionAritmetica]
+	146 [label=exp1]
+	145 -> 146
+	146 -> 147
+	147 [label=" ( Expresion )"]
+	147 -> 148
+	148 [label=ExpresionAritmetica]
+	149 [label=exp1]
+	148 -> 149
+	149 -> 150
+	150 [label=Variable]
+	150 -> 151
+	151 [label=VALOR]
+	152 [label="+"]
+	148 -> 152
+	153 [label=exp2]
+	148 -> 153
+	153 -> 154
+	154 [label=Variable]
+	154 -> 155
+	155 [label=ABSOLUTO]
+	156 [label="/"]
+	145 -> 156
+	157 [label=exp2]
+	145 -> 157
+	157 -> 158
+	158 [label="ExpresionFUNCION NATIVA"]
+	159 [label=ACOSD]
+	158 -> 159
+	160 [label=exp1]
+	158 -> 160
+	160 -> 161
+	161 [label=ExpresionValor]
+	161 -> 162
+	162 [label=0.5]
+	Node163 [label=CODIGO_GENERADO]
+	Node54 -> Node163
+	Node164 [label=CODIGO_GENERADO]
+	Node54 -> Node164
+	Node165 [label=RETORNO__]
+	Node164 -> Node165
+	Node166 [label=EXPRESION_]
+	Node165 -> Node166
+	Node167 [label=CONDICION]
+	Node166 -> Node167
+	168 [label=Variable]
+	168 -> 169
+	169 [label=VALOR]
+	Node167 -> 168
+	Node171 [label=END]
+	Node52 -> Node171
+	Node172 [label="$$;"]
+	Node52 -> Node172
+	Node0 -> 173
+	173 [label=EJECUCION_FUNCION]
+	Node174 [label=CALCULOS]
+	173 -> Node174
+	Node175 [label="()"]
+	173 -> Node175
 }
