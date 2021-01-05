@@ -2798,7 +2798,7 @@ def p_when_auxiliar_e(t):
 
 
 def p_Funciones_General(t):
-    'FUNCIONESS  :  FUNTIONE  FUNCTION  ID  PARIZQ PARAMETROSG PARDER RETURNS expresion ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
+    'FUNCIONESS  :  FUNTIONE  FUNCTION  ID  PARIZQ PARAMETROSG PARDER RETURNS TIPO_CAMPO ALIASRET CODEEPSILON DECLAEP CODE  PUNTOCOMA'
     t[0]=Funciones_(t[1],t[3],t[8],t[9] , t[5], t[10], t[11], t[12])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<  Estoy llegando")
 
@@ -2928,7 +2928,6 @@ def p_Alias_RetornoID(t):
 def p_Alias_Retorno_DOLAR(t):
     'ALI  :  DOLAR DOLAR '
     t[0] = str(t[1])+str(t[2])
-
 
 
 
@@ -3176,6 +3175,8 @@ def p_instruccion_CODE(t):
                     | COMENTARIONORMAL '''
     if t[1] != 'COMENTARIONORMAL' and t[1] != 'COMENTARIOMULTI':
         t[0] = t[1]
+
+
 
 def p_declaracion_simbolo(t):
     '''declaracion_simbolo : IGUAL

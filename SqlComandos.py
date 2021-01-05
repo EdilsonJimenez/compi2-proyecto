@@ -51,11 +51,12 @@ class SqlComandos:
 
         elif isinstance(i, Delete_Datos):
             print("Es Una Instruccion Delete")
-            #self.grafoDelete_Data(i.id_table, i.valore_where)
+            self.CadenaSQL = self.grafoDelete_Data(i.id_table, i.valore_where)
+
 
         elif isinstance(i, Update_Datos):
             print("Es Una Instruccion Update")
-            #self.grafoUpdate__Data(i.id_table, i.valores_set, i.valor_where)
+            self.CadenaSQL = self.grafoUpdate__Data(i.id_table, i.valores_set, i.valor_where)
 
         elif isinstance(i, Alter_COLUMN):
             print("Es Una Instruccion Alter  Column")
@@ -951,9 +952,6 @@ class SqlComandos:
 
 
 # ===========================================================================   GENERACION CONDIGO SHOW DATABASE
-
-
-
     def grafoShowDatabases(self, cadenaLike):
         bandera = False
         Cadenita = "SHOW DATABASES "
@@ -965,6 +963,64 @@ class SqlComandos:
             Cadenita+= "; "
 
         return Cadenita
+
+
+# ===========================================================================   GENERACION CONDIGO DELETE
+    def grafoDelete_Data(self, id, valores):
+        Cadenita=" DELETE  From"
+        Contador=0
+
+        for i in id:
+            if(Contador+1!=len(id)):
+                Cadenita+= " "+i.val+", "
+            else:
+                Cadenita+= " "+i.val+" "
+
+            Contador+=1
+
+        Cadenita +=  "WHERE " + self.cadena_expresion(valores) +";  "
+
+        return  Cadenita
+
+# ===========================================================================   GENERACION CONDIGO UPDATE
+
+    def grafoUpdate__Data(self, id, valores_set, valores):
+        Cadenita = " UPDATE "
+        Contador1= 0
+        Contador2= 0
+
+
+        for i in id:
+            if(Contador1+1!=len(id)):
+                Cadenita += " " + i.val + ", "
+            else:
+                Cadenita += " " + i.val + " "
+            Contador1+=1
+
+
+
+
+        # GRAFICAR============VALORES DEL SET======================
+
+        Cadenita+= " SET  "
+
+        # GRAFICANDO EXPRESION===========================
+        for i in valores_set:
+            if(Contador2+1!=len(valores_set)):
+                Cadenita +=  " " + self.cadena_expresion(i)+", "
+            else:
+                Cadenita += " "  + self.cadena_expresion(i) + " "
+            Contador2+=1
+
+        # GRAFICAR============VALORES DEL WHERE======================
+        Cadenita+= " WHERE  "+ self.cadena_expresion(valores) + "; "
+
+        return  Cadenita
+
+
+
+
+
 
 
 

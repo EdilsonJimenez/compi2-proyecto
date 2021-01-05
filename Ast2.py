@@ -2312,6 +2312,8 @@ class Ast2:
         self.inc()
         dot.edge('Node' + str(padrenuevo4), str(padrenuevo4 + 1))
 
+
+
     # ----------------------------------------------------------------------------------------------------------
     # -----------------------GRAFICAR ALTER TABLE ADD COLUM-------------------------------------------------------------------
     def grafoAlter_AddColumn(self, id_tablas, id_columnas, padre):

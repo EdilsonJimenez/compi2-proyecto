@@ -730,8 +730,8 @@ class Codigo3d:
                         op = v + "= " + sval1 + "- Regla: 12"
             o = Optimizacion(cadena, op)
             listaOpt.append(o)
-
             return v, cadena
+
         elif expresion.operador == OPERACION_ARITMETICA.MENOS:
             v = t_global.varTemporal()
             cadena ="\t" +  v + " = " + str(val) + " - " + str(val2) + "\n"
@@ -747,8 +747,9 @@ class Codigo3d:
                         op = v + " = " + sval1 + "- Regla: 13"
             o = Optimizacion(cadena, op)
             listaOpt.append(o)
-
             return v, cadena
+
+
         elif expresion.operador == OPERACION_ARITMETICA.MULTI:
             v = t_global.varTemporal()
             cadena ="\t" +  v + " = " + str(val) + " * " + str(val2) + "\n"
@@ -772,6 +773,8 @@ class Codigo3d:
             o = Optimizacion(cadena, op)
             listaOpt.append(o)
             return v, cadena
+
+
         elif expresion.operador == OPERACION_ARITMETICA.DIVIDIDO:
             v = t_global.varTemporal()
             cadena ="\t" +  v + " = " + str(val) + " / " + str(val2) + "\n"
@@ -791,14 +794,18 @@ class Codigo3d:
             listaOpt.append(o)
 
             return v, cadena
+
+
         elif expresion.operador == OPERACION_ARITMETICA.RESIDUO:
             v = t_global.varTemporal()
             cadena ="\t" +  v + " = " + str(val) + " / " + str(val2) + "\n"
             return v, cadena
+
         elif expresion.operador == OPERACION_ARITMETICA.POTENCIA:
             v = t_global.varTemporal()
             cadena ="\t" +  v + "= " + str(val) + " ** " + str(val2) + "\n"
             return v, cadena
+
 
     def procesar_relacional(self, expresion, ts):
         # OPTIMIZACION - AHORRO DE 2 LINEAS........................................................
