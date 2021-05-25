@@ -1829,6 +1829,7 @@ class Absoluto(Instruccion) :
     def __init__(self, variable) :
         self.variable=variable
 
+
 #---------------------------------------------------------------------------------------------------
 class Select(Instruccion) :
     def __init__(self,  unionn, Lista_Campos=[], Nombres_Tablas=[] ) :

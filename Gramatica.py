@@ -3160,8 +3160,8 @@ def p_declaracion_asignacion(t):
 #================= PRODUCCIONES PARA EL WHILE
 def p_Codigo_While(t):
     'CODE_  :   WHILE expresion LOOP CODEEPSILON END LOOP ARGU_N PUNTOCOMA '
-    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8]) 
-    
+    t[0] = str(t[1]) + str(t[2]) + str(t[3]) + str(t[4]) + str(t[5]) + str(t[6]) + str(t[7]) + str(t[8])
+
 
 def p_declaracion_asignacion_e(t):
     'declaracion_asignacion : '
